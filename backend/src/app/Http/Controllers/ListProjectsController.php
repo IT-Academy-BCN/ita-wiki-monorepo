@@ -14,10 +14,37 @@ use App\Enums\ContributorStatusEnum;
 class ListProjectsController extends Controller
 {
 
-    /** method index 
-     * Route is GET /api/listsProject
-     * Returns a Json response with a list of projects
-     * return success true, data with list of projects, status 200 and message is 'List of projects retrieved successfully'
+    /**
+     * @OA\Get(
+     *   path="/api/codeconnect",
+     *   summary="Get all projects",
+     *   tags={"Codeconnect"},
+     *   description="Returns a list of all published projects.",
+     *   @OA\Response(
+     *       response=200,
+     *       description="List of projects retrieved successfully",
+     *       @OA\JsonContent(
+     *           type="array",
+     *           @OA\Items(
+     *               type="object",
+     *               @OA\Property(property="id", type="integer", example=1),
+     *               @OA\Property(property="title", type="string", example="Project Alpha"),
+     *               @OA\Property(property="time_duration", type="string", example="2 months"),
+     *               @OA\Property(property="language_backend", type="string", example="PHP"),
+     *               @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *               @OA\Property(
+     *                   property="contributors",
+     *                   type="array",
+     *                   @OA\Items(
+     *                       type="object",
+     *                       @OA\Property(property="name", type="string", example="John Doe"),
+     *                       @OA\Property(property="programming_role", type="string", example="Backend Developer")
+     *                   )
+     *               )
+     *           )
+     *       )
+     *   )
+     * )
      */
 
     public function index(Request $request)
@@ -46,10 +73,42 @@ class ListProjectsController extends Controller
         ], 200);
     }
 
-    /** method show
-     * Route is GET /api/listsProject/{id}
-     * Returns a Json response with a specific project
-     * return success true, data with project details, status 200 and message is 'Project retrieved successfully'
+    /**
+     * @OA\Get(
+     *   path="/api/codeconnect/{id}",
+     *   summary="Get a specific project",
+     *   tags={"Codeconnect"},
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Project retrieved successfully",
+     *      @OA\JsonContent(
+     *           type="object",
+     *           @OA\Property(property="title", type="string", example="Project Alpha"),
+     *           @OA\Property(property="time_duration", type="string", example="1 month"),
+     *           @OA\Property(property="language_backend", type="string", example="PHP"),
+     *           @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *           @OA\Property(
+     *               property="contributors",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="object",
+     *                   @OA\Property(property="name", type="string", example="Jane Doe"),
+     *                   @OA\Property(property="programming_role", type="string", example="Frontend Developer")
+     *               )
+     *           )
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Project not found"
+     *   )
+     * )
      */
     public function show($id)
     {
@@ -84,10 +143,35 @@ class ListProjectsController extends Controller
     }
 
 
-    /** method store
-     * Route is POST /api/listsProject
-     * Creates a new project and returns a Json response
-     * return success true, status 200 and message is 'Project created successfully'
+    /**
+     * @OA\Post(
+     *   path="/api/codeconnect",
+     *   summary="Create a new project",
+     *   tags={"Codeconnect"},
+     *   security={{"sanctum":{}}},
+     *   @OA\RequestBody(
+     *      required=true,
+     *      @OA\JsonContent(
+     *          required={"title","time_duration","language_backend","language_frontend"},
+     *          @OA\Property(property="title", type="string", example="Project Delta"),
+     *          @OA\Property(property="time_duration", type="string", example="3 months"),
+     *          @OA\Property(property="language_backend", type="string", example="PHP"),
+     *          @OA\Property(property="language_frontend", type="string", example="JavaScript")
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Project created successfully"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Invalid language value"
+     *   ),
+     *   @OA\Response(
+     *      response=422,
+     *      description="Validation error"
+     *   )
+     * )
      */
 
     public function store(ListProjectRequest $request)
@@ -113,8 +197,8 @@ class ListProjectsController extends Controller
             $newProject = ListProjects::create($validatedData);
             return response()->json([
                 'success' => true,
-                'data' => $newProject,
-                'message' => 'Project created successfully'
+                'message' => 'Project created successfully',
+                'data' => $newProject
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -123,10 +207,36 @@ class ListProjectsController extends Controller
         }
     }
 
-    /** method update
-     * Route is PUT /api/listsProject/{id}
-     * Updates a specific project and returns a Json response
-     * return success true, status 200 and message is 'Project updated successfully'
+    /**
+     * @OA\Put(
+     *   path="/api/codeconnect/{id}",
+     *   summary="Update an existing project",
+     *   tags={"Codeconnect"},
+     *   security={{"sanctum":{}}},
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\RequestBody(
+     *      required=true,
+     *      @OA\JsonContent(
+     *          @OA\Property(property="title", type="string", example="Updated Project"),
+     *          @OA\Property(property="time_duration", type="string", example="2 months"),
+     *          @OA\Property(property="language_backend", type="string", example="PHP"),
+     *          @OA\Property(property="language_frontend", type="string", example="TypeScript")
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Project updated successfully"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Project not found"
+     *   )
+     * )
      */
 
     public function update(ListProjectRequest $request, $id)
@@ -162,8 +272,8 @@ class ListProjectsController extends Controller
             return response()->json([
 
                 'success' => true,
-                'data' => $projectUpdated,
-                'message' => 'Project updated successfully'
+                'message' => 'Project updated successfully',
+                'data' => $projectUpdated
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -173,12 +283,66 @@ class ListProjectsController extends Controller
         }
     }
 
-    /** method updateContributorStatus
-     * Route is PATCH /api/listsProject/{listProject}/contributors/{contributor}/status
-     * Updates the status of a specific contributor in a project and returns a Json response
-     * return success true, status 200 and message is 'Contributor status updated successfully'
+    /**
+     * @OA\Patch(
+     *     path="/api/codeconnect/{listProject}/contributors/{contributor}/status",
+     *     summary="Update contributor status",
+     *     tags={"Contributors"},
+     *     description="Updates the status of a contributor (accept or reject)",
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="contributor",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"status"},
+     *             @OA\Property(property="status", type="string", enum={"accepted", "rejected"}, example="accepted")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Contributor status updated successfully"),
+     *             @OA\Property(property="status", type="string", example="accepted")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Status must be accepted or rejected")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="You cannot validate your own request")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Contributor not found")
+     *         )
+     *     )
+     * )
      */
-    public function updateContributorStatus(Request $request, $listProjectId, $contributorId)
+    public function updateContributorStatus(Request $request, int $listProjectId, int $contributorId)
     {
         $validatedData = $request->validate([
             'status' => ['required', 'string'],
@@ -241,10 +405,27 @@ class ListProjectsController extends Controller
         ], 200);
     }
 
-    /** Method destroy
-     * Route is DELETE /api/listsProject/{id}
-     * destroy a specific project and returns a Json response
-     * return success true, status 200 and message is 'Project deleted successfully'
+    /**
+     * @OA\Delete(
+     *   path="/api/codeconnect/{id}",
+     *   summary="Delete a project",
+     *   tags={"Codeconnect"},
+     *   security={{"sanctum":{}}},
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Project deleted successfully"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Project not found"
+     *   )
+     * )
      */
 
     public function destroy($id)
@@ -269,6 +450,251 @@ class ListProjectsController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Error deleting project',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/codeconnect/{listProject}/contributors",
+     *     summary="Get all contributors of a project",
+     *     tags={"Contributors"},
+     *     description="Returns a list of all contributors for a specific project",
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Contributors retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="user_id", type="integer", example=1),
+     *                     @OA\Property(property="programming_role", type="string", example="Frontend Developer"),
+     *                     @OA\Property(property="status", type="string", example="pending")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Project not found")
+     *         )
+     *     )
+     * )
+     */
+    public function getContributors(int $listProjectId)
+    {
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
+        $contributors = ContributorListProject::where('list_project_id', $listProjectId)
+            ->with('user')
+            ->get()
+            ->map(function ($contributor) {
+                return [
+                    'id' => $contributor->id,
+                    'user_id' => $contributor->user_id,
+                    'programming_role' => $contributor->programming_role,
+                    'status' => $contributor->status,
+                    'user' => [
+                        'id' => $contributor->user->id,
+                        'name' => $contributor->user->name,
+                        'email' => $contributor->user->email,
+                    ],
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $contributors,
+            'message' => 'Contributors retrieved successfully'
+        ], 200);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/codeconnect/{listProject}/contributors",
+     *     summary="Create a contributor request",
+     *     tags={"Contributors"},
+     *     description="Creates a new contributor request for a project with pending status",
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"user_id","programming_role"},
+     *             @OA\Property(property="user_id", type="integer", example=1),
+     *             @OA\Property(property="programming_role", type="string", enum={"Frontend Developer", "Backend Developer", "Fullstack Developer", "Other"}, example="Frontend Developer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Contributor request created successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="user_id", type="integer", example=1),
+     *                 @OA\Property(property="programming_role", type="string", example="Frontend Developer"),
+     *                 @OA\Property(property="list_project_id", type="integer", example=1),
+     *                 @OA\Property(property="status", type="string", example="pending")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="User is already a contributor for this project")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Project not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Error"
+     *     )
+     * )
+     */
+    public function addContributor(Request $request, int $listProjectId)
+    {
+        $validatedData = $request->validate([
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'programming_role' => ['required', 'string', 'in:Frontend Developer,Backend Developer,Fullstack Developer,Other'],
+        ]);
+
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
+        $existingContributor = ContributorListProject::where('list_project_id', $listProjectId)
+            ->where('user_id', $validatedData['user_id'])
+            ->first();
+
+        if ($existingContributor) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is already a contributor for this project'
+            ], 400);
+        }
+
+        try {
+            $contributor = ContributorListProject::create([
+                'user_id' => $validatedData['user_id'],
+                'programming_role' => $validatedData['programming_role'],
+                'list_project_id' => $listProjectId,
+                'status' => ContributorStatusEnum::Pending->value,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $contributor,
+                'message' => 'Contributor request created successfully'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error creating contributor request',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/codeconnect/{listProject}/contributors/{contributor}",
+     *     summary="Remove a contributor from a project",
+     *     tags={"Contributors"},
+     *     description="Deletes a contributor from a specific project",
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="contributor",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Contributor removed successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Contributor not found")
+     *         )
+     *     )
+     * )
+     */
+    public function removeContributor(int $listProjectId, int $contributorId)
+    {
+        $contributor = ContributorListProject::where('id', $contributorId)
+            ->where('list_project_id', $listProjectId)
+            ->first();
+
+        if (!$contributor) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Contributor not found'
+            ], 404);
+        }
+
+        try {
+            $contributor->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contributor removed successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error removing contributor',
                 'message' => $e->getMessage()
             ], 500);
         }

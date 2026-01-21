@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
         $request->user()->currentAccessToken()->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Sesión closed succesfully'
+            'message' => 'Session closed successfully'
         ]);
     });
 });
@@ -49,17 +49,29 @@ Route::prefix('tags')->group(function () {
     Route::get('/by-category', [TagController::class, 'getCategoryTagsId'])->name('tags.by-category');
 });
 
-//listProject endpoint
-Route::apiResource('listsProject', ListProjectsController::class);
+// ========== LIST PROJECTS ENDPOINTS ==========
 
-// PUBLIC CONTRIBUTOR VALIDATION ENDPOINT
-Route::patch(
-    '/listsProject/{listProject}/contributors/{contributor}/status',
-    [ListProjectsController::class, 'updateContributorStatus']
-)->name('contributors.update-status');
+// PUBLIC
+Route::apiResource('codeconnect', ListProjectsController::class)->only(['index', 'show']);
 
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('codeconnect', ListProjectsController::class)->except(['index', 'show']);
+});
 
-// RESOURCES ENDPOINTS
+// ========== CONTRIBUTORS ENDPOINTS ==========
+
+// PUBLIC
+Route::get('/codeconnect/{listProject}/contributors', [ListProjectsController::class, 'getContributors'])->name('contributors.index');
+
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/codeconnect/{listProject}/contributors', [ListProjectsController::class, 'addContributor'])->name('contributors.store');
+    Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
+    Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
+});
+
+// ========== RESOURCES ENDPOINTS ==========
 
 // PUBLIC
 Route::apiResource('resources', ResourceController::class)->only(['index', 'show']);
@@ -69,9 +81,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('resources', ResourceController::class)->except(['index', 'show']);
 });
 
-// TECHNICAL TESTS ENDPOINTS
+// TECHNICAL TESTS
+
+//PUBLIC
 Route::middleware(['throttle:60,1'])->group(function () {
-    Route::apiResource('technical-tests', TechnicalTestController::class);
+    Route::apiResource('technical-tests', TechnicalTestController::class)
+    ->only(['index', 'show']);
+});
+
+//PROTECTED
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function() {
+    Route::apiResource('technical-tests', TechnicalTestController::class)
+    ->except(['index', 'show']);
 });
 
 // EXERCISES ENDPOINTS

@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost/api/";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/";
 
 type EndPoints =
   | "resources/"
@@ -13,7 +13,8 @@ type EndPoints =
   | "feature-flags/role-self-assignment"
   | "tags/by-category"
   | "technical-tests"
-  | "codeconnect";
+  | "codeconnect"
+  | "auth";
 
 const END_POINTS = {
   resources: {
@@ -49,6 +50,12 @@ const END_POINTS = {
   },
   codeconnect: {
     post: "codeconnect" as EndPoints,
+  },
+  auth: {
+    login: "auth/github/redirect" as EndPoints,
+    getAuthUser: "auth/github/user" as EndPoints,
+    getCurrentUser: "auth/me" as EndPoints,
+    logout: "auth/logout" as EndPoints,
   },
 };
 

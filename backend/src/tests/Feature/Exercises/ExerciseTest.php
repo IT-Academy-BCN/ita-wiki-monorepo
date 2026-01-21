@@ -6,10 +6,21 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\TechnicalTest;
 use App\Models\Exercise;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 class ExerciseTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Authenticate user for all tests in this class
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+    }
 
     public function test_can_create_exercise_with_required_fields()
     {
