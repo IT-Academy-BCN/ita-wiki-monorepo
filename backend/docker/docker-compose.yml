@@ -1,0 +1,52 @@
+services:
+    app:
+        container_name: app
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+        ports:
+            - "8000:80"
+        volumes:
+            - ../src:/var/www/html/src
+            - ../.env.docker:/var/www/html/.env.docker:ro
+        depends_on:
+            - mysql
+        networks:
+            - app-network
+
+    mysql:
+        container_name: mysql
+        image: mysql:8.4
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=laravel
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+        volumes:
+            - mysql-data:/var/lib/mysql
+        networks:
+            - app-network
+
+    phpmyadmin:
+        container_name: phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        ports:
+        - "8080:80"
+        environment:
+        - PMA_HOST=mysql
+        - PMA_PORT=3306
+        - PMA_USER=user
+        - PMA_PASSWORD=password
+        - MYSQL_ROOT_PASSWORD=root
+        depends_on:
+        - mysql
+        networks:
+        - app-network
+
+volumes:
+    mysql-data:
+
+networks:
+    app-network:

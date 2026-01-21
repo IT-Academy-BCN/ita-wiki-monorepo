@@ -1,0 +1,38 @@
+# Laravel
+/vendor/
+/node_modules/
+/composer.phar
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Laravel runtime
+/storage/
+!storage/app/public
+storage/logs/
+storage/framework/
+src/storage/logs/
+src/storage/framework/
+src/storage/api-docs/
+
+# Laravel cache
+.phpunit.result.cache
+.phpunit.cache
+/.phpactor.json
+
+# Frontend build
+public/hot
+public/build
+public/storage
+
+# Editors and IDEs
+/.idea
+/.vscode
+/.fleet
+/.zed
+
+# OS / misc
+npm-debug.log
+yarn-error.log

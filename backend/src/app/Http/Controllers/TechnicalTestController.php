@@ -1,0 +1,470 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Http\Requests\TechnicalTests\IndexTechnicalTestRequest;
+use App\Http\Requests\TechnicalTests\StoreTechnicalTestRequest;
+use App\Models\TechnicalTest;
+use App\Models\Exercise;
+use App\Enums\LanguageEnum;
+use App\Enums\DifficultyLevelEnum;
+use App\Enums\TechnicalTestStatusEnum;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+/**
+ * @OA\Tag(
+ *     name="Technical Tests",
+ *     description="API Endpoints for Technical Tests"
+ * )
+ */
+
+class TechnicalTestController extends Controller
+{
+    /*public function __construct()
+    {
+        $this->middleware('auth:api');
+        $this->middleware('check.permission:create technical tests')->only(['store']);
+        $this->middleware('check.permission:view technical tests')->only(['index', 'show']);
+    }*/
+
+    /**
+     * @OA\Get(
+     *      path="/api/technical-tests",
+     *      summary = "List technical tests with or w/out filters",
+     *      description="Lists available technical test with options to filter by language and any part of the title and the description",
+     *      operationId="getTechnicalTests",
+     *      tags={"Technical Tests"},
+     *    
+     *      @OA\Parameter(
+     *          name="search",
+     *          in="query",
+     *          description="Search by title",
+     *          required=false,
+     *          @OA\Schema(type="String", example="Basic PHP exam"),
+     *      ),
+     *      @OA\Parameter(
+     *          name="language",
+     *          in="query",
+     *          description="Filter by language",
+     *          required=false,
+     *          @OA\Schema(type="String", enum={"PHP", "JavaScript", "Java", "React", "TypeScript", "Python", "SQL"}),
+     *      ),
+     *      @OA\Parameter(
+     *          name="description",
+     *          in="query",
+     *          description="Search by any part of the description",
+     *          required=false,
+     *          @OA\Schema(type="String", example="SOLID"),
+     *      ),
+     * 
+     *      @OA\Response(
+     *          response=200,
+     *          description="Technical Tests successfully listed",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(property="id", type="integer", example=123),
+     *                      @OA\Property(property="github_id", type="integer", example=6729608, nullable=true),
+     *                      @OA\Property(property="node_id", type="string", example="MDQ6VXNlcjY3Mjk2MDg=", nullable=true),
+     *                      @OA\Property(property="title", type="string", example="Basic PHP exam"),
+     *                      @OA\Property(property="language", type="string", example="PHP"),
+     *                      @OA\Property(property="description", type="string", example="Solve this exam paying atention to SOLID principles"),
+     *                      @OA\Property(property="file_path", type="string", example="technical_tests/exam.pdf", nullable=true),
+     *                      @OA\Property(property="file_original_name", type="string", example="exam.pdf", nullable=true),
+     *                      @OA\Property(property="file_size", type="integer", example=1024, nullable=true),
+     *                      @OA\Property(property="tags", type="array", 
+     *                              @OA\Items(type="string"), example={"php", "backend"}, nullable=true),
+     *                      @OA\Property(property="bookmark_count", type="integer", example=5),
+     *                      @OA\Property(property="like_count", type="integer", example=12),
+     *                      @OA\Property(property="created_at", type="string", format="date-time"),
+     *                      @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                      @OA\Property(property="deleted_at", type="string", format="date-time", nullable=true)
+     *                  )         
+     *              ),
+     *              @OA\Property(property="message", type="string", nullable=true, example="No tests found with those criteria"),
+     *              @OA\Property(
+     *                  property="filters",
+     *                  type="object",
+     *                  @OA\Property(property="available_languages", type="array", @OA\Items(type="string"), example={"PHP", "JavaScript", "Java", "React", "TypeScript", "Python", "SQL"}),
+     *                  @OA\Property(property="applied_filters", type="object", example={"search": "Examen de PHP básico", "language": "PHP"})
+     *              )
+     *          )
+     *      ),
+     * 
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                  property="message", 
+     *                  type="string", 
+     *                  example="El título no debe exceder los 255 caracteres."
+     *             ),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                      property="search", 
+     *                      type="array", 
+     *                      @OA\Items(type="string"), 
+     *                      example={"El título no debe exceder los 255 caracteres."}
+     *                 ),
+     *                 @OA\Property(
+     *                      property="language", 
+     *                      type="array", 
+     *                      @OA\Items(type="string"), 
+     *                      example={"El lenguaje seleccionado no es válido."}
+     *                 ),
+     *                 @OA\Property(
+     *                      property="description", 
+     *                      type="array", 
+     *                      @OA\Items(type="string"), 
+     *                      example={"El campo descripción no debe exceder los 1000 caracteres."}
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *         )
+     *     )
+     *)
+     * 
+     */
+    public function index(IndexTechnicalTestRequest $request)
+    {
+       /* $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if (!$user->can('view technical tests')) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }*/
+
+        $query = TechnicalTest::with('exercises');
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('language')) {
+            $query->where('language', $request->language);
+        }
+
+        if ($request->filled('description')) {
+            $query->where('description', 'like', '%' . $request->description . '%');
+        }
+
+        if ($request->filled('difficulty_level')) {
+            $query->where('difficulty_level', $request->difficulty_level);
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+         
+        $technicalTests = $query->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'data' => $technicalTests,
+            'message' => $technicalTests->isEmpty()? 'No tests found with those criteria' : null,
+            'filters' => [
+                'available_languages' => LanguageEnum::values(),
+                'available_difficulty_levels' => DifficultyLevelEnum::values(),
+                'available_states' => TechnicalTestStatusEnum::values(),
+                'applied_filters' => $request->only(['search', 'language', 'description', 'difficulty_level', 'state'])        
+            ] 
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/technical-tests",
+     *     summary="Crear una nueva prueba técnica",
+     *     description="Crea una nueva prueba técnica en el sistema. Permite adjuntar un archivo PDF opcional.",
+     *     tags={"Technical Tests"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Datos de la prueba técnica y archivo opcional",
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"title", "language"},
+     *                 @OA\Property(property="title", type="string", minLength=5, maxLength=255, example="Examen PHP Básico"),
+     *                 @OA\Property(property="language", type="string", enum={"PHP", "JavaScript", "Java", "React", "TypeScript", "Python", "SQL"}, example="PHP"),
+     *                 @OA\Property(property="description", type="string", maxLength=1000, example="Examen sobre conceptos básicos de PHP", nullable=true),
+     *                 @OA\Property(property="tags", type="array", @OA\Items(type="string"), example={"php", "backend"}, nullable=true),
+     *                 @OA\Property(property="file", type="string", format="binary", description="Archivo PDF opcional")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Prueba técnica creada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Technical test created successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=123),
+     *                 @OA\Property(property="title", type="string", example="Examen PHP Básico"),
+     *                 @OA\Property(property="language", type="string", example="PHP"),
+     *                 @OA\Property(property="description", type="string", example="Examen sobre conceptos básicos de PHP"),
+     *                 @OA\Property(property="tags", type="array", @OA\Items(type="string"), example={"php", "backend"}),
+     *                 @OA\Property(property="file_path", type="string", example="technical-tests/1625678900_prueba.pdf"),
+     *                 @OA\Property(property="file_original_name", type="string", example="prueba.pdf"),
+     *                 @OA\Property(property="file_size", type="integer", example=102400),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The title field is required."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     )
+     * )
+     */
+    public function store(StoreTechnicalTestRequest $request)
+    {
+       // $user = auth('api')->user();
+
+        try {
+            DB::beginTransaction();
+
+            $data = [
+                'title' => $request->title,
+                'language' => $request->language,
+                'description' => $request->description,
+                'tags' => $request->tags,
+                'github_id' => $request->github_id,
+                'difficulty_level' => $request->difficulty_level,
+                'duration' => $request->duration,
+                'state' => $request->state ?? 'draft',
+            ];
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('technical-tests', $fileName, 'local');
+                
+                $data['file_path'] = $filePath;
+                $data['file_original_name'] = $file->getClientOriginalName();
+                $data['file_size'] = $file->getSize();
+            }
+
+            $technicalTest = TechnicalTest::create($data);
+
+            // Create exercises if provided
+            if ($request->filled('exercises') && is_array($request->exercises) && count($request->exercises) > 0) {
+                $exercisesData = collect($request->exercises)->map(function($exercise, $index) {
+                    return [
+                        'title' => $exercise['title'],
+                        'description' => $exercise['description'] ?? null,
+                        'order' => $index + 1,
+                        'is_completed' => $exercise['is_completed'] ?? false,
+                    ];
+                })->toArray();
+                
+                $technicalTest->exercises()->createMany($exercisesData);
+            }
+
+            DB::commit();
+
+            // Load exercises for response
+            $technicalTest->load('exercises');
+
+            return response()->json([
+                'message' => 'Technical test created successfully',
+                'data' => $technicalTest
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error('Error creating technical test', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'data' => $request->except('file')
+            ]);
+
+            return response()->json([
+                'message' => 'Error creating technical test',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+        // TODO: Consider using upsert/sync for exercises in future optimization
+    }
+
+   
+    /**
+     * @OA\Get(
+     *     path="/api/technical-tests/{id}",
+     *     summary="Get a technical test",
+     *     tags={"Technical Tests"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Technical test details")
+     * )
+     */
+    public function show(TechnicalTest $technicalTest)
+    {
+        $technicalTest->load('exercises');
+        
+        return response()->json([
+            'data' => $technicalTest
+        ]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/technical-tests/{id}",
+     *     summary="Update a technical test",
+     *     tags={"Technical Tests"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Technical test updated successfully"),
+     *     @OA\Response(response=403, description="Forbidden - Not your technical test")
+     * )
+     */
+    public function update(StoreTechnicalTestRequest $request, TechnicalTest $technicalTest)
+    {
+       /* $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }*/
+
+        /* if (!$user->can('edit all technical tests')) {
+            if ($technicalTest->github_id !== $user->github_id || !$user->can('edit own technical tests')) {
+                return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
+            }
+        }*/
+
+        try {
+            DB::beginTransaction();
+
+            $data = [
+                'title' => $request->title,
+                'language' => $request->language,
+            ];
+
+            // Only update optional fields if they are provided
+            if ($request->has('description')) {
+                $data['description'] = $request->description;
+            }
+            if ($request->has('tags')) {
+                $data['tags'] = $request->tags;
+            }
+            if ($request->has('difficulty_level')) {
+                $data['difficulty_level'] = $request->difficulty_level;
+            }
+            if ($request->has('duration')) {
+                $data['duration'] = $request->duration;
+            }
+            if ($request->has('state')) {
+                $data['state'] = $request->state;
+            }
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('technical-tests', $fileName, 'local');
+                
+                $data['file_path'] = $filePath;
+                $data['file_original_name'] = $file->getClientOriginalName();
+                $data['file_size'] = $file->getSize();
+            }
+
+            $technicalTest->update($data);
+
+            // Handle exercises if provided in request
+            if ($request->has('exercises')) {
+                // Delete existing exercises
+                $technicalTest->exercises()->delete();
+
+                // Create new exercises if array is not empty
+                if (is_array($request->exercises) && count($request->exercises) > 0) {
+                    $exercisesData = collect($request->exercises)->map(function($exercise, $index) {
+                        return [
+                            'title' => $exercise['title'],
+                            'description' => $exercise['description'] ?? null,
+                            'order' => $index + 1,
+                            'is_completed' => $exercise['is_completed'] ?? false,
+                        ];
+                    })->toArray();
+                    
+                    $technicalTest->exercises()->createMany($exercisesData);
+                }
+            }
+
+            DB::commit();
+
+            // Reload exercises for response
+            $technicalTest->load('exercises');
+
+            return response()->json([
+                'message' => 'Technical test updated successfully',
+                'data' => $technicalTest
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error('Error updating technical test', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'technical_test_id' => $technicalTest->id,
+                'data' => $request->except('file')
+            ]);
+
+            return response()->json([
+                'message' => 'Error updating technical test',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+        // TODO: Consider using sync mechanism for exercises to preserve IDs and optimize updates
+    }
+
+  
+    /**
+     * @OA\Delete(
+     *     path="/api/technical-tests/{id}",
+     *     summary="Delete a technical test",
+     *     tags={"Technical Tests"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Technical test deleted successfully"),
+     *     @OA\Response(response=403, description="Forbidden - Not your technical test")
+     * )
+     */
+    public function destroy(TechnicalTest $technicalTest)
+    {
+       /* $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }*/
+        /* if (!$user->can('delete all technical tests')) {
+            if ($technicalTest->github_id !== $user->github_id || !$user->can('delete own technical tests')) {
+                return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
+            }
+        }*/
+
+
+        $technicalTest->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Technical test deleted successfully'
+        ]);
+    }
+}

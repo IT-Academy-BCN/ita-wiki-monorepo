@@ -1,0 +1,52 @@
+import { FC } from "react";
+import PageTitle from "../components/ui/PageTitle";
+import moockData from "../moock/projectDetails.json";
+import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
+import Container from "../components/ui/Container";
+
+import react from "../assets/react.svg";
+import php from "../assets/logo-php 1.svg";
+import avatar1 from "../assets/project-avatar.jpg";
+import avatar2 from "../assets/project-avatar2.jpg";
+import avatar3 from "../assets/project-avatar3.jpg";
+
+const CodeConnectDetails: FC = () => {
+  const { title, description, roadmap } = moockData.details[0];
+  return (
+    <>
+      <PageTitle title={title} />
+
+      <Container className="px-4 py-6 lg:pl-8 xl:pl-6">
+        <div className="flex flex-col lg:flex-row gap-8 w-full">
+          <div className="lg:w-2/3">
+            <h2 className="text-[26px] font-extrabold text-left mb-10">
+              {title}
+            </h2>
+            <p className="text-[16px] mb-20 whitespace-pre-line">
+              {description}
+            </p>{" "}
+            <h3 className="text-[22px] font-extrabold mb-5">Roadmap</h3>
+            <ol className="list-decimal list-inside">
+              {(roadmap || []).map((item, index) => (
+                <li key={index} className="text-[16px] mb-2">
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
+            <ProjectTeam
+              logoFront={react}
+              logoBack={php}
+              avatarSrc={avatar1}
+              avatarSrc2={avatar2}
+              avatarSrc3={avatar3}
+            />
+          </div>
+        </div>
+      </Container>
+    </>
+  );
+};
+
+export default CodeConnectDetails;
