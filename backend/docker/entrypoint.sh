@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 cd /var/www/html
@@ -29,9 +29,8 @@ fi
 
 echo "Waiting for database connection..."
 RETRIES=60
-until mysqladmin --skip-ssl --protocol=tcp -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" ping --silent || [ $RETRIES -le 0 ]; do
-    echo "Database not ready. Retrying in 5 seconds..."
-    RETRIES=$((RETRIES-1))
+until mysqladmin --skip-ssl --protocol=tcp -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" ping --silent  || [ $RETRIES -le 0 ]; do
+    echo "Database not ready. Retrying in 5 seconds..." RETRIES=$((RETRIES-1))
     sleep 5
 done
 
