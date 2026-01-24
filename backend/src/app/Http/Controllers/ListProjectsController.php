@@ -372,7 +372,7 @@ class ListProjectsController extends Controller
                 'message' => 'Contributor not found',
             ], 404);
         }
-        //
+        // 
         if($user) {
             $isMember = ContributorListProject::where('list_project_id', $listProjectId)
                 ->where('user_id', $user->id)
