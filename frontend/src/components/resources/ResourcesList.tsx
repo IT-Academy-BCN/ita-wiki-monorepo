@@ -59,7 +59,13 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   }, [sortedResources, searchTerm]);
 
   if (showLoader) {
-    return <ResourceCardSkeleton />;
+    return (
+      <div className="flex flex-col gap-4 mt-10">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <ResourceCardSkeleton key={index} />
+        ))}
+      </div>
+    );
   }
   // Early return if no resources
   if (!resources?.length) {

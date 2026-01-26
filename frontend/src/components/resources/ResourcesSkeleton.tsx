@@ -1,6 +1,6 @@
 const ResourceCardSkeleton = () => {
     return (
-        <div  data-testid="resource-card-skeleton" className="flex flex-col mt-10 w-full p-6 ring ring-gray-900/5 rounded-2xl shadow-md bg-gray-100">
+        <div  data-testid="resource-card-skeleton" className="flex flex-col w-full p-6 ring ring-gray-900/5 rounded-2xl shadow-md bg-gray-100">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between animate-pulse">
                 <div className="flex flex-col sm:flex-row gap-1">
                 <div className="flex flex-col flex-1 gap-1 mt-2 sm:mt-0">
