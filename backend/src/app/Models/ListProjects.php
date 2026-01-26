@@ -13,6 +13,7 @@ class ListProjects extends Model
     use HasFactory;
     protected $table = 'list_projects';
     protected $fillable = [
+        'owner_id',
         'title',
         'time_duration',
         'language_backend',
