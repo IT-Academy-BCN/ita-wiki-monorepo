@@ -64,3 +64,17 @@ export const createCodeConnect = async (
     throw error;
   }
 };
+
+export const fetchCodeConnectProject = async (projectId: number) => {
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch code connect project");
+    }
+    const data = await response.json();
+    return Array.isArray(data) ? data : data.data;
+  } catch (error: unknown) {
+    console.error(error);
+  }
+};
