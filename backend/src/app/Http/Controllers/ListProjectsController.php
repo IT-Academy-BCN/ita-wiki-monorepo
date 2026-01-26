@@ -675,6 +675,31 @@ class ListProjectsController extends Controller
      */
     public function removeContributor(int $listProjectId, int $contributorId)
     {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json([
+                'succes' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
+        if ($project->owner_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only the project owner can remove contributors'
+            ], 403);
+        }
+
         $contributor = ContributorListProject::where('id', $contributorId)
             ->where('list_project_id', $listProjectId)
             ->first();
