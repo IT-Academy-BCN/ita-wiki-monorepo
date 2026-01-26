@@ -49,6 +49,7 @@ const END_POINTS = {
     get: "technical-tests" as EndPoints,
   },
   codeconnect: {
+    get: "codeconnect" as EndPoints,
     post: "codeconnect" as EndPoints,
   },
   auth: {
