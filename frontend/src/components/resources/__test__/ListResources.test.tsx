@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { ResourcesLayout } from "../ResourcesLayout";
+import { ResourcesList } from "../ResourcesList";
 import { ResourcesFiltersProvider } from "../../../context/ResourcesFiltersContext";
 import { categories } from "../../../data/categories";
 import { IntResource } from "../../../types";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("../../../hooks/useResourceFilter", () => ({
   useResourceFilter: () => ({
@@ -22,19 +23,16 @@ vi.mock("../../../context/UserContext", () => ({
   }),
 }));
 
+const mockUseMinLoading = vi.fn();
+
+vi.mock("../../../hooks/useMinLoading", () => ({
+  useMinLoading: () => mockUseMinLoading(),
+}));
+
+const mockUseResources = vi.fn();
+
 vi.mock("../../../context/ResourcesContext", () => ({
-  useResources: () => ({
-    isBookmarked: vi.fn(),
-    toggleBookmark: vi.fn(),
-    resources: mockResources,
-    isLoading: false,
-    getBookmarkCount: (resourceId: number | string) => {
-      const resource = mockResources.find((r) => r.id === resourceId);
-      return resource?.bookmark_count || 0;
-    },
-    bookmarkedResources: [],
-    loadingBookmarks: false,
-  }),
+  useResources: () => mockUseResources(),
 }));
 
 const mockResources: IntResource[] = [
@@ -65,6 +63,24 @@ const mockResources: IntResource[] = [
 const category = Object.keys(categories)[0] as keyof typeof categories;
 
 describe("ResourcesLayout Component", () => {
+  // Configurar el valor default del mock antes de cada test
+  beforeEach(() => {
+    // Por defecto, useMinLoading retorna false (no loading)
+    mockUseMinLoading.mockReturnValue(false);
+    
+    mockUseResources.mockReturnValue({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: mockResources,
+      isLoading: false,
+      getBookmarkCount: (resourceId: number | string) => {
+        const resource = mockResources.find((r) => r.id === resourceId);
+        return resource?.bookmark_count || 0;
+      },
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+    });
+  });
   it("should render the component and display the correct title", () => {
     render(
       <MemoryRouter>
@@ -79,5 +95,44 @@ describe("ResourcesLayout Component", () => {
 
     const titleElement = screen.getByText(`Recursos ${String(category)}`);
     expect(titleElement.tagName).toBe("H2");
+  });
+
+  it("should render ResourceCardSkeleton when loading", () => {
+    // Configurar useMinLoading para retornar true (mostrar loader)
+    // Usamos mockReturnValue en lugar de mockReturnValueOnce
+    mockUseMinLoading.mockReturnValue(true);
+    
+    // Cambiar temporalmente isLoading a true solo para este test
+    mockUseResources.mockReturnValueOnce({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: mockResources,
+      isLoading: true,
+      getBookmarkCount: (resourceId: number | string) => {
+        const resource = mockResources.find((r) => r.id === resourceId);
+        return resource?.bookmark_count || 0;
+      },
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList resources={mockResources} category={String(category)} />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>
+    );
+
+    // Verificar que aparece el skeleton
+    const skeleton = screen.getByTestId("resource-card-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    
+    // Verificar que NO aparecen los recursos normales
+    expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
+    expect(screen.queryByText("Advanced JS")).not.toBeInTheDocument();
+    
+    // Restaurar el mock a false para no afectar otros tests
+    mockUseMinLoading.mockReturnValue(false);
   });
 });
