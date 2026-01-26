@@ -22,6 +22,7 @@ class ListProjectsFactory extends Factory
         $languages = LanguageEnum::values();
 
         return [
+            'owner_id' => \App\Models\User::factory(),
             'title' => $this->faker->sentence(3),
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
