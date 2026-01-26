@@ -25,8 +25,8 @@ class ListProjects extends Model
         return $this->hasMany(ContributorListProject::class, 'list_project_id');
     }
 
-    public function user()
+    public function owner()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'owner_id', 'id');
     }
 }
