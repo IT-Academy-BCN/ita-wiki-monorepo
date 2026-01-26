@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import ButtonComponent from "../atoms/ButtonComponent";
 import TechnicalTestSkeleton from "./TechnicalTestSkeleton";
 import { TechnicalTest } from "../../types/TechnicalTest";
+import EmptyState from "../ui/EmptyState";
 
 interface TechnicalTestListProps {
   filters?: {
@@ -105,7 +106,11 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ filters }) => {
       )}
       {error && <p className="m-4 text-red-500">Error: {error.message}</p>}
 
-      {!showLoader && !error && (
+      {!isLoading && filteredTechnicalTests?.length === 0 && (
+        <EmptyState text="No hi ha proves tècniques" />
+      )}
+
+      {!showLoader && !error && filteredTechnicalTests.length > 0 && (
         <ul className="flex flex-col gap-4">
           {filteredTechnicalTests.map((test) => (
             <TechnicalTestCard key={test.id} test={test} />
