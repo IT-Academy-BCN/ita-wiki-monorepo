@@ -194,6 +194,7 @@ class ListProjectsController extends Controller
         }
 
         try {
+            $validatedData['owner_id'] = auth()->id();
             $newProject = ListProjects::create($validatedData);
             return response()->json([
                 'success' => true,
