@@ -106,28 +106,13 @@ class ValidateContributorStatusTest extends TestCase
     }
     public function test_only_acepted_contributors_can_validate_requests(){
         $nonMemberUser = User::factory()->create();
-
-        /*ContributorListProject::factory()->create([
-            'list_project_id' => $this->project->id,
-            'user_id' => User::factory()->create() ->id,
-            'status' => ContributorStatusEnum::Accepted->value,
-        ]);*/
         $contributorUser = User::factory()->create();
         $pendingContributor = $this->createPendingContributor($contributorUser);
-
-        //dump for id comprove
-       /* dump([
-        'project_id' => $this->project->id,
-        'pending_contributor_id' => $pendingContributor->id,
-        'pending_contributor_list_project_id' => $pendingContributor->list_project_id,
-    ]);*/
 
         $response = $this->actingAs($nonMemberUser, 'sanctum')
             ->patchJson("/api/listsProject/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
-
-        dump($response->getContent());
         
         $response->assertStatus(403)
             ->assertJson([
