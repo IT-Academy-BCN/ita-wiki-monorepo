@@ -17,19 +17,23 @@ class ListProjectsSeeder extends Seeder
      */
     public function run(): void
     {
+        $owner = \App\Models\User::first() ?? \App\Models\User::factory()->create();
         $Project1 = ListProjects::firstOrCreate([
+            'owner_id' => $owner->id,
             'title' => 'Project Alpha',
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
         $Project2 = ListProjects::firstOrCreate([
+            'owner_id' => $owner->id,
             'title' => 'Project Beta',
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::React->value,
         ]);
         $project3 = ListProjects::firstOrCreate([
+            'owner_id' => $owner->id,
             'title' => 'Project Gamma',
             'time_duration' => '3 weeks',
             'language_backend' => LanguageEnum::Java->value,
