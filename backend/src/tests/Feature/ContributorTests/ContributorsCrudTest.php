@@ -171,15 +171,18 @@ class ContributorsCrudTest extends TestCase
 
     // ========== DELETE TESTS ==========
 
-    public function test_it_can_delete_a_contributor_from_project(): void
+    public function test_it_can_delete_a_contributor_when_user_is_project_owner(): void
     {
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+
         $contributor = ContributorListProject::factory()->create([
-            'list_project_id' => $this->project->id,
+            'list_project_id' => $project->id,
         ]);
 
-        Sanctum::actingAs($this->user);
+        Sanctum::actingAs($owner);
 
-        $response = $this->deleteJson("/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}");
+        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -194,8 +197,11 @@ class ContributorsCrudTest extends TestCase
 
     public function test_delete_returns_404_when_contributor_does_not_exist(): void
     {
-        Sanctum::actingAs($this->user);
-        $response = $this->deleteJson("/api/codeconnect/{$this->project->id}/contributors/99999");
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+
+        Sanctum::actingAs($owner);
+        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/99999");
 
         $response->assertStatus(404)
             ->assertJson([
@@ -206,18 +212,68 @@ class ContributorsCrudTest extends TestCase
 
     public function test_delete_returns_404_when_contributor_does_not_belong_to_project(): void
     {
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+
         $otherProject = ListProjects::factory()->create();
         $contributor = ContributorListProject::factory()->create([
             'list_project_id' => $otherProject->id,
         ]);
 
-        Sanctum::actingAs($this->user);
-        $response = $this->deleteJson("/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}");
+        Sanctum::actingAs($owner);
+        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
 
         $response->assertStatus(404)
             ->assertJson([
                 'success' => false,
                 'message' => 'Contributor not found',
             ]);
+    }
+
+    public function test_it_returns_403_when_non_owner_tries_to_delete_contributor():void
+    {
+        $nonOwner = User::factory()->create();
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+
+        $contributor = ContributorListProject::factory()->create([
+            'list_project_id' => $project->id,
+        ]);
+
+        Sanctum::actingAs($nonOwner);
+        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Only the project owner can remove contributors',
+            ]);
+        
+        $this->assertDatabaseHas('contributors_list_project', [
+            'id' => $contributor->id,
+        ]);
+    }
+
+    public function test_delete_returns_401_when_user_is_unauthenticated(): void
+    {
+        $contributor = ContributorListProject::factory()->create([
+            'list_project_id' => $this->project->id,
+        ]);
+
+        $response = $this->deleteJson("/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}");
+
+        $response->assertStatus(401);
+    }
+
+    public function test_delete_returns_404_when_projectdoes_not_exist(): void 
+    {
+        Sanctum::actingAs($this->user);
+        $response = $this->deleteJson("/api/codeconnect/99999/contributors/1");
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Project not found',
+            ]); 
     }
 }
