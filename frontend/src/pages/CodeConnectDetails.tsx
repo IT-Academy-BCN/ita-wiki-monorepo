@@ -19,7 +19,7 @@ const CodeConnectDetails = () => {
 
   return (
     <>
-      <PageTitle title={title} />
+      <PageTitle title={codeConnectProject?.data?.title || "Codeconnect | IT Academy Wiki"} />
 
       <Container className="px-4 py-6 lg:pl-8 xl:pl-6">
         {isLoading && <p>Carregant...</p>}
