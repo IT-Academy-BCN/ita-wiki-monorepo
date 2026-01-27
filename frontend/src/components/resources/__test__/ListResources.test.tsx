@@ -124,9 +124,9 @@ describe("ResourcesLayout Component", () => {
       </MemoryRouter>
     );
 
-    // Verificar que aparece el skeleton
-    const skeleton = screen.getByTestId("resource-card-skeleton");
-    expect(skeleton).toBeInTheDocument();
+    // Verificar que aparecen exactamente 8 skeletons
+    const skeletons = screen.getAllByTestId("resource-card-skeleton");
+    expect(skeletons).toHaveLength(8);
     
     // Verificar que NO aparecen los recursos normales
     expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
