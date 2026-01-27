@@ -169,6 +169,32 @@ class ContributorsCrudTest extends TestCase
         $response->assertStatus(422);
     }
 
+    public function test_it_returns_403_when_user_was_rejected_and_tries_again(): void
+    {
+        ContributorListProject::factory()->create([
+            'user_id' => $this->user->id,
+            'list_project_id' => $this->project->id,
+            'status' => ContributorStatusEnum::Rejected->value,
+        ]);
+
+        Sanctum::actingAs($this->user);
+
+        $response = $this->postJson("/api/codeconnect/{$this->project->id}/contributors", [
+            'user_id' => $this->user->id,
+            'programming_role' => 'Fullstack Developer',
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => 'User was rejected and cannot request again for this project',
+            ]);
+
+        $this->assertEquals(1, ContributorListProject::where('list_project_id', $this->project->id)
+            ->where('user_id', $this->user->id)
+            ->count());
+    }
+
     // ========== DELETE TESTS ==========
 
     public function test_it_can_delete_a_contributor_from_project(): void
