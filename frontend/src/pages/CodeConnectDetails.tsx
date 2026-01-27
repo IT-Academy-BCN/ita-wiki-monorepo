@@ -9,7 +9,6 @@ import avatar1 from "../assets/project-avatar.jpg";
 import avatar2 from "../assets/project-avatar2.jpg";
 import avatar3 from "../assets/project-avatar3.jpg";
 import { useParams } from "react-router";
-import { useEffect } from "react";
 
 const CodeConnectDetails = () => {
   const { title, description, roadmap } = moockData.details[0];
@@ -17,11 +16,6 @@ const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
 
   const { codeConnectProject, isLoading } = useCodeConnectProject(projectId || null);
-
-  // useEffect(() => {
-  //   console.log("is loading:", isLoading);
-  //   console.log("CodeConnectProject data:", codeConnectProject);
-  // }, [codeConnectProject, isLoading]);
 
   return (
     <>
@@ -33,7 +27,7 @@ const CodeConnectDetails = () => {
           <div className="flex flex-col lg:flex-row gap-8 w-full">
             <div className="lg:w-2/3">
               <h2 className="text-[26px] font-extrabold text-left mb-10">
-                {codeConnectProject?.data?.title || "unable to load project title"}
+                {codeConnectProject.data?.title || "unable to load project title"}
               </h2>
               <p className="text-[16px] mb-20 whitespace-pre-line">
                 {description}

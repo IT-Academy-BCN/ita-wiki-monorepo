@@ -73,7 +73,7 @@ export const fetchCodeConnectProject = async (projectId: number) => {
       throw new Error("Failed to fetch code connect project");
     }
     const data = await response.json();
-    return Array.isArray(data) ? data : data.data;
+    return data;
   } catch (error: unknown) {
     console.error(error);
   }

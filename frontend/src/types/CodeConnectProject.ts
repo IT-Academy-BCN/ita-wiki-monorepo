@@ -1,4 +1,5 @@
 export type CodeConnectProject = {
+    success: boolean;
     data: CodeConnectProjectData;
     message: string;
 };
