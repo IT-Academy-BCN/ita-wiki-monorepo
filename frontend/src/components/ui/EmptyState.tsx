@@ -1,18 +1,23 @@
   import { FC } from "react";                                                                                                                                         
   import emptyImage from "../../assets/loading-png.png";
+  import clsx from "clsx";                                                                                                            
                                                                                                                                                                       
-  interface EmptyStateProps {                                                                                                                                         
-    text: string;                                                                                                                                                     
-  }                                                                                                                                                                   
+  interface EmptyStateProps {                                                                                                    
+    text: string;                                                                                                                
+    subtext?: string;                                                                                                            
+    textClassName?: string;                                                                                                      
+  }                                                                                                                                                                                           
                                                                                                                                                                       
-  const EmptyState: FC<EmptyStateProps> = ({ text }) => {                                                                                                             
+  const EmptyState: FC<EmptyStateProps> = ({                                                                                     
+    text,                                                                                                                        
+    subtext = "Torna-ho a provar més tard o crea un nou element",                                                                
+    textClassName,                                                                                                               
+  }) => {                                                
     return (                                                                                                                                                          
       <div className="flex flex-col items-center mt-20">                                                                                                              
         <img src={emptyImage} alt="No hi ha dades" className="max-w-xs" />                                                                                            
-        <h1 className="font-black">{text}</h1>                                                                                                                        
-        <p className="text-gray-500 text-sm mt-2">                                                                                                                    
-          Torna-ho a provar més tard o crea un nou element                                                                                                            
-        </p>                                                                                                                                                          
+        <h1 className={clsx("font-black", textClassName)}>{text}</h1>                                                                                                                         
+        <p className="text-gray-500 text-sm mt-2">{subtext}</p>                                                                                                                                                          
       </div>                                                                                                                                                          
     );                                                                                                                                                                
   };                                                                                                                                                                  

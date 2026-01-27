@@ -104,9 +104,15 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ filters }) => {
           ))}
         </ul>
       )}
-      {error && <p className="m-4 text-red-500">Error: {error.message}</p>}
+      {error && (
+        <EmptyState
+          text="Error al obtenir proves tècniques"
+          subtext="Hi ha hagut un problema. Torna-ho a provar."
+          textClassName="text-red-500"
+        />
+      )}
 
-      {!isLoading && filteredTechnicalTests?.length === 0 && (
+      {!isLoading && !error && filteredTechnicalTests?.length === 0 && (
         <EmptyState text="No hi ha proves tècniques" />
       )}
 
