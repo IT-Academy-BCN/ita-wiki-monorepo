@@ -152,7 +152,7 @@ describe("TechnicalTestList", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText(/Error: Algo ha fallado/)).toBeDefined();
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
   });
 
 
@@ -188,21 +188,22 @@ describe("TechnicalTestList", () => {
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
 
-  it("shows EmptyState together with error message", () => {
-    mockedUseTechnicalTestList.mockReturnValue({
-      technicalTests: [],
-      isLoading: false,
-      error: new Error("Error de connexió"),
-    });
-
-    render(
-      <MemoryRouter>
-        <TechnicalTestList />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText(/Error: Error de connexió/)).toBeDefined();
-    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  it("shows EmptyState with error styling when there is an error", () => {                                                
+    mockedUseTechnicalTestList.mockReturnValue({                                                                          
+      technicalTests: [],                                                                                                 
+      isLoading: false,                                                                                                   
+      error: new Error("Error de connexió"),                                                                              
+    });                                                                                                                   
+                                                                                                                          
+    render(                                                                                                               
+      <MemoryRouter>                                                                                                      
+        <TechnicalTestList />                                                                                             
+      </MemoryRouter>,                                                                                                    
+    );                                                                                                                    
+                                                                                                                          
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();                                          
+    expect(screen.getByText("Hi ha hagut un problema. Torna-ho a provar.")).toBeDefined();                                                                                          
+    expect(screen.queryByText("No hi ha proves tècniques")).toBeNull();                                                   
   });
 
   it("shows skeletons while loading", () => {
