@@ -1,4 +1,4 @@
-name: React CI
+name: Frontend Tests
 
 on:
   pull_request:
@@ -9,6 +9,10 @@ on:
     branches:
       - main
       - develop
+
+defaults:
+  run:
+    working-directory: ./frontend/
 
 jobs:
   react-checks:
@@ -37,11 +41,9 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        working-directory: ./frontend/
         run: npm ci
 
       - name: Check code formatting with Prettier
-        working-directory: ./frontend/
         run: npx prettier --check .
 
       - name: Run ESLint
