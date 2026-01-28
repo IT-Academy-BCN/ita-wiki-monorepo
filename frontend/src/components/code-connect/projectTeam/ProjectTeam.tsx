@@ -1,23 +1,58 @@
 import ProjectButton from "../../code-connect/projectCard/ProjectButton";
 import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
-
-interface Contributor {
-  name: string;
-  programming_role: string;
-}
+import { useProjectTeam } from "../../../hooks/useProjectTeam";
+import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
 
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
-  contributors?: Contributor[];
+  contributors?: CodeConnectProjectDataContributor[];
 }
+
+// Sub-component per evitar repetir codi entre Frontend i Backend
+const TeamRow = ({
+  members,
+  emptySlots,
+}: {
+  members: { name: string; avatar: string }[];
+  emptySlots: number;
+}) => (
+  <div className="w-full flex gap-6 pr-2 mb-4">
+    {/* 1. Membres reals amb el seu avatar */}
+    {members.map((member, index) => (
+      <figure className="flex flex-col items-center" key={index}>
+        <img
+          src={member.avatar}
+          alt={member.name}
+          className="w-10 h-10 rounded-full object-cover mb-1" // Estils per l'avatar
+        />
+        <figcaption className="text-xs font-bold text-gray-500">
+          {member.name}
+        </figcaption>
+      </figure>
+    ))}
+
+    {/* 2. Botons "+" per omplir els forats fins a 3 */}
+    {Array.from({ length: emptySlots }).map((_, index) => (
+      <ProjectButton key={`empty-${index}`}>+</ProjectButton>
+    ))}
+  </div>
+);
 
 function ProjectTeam({
   logoFront,
   logoBack,
-  contributors
+  contributors = [],
 }: ProjectTeamProps) {
+  
+  // Cridem al hook, que ja fa el filtre, el slice(0,3) i genera l'avatar
+  const { getTeamByRole } = useProjectTeam(contributors);
+
+  // Obtenim les dades ja processades
+  const frontendData = getTeamByRole("frontend");
+  const backendData = getTeamByRole("backend");
+
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
       <div>
@@ -25,6 +60,7 @@ function ProjectTeam({
       </div>
 
       <div className="w-full mt-5">
+        {/* --- SECCIÓ FRONTEND --- */}
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Frontend</h2>
           {logoFront && (
@@ -32,18 +68,13 @@ function ProjectTeam({
           )}
         </div>
 
-        <div className="w-full flex gap-6 pr-2 mb-4">
-          {contributors && contributors.filter(contributor => contributor.programming_role.toLowerCase().includes("frontend"))
-          .map((contributor, index) => 
-            <figure className="flex flex-col items-center" key={index}>
-              <figcaption className="text-xs mt-1 font-bold text-gray-500">
-                {contributor.name}
-              </figcaption>
-            </figure>
-            )}
-          <ProjectButton>+</ProjectButton>
-        </div>
+        {/* Utilitzem el subcomponent amb les dades del hook */}
+        <TeamRow 
+          members={frontendData.members} 
+          emptySlots={frontendData.emptySlots} 
+        />
 
+        {/* --- SECCIÓ BACKEND --- */}
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Backend</h2>
           {logoBack && (
@@ -51,14 +82,11 @@ function ProjectTeam({
           )}
         </div>
 
-        <div className="w-full flex gap-6 pr-2 mb-14">
-          <figure className="flex flex-col items-center">
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Aina
-            </figcaption>
-          </figure>
-          <ProjectButton>+</ProjectButton>
-          <ProjectButton>+</ProjectButton>
+        <div className="mb-14">
+          <TeamRow 
+            members={backendData.members} 
+            emptySlots={backendData.emptySlots} 
+          />
         </div>
       </div>
 

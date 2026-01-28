@@ -4,7 +4,7 @@ export const useProjectTeam = (contributors: CodeConnectProjectDataContributor[]
 
   const getTeamByRole = (role: string) => {
     const roleMembers = contributors
-      .filter((c) => c.programming_role.toLowerCase() === role.toLowerCase())
+      .filter((c) => c.programming_role.toLowerCase().includes(role.toLowerCase()))
       .slice(0, 3);
 
     const members = roleMembers.map((member) => ({
