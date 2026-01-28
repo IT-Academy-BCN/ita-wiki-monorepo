@@ -1,9 +1,9 @@
 import react from "../assets/react.svg";
-import php from "../assets/logo-php 1.svg"; 
+import php from "../assets/logo-php-1.svg"; 
 import angular from "../assets/angular.svg";
 import javascript from "../assets/javascript.svg";
 import python from "../assets/pythonVector.svg";
-import java from "../assets/logo-java 1.svg";
+import java from "../assets/logo-java-1.svg";
 import typescript from "../assets/typescript.svg";
 
 export const displayLanguageIcon = (language: string | undefined | null): string => {
