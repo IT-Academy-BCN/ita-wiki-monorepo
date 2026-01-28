@@ -12,7 +12,7 @@ type CodeConnectProjectData = {
     contributors: CodeConnectProjectDataContributor[];
 }
 
-type CodeConnectProjectDataContributor = {
+export type CodeConnectProjectDataContributor = {
     name: string;
     programming_role: string;
 }

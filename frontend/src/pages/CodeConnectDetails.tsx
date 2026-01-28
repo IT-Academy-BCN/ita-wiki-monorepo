@@ -3,9 +3,6 @@ import useCodeConnectProject from "../hooks/useCodeConnectProject";
 import moockData from "../moock/projectDetails.json";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
-import avatar1 from "../assets/project-avatar.jpg";
-import avatar2 from "../assets/project-avatar2.jpg";
-import avatar3 from "../assets/project-avatar3.jpg";
 import { useParams } from "react-router";
 import { displayLanguageIcon } from "../utils/iconUtils";
 
@@ -44,9 +41,7 @@ const CodeConnectDetails = () => {
               <ProjectTeam
                 logoFront={displayLanguageIcon(codeConnectProject.data?.language_frontend)}
                 logoBack={displayLanguageIcon(codeConnectProject.data?.language_backend)}
-                avatarSrc={avatar1}
-                avatarSrc2={avatar2}
-                avatarSrc3={avatar3}
+                contributors={codeConnectProject.data?.contributors}
               />
             </div>
           </div>

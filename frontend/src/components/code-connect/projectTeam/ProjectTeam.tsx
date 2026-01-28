@@ -2,19 +2,21 @@ import ProjectButton from "../../code-connect/projectCard/ProjectButton";
 import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
 
+interface Contributor {
+  name: string;
+  programming_role: string;
+}
+
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
-  avatarSrc?: string;
-  avatarSrc2?: string;
-  avatarSrc3?: string;
+  contributors?: Contributor[];
 }
+
 function ProjectTeam({
   logoFront,
   logoBack,
-  avatarSrc,
-  avatarSrc2,
-  avatarSrc3,
+  contributors
 }: ProjectTeamProps) {
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -31,18 +33,14 @@ function ProjectTeam({
         </div>
 
         <div className="w-full flex gap-6 pr-2 mb-4">
-          <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc} alt="Avatar Natasha" />
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Natasha
-            </figcaption>
-          </figure>
-          <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc2} alt="Avatar Jordi" />
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Jordi
-            </figcaption>
-          </figure>
+          {contributors && contributors.filter(contributor => contributor.programming_role.toLowerCase().includes("frontend"))
+          .map((contributor, index) => 
+            <figure className="flex flex-col items-center" key={index}>
+              <figcaption className="text-xs mt-1 font-bold text-gray-500">
+                {contributor.name}
+              </figcaption>
+            </figure>
+            )}
           <ProjectButton>+</ProjectButton>
         </div>
 
@@ -55,7 +53,6 @@ function ProjectTeam({
 
         <div className="w-full flex gap-6 pr-2 mb-14">
           <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc3} alt="Avatar Aina" />
             <figcaption className="text-xs mt-1 font-bold text-gray-500">
               Aina
             </figcaption>
