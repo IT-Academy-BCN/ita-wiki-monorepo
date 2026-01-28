@@ -4,9 +4,11 @@ on:
   pull_request:
     branches:
       - main
+      - develop
   push:
     branches:
       - main
+      - develop
 
 jobs:
   react-checks:
@@ -35,19 +37,25 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        working-directory: ./frontend/
         run: npm ci
 
       - name: Check code formatting with Prettier
+        working-directory: ./frontend/
         run: npx prettier --check .
 
       - name: Run ESLint
+        working-directory: ./frontend/
         run: npx eslint .
 
       - name: Run tests with Jest
+        working-directory: ./frontend/
         run: npm test -- --coverage
 
       - name: Build project
+        working-directory: ./frontend/
         run: npm run build
 
       - name: Check for security vulnerabilities
+        working-directory: ./frontend/
         run: npm audit --audit-level=critical
