@@ -10,14 +10,14 @@
                                                                                                                                                                       
   const EmptyState: FC<EmptyStateProps> = ({                                                                                     
     text,                                                                                                                        
-    subtext = "Torna-ho a provar més tard o crea un nou element",                                                                
+    subtext,                                                                
     textClassName,                                                                                                               
   }) => {                                                
     return (                                                                                                                                                          
       <div className="flex flex-col items-center mt-20">                                                                                                              
         <img src={emptyImage} alt="No hi ha dades" className="max-w-xs" />                                                                                            
         <h1 className={clsx("font-black", textClassName)}>{text}</h1>                                                                                                                         
-        <p className="text-gray-500 text-sm mt-2">{subtext}</p>                                                                                                                                                          
+        {subtext && <p className="text-gray-500 text-sm mt-2">{subtext}</p>}                                                                                                                                                          
       </div>                                                                                                                                                          
     );                                                                                                                                                                
   };                                                                                                                                                                  
