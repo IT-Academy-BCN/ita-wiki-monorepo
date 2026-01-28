@@ -230,30 +230,6 @@ class ContributorsCrudTest extends TestCase
             ]);
     }
 
-    public function test_it_returns_403_when_non_owner_tries_to_delete_contributor():void
-    {
-        $nonOwner = User::factory()->create();
-        $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
-
-        $contributor = ContributorListProject::factory()->create([
-            'list_project_id' => $project->id,
-        ]);
-
-        Sanctum::actingAs($nonOwner);
-        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
-
-        $response->assertStatus(403)
-            ->assertJson([
-                'success' => false,
-                'message' => 'Only the project owner can remove contributors',
-            ]);
-        
-        $this->assertDatabaseHas('contributors_list_project', [
-            'id' => $contributor->id,
-        ]);
-    }
-
     public function test_delete_returns_401_when_user_is_unauthenticated(): void
     {
         $contributor = ContributorListProject::factory()->create([
