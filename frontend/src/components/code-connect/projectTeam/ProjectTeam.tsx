@@ -1,6 +1,6 @@
-import ProjectButton from "../../code-connect/projectCard/ProjectButton";
 import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
+import TeamRow from "./TeamRow";
 import { useProjectTeam } from "../../../hooks/useProjectTeam";
 import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
 
@@ -10,32 +10,6 @@ interface ProjectTeamProps {
   contributors?: CodeConnectProjectDataContributor[];
   timeDuration?: string;
 }
-
-const TeamRow = ({
-  members,
-  emptySlots,
-}: {
-  members: { name: string; avatar: string }[];
-  emptySlots: number;
-}) => (
-  <div className="w-full flex gap-6 pr-2 mb-4">
-    {members.map((member, index) => (
-      <figure className="flex flex-col items-center" key={index}>
-        <img
-          src={member.avatar}
-          alt={member.name}
-          className="w-10 h-10 rounded-full object-cover mb-1" // Estils per l'avatar
-        />
-        <figcaption className="text-xs font-bold text-gray-500">
-          {member.name}
-        </figcaption>
-      </figure>
-    ))}
-    {Array.from({ length: emptySlots }).map((_, index) => (
-      <ProjectButton key={`empty-${index}`}>+</ProjectButton>
-    ))}
-  </div>
-);
 
 function ProjectTeam({
   logoFront,
