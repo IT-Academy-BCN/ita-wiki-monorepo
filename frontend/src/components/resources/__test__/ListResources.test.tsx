@@ -97,13 +97,10 @@ describe("ResourcesLayout Component", () => {
     expect(titleElement.tagName).toBe("H2");
   });
 
-  it("should render ResourceCardSkeleton when loading", () => {
-    // Configurar useMinLoading para retornar true (mostrar loader)
-    // Usamos mockReturnValue en lugar de mockReturnValueOnce
+  it("should render 8 skeletons when loading and hide them after loading completes", () => {
     mockUseMinLoading.mockReturnValue(true);
     
-    // Cambiar temporalmente isLoading a true solo para este test
-    mockUseResources.mockReturnValueOnce({
+    mockUseResources.mockReturnValue({
       isBookmarked: vi.fn(),
       toggleBookmark: vi.fn(),
       resources: mockResources,
@@ -116,7 +113,7 @@ describe("ResourcesLayout Component", () => {
       loadingBookmarks: false,
     });
 
-    render(
+    const { rerender } = render(
       <MemoryRouter>
         <ResourcesFiltersProvider>
           <ResourcesList resources={mockResources} category={String(category)} />
@@ -127,12 +124,36 @@ describe("ResourcesLayout Component", () => {
     // Verificar que aparecen exactamente 8 skeletons
     const skeletons = screen.getAllByTestId("resource-card-skeleton");
     expect(skeletons).toHaveLength(8);
-    
-    // Verificar que NO aparecen los recursos normales
     expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
     expect(screen.queryByText("Advanced JS")).not.toBeInTheDocument();
-    
-    // Restaurar el mock a false para no afectar otros tests
+
+    // Simular que termina la carga
     mockUseMinLoading.mockReturnValue(false);
+    mockUseResources.mockReturnValue({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: mockResources,
+      isLoading: false,
+      getBookmarkCount: (resourceId: number | string) => {
+        const resource = mockResources.find((r) => r.id === resourceId);
+        return resource?.bookmark_count || 0;
+      },
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+    });
+
+    // Re-renderizar con el nuevo estado
+    rerender(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList resources={mockResources} category={String(category)} />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>
+    );
+
+    // Verificar que los skeletons desaparecen
+    expect(screen.queryByTestId("resource-card-skeleton")).not.toBeInTheDocument();
+    expect(screen.getByText("React Basics")).toBeInTheDocument();
+    expect(screen.getByText("Advanced JS")).toBeInTheDocument();
   });
 });
