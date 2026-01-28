@@ -4,7 +4,7 @@ import angular from "../assets/angular.svg";
 import javascript from "../assets/javascript.svg";
 import python from "../assets/pythonVector.svg";
 import java from "../assets/logo-java-1.svg";
-import typescript from "../assets/typescript.svg";
+import typescript from "../assets/TypescriptVector.svg";
 
 export const displayLanguageIcon = (language: string | undefined | null): string => {
   if (!language) return ""; 

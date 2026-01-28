@@ -8,9 +8,9 @@ interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
   contributors?: CodeConnectProjectDataContributor[];
+  timeDuration?: string;
 }
 
-// Sub-component per evitar repetir codi entre Frontend i Backend
 const TeamRow = ({
   members,
   emptySlots,
@@ -19,7 +19,6 @@ const TeamRow = ({
   emptySlots: number;
 }) => (
   <div className="w-full flex gap-6 pr-2 mb-4">
-    {/* 1. Membres reals amb el seu avatar */}
     {members.map((member, index) => (
       <figure className="flex flex-col items-center" key={index}>
         <img
@@ -32,8 +31,6 @@ const TeamRow = ({
         </figcaption>
       </figure>
     ))}
-
-    {/* 2. Botons "+" per omplir els forats fins a 3 */}
     {Array.from({ length: emptySlots }).map((_, index) => (
       <ProjectButton key={`empty-${index}`}>+</ProjectButton>
     ))}
@@ -44,12 +41,11 @@ function ProjectTeam({
   logoFront,
   logoBack,
   contributors = [],
+  timeDuration
 }: ProjectTeamProps) {
-  
-  // Cridem al hook, que ja fa el filtre, el slice(0,3) i genera l'avatar
+
   const { getTeamByRole } = useProjectTeam(contributors);
 
-  // Obtenim les dades ja processades
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
 
@@ -60,7 +56,6 @@ function ProjectTeam({
       </div>
 
       <div className="w-full mt-5">
-        {/* --- SECCIÓ FRONTEND --- */}
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Frontend</h2>
           {logoFront && (
@@ -68,13 +63,11 @@ function ProjectTeam({
           )}
         </div>
 
-        {/* Utilitzem el subcomponent amb les dades del hook */}
         <TeamRow 
           members={frontendData.members} 
           emptySlots={frontendData.emptySlots} 
         />
 
-        {/* --- SECCIÓ BACKEND --- */}
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Backend</h2>
           {logoBack && (
@@ -103,7 +96,7 @@ function ProjectTeam({
 
       <div className="mb-10">
         <h2 className="font-extrabold text-xl text-start">Durada</h2>
-        <p className="text-sm font-bold text-start">1 mes</p>
+        <p className="text-sm font-bold text-start">{timeDuration || "No especificada"}</p>
       </div>
 
       <div className="w-full">

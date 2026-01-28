@@ -42,6 +42,7 @@ const CodeConnectDetails = () => {
                 logoFront={displayLanguageIcon(codeConnectProject.data?.language_frontend)}
                 logoBack={displayLanguageIcon(codeConnectProject.data?.language_backend)}
                 contributors={codeConnectProject.data?.contributors}
+                timeDuration={codeConnectProject.data?.time_duration}
               />
             </div>
           </div>
