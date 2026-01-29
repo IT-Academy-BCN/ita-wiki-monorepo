@@ -85,10 +85,10 @@ vi.mock("../../../assets/pythonVector.svg?react", () => ({
 vi.mock("../../../assets/javascript.svg?react", () => ({
   default: () => <svg data-testid="js-icon" />,
 }));
-vi.mock("../../../assets/logo-java 1.svg?react", () => ({
+vi.mock("../../../assets/logo-java-1.svg?react", () => ({
   default: () => <svg data-testid="java-icon" />,
 }));
-vi.mock("../../../assets/logo-php 1.svg?react", () => ({
+vi.mock("../../../assets/logo-php-1.svg?react", () => ({
   default: () => <svg data-testid="php-icon" />,
 }));
 vi.mock("../../../assets/angular.svg?react", () => ({
@@ -97,7 +97,7 @@ vi.mock("../../../assets/angular.svg?react", () => ({
 vi.mock("../../../assets/react.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
-vi.mock("../../../assets/logo-node 1.svg?react", () => ({
+vi.mock("../../../assets/logo-node-1.svg?react", () => ({
   default: () => <svg data-testid="node-icon" />,
 }));
 
