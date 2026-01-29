@@ -4,9 +4,33 @@ import userEvent from "@testing-library/user-event";
 import { TechnicalTestForm } from "../TechnicalTestForm";
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
+import { useForm } from "react-hook-form";
 
 vi.mock("react-router", () => ({
   useNavigate: () => vi.fn(),
+}));
+
+vi.mock("../../ui/Container", () => ({
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
+vi.mock("../../hooks/useTechnicalTestForm", () => ({
+  useTechnicalTestForm: () => ({
+    form: useForm({
+      defaultValues: {
+        title: "",
+        description: "",
+        language: undefined,
+        duration: undefined,
+        difficulty: "",
+        tags: [],
+        contentType: "text",
+        file: [],
+      },
+    }),
+    onSubmit: vi.fn(),
+    handleCancel: vi.fn(),
+  }),
 }));
 
 describe("TechnicalTestForm UI", () => {
@@ -47,7 +71,7 @@ describe("TechnicalTestForm UI", () => {
 
   it("renders duration input field", () => {
     render(<TechnicalTestForm />);
-    expect(screen.getByText("Durada (minuts)")).toBeInTheDocument();
+    expect(screen.getByText("Durada (minuts) *")).toBeInTheDocument();
     const durationInput = screen.getByRole("spinbutton");
     expect(durationInput).toBeInTheDocument();
     expect(durationInput).toHaveAttribute("type", "number");
@@ -68,7 +92,7 @@ describe("TechnicalTestForm UI", () => {
     const user = userEvent.setup();
     render(<TechnicalTestForm />);
 
-    const difficultySelect = screen.getByLabelText("Dificultat");
+    const difficultySelect = screen.getByRole("combobox");
     await user.selectOptions(difficultySelect, "hard");
 
     expect(difficultySelect).toHaveValue("hard");
@@ -76,26 +100,14 @@ describe("TechnicalTestForm UI", () => {
 
   it("renders difficulty select field with correct options", () => {
     render(<TechnicalTestForm />);
-    expect(screen.getByText("Dificultat")).toBeInTheDocument();
-    const difficultySelect = screen.getByLabelText("Dificultat");
+    expect(screen.getByText("Dificultat *")).toBeInTheDocument();
+    const difficultySelect = screen.getByRole("combobox");
     expect(difficultySelect).toBeInTheDocument();
-    expect(difficultySelect).toHaveValue("easy");
+    expect(difficultySelect).toHaveValue("");
 
     expect(screen.getByRole("option", { name: "Fàcil" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Mitjana" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Mitjà" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Difícil" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Expert" })).toBeInTheDocument();
-  });
-
-  it("renders exercises section with 4 textareas", () => {
-    render(<TechnicalTestForm />);
-    expect(screen.getByText("Exercicis")).toBeInTheDocument();
-
-    const exerciseTextareas = screen.getAllByPlaceholderText(/Exercici \d/);
-    expect(exerciseTextareas).toHaveLength(4);
-    expect(screen.getByPlaceholderText("Exercici 1")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Exercici 2")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Exercici 3")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Exercici 4")).toBeInTheDocument();
   });
 });

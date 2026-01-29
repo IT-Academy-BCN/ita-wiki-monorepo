@@ -169,28 +169,33 @@ class ContributorsCrudTest extends TestCase
         $response->assertStatus(422);
     }
 
-    // ========== DELETE TESTS ==========
-
-    public function test_it_can_delete_a_contributor_from_project(): void
+    public function test_it_returns_403_when_user_was_rejected_and_tries_again(): void
     {
-        $contributor = ContributorListProject::factory()->create([
+        ContributorListProject::factory()->create([
+            'user_id' => $this->user->id,
             'list_project_id' => $this->project->id,
+            'status' => ContributorStatusEnum::Rejected->value,
         ]);
 
         Sanctum::actingAs($this->user);
 
-        $response = $this->deleteJson("/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}");
+        $response = $this->postJson("/api/codeconnect/{$this->project->id}/contributors", [
+            'user_id' => $this->user->id,
+            'programming_role' => 'Fullstack Developer',
+        ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(403)
             ->assertJson([
-                'success' => true,
-                'message' => 'Contributor removed successfully',
+                'success' => false,
+                'message' => 'User was rejected and cannot request again for this project',
             ]);
 
-        $this->assertDatabaseMissing('contributors_list_project', [
-            'id' => $contributor->id,
-        ]);
+        $this->assertEquals(1, ContributorListProject::where('list_project_id', $this->project->id)
+            ->where('user_id', $this->user->id)
+            ->count());
     }
+
+    // ========== DELETE TESTS ==========
 
     public function test_delete_returns_404_when_contributor_does_not_exist(): void
     {
@@ -219,5 +224,55 @@ class ContributorsCrudTest extends TestCase
                 'success' => false,
                 'message' => 'Contributor not found',
             ]);
+    }
+
+    public function test_user_can_remove_himself_from_project(): void
+    {
+        $contributor = ContributorListProject::factory()->create([
+            'user_id' => $this->user->id,
+            'list_project_id' => $this->project->id,
+        ]);
+
+        Sanctum::actingAs($this->user);
+
+        $response = $this->deleteJson(
+            "/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}"
+        );
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Contributor removed successfully',
+            ]);
+
+        $this->assertDatabaseMissing('contributors_list_project', [
+            'id' => $contributor->id,
+        ]);
+    }
+
+    public function test_user_cannot_remove_another_contributor(): void
+    {
+        $otherUser = User::factory()->create();
+
+        $contributor = ContributorListProject::factory()->create([
+            'user_id' => $otherUser->id,
+            'list_project_id' => $this->project->id,
+        ]);
+
+        Sanctum::actingAs($this->user);
+
+        $response = $this->deleteJson(
+            "/api/codeconnect/{$this->project->id}/contributors/{$contributor->id}"
+        );
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => 'You are not allowed to remove this contributor',
+            ]);
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'id' => $contributor->id,
+        ]);
     }
 }
