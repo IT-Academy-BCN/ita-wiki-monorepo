@@ -52,7 +52,7 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
         $this->assertDatabaseHas('users', [
             'github_id' => '12345',
@@ -85,7 +85,7 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
 
         $this->assertDatabaseHas('users', [
@@ -158,7 +158,7 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('success=false', $redirectUrl);
         $this->assertStringContainsString('error=Authentication+error', $redirectUrl);
     }
