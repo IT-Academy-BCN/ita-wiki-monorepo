@@ -1,5 +1,5 @@
 import PageTitle from "../components/ui/PageTitle";
-import useCodeConnectProject from "../hooks/useCodeConnectProject";
+import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
 import moockData from "../moock/projectDetails.json";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
@@ -11,7 +11,7 @@ const CodeConnectDetails = () => {
 
   const { projectId } = useParams<{ projectId: string }>();
 
-  const { codeConnectProject, isLoading } = useCodeConnectProject(projectId || null);
+  const { codeConnectProject, isLoading } = useCodeConnectDetails(projectId || null);
 
   return (
     <>
