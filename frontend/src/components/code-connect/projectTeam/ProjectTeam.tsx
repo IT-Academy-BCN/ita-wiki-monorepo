@@ -1,7 +1,7 @@
 import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
-import { useProjectTeam } from "../../../hooks/useProjectTeam";
+import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
 
 interface ProjectTeamProps {
@@ -18,7 +18,7 @@ function ProjectTeam({
   timeDuration
 }: ProjectTeamProps) {
 
-  const { getTeamByRole } = useProjectTeam(contributors);
+  const { getTeamByRole } = useProjectContributors(contributors);
 
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
