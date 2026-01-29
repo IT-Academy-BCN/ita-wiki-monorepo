@@ -52,14 +52,14 @@ class GitHubAuthController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            $frontendUrl = config('app.frontend_url', 'http://localhost:5173');
+            $frontendUrl = config('app.frontend_url', 'http://localhost');
 
             $redirectUrl = $frontendUrl . '/auth/callback?token=' . urlencode($token);
 
             return redirect($redirectUrl);
 
         } catch (\Exception $e) {
-            $frontendUrl = config('app.frontend_url', 'http://localhost:5173');
+            $frontendUrl = config('app.frontend_url', 'http://localhost');
             $redirectUrl = $frontendUrl . '/auth/callback?' . http_build_query([
                 'success' => 'false',
                 'error' => $e->getMessage(),
