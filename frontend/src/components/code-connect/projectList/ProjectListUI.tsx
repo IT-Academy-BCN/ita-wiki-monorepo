@@ -1,75 +1,64 @@
-import { describe, it, expect } from "vitest";                                                                             
-import { render, screen } from "@testing-library/react";                                                                   
-import { MemoryRouter } from "react-router";                                                                               
-import ProjectListUI from "../ProjectListUI";
+import type { Project } from "../projectCard/types/projectTypes";                                                          
+import ProjectCard from "../projectCard/ProjectCard";                                                                      
+import CodeConnectCardSkeleton from "../CodeConnectCardSkeleton";                                                          
+import EmptyState from "../../ui/EmptyState";                                                                              
                                                                                                                              
-  const mockProject = {                                                                                                      
-    id: 1,                                                                                                                   
-    title: "Test Project",                                                                                                    
-    frontend: {                                                                                                              
-      tech: "React",                                                                                                         
-      positions: 2,                                                                                                          
-      participants: []                                                                                                       
-    },                                                                                                                       
-    backend: {                                                                                                               
-      tech: "Node",                                                                                                          
-      positions: 2,                                                                                                          
-      participants: []                                                                                                       
-    },                                                                                                                       
-  };                                                                                                                         
+  interface ProjectListUIProps {                                                                                             
+    projects: Project[];                                                                                                     
+    showLoader: boolean;                                                                                                     
+    error: Error | null;                                                                                                     
+    onCardClick?: (id: number) => void;                                                                                      
+  }                                                                                                                          
                                                                                                                              
-  describe("ProjectListUI", () => {                                                                                          
-    it("muestra skeletons cuando showLoader es true", () => {                                                                
-      render(                                                                                                                
-        <MemoryRouter>                                                                                                       
-          <ProjectListUI                                                                                                     
-            projects={[]}                                                                                                    
-            showLoader={true}                                                                                                
-            error={null}                                                                                                     
+  function ProjectListUI({                                                                                                   
+    projects,                                                                                                                
+    showLoader,                                                                                                              
+    error,                                                                                                                   
+    onCardClick,                                                                                                             
+  }: ProjectListUIProps) {                                                                                                   
+    return (                                                                                                                 
+      <>                                                                                                                     
+        <h2 className="text-2xl font-bold py-4 sm:py-6 text-black sm:mb-4">                                                  
+          Llista de projectes                                                                                                
+        </h2>                                                                                                                
+        {showLoader && !error && (                                                                                           
+          <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]   
+  w-full">                                                                                                                   
+            {Array.from({ length: 6 }).map((_, i) => (                                                                       
+              <CodeConnectCardSkeleton key={i} />                                                                            
+            ))}                                                                                                              
+          </div>                                                                                                             
+        )}                                                                                                                   
+                                                                                                                             
+        {error && (                                                                                                          
+          <EmptyState                                                                                                        
+            text="Error al obtenir projectes"                                                                                
+            subtext="Hi ha hagut un problema. Torna-ho a provar."                                                            
+            textClassName="text-red-500"                                                                                     
           />                                                                                                                 
-        </MemoryRouter>                                                                                                      
-      );                                                                                                                     
-      expect(screen.getByText("Llista de projectes")).toBeDefined();                                                         
-      // Skeletons se renderizan                                                                                             
-    });                                                                                                                      
+        )}                                                                                                                   
                                                                                                                              
-    it("muestra EmptyState con error cuando hay error", () => {                                                              
-      render(                                                                                                                
-        <MemoryRouter>                                                                                                       
-          <ProjectListUI                                                                                                     
-            projects={[]}                                                                                                    
-            showLoader={false}                                                                                               
-            error={new Error("Test error")}                                                                                  
+        {!showLoader && !error && projects.length === 0 && (                                                                 
+          <EmptyState                                                                                                        
+            text="No hi ha projectes"                                                                                        
+            subtext="Torna-ho a provar més tard o crea un nou projecte"                                                      
           />                                                                                                                 
-        </MemoryRouter>                                                                                                      
-      );                                                                                                                     
-      expect(screen.getByText("Error al obtenir projectes")).toBeDefined();                                                  
-      expect(screen.getByText("Hi ha hagut un problema. Torna-ho a provar.")).toBeDefined();                                 
-    });                                                                                                                      
+        )}                                                                                                                   
                                                                                                                              
-    it("muestra EmptyState cuando no hay proyectos", () => {                                                                 
-      render(                                                                                                                
-        <MemoryRouter>                                                                                                       
-          <ProjectListUI                                                                                                     
-            projects={[]}                                                                                                    
-            showLoader={false}                                                                                               
-            error={null}                                                                                                     
-          />                                                                                                                 
-        </MemoryRouter>                                                                                                      
-      );                                                                                                                     
-      expect(screen.getByText("No hi ha projectes")).toBeDefined();                                                          
-    });                                                                                                                      
+        {!showLoader && !error && projects.length > 0 && (                                                                   
+          <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]   
+  w-full">                                                                                                                   
+            {projects.map((project) => (                                                                                     
+              <ProjectCard                                                                                                   
+                key={project.id}                                                                                             
+                project={project}                                                                                            
+                onClick={onCardClick}                                                                                        
+              />                                                                                                             
+            ))}                                                                                                              
+          </div>                                                                                                             
+        )}                                                                                                                   
+      </>                                                                                                                    
+    );                                                                                                                       
+  }                                                                                                                          
                                                                                                                              
-    it("muestra lista de proyectos cuando hay datos", () => {                                                                
-      render(                                                                                                                
-        <MemoryRouter>                                                                                                       
-          <ProjectListUI                                                                                                     
-            projects={[mockProject]}                                                                                         
-            showLoader={false}                                                                                               
-            error={null}                                                                                                     
-          />                                                                                                                 
-        </MemoryRouter>                                                                                                      
-      );                                                                                                                     
-      expect(screen.getByText("Test Project")).toBeDefined();                                                                
-    });                                                                                                                      
-  }); 
+  export default ProjectListUI;
