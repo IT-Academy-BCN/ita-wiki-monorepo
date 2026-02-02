@@ -1,9 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import ProjectList from "../ProjectList";
 import projectsData from "../../../../moock/projects.json";
+
+vi.mock("../../../../hooks/useMinLoading", () => ({
+  useMinLoading: () => false,
+}));
 
 type Project = (typeof projectsData)[number];
 
