@@ -24,7 +24,7 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   const searchTerm = searchParams.get("search") || "";
 
   const { selectedResourceTypes, selectedTags } = useResourcesFilters();
-  const { isBookmarked, toggleBookmark, isLoading, error } = useResources();
+  const { isBookmarked, toggleBookmark, isLoading } = useResources();
 
   const showLoader = useMinLoading(isLoading, 1500);
 
@@ -66,16 +66,6 @@ export const ResourcesList: FC<ResourcesListProps> = ({
           <ResourceCardSkeleton key={index} />
         ))}
       </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <EmptyState
-        text="Error al obtenir recursos"
-        subtext="Hi ha hagut un problema. Torna-ho a provar."
-        textClassName="text-red-500"
-      />
     );
   }
 
