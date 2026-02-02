@@ -51,28 +51,30 @@ export const TechnicalTestForm = () => {
           />
 
           <div className="flex flex-col px-10 mt-8">
-            <label className="block mb-2 font-medium">Durada (minuts) *</label>
+            <label className="text-sm text-black font-medium mb-2">
+              Durada (minuts) *
+            </label>
             <input
               type="number"
               {...register("duration", { valueAsNumber: true })}
-              className="sm:w-1/2 p-2 border border-[#B91879] rounded-lg"
+              className="max-w-[482px] p-2 text-base border border-gray-300 rounded-lg focus:border-[#B91879] outline-none"
               min="1"
               placeholder="Ex: 60"
             />
             {errors.duration && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">
-                  {errors.duration.message}
-                </p>
+                <p className="text-red-500 text-xs">{errors.duration.message}</p>
               </div>
             )}
           </div>
 
           <div className="flex flex-col px-10 mt-8">
-            <label className="block mb-2 font-medium">Dificultat *</label>
+            <label className="text-sm text-black font-medium mb-2">
+              Dificultat *
+            </label>
             <select
               {...register("difficulty")}
-              className="sm:w-1/2 p-2 border border-[#B91879] rounded-lg bg-white"
+              className="max-w-[482px] p-2 text-base border border-gray-300 rounded-lg bg-white focus:border-[#B91879] outline-none"
             >
               <option value="">Selecciona una dificultat</option>
               <option value="easy">Fàcil</option>
@@ -82,9 +84,7 @@ export const TechnicalTestForm = () => {
             </select>
             {errors.difficulty && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">
-                  {errors.difficulty.message}
-                </p>
+                <p className="text-red-500 text-xs">{errors.difficulty.message}</p>
               </div>
             )}
           </div>

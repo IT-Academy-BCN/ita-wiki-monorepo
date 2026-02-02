@@ -17,7 +17,9 @@ const LanguageSelectorInput = ({
 }: LanguageSelectorProps) => {
   return (
     <div className="px-10">
-      <label className="block font-medium mb-2">Llenguatge *</label>
+      <label className="block text-sm text-black font-medium mb-2">
+        Llenguatge *
+      </label>
       <Controller
         name="language"
         control={control}
@@ -25,19 +27,22 @@ const LanguageSelectorInput = ({
           <div className="flex flex-wrap gap-3 mb-4">
             {languages.map((cat) => {
               const IconComponent = cat.icon;
+              const isSelected = field.value === cat.label;
               return (
                 <button
-                  key={cat.label}
-                  type="button"
-                  onClick={() => field.onChange(cat.label)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer ${
-                    field.value === cat.label
-                      ? "border-2 border-[#B91879] bg-white"
-                      : "border-gray-300 bg-white"
-                  }`}
-                >
-                  <IconComponent className="w-5 h-5" />
-                  <span className="text-sm font-medium">{cat.label}</span>
+                 key={cat.label}
+                 type="button"
+                 onClick={() => field.onChange(cat.label)}
+                className={`w-[110px] h-[57px] px-2 py-4 rounded-[8px] border-2 outline-none text-sm font-medium flex items-center justify-center gap-2
+                ${
+                field.value === cat.label
+                ? "border-[#B91879]"
+                : "border-gray-300"
+                }
+                focus-visible:border-[#B91879] focus-visible:ring-0`}
+>
+  <IconComponent className="w-5 h-5" />
+  <span>{cat.label}</span>
                 </button>
               );
             })}
