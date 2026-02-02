@@ -1,39 +1,55 @@
 import ProjectCard from "../projectCard/ProjectCard";
 import type { Project } from "../projectCard/types/projectTypes";
-import projectsData from "../../../moock/projects.json";
+import { useProjects } from "../../../hooks/useProjectsCodeconnect";
 
-function ProjectList({
-  onCardClick,
-  filter,
-}: {
+type ProjectProps = {
   onCardClick?: (id: number) => void;
   filter?: string | null;
-}) {
-  const projects = (projectsData as Project[]).filter((p) => {
+};
+
+const ProjectList = ({ onCardClick, filter }: ProjectProps) => {
+  const { projects, isLoading, errorMessage } = useProjects(filter);
+
+  const filteredProjects = (projects as Project[]).filter((project) => {
     if (!filter) return true;
-    const f = filter.toLowerCase();
+
+    const normalizedFilter = filter.toLowerCase();
+
     return (
-      p.frontend?.tech?.toLowerCase() === f ||
-      p.backend?.tech?.toLowerCase() === f
+      project.frontend?.tech?.toLowerCase() === normalizedFilter ||
+      project.backend?.tech?.toLowerCase() === normalizedFilter
     );
   });
 
   return (
     <>
       <h2 className="text-2xl font-bold  py-4 sm:py-6 text-black sm:mb-4">
-        Llista de projectes
+        Llista de projectess
       </h2>
-      <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
-        {projects.map((project) => (
+
+      {isLoading && <p className="text-black py-3">Carregant projectes...</p>}
+
+      {!isLoading && errorMessage && (
+        <p className="text-black py-3">
+          Error carregant projectes: {errorMessage}
+        </p>
+      )}
+
+      {!isLoading && !errorMessage && filteredProjects.length === 0 && (
+        <p className="text-black py-3">No hi ha projectes disponibles.</p>
+      )}
+
+      <section className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
+        {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}
             project={project}
             onClick={onCardClick}
           />
         ))}
-      </div>
+      </section>
     </>
   );
-}
+};
 
 export default ProjectList;
