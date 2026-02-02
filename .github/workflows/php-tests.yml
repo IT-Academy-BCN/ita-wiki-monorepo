@@ -5,8 +5,10 @@ on:
     branches:
       - main
       - develop
-  pull_request_review:
-    types: [submitted]
+  push:
+    branches:
+      - main
+      - develop
 
 defaults:
   run:
