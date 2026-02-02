@@ -30,19 +30,19 @@ const LanguageSelectorInput = ({
               const isSelected = field.value === cat.label;
               return (
                 <button
-                 key={cat.label}
-                 type="button"
-                 onClick={() => field.onChange(cat.label)}
-                className={`w-[110px] h-[57px] px-2 py-4 rounded-[8px] border-2 outline-none text-sm font-medium flex items-center justify-center gap-2
+                  key={cat.label}
+                  type="button"
+                  onClick={() => field.onChange(cat.label)}
+                  className={`w-[110px] h-[57px] px-2 py-4 rounded-[8px] border-2 outline-none text-sm font-medium flex items-center justify-center gap-2
                 ${
-                field.value === cat.label
-                ? "border-[#B91879]"
-                : "border-gray-300"
+                  field.value === cat.label
+                    ? "border-[#B91879]"
+                    : "border-gray-300"
                 }
                 focus-visible:border-[#B91879] focus-visible:ring-0`}
->
-  <IconComponent className="w-5 h-5" />
-  <span>{cat.label}</span>
+                >
+                  <IconComponent className="w-5 h-5" />
+                  <span>{cat.label}</span>
                 </button>
               );
             })}
