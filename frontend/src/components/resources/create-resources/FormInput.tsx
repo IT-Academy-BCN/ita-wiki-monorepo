@@ -28,7 +28,9 @@ export default function FormInput({
 }: FormInputProps) {
   return (
     <>
-      <label htmlFor={id} className="text-sm text-black font-medium block mb-2">{label}</label>
+      <label htmlFor={id} className="text-sm text-black font-medium block mb-2">
+        {label}
+      </label>
       <div className="max-w-[482px] space-y-2">
         <input
           type="text"
@@ -52,14 +54,13 @@ export default function FormInput({
           <div className="flex justify-start">
             {errors && <p className="text-red-500 text-xs">{errors}</p>}
           </div>
-          {
-            limitedText && 
+          {limitedText && (
             <div className="flex justify-end">
               <p className="text-sm text-slate-600 text-right">
                 {textLength}/{maxLength}
               </p>
             </div>
-          }
+          )}
         </div>
       </div>
     </>
