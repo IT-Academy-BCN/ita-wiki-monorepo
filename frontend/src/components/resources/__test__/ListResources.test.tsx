@@ -62,24 +62,25 @@ const mockResources: IntResource[] = [
 
 const category = Object.keys(categories)[0] as keyof typeof categories;
 
+const setupLoadingState = (isLoading: boolean) => {
+  mockUseMinLoading.mockReturnValue(isLoading);
+  mockUseResources.mockReturnValue({
+    isBookmarked: vi.fn(),
+    toggleBookmark: vi.fn(),
+    resources: mockResources,
+    isLoading,
+    getBookmarkCount: (resourceId: number | string) => {
+      const resource = mockResources.find((r) => r.id === resourceId);
+      return resource?.bookmark_count || 0;
+    },
+    bookmarkedResources: [],
+    loadingBookmarks: false,
+  });
+};
+
 describe("ResourcesLayout Component", () => {
-  // Configurar el valor default del mock antes de cada test
   beforeEach(() => {
-    // Por defecto, useMinLoading retorna false (no loading)
-    mockUseMinLoading.mockReturnValue(false);
-    
-    mockUseResources.mockReturnValue({
-      isBookmarked: vi.fn(),
-      toggleBookmark: vi.fn(),
-      resources: mockResources,
-      isLoading: false,
-      getBookmarkCount: (resourceId: number | string) => {
-        const resource = mockResources.find((r) => r.id === resourceId);
-        return resource?.bookmark_count || 0;
-      },
-      bookmarkedResources: [],
-      loadingBookmarks: false,
-    });
+    setupLoadingState(false);
   });
   it("should render the component and display the correct title", () => {
     render(
@@ -98,20 +99,7 @@ describe("ResourcesLayout Component", () => {
   });
 
   it("should render 8 skeletons when loading", () => {
-    mockUseMinLoading.mockReturnValue(true);
-    
-    mockUseResources.mockReturnValue({
-      isBookmarked: vi.fn(),
-      toggleBookmark: vi.fn(),
-      resources: mockResources,
-      isLoading: true,
-      getBookmarkCount: (resourceId: number | string) => {
-        const resource = mockResources.find((r) => r.id === resourceId);
-        return resource?.bookmark_count || 0;
-      },
-      bookmarkedResources: [],
-      loadingBookmarks: false,
-    });
+    setupLoadingState(true);
 
     render(
       <MemoryRouter>
@@ -128,20 +116,7 @@ describe("ResourcesLayout Component", () => {
   });
 
   it("should hide skeletons after loading completes", () => {
-    mockUseMinLoading.mockReturnValue(true);
-    
-    mockUseResources.mockReturnValue({
-      isBookmarked: vi.fn(),
-      toggleBookmark: vi.fn(),
-      resources: mockResources,
-      isLoading: true,
-      getBookmarkCount: (resourceId: number | string) => {
-        const resource = mockResources.find((r) => r.id === resourceId);
-        return resource?.bookmark_count || 0;
-      },
-      bookmarkedResources: [],
-      loadingBookmarks: false,
-    });
+    setupLoadingState(true);
 
     const { rerender } = render(
       <MemoryRouter>
@@ -154,19 +129,7 @@ describe("ResourcesLayout Component", () => {
     expect(screen.getAllByTestId("resource-card-skeleton")).toHaveLength(8);
 
     // Simular que termina la carga
-    mockUseMinLoading.mockReturnValue(false);
-    mockUseResources.mockReturnValue({
-      isBookmarked: vi.fn(),
-      toggleBookmark: vi.fn(),
-      resources: mockResources,
-      isLoading: false,
-      getBookmarkCount: (resourceId: number | string) => {
-        const resource = mockResources.find((r) => r.id === resourceId);
-        return resource?.bookmark_count || 0;
-      },
-      bookmarkedResources: [],
-      loadingBookmarks: false,
-    });
+    setupLoadingState(false);
 
     rerender(
       <MemoryRouter>
