@@ -97,7 +97,37 @@ describe("ResourcesLayout Component", () => {
     expect(titleElement.tagName).toBe("H2");
   });
 
-  it("should render 8 skeletons when loading and hide them after loading completes", () => {
+  it("should render 8 skeletons when loading", () => {
+    mockUseMinLoading.mockReturnValue(true);
+    
+    mockUseResources.mockReturnValue({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: mockResources,
+      isLoading: true,
+      getBookmarkCount: (resourceId: number | string) => {
+        const resource = mockResources.find((r) => r.id === resourceId);
+        return resource?.bookmark_count || 0;
+      },
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList resources={mockResources} category={String(category)} />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>
+    );
+
+    const skeletons = screen.getAllByTestId("resource-card-skeleton");
+    expect(skeletons).toHaveLength(8);
+    expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
+    expect(screen.queryByText("Advanced JS")).not.toBeInTheDocument();
+  });
+
+  it("should hide skeletons after loading completes", () => {
     mockUseMinLoading.mockReturnValue(true);
     
     mockUseResources.mockReturnValue({
@@ -121,11 +151,7 @@ describe("ResourcesLayout Component", () => {
       </MemoryRouter>
     );
 
-    // Verificar que aparecen exactamente 8 skeletons
-    const skeletons = screen.getAllByTestId("resource-card-skeleton");
-    expect(skeletons).toHaveLength(8);
-    expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
-    expect(screen.queryByText("Advanced JS")).not.toBeInTheDocument();
+    expect(screen.getAllByTestId("resource-card-skeleton")).toHaveLength(8);
 
     // Simular que termina la carga
     mockUseMinLoading.mockReturnValue(false);
@@ -142,7 +168,6 @@ describe("ResourcesLayout Component", () => {
       loadingBookmarks: false,
     });
 
-    // Re-renderizar con el nuevo estado
     rerender(
       <MemoryRouter>
         <ResourcesFiltersProvider>
@@ -151,7 +176,6 @@ describe("ResourcesLayout Component", () => {
       </MemoryRouter>
     );
 
-    // Verificar que los skeletons desaparecen
     expect(screen.queryByTestId("resource-card-skeleton")).not.toBeInTheDocument();
     expect(screen.getByText("React Basics")).toBeInTheDocument();
     expect(screen.getByText("Advanced JS")).toBeInTheDocument();
