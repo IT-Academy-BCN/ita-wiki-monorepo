@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { describe, it, expect, vi, beforeEach } from "vitest"; 
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import TechnicalTestList from "../TechnicalTestList";
 import { TechnicalTest } from "../../../types/TechnicalTest";
 import useTechnicalTestList from "../../../hooks/useTechnicalTestList";
@@ -155,7 +155,6 @@ describe("TechnicalTestList", () => {
     expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
   });
 
-
   it("shows EmptyState when there are no technical tests", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: [],
@@ -188,22 +187,24 @@ describe("TechnicalTestList", () => {
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
 
-  it("shows EmptyState with error styling when there is an error", () => {                                                
-    mockedUseTechnicalTestList.mockReturnValue({                                                                          
-      technicalTests: [],                                                                                                 
-      isLoading: false,                                                                                                   
-      error: new Error("Error de connexió"),                                                                              
-    });                                                                                                                   
-                                                                                                                          
-    render(                                                                                                               
-      <MemoryRouter>                                                                                                      
-        <TechnicalTestList />                                                                                             
-      </MemoryRouter>,                                                                                                    
-    );                                                                                                                    
-                                                                                                                          
-    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();                                          
-    expect(screen.getByText("Hi ha hagut un problema. Torna-ho a provar.")).toBeDefined();                                                                                          
-    expect(screen.queryByText("No hi ha proves tècniques")).toBeNull();                                                   
+  it("shows EmptyState with error styling when there is an error", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: new Error("Error de connexió"),
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
+    expect(
+      screen.getByText("Hi ha hagut un problema. Torna-ho a provar."),
+    ).toBeDefined();
+    expect(screen.queryByText("No hi ha proves tècniques")).toBeNull();
   });
 
   it("shows skeletons while loading", () => {

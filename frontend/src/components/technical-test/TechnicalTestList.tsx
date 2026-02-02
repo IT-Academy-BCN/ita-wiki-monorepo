@@ -113,10 +113,10 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ filters }) => {
       )}
 
       {!isLoading && !error && filteredTechnicalTests?.length === 0 && (
-        <EmptyState                                                                                                                
-          text="No hi ha proves tècniques"                                                                                         
-          subtext="Torna-ho a provar més tard o crea una nova prova"                                                               
-        /> 
+        <EmptyState
+          text="No hi ha proves tècniques"
+          subtext="Torna-ho a provar més tard o crea una nova prova"
+        />
       )}
 
       {!showLoader && !error && filteredTechnicalTests.length > 0 && (
