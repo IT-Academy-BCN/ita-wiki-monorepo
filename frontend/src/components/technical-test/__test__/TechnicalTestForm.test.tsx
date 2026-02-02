@@ -11,7 +11,9 @@ vi.mock("react-router", () => ({
 }));
 
 vi.mock("../../ui/Container", () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../../hooks/useTechnicalTestForm", () => ({
