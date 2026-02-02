@@ -3,7 +3,6 @@ import { displayLanguageIcon } from "../iconUtils";
 
 describe("displayLanguageIcon", () => {
   it("retorna una icona per als llenguatges suportats", () => {
-
     const reactIcon = displayLanguageIcon("React");
     const javaIcon = displayLanguageIcon("Java");
 

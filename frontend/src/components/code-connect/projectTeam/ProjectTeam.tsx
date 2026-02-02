@@ -15,9 +15,8 @@ function ProjectTeam({
   logoFront,
   logoBack,
   contributors = [],
-  timeDuration
+  timeDuration,
 }: ProjectTeamProps) {
-
   const { getTeamByRole } = useProjectContributors(contributors);
 
   const frontendData = getTeamByRole("frontend");
@@ -37,9 +36,9 @@ function ProjectTeam({
           )}
         </div>
 
-        <TeamRow 
-          members={frontendData.members} 
-          emptySlots={frontendData.emptySlots} 
+        <TeamRow
+          members={frontendData.members}
+          emptySlots={frontendData.emptySlots}
         />
 
         <div className="flex w-full items-center gap-4 mb-4">
@@ -50,9 +49,9 @@ function ProjectTeam({
         </div>
 
         <div className="mb-14">
-          <TeamRow 
-            members={backendData.members} 
-            emptySlots={backendData.emptySlots} 
+          <TeamRow
+            members={backendData.members}
+            emptySlots={backendData.emptySlots}
           />
         </div>
       </div>
@@ -70,7 +69,9 @@ function ProjectTeam({
 
       <div className="mb-10">
         <h2 className="font-extrabold text-xl text-start">Durada</h2>
-        <p className="text-sm font-bold text-start">{timeDuration || "No especificada"}</p>
+        <p className="text-sm font-bold text-start">
+          {timeDuration || "No especificada"}
+        </p>
       </div>
 
       <div className="w-full">

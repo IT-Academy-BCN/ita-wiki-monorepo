@@ -8,7 +8,7 @@ vi.mock("../../api/endPointCodeConnect");
 describe("useCodeConnectDetails Hook", () => {
   it("retorna les dades del projecte i gestiona el loading", async () => {
     const mockData = { data: { title: "Projecte Vitest" } };
-    
+
     (fetchCodeConnectProject as Mock).mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useCodeConnectDetails("1"));

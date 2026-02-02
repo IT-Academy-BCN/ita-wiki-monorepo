@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createCodeConnect, CodeConnectError, fetchCodeConnectProject } from "./endPointCodeConnect";
+import {
+  createCodeConnect,
+  CodeConnectError,
+  fetchCodeConnectProject,
+} from "./endPointCodeConnect";
 
 vi.mock("../config", () => ({
   API_URL: "https://localhost:8000",
@@ -112,7 +116,6 @@ describe("createCodeConnect", () => {
 });
 
 describe("fetchCodeConnectProject", () => {
-
   afterEach(() => {
     vi.restoreAllMocks();
   });

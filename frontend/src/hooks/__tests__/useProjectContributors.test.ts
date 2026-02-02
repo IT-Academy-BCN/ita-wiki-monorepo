@@ -4,13 +4,14 @@ import { useProjectContributors } from "../useProjectContributors";
 
 describe("useProjectContributors Hook", () => {
   it("filtra correctament per rol i calcula els espais buits", () => {
-
     const mockContributors = [
       { name: "Anna", programming_role: "Frontend Developer" }, // Hauria de sortir
-      { name: "Marc", programming_role: "Backend Developer" },  // No hauria de sortir
+      { name: "Marc", programming_role: "Backend Developer" }, // No hauria de sortir
     ];
 
-    const { result } = renderHook(() => useProjectContributors(mockContributors));
+    const { result } = renderHook(() =>
+      useProjectContributors(mockContributors),
+    );
 
     const { members, emptySlots } = result.current.getTeamByRole("frontend");
 

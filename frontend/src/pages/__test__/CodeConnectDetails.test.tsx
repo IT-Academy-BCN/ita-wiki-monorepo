@@ -11,11 +11,13 @@ vi.mock("react-router", () => ({
 vi.mock("../../hooks/useCodeConnectDetails");
 
 vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
-  default: () => <div data-testid="mock-project-team">Component ProjectTeam</div>
+  default: () => (
+    <div data-testid="mock-project-team">Component ProjectTeam</div>
+  ),
 }));
 
 vi.mock("../../utils/iconUtils", () => ({
-  displayLanguageIcon: () => "fake-icon.svg"
+  displayLanguageIcon: () => "fake-icon.svg",
 }));
 
 describe("CodeConnectDetails Page", () => {
@@ -26,13 +28,13 @@ describe("CodeConnectDetails Page", () => {
         contributors: [],
         time_duration: "2 setmanes",
         language_frontend: "react",
-        language_backend: "node"
-      }
+        language_backend: "node",
+      },
     };
 
     (useCodeConnectDetails as Mock).mockReturnValue({
       codeConnectProject: mockProjectData,
-      isLoading: false
+      isLoading: false,
     });
 
     render(<CodeConnectDetails />);

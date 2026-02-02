@@ -5,12 +5,16 @@ import ProjectTeam from "../ProjectTeam";
 
 vi.mock("../../../../hooks/useProjectContributors", () => ({
   useProjectContributors: () => ({
-    getTeamByRole: () => ({ members: [], emptySlots: 0 })
-  })
+    getTeamByRole: () => ({ members: [], emptySlots: 0 }),
+  }),
 }));
 
-vi.mock("../../atoms/ButtonComponent", () => ({ default: () => <button>Botó</button> }));
-vi.mock("../../code-connect/projectCard/ProgressBar", () => ({ default: () => <div>Barra</div> }));
+vi.mock("../../atoms/ButtonComponent", () => ({
+  default: () => <button>Botó</button>,
+}));
+vi.mock("../../code-connect/projectCard/ProgressBar", () => ({
+  default: () => <div>Barra</div>,
+}));
 vi.mock("../TeamRow", () => ({ default: () => <div>Fila TeamRow</div> }));
 
 describe("ProjectTeam Component", () => {

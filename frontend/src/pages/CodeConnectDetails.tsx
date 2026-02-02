@@ -11,11 +11,17 @@ const CodeConnectDetails = () => {
 
   const { projectId } = useParams<{ projectId: string }>();
 
-  const { codeConnectProject, isLoading } = useCodeConnectDetails(projectId || null);
+  const { codeConnectProject, isLoading } = useCodeConnectDetails(
+    projectId || null,
+  );
 
   return (
     <>
-      <PageTitle title={codeConnectProject?.data?.title || "Codeconnect | IT Academy Wiki"} />
+      <PageTitle
+        title={
+          codeConnectProject?.data?.title || "Codeconnect | IT Academy Wiki"
+        }
+      />
 
       <Container className="px-4 py-6 lg:pl-8 xl:pl-6">
         {isLoading && <p>Carregant...</p>}
@@ -23,7 +29,8 @@ const CodeConnectDetails = () => {
           <div className="flex flex-col lg:flex-row gap-8 w-full">
             <div className="lg:w-2/3">
               <h2 className="text-[26px] font-extrabold text-left mb-10">
-                {codeConnectProject.data?.title || "unable to load project title"}
+                {codeConnectProject.data?.title ||
+                  "unable to load project title"}
               </h2>
               <p className="text-[16px] mb-20 whitespace-pre-line">
                 {description}
@@ -39,8 +46,12 @@ const CodeConnectDetails = () => {
             </div>
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
               <ProjectTeam
-                logoFront={displayLanguageIcon(codeConnectProject.data?.language_frontend)}
-                logoBack={displayLanguageIcon(codeConnectProject.data?.language_backend)}
+                logoFront={displayLanguageIcon(
+                  codeConnectProject.data?.language_frontend,
+                )}
+                logoBack={displayLanguageIcon(
+                  codeConnectProject.data?.language_backend,
+                )}
                 contributors={codeConnectProject.data?.contributors}
                 timeDuration={codeConnectProject.data?.time_duration}
               />
