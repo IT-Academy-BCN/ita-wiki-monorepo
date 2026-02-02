@@ -104,9 +104,12 @@ describe("ResourcesLayout Component", () => {
     render(
       <MemoryRouter>
         <ResourcesFiltersProvider>
-          <ResourcesList resources={mockResources} category={String(category)} />
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
         </ResourcesFiltersProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const skeletons = screen.getAllByTestId("resource-card-skeleton");
@@ -121,9 +124,12 @@ describe("ResourcesLayout Component", () => {
     const { rerender } = render(
       <MemoryRouter>
         <ResourcesFiltersProvider>
-          <ResourcesList resources={mockResources} category={String(category)} />
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
         </ResourcesFiltersProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getAllByTestId("resource-card-skeleton")).toHaveLength(8);
@@ -134,12 +140,17 @@ describe("ResourcesLayout Component", () => {
     rerender(
       <MemoryRouter>
         <ResourcesFiltersProvider>
-          <ResourcesList resources={mockResources} category={String(category)} />
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
         </ResourcesFiltersProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    expect(screen.queryByTestId("resource-card-skeleton")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("resource-card-skeleton"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("React Basics")).toBeInTheDocument();
     expect(screen.getByText("Advanced JS")).toBeInTheDocument();
   });
