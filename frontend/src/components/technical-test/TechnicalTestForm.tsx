@@ -50,7 +50,6 @@ export const TechnicalTestForm = () => {
             languages={contentForTechnicalTest}
           />
 
-          {/* DURADA */}
           <div className="flex flex-col px-10 mt-8">
             <label className="text-sm text-black font-medium mb-2">
               Durada (minuts) *
@@ -64,14 +63,11 @@ export const TechnicalTestForm = () => {
             />
             {errors.duration && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">
-                  {errors.duration.message}
-                </p>
+                <p className="text-red-500 text-xs">{errors.duration.message}</p>
               </div>
             )}
           </div>
 
-          {/* DIFICULTAT */}
           <div className="flex flex-col px-10 mt-8">
             <label className="text-sm text-black font-medium mb-2">
               Dificultat *
@@ -88,9 +84,7 @@ export const TechnicalTestForm = () => {
             </select>
             {errors.difficulty && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">
-                  {errors.difficulty.message}
-                </p>
+                <p className="text-red-500 text-xs">{errors.difficulty.message}</p>
               </div>
             )}
           </div>
