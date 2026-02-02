@@ -27,7 +27,7 @@ const LanguageSelectorInput = ({
           <div className="flex flex-wrap gap-3 mb-4">
             {languages.map((cat) => {
               const IconComponent = cat.icon;
-              const isSelected = field.value === cat.label;
+             
               return (
                 <button
                   key={cat.label}
