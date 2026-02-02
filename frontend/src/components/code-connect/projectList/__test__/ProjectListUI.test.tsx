@@ -65,4 +65,13 @@ describe("ProjectListUI", () => {
     );
     expect(screen.getByText("Test Project")).toBeDefined();
   });
+
+  it("renderiza exactamente 6 skeletons durante la carga", () => {
+    render(
+      <MemoryRouter>
+        <ProjectListUI projects={[]} showLoader={true} error={null} />
+      </MemoryRouter>,
+    );
+    expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
+  });
 });

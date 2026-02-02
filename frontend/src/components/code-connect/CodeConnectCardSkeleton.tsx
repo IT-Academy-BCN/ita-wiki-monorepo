@@ -1,6 +1,9 @@
 const CodeConnectCardSkeleton = () => {
   return (
-    <div className="flex flex-col border scale-95 sm:scale-100 border-gray-300 items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10 animate-pulse">
+    <div
+      data-testid="skeleton-card"
+      className="flex flex-col border scale-95 sm:scale-100 border-gray-300 items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10 animate-pulse"
+    >
       <div className="w-full">
         <div className="h-6 w-3/4 bg-gray-300 rounded" />
         <div className="h-4 w-24 bg-gray-300 rounded mt-2" />
