@@ -1,10 +1,9 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { describe, it, expect, vi, beforeEach } from "vitest"; // Afegeix beforeEach
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import TechnicalTestList from "../TechnicalTestList";
 import { TechnicalTest } from "../../../types/TechnicalTest";
-// 1. IMPORTA EL HOOK REAL
 import useTechnicalTestList from "../../../hooks/useTechnicalTestList";
 
 const mockTests: TechnicalTest[] = [
@@ -36,14 +35,11 @@ const mockTests: TechnicalTest[] = [
   },
 ];
 
-// 2. MOCKEJA EL MÒDUL (sense la factory function, només el path)
 vi.mock("../../../hooks/useTechnicalTestList");
 
-// 3. CREA LA REFERÈNCIA AL MOCK
 const mockedUseTechnicalTestList = vi.mocked(useTechnicalTestList);
 
 describe("TechnicalTestList", () => {
-  // 4. CONFIGURA EL VALOR PER DEFECTE ABANS DE CADA TEST
   beforeEach(() => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: mockTests,
@@ -143,9 +139,7 @@ describe("TechnicalTestList", () => {
     expect(screen.queryByText("Test A")).toBeNull();
   });
 
-  // 5. ARA AQUEST TEST JA FUNCIONA CORRECTAMENT
   it("shows error message when there is an error", () => {
-    // Sobreescrivim el mock només per aquest test
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: [],
       isLoading: false,
@@ -158,6 +152,75 @@ describe("TechnicalTestList", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText(/Error: Algo ha fallado/)).toBeDefined();
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
+  });
+
+  it("shows EmptyState when there are no technical tests", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
+
+  it("shows EmptyState when filters return no results", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList
+          filters={{
+            languages: ["Python"],
+            years: [],
+            difficulties: [],
+          }}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
+
+  it("shows EmptyState with error styling when there is an error", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: new Error("Error de connexió"),
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
+    expect(
+      screen.getByText("Hi ha hagut un problema. Torna-ho a provar."),
+    ).toBeDefined();
+    expect(screen.queryByText("No hi ha proves tècniques")).toBeNull();
+  });
+
+  it("shows skeletons while loading", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: true,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    const skeletons = document.querySelectorAll(".animate-pulse");
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 });
