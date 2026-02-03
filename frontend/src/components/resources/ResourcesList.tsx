@@ -9,6 +9,7 @@ import ResourceCard from "../ui/ResourceCard";
 import ResourceCardSkeleton from "./ResourcesSkeleton";
 import SortButton from "./SortButton";
 import { useMinLoading } from "../../hooks/useMinLoading";
+import EmptyState from "../ui/EmptyState";
 
 interface ResourcesListProps {
   resources: IntResource[];
@@ -23,11 +24,10 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   const searchTerm = searchParams.get("search") || "";
 
   const { selectedResourceTypes, selectedTags } = useResourcesFilters();
-  const { isBookmarked, toggleBookmark, isLoading } = useResources();
+  const { isBookmarked, toggleBookmark, isLoading, error } = useResources();
 
   const showLoader = useMinLoading(isLoading, 1500);
 
-  // Filter resources by category
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
 
@@ -36,19 +36,16 @@ export const ResourcesList: FC<ResourcesListProps> = ({
       : resources;
   }, [resources, category]);
 
-  // Apply filters
   const { filteredResources } = useResourceFilter({
     resources: categoryFilteredResources,
     selectedResourceTypes,
     selectedTags,
   });
 
-  // Apply sorting
   const { sortedResources, setSortOption, sortOption } = useResourceSort({
     resources: filteredResources,
   });
 
-  // Apply search filter
   const visibleResources = useMemo(() => {
     if (!searchTerm) return sortedResources;
 
@@ -57,6 +54,16 @@ export const ResourcesList: FC<ResourcesListProps> = ({
       resource.title.toLowerCase().includes(lowerSearchTerm),
     );
   }, [sortedResources, searchTerm]);
+
+  if (error) {
+    return (
+      <EmptyState
+        text="Error al obtenir recursos"
+        subtext="Hi ha hagut un problema. Torna-ho a provar."
+        textClassName="text-red-500"
+      />
+    );
+  }
 
   if (showLoader) {
     return (
@@ -67,23 +74,22 @@ export const ResourcesList: FC<ResourcesListProps> = ({
       </div>
     );
   }
-  // Early return if no resources
+
   if (!resources?.length) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        No hi ha recursos disponibles.
-      </div>
+      <EmptyState
+        text="No hi ha recursos"
+        subtext="Torna-ho a provar més tard"
+      />
     );
   }
 
   return (
     <div className="lg:flex-1">
       <div className="flex justify-end items-center">
-        {/* El encabezado se eliminó de aquí */}
         <SortButton setSortOption={setSortOption} sortOption={sortOption} />
       </div>
 
-      {/* Resources List */}
       {visibleResources.length === 0 ? (
         <div className="flex flex-col gap-4 py-8">
           <div className="text-center py-8 text-gray-500">
