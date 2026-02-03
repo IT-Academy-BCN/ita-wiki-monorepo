@@ -55,16 +55,6 @@ export const ResourcesList: FC<ResourcesListProps> = ({
     );
   }, [sortedResources, searchTerm]);
 
-  if (showLoader) {
-    return (
-      <div className="flex flex-col gap-4 mt-10">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <ResourceCardSkeleton key={index} />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <EmptyState
@@ -72,6 +62,16 @@ export const ResourcesList: FC<ResourcesListProps> = ({
         subtext="Hi ha hagut un problema. Torna-ho a provar."
         textClassName="text-red-500"
       />
+    );
+  }
+
+  if (showLoader) {
+    return (
+      <div className="flex flex-col gap-4 mt-10">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <ResourceCardSkeleton key={index} />
+        ))}
+      </div>
     );
   }
 
