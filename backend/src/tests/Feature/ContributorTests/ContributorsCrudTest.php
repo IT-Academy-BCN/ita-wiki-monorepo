@@ -263,6 +263,8 @@ class ContributorsCrudTest extends TestCase
                 'success' => false,
                 'message' => 'Project not found',
             ]); 
+    }
+    
     public function test_user_can_remove_himself_from_project(): void
     {
         $contributor = ContributorListProject::factory()->create([
