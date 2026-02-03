@@ -75,6 +75,7 @@ const setupLoadingState = (isLoading: boolean) => {
     },
     bookmarkedResources: [],
     loadingBookmarks: false,
+    error: null,
   });
 };
 
@@ -153,5 +154,29 @@ describe("ResourcesLayout Component", () => {
     ).not.toBeInTheDocument();
     expect(screen.getByText("React Basics")).toBeInTheDocument();
     expect(screen.getByText("Advanced JS")).toBeInTheDocument();
+  });
+
+  it("muestra EmptyState cuando no hay recursos", () => {
+    mockUseMinLoading.mockReturnValue(false);
+    mockUseResources.mockReturnValue({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: [],
+      isLoading: false,
+      getBookmarkCount: () => 0,
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList resources={[]} category={String(category)} />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha recursos")).toBeInTheDocument();
   });
 });
