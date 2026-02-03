@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { IntResource } from "../../types";
 import { useResourceFilter } from "../../hooks/useResourceFilter";
@@ -26,9 +26,10 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   const { selectedResourceTypes, selectedTags } = useResourcesFilters();
   const { isBookmarked, toggleBookmark, isLoading } = useResources();
 
+  const [error] = useState<Error | null>(null);
+
   const showLoader = useMinLoading(isLoading, 1500);
 
-  // Filter resources by category
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
 
@@ -37,19 +38,16 @@ export const ResourcesList: FC<ResourcesListProps> = ({
       : resources;
   }, [resources, category]);
 
-  // Apply filters
   const { filteredResources } = useResourceFilter({
     resources: categoryFilteredResources,
     selectedResourceTypes,
     selectedTags,
   });
 
-  // Apply sorting
   const { sortedResources, setSortOption, sortOption } = useResourceSort({
     resources: filteredResources,
   });
 
-  // Apply search filter
   const visibleResources = useMemo(() => {
     if (!searchTerm) return sortedResources;
 
@@ -69,6 +67,16 @@ export const ResourcesList: FC<ResourcesListProps> = ({
     );
   }
 
+  if (error) {
+    return (
+      <EmptyState
+        text="Error al obtenir recursos"
+        subtext="Hi ha hagut un problema. Torna-ho a provar."
+        textClassName="text-red-500"
+      />
+    );
+  }
+
   if (!resources?.length) {
     return (
       <EmptyState
@@ -81,11 +89,9 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   return (
     <div className="lg:flex-1">
       <div className="flex justify-end items-center">
-        {/* El encabezado se eliminó de aquí */}
         <SortButton setSortOption={setSortOption} sortOption={sortOption} />
       </div>
 
-      {/* Resources List */}
       {visibleResources.length === 0 ? (
         <div className="flex flex-col gap-4 py-8">
           <div className="text-center py-8 text-gray-500">
