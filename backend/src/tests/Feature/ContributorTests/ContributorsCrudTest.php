@@ -169,15 +169,6 @@ class ContributorsCrudTest extends TestCase
         $response->assertStatus(422);
     }
 
-    // ========== DELETE TESTS ==========
-
-    public function test_it_can_delete_a_contributor_when_user_is_project_owner(): void
-    {
-        $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
-
-        $contributor = ContributorListProject::factory()->create([
-            'list_project_id' => $project->id,
     public function test_it_returns_403_when_user_was_rejected_and_tries_again(): void
     {
         ContributorListProject::factory()->create([
@@ -186,9 +177,8 @@ class ContributorsCrudTest extends TestCase
             'status' => ContributorStatusEnum::Rejected->value,
         ]);
 
-        Sanctum::actingAs($owner);
+        Sanctum::actingAs($this->user);
 
-        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
         $response = $this->postJson("/api/codeconnect/{$this->project->id}/contributors", [
             'user_id' => $this->user->id,
             'programming_role' => 'Fullstack Developer',
@@ -206,6 +196,30 @@ class ContributorsCrudTest extends TestCase
     }
 
     // ========== DELETE TESTS ==========
+
+    public function test_it_can_delete_a_contributor_when_user_is_project_owner(): void
+    {
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+
+        $contributor = ContributorListProject::factory()->create([
+            'list_project_id' => $project->id,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/{$contributor->id}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Contributor removed successfully',
+            ]);
+
+        $this->assertDatabaseMissing('contributors_list_project', [
+            'id' => $contributor->id,
+        ]);
+    }
 
     public function test_delete_returns_404_when_contributor_does_not_exist(): void
     {
@@ -264,7 +278,7 @@ class ContributorsCrudTest extends TestCase
                 'message' => 'Project not found',
             ]); 
     }
-    
+
     public function test_user_can_remove_himself_from_project(): void
     {
         $contributor = ContributorListProject::factory()->create([
