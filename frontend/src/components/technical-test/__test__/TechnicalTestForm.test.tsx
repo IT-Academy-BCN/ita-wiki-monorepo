@@ -9,6 +9,10 @@ vi.mock("react-router", () => ({
   useNavigate: () => vi.fn(),
 }));
 
+vi.mock("../../ui/Container", () => ({
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
 describe("TechnicalTestForm UI", () => {
   it("renders heading and back link", () => {
     render(<TechnicalTestForm />);

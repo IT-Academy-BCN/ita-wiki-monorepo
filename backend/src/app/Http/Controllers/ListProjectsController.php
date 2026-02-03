@@ -698,6 +698,13 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
+        if ($contributor->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not allowed to remove this contributor'
+            ], 403);
+        }
+
         try {
             $contributor->delete();
 
