@@ -699,22 +699,22 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
-        if ($project->owner_id !== $user->id && $user->id !== auth()->id()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You are not allowed to remove this contributor'
-            ], 403);
-        }
-
         $contributor = ContributorListProject::where('id', $contributorId)
-            ->where('list_project_id', $listProjectId)
-            ->first();
-
+        ->where('list_project_id', $listProjectId)
+        ->first();
+        
         if (!$contributor) {
             return response()->json([
                 'success' => false,
                 'message' => 'Contributor not found'
             ], 404);
+        }
+
+        if ($project->owner_id !== $user->id && $contributor->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not allowed to remove this contributor'
+            ], 403);
         }
 
         try {
