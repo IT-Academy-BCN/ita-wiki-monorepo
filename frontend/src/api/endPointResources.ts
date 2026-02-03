@@ -20,7 +20,7 @@ const getResources = async (timeoutMs = 0): Promise<IntResource[]> => {
 
     if (!response.ok) {
       console.warn(`Error ${response.status}: ${response.statusText}`);
-      return [];
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
