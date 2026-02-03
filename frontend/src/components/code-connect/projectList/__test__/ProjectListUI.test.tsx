@@ -74,4 +74,27 @@ describe("ProjectListUI", () => {
     );
     expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
   });
+
+  it("oculta skeletons después de completar la carga", () => {
+    const { rerender } = render(
+      <MemoryRouter>
+        <ProjectListUI projects={[]} showLoader={true} error={null} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
+
+    rerender(
+      <MemoryRouter>
+        <ProjectListUI
+          projects={[mockProject]}
+          showLoader={false}
+          error={null}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.queryByTestId("skeleton-card")).toBeNull();
+    expect(screen.getByText("Test Project")).toBeDefined();
+  });
 });
