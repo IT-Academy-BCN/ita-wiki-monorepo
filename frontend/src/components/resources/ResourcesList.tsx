@@ -6,8 +6,8 @@ import { useResourceSort } from "../../hooks/useResourceSort";
 import { useResources } from "../../context/ResourcesContext";
 import { useResourcesFilters } from "../../context/ResourcesFiltersContext";
 import ResourceCard from "../ui/ResourceCard";
+import ResourceCardSkeleton from "./ResourcesSkeleton";
 import SortButton from "./SortButton";
-import LoadingImage from "../ui/LoadingImage";
 import { useMinLoading } from "../../hooks/useMinLoading";
 
 interface ResourcesListProps {
@@ -59,7 +59,13 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   }, [sortedResources, searchTerm]);
 
   if (showLoader) {
-    return <LoadingImage text="Carregant recursos..." />;
+    return (
+      <div className="flex flex-col gap-4 mt-10">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <ResourceCardSkeleton key={index} />
+        ))}
+      </div>
+    );
   }
   // Early return if no resources
   if (!resources?.length) {

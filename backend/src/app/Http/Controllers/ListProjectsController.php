@@ -610,6 +610,12 @@ class ListProjectsController extends Controller
             ->first();
 
         if ($existingContributor) {
+            if ($existingContributor->status === ContributorStatusEnum::Rejected->value) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User was rejected and cannot request again for this project',
+                ], 403);
+            }
             return response()->json([
                 'success' => false,
                 'message' => 'User is already a contributor for this project'
@@ -709,6 +715,13 @@ class ListProjectsController extends Controller
                 'success' => false,
                 'message' => 'Contributor not found'
             ], 404);
+        }
+
+        if ($contributor->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not allowed to remove this contributor'
+            ], 403);
         }
 
         try {

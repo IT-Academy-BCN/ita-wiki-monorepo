@@ -22,7 +22,7 @@ class GitHubAuthErrorTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('success=false', $redirectUrl);
         $this->assertStringContainsString('error=', $redirectUrl);
         
@@ -42,7 +42,7 @@ class GitHubAuthErrorTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('success=false', $redirectUrl);
         $this->assertStringContainsString('error=Unexpected+error', $redirectUrl);
         
