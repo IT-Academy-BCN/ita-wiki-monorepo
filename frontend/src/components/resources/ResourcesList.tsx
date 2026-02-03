@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { IntResource } from "../../types";
 import { useResourceFilter } from "../../hooks/useResourceFilter";
@@ -24,9 +24,7 @@ export const ResourcesList: FC<ResourcesListProps> = ({
   const searchTerm = searchParams.get("search") || "";
 
   const { selectedResourceTypes, selectedTags } = useResourcesFilters();
-  const { isBookmarked, toggleBookmark, isLoading } = useResources();
-
-  const [error] = useState<Error | null>(null);
+  const { isBookmarked, toggleBookmark, isLoading, error } = useResources();
 
   const showLoader = useMinLoading(isLoading, 1500);
 
