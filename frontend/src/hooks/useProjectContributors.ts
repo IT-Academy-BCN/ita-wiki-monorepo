@@ -1,4 +1,4 @@
-import { CodeConnectProjectDataContributor } from "../types/CodeConnectProject";
+import { CodeConnectProjectDataContributor } from "../types/dsd";
 
 export const useProjectContributors = (
   contributors: CodeConnectProjectDataContributor[] = [],

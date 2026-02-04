@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import type {
-  ApiProjectsResponse,
-  Project,
+  CodeConnectProject,
+  CodeConnectProjects,
   UseProjectsState,
-} from "../types/projectTypes";
+} from "../types/CodeConnectProjectTypes";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
+const API_ENDPOINT = "http://localhost/api/codeconnect";
 
 const buildProjectsUrl = (filter: string | null | undefined): string => {
-  if (!API_BASE_URL) return "/api/codeconnect";
-
-  const url = new URL("/codeconnect", API_BASE_URL);
+  const url = new URL(API_ENDPOINT);
 
   if (filter) {
     url.searchParams.set("tech", filter);
@@ -19,9 +17,9 @@ const buildProjectsUrl = (filter: string | null | undefined): string => {
   return url.toString();
 };
 
-const isApiProjectsResponse = (
+const isCodeConnectProjectResponse = (
   value: unknown,
-): value is ApiProjectsResponse => {
+): value is CodeConnectProjects => {
   if (typeof value !== "object" || value === null) return false;
 
   const record = value as Record<string, unknown>;
@@ -36,7 +34,7 @@ const isApiProjectsResponse = (
 export const useProjects = (
   filter: string | null | undefined,
 ): UseProjectsState => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<CodeConnectProject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -62,7 +60,7 @@ export const useProjects = (
 
         const json: unknown = await response.json();
 
-        if (!isApiProjectsResponse(json)) {
+        if (!isCodeConnectProjectResponse(json)) {
           throw new Error("Invalid API response shape");
         }
 

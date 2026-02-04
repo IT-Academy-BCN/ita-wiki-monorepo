@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchCodeConnectProject } from "../api/endPointCodeConnect";
-import type { CodeConnectProject } from "../types/CodeConnectProject";
+import type { CodeConnectProject } from "../types/dsd";
 
 const useCodeConnectDetails = (projectId: string | null) => {
   const [codeConnectProject, setCodeConnectProject] =

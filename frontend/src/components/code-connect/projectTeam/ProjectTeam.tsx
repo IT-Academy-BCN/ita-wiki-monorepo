@@ -2,7 +2,7 @@ import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
-import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
+import { CodeConnectProjectDataContributor } from "../../../types/dsd";
 
 interface ProjectTeamProps {
   logoFront?: string;
