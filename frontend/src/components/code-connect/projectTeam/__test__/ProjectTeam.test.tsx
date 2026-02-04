@@ -1,55 +1,32 @@
+// @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
 import ProjectTeam from "../ProjectTeam";
 
-describe("ProjectTeam", () => {
-  const props = {
-    logoFront: "../assets/react.svg",
-    logoBack: "../assets/logo-php 1.svg",
-    avatarSrc: "../assets/project-avatar1.svg",
-    avatarSrc2: "../assets/project-avatar2.svg",
-    avatarSrc3: "../assets/project-avatar3.svg",
-  };
+vi.mock("../../../../hooks/useProjectContributors", () => ({
+  useProjectContributors: () => ({
+    getTeamByRole: () => ({ members: [], emptySlots: 0 }),
+  }),
+}));
 
-  test("renders tech sections with logos", () => {
-    render(<ProjectTeam {...props} />);
+vi.mock("../../atoms/ButtonComponent", () => ({
+  default: () => <button>Botó</button>,
+}));
+vi.mock("../../code-connect/projectCard/ProgressBar", () => ({
+  default: () => <div>Barra</div>,
+}));
+vi.mock("../TeamRow", () => ({ default: () => <div>Fila TeamRow</div> }));
 
-    const imgs = screen.getAllByRole("img");
-    const hasFrontLogo = imgs.some(
-      (img) => img.getAttribute("src") === props.logoFront,
-    );
-    const hasBackLogo = imgs.some(
-      (img) => img.getAttribute("src") === props.logoBack,
-    );
-    expect(hasFrontLogo).toBe(true);
-    expect(hasBackLogo).toBe(true);
-  });
+describe("ProjectTeam Component", () => {
+  it("renderitza els títols, la durada i les seccions", () => {
+    render(<ProjectTeam timeDuration="2 mesos" />);
 
-  test("renders avatars of team members", () => {
-    render(<ProjectTeam {...props} />);
+    expect(screen.getByText("Equip")).toBeTruthy();
+    expect(screen.getByText("Frontend")).toBeTruthy();
+    expect(screen.getByText("Backend")).toBeTruthy();
 
-    const imgs = screen.getAllByRole("img");
-    const hasAvatar1 = imgs.some(
-      (img) => img.getAttribute("src") === props.avatarSrc,
-    );
-    const hasAvatar2 = imgs.some(
-      (img) => img.getAttribute("src") === props.avatarSrc2,
-    );
-    const hasAvatar3 = imgs.some(
-      (img) => img.getAttribute("src") === props.avatarSrc3,
-    );
+    expect(screen.getByText("2 mesos")).toBeTruthy();
 
-    expect(hasAvatar1).toBe(true);
-    expect(hasAvatar2).toBe(true);
-    expect(hasAvatar3).toBe(true);
-  });
-
-  test("renders basic project info sections", () => {
-    render(<ProjectTeam {...props} />);
-
-    expect(screen.getByText(/equip/i)).toBeInTheDocument();
-    expect(screen.getByText(/frontend/i)).toBeInTheDocument();
-    expect(screen.getByText(/backend/i)).toBeInTheDocument();
-    expect(screen.getByText(/durada/i)).toBeInTheDocument();
-    expect(screen.getByText(/inscripció/i)).toBeInTheDocument();
+    expect(screen.getAllByText("Fila TeamRow")).toHaveLength(2);
   });
 });

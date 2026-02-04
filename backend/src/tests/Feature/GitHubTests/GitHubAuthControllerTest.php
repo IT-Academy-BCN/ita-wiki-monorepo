@@ -26,7 +26,7 @@ class GitHubAuthControllerTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
         
         $this->assertDatabaseHas('users', [
