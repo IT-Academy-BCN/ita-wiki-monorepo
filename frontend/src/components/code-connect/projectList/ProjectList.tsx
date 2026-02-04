@@ -1,55 +1,42 @@
-import ProjectCard from "../projectCard/ProjectCard";
+import { useState, useEffect } from "react";
+import projectsData from "../../../moock/projects.json";
+import { useMinLoading } from "../../../hooks/useMinLoading";
+import ProjectListUI from "./ProjectListUI";
 import type { Project } from "../projectCard/types/projectTypes";
-import { useProjects } from "../../../hooks/useProjectsCodeconnect";
 
-type ProjectProps = {
+function ProjectList({
+  onCardClick,
+  filter,
+}: {
   onCardClick?: (id: number) => void;
   filter?: string | null;
-};
+}) {
+  const [isLoading, setIsLoading] = useState(true);
+  const error = null;
+  const showLoader = useMinLoading(isLoading);
 
-const ProjectList = ({ onCardClick, filter }: ProjectProps) => {
-  const { projects, isLoading, errorMessage } = useProjects(filter);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const filteredProjects = (projects as Project[]).filter((project) => {
+  const projects = (projectsData as Project[]).filter((p) => {
     if (!filter) return true;
-
-    const normalizedFilter = filter.toLowerCase();
-
+    const f = filter.toLowerCase();
     return (
-      project.frontend?.tech?.toLowerCase() === normalizedFilter ||
-      project.backend?.tech?.toLowerCase() === normalizedFilter
+      p.frontend?.tech?.toLowerCase() === f ||
+      p.backend?.tech?.toLowerCase() === f
     );
   });
 
   return (
-    <>
-      <h2 className="text-2xl font-bold  py-4 sm:py-6 text-black sm:mb-4">
-        Llista de projectess
-      </h2>
-
-      {isLoading && <p className="text-black py-3">Carregant projectes...</p>}
-
-      {!isLoading && errorMessage && (
-        <p className="text-black py-3">
-          Error carregant projectes: {errorMessage}
-        </p>
-      )}
-
-      {!isLoading && !errorMessage && filteredProjects.length === 0 && (
-        <p className="text-black py-3">No hi ha projectes disponibles.</p>
-      )}
-
-      <section className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
-        {filteredProjects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onClick={onCardClick}
-          />
-        ))}
-      </section>
-    </>
+    <ProjectListUI
+      projects={projects}
+      showLoader={showLoader}
+      error={error}
+      onCardClick={onCardClick}
+    />
   );
-};
+}
 
 export default ProjectList;
