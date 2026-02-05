@@ -1,87 +1,180 @@
 import { render, screen } from "@testing-library/react";
-import { vi, describe, test, expect } from "vitest";
-import { ListMyResources } from "../ListMyResources";
+import { MemoryRouter } from "react-router";
+import { ResourcesLayout } from "../ResourcesLayout";
+import { ResourcesList } from "../ResourcesList";
+import { ResourcesFiltersProvider } from "../../../context/ResourcesFiltersContext";
+import { categories } from "../../../data/categories";
 import { IntResource } from "../../../types";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("../../ui/ResourceCard", () => ({
-  default: vi.fn(({ resource }) => (
-    <li data-testid={`resource-card-${resource.id}`}>
-      <div>{resource.title}</div>
-      <div>{resource.description}</div>
-    </li>
-  )),
-}));
-
-vi.mock("../../../context/UserContext", () => ({
-  useUserContext: vi.fn().mockReturnValue({
-    user: { id: "user123" },
-    isAuthenticated: true,
-    signIn: vi.fn(),
-    signOut: vi.fn(),
-    error: null,
-    setError: vi.fn(),
-    saveUser: vi.fn(),
+vi.mock("../../../hooks/useResourceFilter", () => ({
+  useResourceFilter: () => ({
+    filteredResources: mockResources,
+    selectedTags: [],
+    setSelectedTags: vi.fn(),
+    selectedResourceTypes: ["Video"],
+    setSelectedResourceTypes: vi.fn(),
   }),
 }));
 
-describe("ListMyResources Component", () => {
-  const mockBase = [
-    {
-      id: 1,
-      title: "React Basics",
-      description: "Learn React fundamentals",
-      type: "Blog",
+vi.mock("../../../context/UserContext", () => ({
+  useUserContext: () => ({
+    user: { id: "123463" },
+  }),
+}));
+
+const mockUseMinLoading = vi.fn();
+
+vi.mock("../../../hooks/useMinLoading", () => ({
+  useMinLoading: () => mockUseMinLoading(),
+}));
+
+const mockUseResources = vi.fn();
+
+vi.mock("../../../context/ResourcesContext", () => ({
+  useResources: () => mockUseResources(),
+}));
+
+const mockResources: IntResource[] = [
+  {
+    id: 1,
+    title: "React Basics",
+    description: "Learn React step-by-step",
+    type: "Video",
+    created_at: "2025-02-25 00:00:00",
+    updated_at: "2025-02-25 00:00:00",
+    like_count: 10,
+    bookmark_count: 2,
+    comment_count: 1,
+  } as IntResource,
+  {
+    id: 2,
+    title: "Advanced JS",
+    description: "Deep dive into JS",
+    type: "Blog",
+    created_at: "2025-02-25 00:00:00",
+    updated_at: "2025-02-25 00:00:00",
+    like_count: 5,
+    bookmark_count: 0,
+    comment_count: 0,
+  } as IntResource,
+];
+
+const category = Object.keys(categories)[0] as keyof typeof categories;
+
+const setupLoadingState = (isLoading: boolean) => {
+  mockUseMinLoading.mockReturnValue(isLoading);
+  mockUseResources.mockReturnValue({
+    isBookmarked: vi.fn(),
+    toggleBookmark: vi.fn(),
+    resources: mockResources,
+    isLoading,
+    getBookmarkCount: (resourceId: number | string) => {
+      const resource = mockResources.find((r) => r.id === resourceId);
+      return resource?.bookmark_count || 0;
     },
-    {
-      id: 2,
-      title: "Advanced TypeScript",
-      description: "Master TypeScript concepts",
-      type: "Video",
-    },
-  ];
+    bookmarkedResources: [],
+    loadingBookmarks: false,
+  });
+};
 
-  const mockResources = mockBase.map(
-    (resource) =>
-      ({
-        ...resource,
-      }) as IntResource,
-  );
+describe("ResourcesLayout Component", () => {
+  beforeEach(() => {
+    setupLoadingState(false);
+  });
+  it("should render the component and display the correct title", () => {
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesLayout
+            resources={mockResources}
+            category={String(category)}
+          />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
 
-  test("renders correctly with my resources", () => {
-    render(<ListMyResources myResources={mockResources} />);
+    const titleElement = screen.getByText(`Recursos ${String(category)}`);
+    expect(titleElement.tagName).toBe("H2");
+  });
 
-    expect(screen.getByTestId("resource-card-1")).toBeInTheDocument();
-    expect(screen.getByTestId("resource-card-2")).toBeInTheDocument();
+  it("should render 8 skeletons when loading", () => {
+    setupLoadingState(true);
 
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
+
+    const skeletons = screen.getAllByTestId("resource-card-skeleton");
+    expect(skeletons).toHaveLength(8);
+    expect(screen.queryByText("React Basics")).not.toBeInTheDocument();
+    expect(screen.queryByText("Advanced JS")).not.toBeInTheDocument();
+  });
+
+  it("should hide skeletons after loading completes", () => {
+    setupLoadingState(true);
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getAllByTestId("resource-card-skeleton")).toHaveLength(8);
+
+    // Simular que termina la carga
+    setupLoadingState(false);
+
+    rerender(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList
+            resources={mockResources}
+            category={String(category)}
+          />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.queryByTestId("resource-card-skeleton"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("React Basics")).toBeInTheDocument();
-    expect(screen.getByText("Advanced TypeScript")).toBeInTheDocument();
+    expect(screen.getByText("Advanced JS")).toBeInTheDocument();
   });
 
-  test("renders empty list when no resources", () => {
-    render(<ListMyResources myResources={[]} />);
+  it("muestra EmptyState cuando no hay recursos", () => {
+    mockUseMinLoading.mockReturnValue(false);
+    mockUseResources.mockReturnValue({
+      isBookmarked: vi.fn(),
+      toggleBookmark: vi.fn(),
+      resources: [],
+      isLoading: false,
+      getBookmarkCount: () => 0,
+      bookmarkedResources: [],
+      loadingBookmarks: false,
+    });
 
-    const list = screen.getByRole("list");
-    expect(list).toBeInTheDocument();
-    expect(list.children).toHaveLength(0);
-  });
+    render(
+      <MemoryRouter>
+        <ResourcesFiltersProvider>
+          <ResourcesList resources={[]} category={String(category)} />
+        </ResourcesFiltersProvider>
+      </MemoryRouter>,
+    );
 
-  test("renders the correct number of resources", () => {
-    const manyResources = Array.from({ length: 5 }, (_, index) => ({
-      ...mockBase[0],
-      id: index + 1,
-      title: `Resource ${index + 1}`,
-      created_at: "2025-02-25 00:00:00",
-      updated_at: "2025-02-25 00:00:00",
-    })) as IntResource[];
-
-    render(<ListMyResources myResources={manyResources} />);
-
-    const list = screen.getByRole("list");
-    expect(list.children).toHaveLength(5);
-
-    for (let i = 1; i <= 5; i++) {
-      expect(screen.getByTestId(`resource-card-${i}`)).toBeInTheDocument();
-      expect(screen.getByText(`Resource ${i}`)).toBeInTheDocument();
-    }
+    expect(screen.getByText("No hi ha recursos")).toBeInTheDocument();
   });
 });
