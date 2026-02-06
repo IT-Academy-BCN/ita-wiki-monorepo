@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { categories } from "../data/categories";
 import { ResourcesLayout } from "../components/resources/ResourcesLayout";
@@ -6,7 +6,7 @@ import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
 import { useResources } from "../context/ResourcesContext";
 import PageTitle from "../components/ui/PageTitle";
 
-const ResourcesPage: FC = () => {
+const ResourcesPage = () => {
   const { resources } = useResources();
   const { category } = useParams();
   const navigate = useNavigate();
