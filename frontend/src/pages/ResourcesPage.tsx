@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router";
 import { categories } from "../data/categories";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
 // import { useResources } from "../context/ResourcesContext";
-// import { ResourcesLayout } from "../components/resources/ResourcesLayout";
 
 const ResourcesPage = () => {
   // const { resources } = useResources();
@@ -24,7 +23,6 @@ const ResourcesPage = () => {
         <div>Ordenar, filtros</div>
       </div>
       <div>Lista de recursos</div>
-      {/* <ResourcesLayout resources={resources} category={category} /> */}
     </ResourcesFiltersProvider>
   );
 };
