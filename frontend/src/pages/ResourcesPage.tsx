@@ -19,8 +19,6 @@ const ResourcesPage = () => {
 
   return (
     <ResourcesFiltersProvider>
-      <PageTitle title={`${category}`} />
-
       <ResourcesLayout resources={resources} category={category} />
     </ResourcesFiltersProvider>
   );
