@@ -20,12 +20,8 @@ const ResourcesPage = () => {
     <ResourcesFiltersProvider>
       <div>Recursos de programación</div>
       <div>
-        <div>
-          Javascript, PHP, Java, BBDD, Python
-        </div>
-        <div>
-          Ordenar, filtros
-        </div>
+        <div>Javascript, PHP, Java, BBDD, Python</div>
+        <div>Ordenar, filtros</div>
       </div>
       <ResourcesList resources={resources} category={category} />
     </ResourcesFiltersProvider>
