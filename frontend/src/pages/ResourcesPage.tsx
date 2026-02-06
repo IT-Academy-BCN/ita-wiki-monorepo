@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { categories } from "../data/categories";
-import { ResourcesLayout } from "../components/resources/ResourcesLayout";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
 import { useResources } from "../context/ResourcesContext";
-import PageTitle from "../components/ui/PageTitle";
+import { ResourcesList } from "../components/resources/ResourcesList";
 
 const ResourcesPage = () => {
   const { resources } = useResources();
@@ -19,7 +18,16 @@ const ResourcesPage = () => {
 
   return (
     <ResourcesFiltersProvider>
-      <ResourcesLayout resources={resources} category={category} />
+      <div>Recursos de programación</div>
+      <div>
+        <div>
+          Javascript, PHP, Java, BBDD, Python
+        </div>
+        <div>
+          Ordenar, filtros
+        </div>
+      </div>
+      <ResourcesList resources={resources} category={category} />
     </ResourcesFiltersProvider>
   );
 };
