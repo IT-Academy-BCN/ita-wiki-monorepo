@@ -13,7 +13,7 @@ import MyTechnicalTestsPage from "./pages/MyTechnicalTestsPage";
 import RequireAuth from "./components/RequireAuth";
 import CodeConnectPage from "./pages/CodeConnectPage";
 import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
-import CodeConnectDetails from "./pages/CodeConnectDetails";
+import CodeConnectProjectDetails from "./pages/CodeConnectProjectDetails";
 import TechnicalPage from "./components/technical-page/TechnicalPage";
 import RankingsPage from "./pages/RankingsPage";
 
@@ -33,7 +33,7 @@ const App: FC = () => {
             <Route path="/codeconnect" element={<CodeConnectPage />} />
             <Route
               path="/codeconnect/:projectId"
-              element={<CodeConnectDetails />}
+              element={<CodeConnectProjectDetails />}
             />
             <Route path="/ranking" element={<RankingsPage />} />
 

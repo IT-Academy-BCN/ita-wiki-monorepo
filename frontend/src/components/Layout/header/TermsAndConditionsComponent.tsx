@@ -1,5 +1,5 @@
 import ButtonComponent from "../../atoms/ButtonComponent";
-import { TermsAndConditionsData } from "../../../moock/TermsAndConditionsData";
+import { TermsAndConditionsData } from "../../../mock/TermsAndConditionsData";
 
 interface TermsAndConditionsComponentProps {
   closeModal: () => void;

@@ -3,7 +3,7 @@ import { useMinLoading } from "../../../hooks/useMinLoading";
 import EmptyState from "../../ui/EmptyState";
 import ProjectCard from "../projectCard/ProjectCard";
 import CodeConnectCardSkeleton from "../CodeConnectCardSkeleton";
-import { useProjects } from "../../../hooks/useProjectsCodeconnect";
+import { useProjects } from "../../../hooks/useCodeConnectAllProjects";
 import type { CodeConnectProject } from "../../../types/CodeConnectProjectTypes";
 
 const ProjectList = ({
@@ -39,8 +39,8 @@ const ProjectList = ({
 
       {showLoader && !hasError && (
         <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <CodeConnectCardSkeleton key={i} />
+          {Array.from({ length: 6 }).map((_, index) => (
+            <CodeConnectCardSkeleton key={index} />
           ))}
         </div>
       )}

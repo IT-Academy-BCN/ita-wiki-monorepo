@@ -1,7 +1,6 @@
-import React from "react";
-import type { ProgressBarProps } from "./types/projectTypes";
+import type { ProgressBarProps } from "../../../types/CodeConnectProjectTypes";
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ startDate, endDate }) => {
+const ProgressBar = ({ startDate, endDate }: ProgressBarProps) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const today = new Date();

@@ -1,6 +1,6 @@
-import type { ProjectButtonProps } from "./types/projectTypes";
+import type { ProjectButtonProps } from "../../../types/CodeConnectProjectTypes";
 
-function ProjectButton({ children, onClick }: ProjectButtonProps) {
+const ProjectButton = ({ children, onClick }: ProjectButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -9,6 +9,6 @@ function ProjectButton({ children, onClick }: ProjectButtonProps) {
       {children}
     </button>
   );
-}
+};
 
 export default ProjectButton;

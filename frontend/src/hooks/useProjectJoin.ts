@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { PendingSlot } from "../types/projectTypes";
-import { joinProject } from "../../../../api/endPointJoinProject";
+import type { PendingSlot } from "../types/CodeConnectProjectTypes";
+import { joinProject } from "../api/endPointJoinProject";
 
 type PendingStatus = "pending" | "accepted" | "rejected";
 
@@ -8,7 +8,7 @@ type PendingSlotWithStatus = PendingSlot & {
   status: PendingStatus;
 };
 
-export function useProjectJoin(projectId: number) {
+export const useProjectJoin = (projectId: number) => {
   const [pendingSlots, setPendingSlots] = useState<PendingSlotWithStatus[]>([]);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [decisionModalOpen, setDecisionModalOpen] = useState(false);
@@ -129,4 +129,4 @@ export function useProjectJoin(projectId: number) {
       reject: handleRejectContributor,
     },
   };
-}
+};

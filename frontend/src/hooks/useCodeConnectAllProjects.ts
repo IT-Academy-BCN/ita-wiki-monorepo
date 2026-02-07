@@ -1,25 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
+import { fetchCodeConnectAllProjects } from "../api/endPointCodeConnect";
 import type {
   CodeConnectProject,
-  CodeConnectProjects,
+  CodeConnectProjectsResponse,
   UseProjectsState,
 } from "../types/CodeConnectProjectTypes";
 
-const API_ENDPOINT = "http://localhost/api/codeconnect";
-
-const buildProjectsUrl = (filter: string | null | undefined): string => {
-  const url = new URL(API_ENDPOINT);
-
-  if (filter) {
-    url.searchParams.set("tech", filter);
-  }
-
-  return url.toString();
-};
-
-const isCodeConnectProjectResponse = (
+const isCodeConnectProjectsResponse = (
   value: unknown,
-): value is CodeConnectProjects => {
+): value is CodeConnectProjectsResponse => {
   if (typeof value !== "object" || value === null) return false;
 
   const record = value as Record<string, unknown>;
@@ -38,7 +27,9 @@ export const useProjects = (
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const url = useMemo(() => buildProjectsUrl(filter), [filter]);
+  const normalizedFilter = useMemo(() => {
+    return filter ? filter.trim().toLowerCase() : null;
+  }, [filter]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -48,19 +39,11 @@ export const useProjects = (
       setErrorMessage(null);
 
       try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: { Accept: "application/json" },
-          signal: abortController.signal,
-        });
+        const json: unknown = await fetchCodeConnectAllProjects(
+          abortController.signal,
+        );
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const json: unknown = await response.json();
-
-        if (!isCodeConnectProjectResponse(json)) {
+        if (!isCodeConnectProjectsResponse(json)) {
           throw new Error("Invalid API response shape");
         }
 
@@ -68,13 +51,36 @@ export const useProjects = (
           throw new Error(json.message || "API returned success=false");
         }
 
-        setProjects(json.data);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError")
+        const incomingProjects = json.data;
+
+        if (!normalizedFilter) {
+          setProjects(incomingProjects);
           return;
+        }
+
+        const filtered = incomingProjects.filter((project) => {
+          return (
+            project.language_frontend.toLowerCase() === normalizedFilter ||
+            project.language_backend.toLowerCase() === normalizedFilter
+          );
+        });
+
+        setProjects(filtered);
+      } catch (error) {
+        if (
+          error &&
+          typeof error === "object" &&
+          "name" in error &&
+          (error as { name: unknown }).name === "AbortError"
+        ) {
+          return;
+        }
 
         const message =
-          error instanceof Error ? error.message : "Unknown error";
+          error && typeof error === "object" && "message" in error
+            ? String((error as { message: unknown }).message)
+            : "Unknown error";
+
         setErrorMessage(message);
         setProjects([]);
       } finally {
@@ -85,7 +91,7 @@ export const useProjects = (
     fetchProjects();
 
     return () => abortController.abort();
-  }, [url]);
+  }, [normalizedFilter]);
 
   return { projects, isLoading, errorMessage };
 };

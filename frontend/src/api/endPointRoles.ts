@@ -1,5 +1,5 @@
 import { API_URL, END_POINTS } from "../config";
-import moock from "../moock/roles.json";
+import moock from "../mock/roles.json";
 
 interface IntRole {
   github_id: number;
