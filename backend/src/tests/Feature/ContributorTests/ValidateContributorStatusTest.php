@@ -35,37 +35,20 @@ class ValidateContributorStatusTest extends TestCase
         ]);
     }
 
-    public function test_it_allows_any_user_to_accept_a_pending_contributor(): void
-    {
-        $validator = User::factory()->create();
-        $contributorUser = User::factory()->create();
-
-        $pendingContributor = $this->createPendingContributor($contributorUser);
-
-        $response = $this->actingAs($validator)
-            ->patchJson("/api/codeconnect/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
-                'status' => ContributorStatusEnum::Accepted->value,
-            ]);
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'Contributor status updated successfully',
-                'status' => ContributorStatusEnum::Accepted->value,
-            ]);
-
-        $this->assertDatabaseHas('contributors_list_project', [
-            'id' => $pendingContributor->id,
-            'status' => ContributorStatusEnum::Accepted->value,
-        ]);
-    }
 
     public function test_a_user_cannot_accept_their_own_contributor_request(): void
     {
         $user = User::factory()->create();
 
+        ContributorListProject::factory()->create([
+            'list_project_id' => $this->project->id,
+            'user_id' => $user->id,
+            'status' => ContributorStatusEnum::Accepted->value,
+        ]);
+
         $pendingContributor = $this->createPendingContributor($user);
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'sanctum')
             ->patchJson("/api/codeconnect/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
@@ -86,9 +69,15 @@ class ValidateContributorStatusTest extends TestCase
         $validator = User::factory()->create();
         $contributorUser = User::factory()->create();
 
+        ContributorListProject::factory()->create([
+            'list_project_id' => $this->project->id,
+            'user_id' => $validator->id,
+            'status' => ContributorStatusEnum::Accepted->value,
+        ]);
+
         $pendingContributor = $this->createPendingContributor($contributorUser);
 
-        $response = $this->actingAs($validator)
+        $response = $this->actingAs($validator, 'sanctum')
             ->patchJson("/api/codeconnect/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
                 'status' => ContributorStatusEnum::Pending->value,
             ]);
@@ -110,7 +99,7 @@ class ValidateContributorStatusTest extends TestCase
         $pendingContributor = $this->createPendingContributor($contributorUser);
 
         $response = $this->actingAs($nonMemberUser, 'sanctum')
-            ->patchJson("/api/listsProject/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
+            ->patchJson("/api/codeconnect/{$this->project->id}/contributors/{$pendingContributor->id}/status", [
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
         
