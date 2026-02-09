@@ -373,6 +373,19 @@ class ListProjectsController extends Controller
                 'message' => 'Contributor not found',
             ], 404);
         }
+        
+        if ($user) {
+            $isMember = ContributorListProject::where('list_project_id', $listProjectId)
+                ->where('user_id', $user->id)
+                ->where('status', ContributorStatusEnum::Accepted->value)
+                ->exists();
+            
+            if (!$isMember) {
+                return response()->json([
+                    'error' => 'You cannot validate this request',
+                ], 403);
+            }
+        }
 
         //Only if is an authenticated user
         if ($user && $contributor->user_id === $user->id) {
