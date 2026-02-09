@@ -194,6 +194,7 @@ class ListProjectsController extends Controller
         }
 
         try {
+            $validatedData['owner_id'] = auth()->id();
             $newProject = ListProjects::create($validatedData);
             return response()->json([
                 'success' => true,
@@ -371,6 +372,19 @@ class ListProjectsController extends Controller
                 'success' => false,
                 'message' => 'Contributor not found',
             ], 404);
+        }
+        
+        if ($user) {
+            $isMember = ContributorListProject::where('list_project_id', $listProjectId)
+                ->where('user_id', $user->id)
+                ->where('status', ContributorStatusEnum::Accepted->value)
+                ->exists();
+            
+            if (!$isMember) {
+                return response()->json([
+                    'error' => 'You cannot validate this request',
+                ], 403);
+            }
         }
 
         //Only if is an authenticated user
@@ -680,10 +694,28 @@ class ListProjectsController extends Controller
      */
     public function removeContributor(int $listProjectId, int $contributorId)
     {
-        $contributor = ContributorListProject::where('id', $contributorId)
-            ->where('list_project_id', $listProjectId)
-            ->first();
+        $user = auth()->user();
 
+        if (!$user) {
+            return response()->json([
+                'succes' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
+        $contributor = ContributorListProject::where('id', $contributorId)
+        ->where('list_project_id', $listProjectId)
+        ->first();
+        
         if (!$contributor) {
             return response()->json([
                 'success' => false,
@@ -691,7 +723,7 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
-        if ($contributor->user_id !== auth()->id()) {
+        if ($project->owner_id !== $user->id && $contributor->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You are not allowed to remove this contributor'

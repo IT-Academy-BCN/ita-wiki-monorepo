@@ -1,78 +1,163 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import ProjectListUI from "../ProjectListUI";
+import ProjectList from "../ProjectList";
 
-const mockProject = {
-  id: 1,
-  title: "Test Project",
-  frontend: {
-    tech: "React",
-    positions: 2,
-    participants: [],
-  },
-  backend: {
-    tech: "Node",
-    positions: 2,
-    participants: [],
-  },
-};
+// Mocks hook modules
+import { useMinLoading } from "../../../../hooks/useMinLoading";
+import { useProjects } from "../../../../hooks/useCodeConnectGetAllProjects";
 
-describe("ProjectListUI", () => {
-  it("muestra skeletons cuando showLoader es true", () => {
+vi.mock("../../../../hooks/useMinLoading", () => ({
+  useMinLoading: vi.fn(),
+}));
+
+vi.mock("../../../../hooks/useCodeConnectGetAllProjects", () => ({
+  useProjects: vi.fn(),
+}));
+
+// Mocks UI components
+vi.mock("../../ui/EmptyState", () => ({
+  default: ({ text, subtext }: { text: string; subtext?: string }) => (
+    <div>
+      <p>{text}</p>
+      {subtext ? <p>{subtext}</p> : null}
+    </div>
+  ),
+}));
+
+vi.mock("../CodeConnectCardSkeleton", () => ({
+  default: () => <div data-testid="skeleton-card" />,
+}));
+
+vi.mock("../projectCard/ProjectCard", () => ({
+  default: ({ project }: { project: { title: string } }) => (
+    <div>{project.title}</div>
+  ),
+}));
+
+const useMinLoadingMock = vi.mocked(useMinLoading);
+const useProjectsMock = vi.mocked(useProjects);
+
+beforeEach(() => {
+  useMinLoadingMock.mockReturnValue(false);
+  useProjectsMock.mockReturnValue({
+    projects: [],
+    isLoading: false,
+    errorMessage: null,
+  });
+});
+
+describe("ProjectList", () => {
+  it("mostra skeletons quan està carregant i no hi ha error", () => {
+    useMinLoadingMock.mockReturnValueOnce(true);
+    useProjectsMock.mockReturnValueOnce({
+      projects: [],
+      isLoading: true,
+      errorMessage: null,
+    });
+
     render(
       <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={true} error={null} />
+        <ProjectList />
       </MemoryRouter>,
     );
-    expect(screen.getByText("Llista de projectes")).toBeDefined();
-    // Skeletons se renderizan
+
+    expect(screen.getByText("Llista de projectes")).toBeInTheDocument();
+    expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
   });
 
-  it("muestra EmptyState con error cuando hay error", () => {
+  it("mostra EmptyState d'error quan hi ha errorMessage", () => {
+    useProjectsMock.mockReturnValueOnce({
+      projects: [],
+      isLoading: false,
+      errorMessage: "boom",
+    });
+
     render(
       <MemoryRouter>
-        <ProjectListUI
-          projects={[]}
-          showLoader={false}
-          error={new Error("Test error")}
-        />
+        <ProjectList />
       </MemoryRouter>,
     );
-    expect(screen.getByText("Error al obtenir projectes")).toBeDefined();
+
+    expect(screen.getByText("Error al obtenir projectes")).toBeInTheDocument();
     expect(
       screen.getByText("Hi ha hagut un problema. Torna-ho a provar."),
-    ).toBeDefined();
+    ).toBeInTheDocument();
   });
 
-  it("muestra EmptyState cuando no hay proyectos", () => {
+  it("mostra EmptyState quan no hi ha projectes i no carrega", () => {
+    useProjectsMock.mockReturnValueOnce({
+      projects: [],
+      isLoading: false,
+      errorMessage: null,
+    });
+
     render(
       <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={false} error={null} />
+        <ProjectList />
       </MemoryRouter>,
     );
-    expect(screen.getByText("No hi ha projectes")).toBeDefined();
+
+    expect(screen.getByText("No hi ha projectes")).toBeInTheDocument();
   });
 
-  it("muestra lista de proyectos cuando hay datos", () => {
+  it("mostra projectes quan n'hi ha", () => {
+    useProjectsMock.mockReturnValueOnce({
+      projects: [
+        {
+          id: 1,
+          title: "React Project",
+          time_duration: "1 mes",
+          language_frontend: "react",
+          language_backend: "java",
+          contributors: [],
+        },
+      ],
+      isLoading: false,
+      errorMessage: null,
+    });
+
     render(
       <MemoryRouter>
-        <ProjectListUI
-          projects={[mockProject]}
-          showLoader={false}
-          error={null}
-        />
+        <ProjectList />
       </MemoryRouter>,
     );
-    expect(screen.getByText("Test Project")).toBeDefined();
+
+    expect(screen.getByText("React Project")).toBeInTheDocument();
   });
 
-  it("renderiza exactamente 6 skeletons durante la carga", () => {
+  it("filtra per tecnologia quan es passa filter", () => {
+    useProjectsMock.mockReturnValueOnce({
+      projects: [
+        {
+          id: 1,
+          title: "React Project",
+          time_duration: "1 mes",
+          language_frontend: "react",
+          language_backend: "java",
+          contributors: [],
+        },
+        {
+          id: 2,
+          title: "PHP Project",
+          time_duration: "2 mesos",
+          language_frontend: "php",
+          language_backend: "php",
+          contributors: [],
+        },
+      ],
+      isLoading: false,
+      errorMessage: null,
+    });
+
     render(
       <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={true} error={null} />
+        <ProjectList filter="react" />
       </MemoryRouter>,
     );
-    expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
+
+    expect(screen.getByText("React Project")).toBeInTheDocument();
+    expect(screen.queryByText("PHP Project")).toBeNull();
   });
 });

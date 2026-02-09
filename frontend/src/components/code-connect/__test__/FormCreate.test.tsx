@@ -37,11 +37,13 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const titleInput = screen.getByRole("textbox", {
     name: /títol/i,
   }) as HTMLInputElement;
+  await user.clear(titleInput);
   await user.type(titleInput, "Test Project");
 
   const descriptionTextarea = screen.getByRole("textbox", {
     name: /descripció/i,
   }) as HTMLInputElement;
+  await user.clear(descriptionTextarea);
   await user.type(descriptionTextarea, "Test description");
 
   const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
@@ -53,13 +55,14 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const deadlineInput = screen.getByLabelText(
     /data límit d'inscripció/i,
   ) as HTMLInputElement;
-  await user.type(deadlineInput, "2025-11-20");
+
+  fireEvent.change(deadlineInput, { target: { value: "2025-11-20" } });
 
   const timeInput = screen.getByLabelText(
     /durada del projecte/i,
   ) as HTMLInputElement;
-  await user.tripleClick(timeInput);
-  await user.keyboard("2");
+  await user.clear(timeInput);
+  await user.type(timeInput, "2");
 
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
@@ -67,24 +70,22 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const devsFrontInput = screen.getByLabelText(
     /nombre de programadors frontend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsFrontInput);
-  await user.keyboard("2");
+  await user.clear(devsFrontInput);
+  await user.type(devsFrontInput, "2");
 
   const devsBackInput = screen.getByLabelText(
     /nombre de programadors backend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsBackInput);
-  await user.keyboard("2");
+  await user.clear(devsBackInput);
+  await user.type(devsBackInput, "2");
 
-  await waitFor(() => {
-    expect(titleInput.value).toBe("Test Project");
-    expect(descriptionTextarea.value).toBe("Test description");
-    expect(devsFrontInput.value).toBe("2");
-    expect(devsBackInput.value).toBe("2");
-    expect(timeInput.value).toBe("2");
-    expect((unitTimeSelect as HTMLSelectElement).value).toBe("month");
-    expect(deadlineInput.value).toBe("2025-11-20");
-  });
+  expect(titleInput.value).toBe("Test Project");
+  expect(descriptionTextarea.value).toBe("Test description");
+  expect(devsFrontInput.value).toBe("2");
+  expect(devsBackInput.value).toBe("2");
+  expect(timeInput.value).toBe("2");
+  expect((unitTimeSelect as HTMLSelectElement).value).toBe("month");
+  expect(deadlineInput.value).toBe("2025-11-20");
 };
 
 describe("FormCreateCodeConnect", () => {

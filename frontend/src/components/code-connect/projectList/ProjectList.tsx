@@ -3,7 +3,7 @@ import { useMinLoading } from "../../../hooks/useMinLoading";
 import EmptyState from "../../ui/EmptyState";
 import ProjectCard from "../projectCard/ProjectCard";
 import CodeConnectCardSkeleton from "../CodeConnectCardSkeleton";
-import { useProjects } from "../../../hooks/useCodeConnectAllProjects";
+import { useProjects } from "../../../hooks/useCodeConnectGetAllProjects";
 import type { CodeConnectProject } from "../../../types/CodeConnectProjectTypes";
 
 const ProjectList = ({

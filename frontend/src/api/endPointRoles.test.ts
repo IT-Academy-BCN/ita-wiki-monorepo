@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getRole, createRole } from "./endPointRoles";
 import { API_URL, END_POINTS } from "../config";
-import moock from "../moock/roles.json";
+import mock from "../mock/roles.json";
 import type {
   IntRole,
   RoleCreationRequest,
@@ -9,7 +9,7 @@ import type {
 } from "./endPointRoles";
 
 // Set up mock data
-const mockRole = moock.role as IntRole;
+const mockRole = mock.role as IntRole;
 const mockGithubId = 123456;
 
 describe("endPointRoles", () => {

@@ -52,6 +52,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
       tabIndex={onClick ? 0 : undefined}
       onClick={handleCardClick}
       onKeyDown={handleCardKeyDown}
+      aria-label="project-card"
     >
       <div className="w-full">
         <Link to={`/codeconnect/${project.id}`}>

@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('list_projects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id')->nullable()->constrained('users');
             $table->string('title');
             $table->string('time_duration')->nullable();
             $table->enum('language_backend', LanguageEnum::values())->nullable();

@@ -1,16 +1,21 @@
-// src/services/languageService.test.ts
-
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { getLanguages } from "./languageService";
 
 describe("languageService (mock version)", () => {
-  test("should return a list of languages", async () => {
+  afterEach(() => {
+    // Evita que algun test deixi timers/spies “enganxats”
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("should return a list of languages", async () => {
     const result = await getLanguages();
 
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);
   });
 
-  test("each language should have id, code and name", async () => {
+  it("each language should have id, code and name", async () => {
     const result = await getLanguages();
 
     result.forEach((lang) => {
@@ -20,7 +25,7 @@ describe("languageService (mock version)", () => {
     });
   });
 
-  test("should include some expected languages", async () => {
+  it("should include some expected languages", async () => {
     const result = await getLanguages();
     const languageNames = result.map((lang) => lang.name);
 
@@ -29,12 +34,19 @@ describe("languageService (mock version)", () => {
     expect(languageNames).toContain("Python");
   });
 
-  test("should simulate async delay", async () => {
-    const start = Date.now();
-    await getLanguages();
-    const duration = Date.now() - start;
+  it("should simulate async delay", async () => {
+    vi.useFakeTimers();
 
-    // Roughly expect a delay of at least 250ms due to setTimeout(300)
-    expect(duration).toBeGreaterThanOrEqual(250);
+    const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout");
+
+    const promise = getLanguages();
+
+    // Comprovem que programa el timeout de 300ms
+    expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+    expect(setTimeoutSpy.mock.calls[0][1]).toBe(300);
+
+    // Avancem el temps perquè la Promise es resolgui
+    vi.advanceTimersByTime(300);
+    await promise;
   });
 });
