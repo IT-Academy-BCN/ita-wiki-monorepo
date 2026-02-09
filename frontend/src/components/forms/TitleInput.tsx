@@ -16,8 +16,9 @@ const TitleInput = ({ register, errors, currentLength }: TitleInputProps) => {
       <input
         type="text"
         {...register("title")}
-        className="sm:w-1/2 p-2 border border-[#B91879] rounded-lg mb-4"
+        className="max-w-[482px] w-full text-base p-2 border border-gray-300 rounded-lg focus:border-[#B91879] outline-none mb-2"
         maxLength={charLimitTitle}
+        placeholder="Ex: Validar inputs de formulari"
       />
       <div className="sm:w-1/2 self-end sm:me-10 text-sm text-gray-500">
         <span>

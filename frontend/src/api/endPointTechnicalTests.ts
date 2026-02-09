@@ -50,7 +50,6 @@ export const fetchTechnicalTestById = async (testId: number) => {
     }
     const data = await response.json();
     return Array.isArray(data) ? data : data.data;
-    return Array.isArray(data) ? data : data.data;
   } catch (error: unknown) {
     console.error(error);
   }
