@@ -1,15 +1,5 @@
 import { useState } from "react";
-
-const languages = [
-  "Node",
-  "React",
-  "Angular",
-  "JavaScript",
-  "Java",
-  "PHP",
-  "Data Science",
-  "BBDD",
-];
+import { categories } from "../../../data/categories";
 
 interface LanguageTagsBarProps {
   onSelect?: (language: string | null) => void;
@@ -26,7 +16,7 @@ const LanguageTagsBar = ({ onSelect }: LanguageTagsBarProps) => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {languages.map((language) => (
+      {categories.map((language) => (
         <button
           key={language}
           onClick={() => handleClick(language)}
