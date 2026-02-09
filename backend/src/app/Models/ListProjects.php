@@ -16,7 +16,8 @@ class ListProjects extends Model
         'title',
         'time_duration',
         'language_backend',
-        'language_frontend'
+        'language_frontend',
+        'foro'
     ];
 
     public function contributorListProject()
