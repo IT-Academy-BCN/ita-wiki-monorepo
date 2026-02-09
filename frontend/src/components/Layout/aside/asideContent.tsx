@@ -23,7 +23,19 @@ export const asideContent: { icon: SvgIcon; label: Category }[] = [
 
 export const AsideNavbarData = [
   { label: "Inici", ref: "/", icon: <HomeIcon className="w-full h-full" /> },
-  { label: "Recursos", ref: "/resources/React", icon: <ResourcesIcon className="w-full h-full" /> },
-  { label: "Proves tècniques", ref: "/resources/technical-test/all-tech-tests", icon: <TechTestsIcon className="w-full h-full" /> },
-  { label: "Codeconnect", ref: "/codeconnect", icon: <CodeConnectIcon className="w-full h-full" /> },
-]
+  {
+    label: "Recursos",
+    ref: "/resources/React",
+    icon: <ResourcesIcon className="w-full h-full" />,
+  },
+  {
+    label: "Proves tècniques",
+    ref: "/resources/technical-test/all-tech-tests",
+    icon: <TechTestsIcon className="w-full h-full" />,
+  },
+  {
+    label: "Codeconnect",
+    ref: "/codeconnect",
+    icon: <CodeConnectIcon className="w-full h-full" />,
+  },
+];

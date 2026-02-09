@@ -15,7 +15,7 @@ describe("AsideNavbarLink Tests", () => {
           isActive={true}
           icon={<MockIcon />}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const link = screen.getByText("Test Link");
@@ -37,7 +37,7 @@ describe("AsideNavbarLink Tests", () => {
           isActive={false}
           icon={<MockIcon />}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const link = screen.getByText("Test Link");
@@ -59,7 +59,7 @@ describe("AsideNavbarLink Tests", () => {
           isActive={false}
           icon={<MockIcon />}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const icon = screen.getByTestId("mock-icon");
@@ -75,7 +75,7 @@ describe("AsideNavbarLink Tests", () => {
           isActive={false}
           icon={<MockIcon />}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const iconSpan = container.querySelector("span");
@@ -92,14 +92,14 @@ describe("AsideNavbarLink Tests", () => {
           isActive={true}
           icon={<MockIcon />}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const link = screen.getByText("Home");
     expect(link).toHaveClass("flex");
     expect(link).toHaveClass("items-center");
     expect(link).toHaveClass("gap-3");
-    
+
     const icon = screen.getByTestId("mock-icon");
     expect(icon).toBeInTheDocument();
   });

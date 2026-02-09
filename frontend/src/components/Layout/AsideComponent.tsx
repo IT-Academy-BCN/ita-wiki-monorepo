@@ -40,7 +40,7 @@ const AsideComponent: React.FC = () => {
 
       <section>
         <ul className="py-6 space-y-3">
-          {AsideNavbarData.map(data => (
+          {AsideNavbarData.map((data) => (
             <AsideNavbarLink
               label={data.label}
               path={data.ref}
