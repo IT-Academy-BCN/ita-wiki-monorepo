@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
 import LanguageTagsBar from "../components/resources/LanguageTagsBar";
-import SortDropdown from "../components/resources/ResourcesPage2/SortDropdown";
-import FiltersDropdown from "../components/resources/ResourcesPage2/FiltersDropdown";
+import SortDropdown from "../components/resources/SortDropdown";
+import FiltersDropdown from "../components/resources/FiltersDropdown";
 
 type OpenDropdown = "sort" | "filters" | null;
 
-const ResourcesPage2 = () => {
+const ResourcesPage = () => {
   const [openDropdown, setOpenDropdown] = useState<OpenDropdown>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -52,4 +52,4 @@ const ResourcesPage2 = () => {
   );
 };
 
-export default ResourcesPage2;
+export default ResourcesPage;
