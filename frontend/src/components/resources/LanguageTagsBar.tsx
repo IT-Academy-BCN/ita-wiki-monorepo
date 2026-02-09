@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { categories } from "../../../data/categories";
+import { categories } from "../../data/categories";
 
 interface LanguageTagsBarProps {
   onSelect?: (language: string | null) => void;
