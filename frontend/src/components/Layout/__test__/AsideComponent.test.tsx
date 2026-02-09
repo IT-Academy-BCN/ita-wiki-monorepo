@@ -71,7 +71,6 @@ vi.mock("react-router-dom", () => {
   };
 });
 
-
 describe("AsideComponent Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
