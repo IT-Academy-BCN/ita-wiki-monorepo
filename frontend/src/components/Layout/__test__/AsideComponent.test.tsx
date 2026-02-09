@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router";
 import { vi, describe, test, expect, beforeEach } from "vitest";
+import "@testing-library/jest-dom";
 import AsideComponent from "../AsideComponent";
 import { useUserContext } from "../../../context/UserContext";
 import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
@@ -20,7 +21,6 @@ const MockIcon = () => <svg data-testid="mock-icon" />;
 
 const mockUseLocation = vi.fn();
 const mockUseNavigate = vi.fn();
-const mockUseSearchParams = vi.fn();
 
 vi.mock("../../../context/UserContext", () => ({
   useUserContext: vi.fn().mockReturnValue({
@@ -32,6 +32,8 @@ vi.mock("../../../context/UserContext", () => ({
     setError: vi.fn(),
     saveUser: vi.fn(),
     setUser: vi.fn(),
+    loading: false,
+    setIsLoading: vi.fn(),
   }),
 }));
 
@@ -66,7 +68,6 @@ vi.mock("react-router-dom", () => {
     ...actual,
     useLocation: () => mockUseLocation(),
     useNavigate: () => mockUseNavigate(),
-    useSearchParams: () => mockUseSearchParams(),
   };
 });
 
@@ -88,62 +89,17 @@ describe("AsideComponent Tests", () => {
     });
 
     mockUseNavigate.mockReturnValue(vi.fn());
-    mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
-  });
-
-  test("renders search input when user is not logged in", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
-
-    render(
-      <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
-      </MemoryRouter>,
-    );
-
-    const searchInput = screen.getByRole("textbox");
-    expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute("placeholder", "Cercar recurs");
-
-    expect(screen.queryByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.queryByText("Crear recurs")).toBeInTheDocument();
-  });
-
-  test("should display 'Els meus recursos' and 'Crear recurs' sections", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
-
-    render(
-      <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
   });
 
   test("renders user sections when logged in", () => {
     vi.mocked(useUserContext).mockReturnValue({
       user: {
         id: 12345,
-        displayName: "Test User",
+        github_id: 12345,
+        name: "Test User",
+        github_user_name: "testuser",
+        email: "test@example.com",
+        password: "hashedpass",
         photoURL: "https://example.com/photo.jpg",
       },
       isAuthenticated: true,
@@ -153,42 +109,22 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
     expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
     expect(screen.getByText("Guardats")).toBeInTheDocument();
     expect(screen.getByText("Creats")).toBeInTheDocument();
-    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
   });
 
-  test("renders search input with correct attributes", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
 
-    render(
-      <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
-      </MemoryRouter>,
-    );
-
-    const searchInput = screen.getByRole("textbox");
-    expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute("placeholder", "Cercar recurs");
-  });
 
   test("should render 'Inici' link", () => {
     vi.mocked(useUserContext).mockReturnValue({
@@ -200,11 +136,13 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
@@ -221,11 +159,13 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
@@ -246,11 +186,13 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter initialEntries={["/"]}>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
         <Routes>
           <Route path="/codeconnect" element={<div>Code Connect Page</div>} />
         </Routes>

@@ -1,25 +1,13 @@
-import { useState } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import classNames from "classnames";
 
 import Bookmark from "../../assets/Bookmark.svg";
 import CreatedResources from "../../assets/CreatedResources.svg";
 
-import SearchComponent from "./header/SearchComponent";
-import ButtonComponent from "../atoms/ButtonComponent";
-
 const AsideComponent: React.FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [resource] = useState("");
-
-  const handleSearch = (query: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("search", query);
-    navigate(`?${params.toString()}`);
-  };
 
   const isPathActive = (path: string) => currentPath === path;
 
@@ -29,16 +17,6 @@ const AsideComponent: React.FC = () => {
 
   return (
     <aside className="flex flex-col px-6 lg:w-56 py-4">
-      <SearchComponent onSearch={handleSearch} resetTrigger={resource} />
-
-      <section className="w-[200px] my-5">
-        <Link to="/resources/add" className="block w-full">
-          <ButtonComponent className="w-full" type="button" variant="primary">
-            Crear recurs
-          </ButtonComponent>
-        </Link>
-      </section>
-
       <section>
         <ul className="py-6 space-y-3">
           <li className="flex items-center space-x-3 mb-5">
