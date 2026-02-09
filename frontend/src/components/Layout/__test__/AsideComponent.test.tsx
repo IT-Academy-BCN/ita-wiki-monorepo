@@ -16,9 +16,6 @@ import java_vector from "../../../assets/logo-java-1.svg?react";
 import php_vector from "../../../assets/logo-php-1.svg?react";
 import react_vector from "../../../assets/react.svg?react";
 
-// Mocks
-const MockIcon = () => <svg data-testid="mock-icon" />;
-
 const mockUseLocation = vi.fn();
 const mockUseNavigate = vi.fn();
 
