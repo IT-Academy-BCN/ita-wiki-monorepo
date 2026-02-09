@@ -17,7 +17,7 @@ class ListProjects extends Model
         'time_duration',
         'language_backend',
         'language_frontend',
-        'foro'
+    
     ];
 
     public function contributorListProject()
@@ -29,4 +29,9 @@ class ListProjects extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function forumQuestions()
+    {
+        return $this->hasMany(ForumQuestion::class, 'list_project_id');
+    }
+
 }
