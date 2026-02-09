@@ -124,8 +124,6 @@ describe("AsideComponent Tests", () => {
     expect(screen.getByText("Creats")).toBeInTheDocument();
   });
 
-
-
   test("should render 'Inici' link", () => {
     vi.mocked(useUserContext).mockReturnValue({
       user: null,
