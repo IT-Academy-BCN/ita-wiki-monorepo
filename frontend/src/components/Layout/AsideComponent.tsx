@@ -4,22 +4,14 @@ import classNames from "classnames";
 
 import Bookmark from "../../assets/Bookmark.svg";
 import CreatedResources from "../../assets/CreatedResources.svg";
-import { HomeIcon } from "../../icons/HomeIcon";
-import { ResourcesIcon } from "../../icons/ResourcesIcon";
-import { TechTestsIcon } from "../../icons/TechTestsIcon";
-import { CodeConnectIcon } from "../../icons/CodeConnectIcon";
+
+import { AsideNavbarData } from "./aside/asideContent.tsx";
 
 import SearchComponent from "./header/SearchComponent";
 import ButtonComponent from "../atoms/ButtonComponent";
 import { AsideNavbarLink } from "./aside/AsideNavbarLink";
 
 const AsideComponent: React.FC = () => {
-  const AsideNavbarData = [
-    { label: "Inici", ref: "/", icon: <HomeIcon className="w-full h-full" /> },
-    { label: "Recursos", ref: "/resources/React", icon: <ResourcesIcon className="w-full h-full" /> },
-    { label: "Proves tècniques", ref: "/resources/technical-test/all-tech-tests", icon: <TechTestsIcon className="w-full h-full" /> },
-    { label: "Codeconnect", ref: "/codeconnect", icon: <CodeConnectIcon className="w-full h-full" /> },
-  ]
   const location = useLocation();
   const currentPath = location.pathname;
   const [searchParams] = useSearchParams();
@@ -47,16 +39,16 @@ const AsideComponent: React.FC = () => {
       </section>
 
       <section>
-            <ul className="py-6 space-y-3">
-              {AsideNavbarData.map(data => (
-                <AsideNavbarLink
-                  label={data.label}
-                  path={data.ref}
-                  isActive={isPathActive(data.ref)}
-                  icon={data.icon}
-                />
-              ))}
-            </ul>
+        <ul className="py-6 space-y-3">
+          {AsideNavbarData.map(data => (
+            <AsideNavbarLink
+              label={data.label}
+              path={data.ref}
+              isActive={isPathActive(data.ref)}
+              icon={data.icon}
+            />
+          ))}
+        </ul>
       </section>
 
       <section className="py-6">
