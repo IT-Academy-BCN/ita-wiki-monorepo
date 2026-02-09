@@ -15,7 +15,7 @@ const TitleInput = ({ register, errors, currentLength }: TitleInputProps) => {
       <label className="block mb-2 mt-8 font-medium">Títol *</label>
       <input
         type="text"
-         {...register("title")}
+        {...register("title")}
         className="max-w-[482px] w-full text-base p-2 border border-gray-300 rounded-lg focus:border-[#B91879] outline-none mb-2"
         maxLength={charLimitTitle}
         placeholder="Ex: Validar inputs de formulari"

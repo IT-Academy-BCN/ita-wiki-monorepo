@@ -1,21 +1,27 @@
-import ProjectButton from "../../code-connect/projectCard/ProjectButton";
 import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
+import TeamRow from "./TeamRow";
+import { useProjectContributors } from "../../../hooks/useProjectContributors";
+import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
 
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
-  avatarSrc?: string;
-  avatarSrc2?: string;
-  avatarSrc3?: string;
+  contributors?: CodeConnectProjectDataContributor[];
+  timeDuration?: string;
 }
+
 function ProjectTeam({
   logoFront,
   logoBack,
-  avatarSrc,
-  avatarSrc2,
-  avatarSrc3,
+  contributors = [],
+  timeDuration,
 }: ProjectTeamProps) {
+  const { getTeamByRole } = useProjectContributors(contributors);
+
+  const frontendData = getTeamByRole("frontend");
+  const backendData = getTeamByRole("backend");
+
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
       <div>
@@ -30,21 +36,10 @@ function ProjectTeam({
           )}
         </div>
 
-        <div className="w-full flex gap-6 pr-2 mb-4">
-          <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc} alt="Avatar Natasha" />
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Natasha
-            </figcaption>
-          </figure>
-          <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc2} alt="Avatar Jordi" />
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Jordi
-            </figcaption>
-          </figure>
-          <ProjectButton>+</ProjectButton>
-        </div>
+        <TeamRow
+          members={frontendData.members}
+          emptySlots={frontendData.emptySlots}
+        />
 
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Backend</h2>
@@ -53,15 +48,11 @@ function ProjectTeam({
           )}
         </div>
 
-        <div className="w-full flex gap-6 pr-2 mb-14">
-          <figure className="flex flex-col items-center">
-            <img className="w-12 h-12" src={avatarSrc3} alt="Avatar Aina" />
-            <figcaption className="text-xs mt-1 font-bold text-gray-500">
-              Aina
-            </figcaption>
-          </figure>
-          <ProjectButton>+</ProjectButton>
-          <ProjectButton>+</ProjectButton>
+        <div className="mb-14">
+          <TeamRow
+            members={backendData.members}
+            emptySlots={backendData.emptySlots}
+          />
         </div>
       </div>
 
@@ -78,7 +69,9 @@ function ProjectTeam({
 
       <div className="mb-10">
         <h2 className="font-extrabold text-xl text-start">Durada</h2>
-        <p className="text-sm font-bold text-start">1 mes</p>
+        <p className="text-sm font-bold text-start">
+          {timeDuration || "No especificada"}
+        </p>
       </div>
 
       <div className="w-full">
