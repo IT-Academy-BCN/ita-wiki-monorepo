@@ -4,11 +4,22 @@ import classNames from "classnames";
 
 import Bookmark from "../../assets/Bookmark.svg";
 import CreatedResources from "../../assets/CreatedResources.svg";
+import { HomeIcon } from "../../icons/HomeIcon";
+import { ResourcesIcon } from "../../icons/ResourcesIcon";
+import { TechTestsIcon } from "../../icons/TechTestsIcon";
+import { CodeConnectIcon } from "../../icons/CodeConnectIcon";
 
 import SearchComponent from "./header/SearchComponent";
 import ButtonComponent from "../atoms/ButtonComponent";
+import { AsideNavbarLink } from "./aside/AsideNavbarLink";
 
 const AsideComponent: React.FC = () => {
+  const AsideNavbarData = [
+    { label: "Inici", ref: "/", icon: <HomeIcon className="w-full h-full" /> },
+    { label: "Recursos", ref: "/resources/React", icon: <ResourcesIcon className="w-full h-full" /> },
+    { label: "Proves tècniques", ref: "/resources/technical-test/all-tech-tests", icon: <TechTestsIcon className="w-full h-full" /> },
+    { label: "Codeconnect", ref: "/codeconnect", icon: <CodeConnectIcon className="w-full h-full" /> },
+  ]
   const location = useLocation();
   const currentPath = location.pathname;
   const [searchParams] = useSearchParams();
@@ -23,12 +34,8 @@ const AsideComponent: React.FC = () => {
 
   const isPathActive = (path: string) => currentPath === path;
 
-  const isResourcesPathActive = (generalPath: string) =>
-    location.pathname.startsWith(generalPath) &&
-    !location.pathname.includes("technical");
-
   return (
-    <aside className="flex flex-col px-6 lg:w-56 py-4">
+    <aside className="flex flex-col ps-5 lg:w-70 py-4">
       <SearchComponent onSearch={handleSearch} resetTrigger={resource} />
 
       <section className="w-[200px] my-5">
@@ -40,71 +47,16 @@ const AsideComponent: React.FC = () => {
       </section>
 
       <section>
-        <ul className="py-6 space-y-3">
-          <li className="flex items-center space-x-3 mb-5">
-            {isPathActive("/") && (
-              <span className="w-3 h-3 rounded-full bg-primary" />
-            )}
-            <Link
-              to="/"
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive("/"),
-                "text-gray-400": !isPathActive("/"),
-              })}
-            >
-              Inici
-            </Link>
-          </li>
-
-          <li className="flex items-center space-x-3 mb-5">
-            {isResourcesPathActive("/resources/") && (
-              <span className="w-3 h-3 rounded-full bg-primary" />
-            )}
-            <Link
-              to="/resources/React"
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isResourcesPathActive("/resources/"),
-                "text-gray-400": !isResourcesPathActive("/resources/"),
-              })}
-            >
-              Recursos
-            </Link>
-          </li>
-
-          <li className="flex items-center space-x-3 mb-5">
-            {isPathActive("/resources/technical-test/all-tech-tests") && (
-              <span className="w-3 h-3 rounded-full bg-primary" />
-            )}
-            <Link
-              to="/resources/technical-test/all-tech-tests"
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive(
-                  "/resources/technical-test/all-tech-tests",
-                ),
-                "text-gray-400": !isPathActive(
-                  "/resources/technical-test/all-tech-tests",
-                ),
-              })}
-            >
-              Proves tècniques
-            </Link>
-          </li>
-
-          <li className="flex items-center space-x-3 mb-5">
-            {isResourcesPathActive("/codeconnect") && (
-              <span className="w-3 h-3 rounded-full bg-primary" />
-            )}
-            <Link
-              to="/codeconnect"
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive("/codeconnect"),
-                "text-gray-400": !isPathActive("/codeconnect"),
-              })}
-            >
-              Code Connect
-            </Link>
-          </li>
-        </ul>
+            <ul className="py-6 space-y-3">
+              {AsideNavbarData.map(data => (
+                <AsideNavbarLink
+                  label={data.label}
+                  path={data.ref}
+                  isActive={isPathActive(data.ref)}
+                  icon={data.icon}
+                />
+              ))}
+            </ul>
       </section>
 
       <section className="py-6">
