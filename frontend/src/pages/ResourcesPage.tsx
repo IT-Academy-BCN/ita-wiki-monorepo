@@ -2,10 +2,8 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { categories } from "../data/categories";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
-// import { useResources } from "../context/ResourcesContext";
 
 const ResourcesPage = () => {
-  // const { resources } = useResources();
   const { category } = useParams();
   const navigate = useNavigate();
 
