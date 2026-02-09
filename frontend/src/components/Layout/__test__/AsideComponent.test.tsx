@@ -71,10 +71,6 @@ vi.mock("react-router-dom", () => {
   };
 });
 
-const contentForTechnicalTestMock = [
-  { icon: MockIcon, label: "React" },
-  { icon: MockIcon, label: "Node" },
-];
 
 describe("AsideComponent Tests", () => {
   beforeEach(() => {
