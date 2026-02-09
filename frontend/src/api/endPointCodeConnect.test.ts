@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createCodeConnect, CodeConnectError } from "./endPointCodeConnect";
+import {
+  createCodeConnect,
+  CodeConnectError,
+  fetchCodeConnectProject,
+} from "./endPointCodeConnect";
 
 vi.mock("../config", () => ({
   API_URL: "https://localhost:8000",
@@ -108,5 +112,25 @@ describe("createCodeConnect", () => {
     } as CodeConnectError);
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("fetchCodeConnectProject", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("crida a l'endpoint correcte i retorna les dades", async () => {
+    const mockData = { id: 1, title: "Projecte Test" };
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockData,
+    });
+
+    const result = await fetchCodeConnectProject(1);
+
+    expect(result).toEqual(mockData);
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("/1"));
   });
 });

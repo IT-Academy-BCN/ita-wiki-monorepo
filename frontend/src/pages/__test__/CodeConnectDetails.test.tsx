@@ -1,85 +1,48 @@
+// @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import React from "react";
-import { MemoryRouter, Routes, Route } from "react-router";
-import { vi } from "vitest";
+import { describe, it, expect, vi, type Mock } from "vitest";
 import CodeConnectDetails from "../CodeConnectDetails";
-import moockData from "../../moock/projectDetails.json";
+import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 
-vi.mock("../../components/ui/Container", () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="mock-container">{children}</div>
+vi.mock("react-router", () => ({
+  useParams: () => ({ projectId: "1" }),
+}));
+
+vi.mock("../../hooks/useCodeConnectDetails");
+
+vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
+  default: () => (
+    <div data-testid="mock-project-team">Component ProjectTeam</div>
   ),
 }));
 
-vi.mock("../components/ui/projectTeam/ProjectTeam", () => ({
-  default: () => <div data-testid="mock-project-team" />,
+vi.mock("../../utils/iconUtils", () => ({
+  displayLanguageIcon: () => "fake-icon.svg",
 }));
 
-vi.mock("../components/ui/PageTitle", () => ({
-  default: ({ title }: { title: string }) => (
-    <h1 data-testid="mock-page-title">{title}</h1>
-  ),
-}));
+describe("CodeConnectDetails Page", () => {
+  it("renderitza el títol del projecte i l'equip quan arriben les dades", () => {
+    const mockProjectData = {
+      data: {
+        title: "Súper Projecte de Prova",
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
 
-vi.mock("../projectCard/ProjectButton", () => ({
-  default: () => <div data-testid="mock-project-button" />,
-}));
-
-vi.mock("../projectCard/ProgressBar", () => ({
-  default: () => <div data-testid="mock-progress-bar" />,
-}));
-
-vi.mock("../../atoms/ButtonComponent", () => ({
-  default: (props: React.ComponentProps<"button">) => (
-    <button {...props}>Mock Button</button>
-  ),
-}));
-
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useParams: () => ({ projectId: "taskforge" }),
-  };
-});
-
-describe("CodeConnectDetails", () => {
-  const project = moockData.details[0];
-
-  it("renders project details correctly", () => {
-    render(
-      <MemoryRouter initialEntries={["/codeconnect/taskforge"]}>
-        <Routes>
-          <Route
-            path="/codeconnect/:projectId"
-            element={<CodeConnectDetails />}
-          />
-        </Routes>
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText(project.title)).toBeInTheDocument();
-
-    project.roadmap.forEach((item) => {
-      expect(screen.getByText(item)).toBeInTheDocument();
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
     });
 
-    expect(screen.getByTestId("mock-container")).toBeInTheDocument();
-  });
+    render(<CodeConnectDetails />);
 
-  it("navigates to correct project using URL parameter", () => {
-    render(
-      <MemoryRouter initialEntries={["/codeconnect/taskforge"]}>
-        <Routes>
-          <Route
-            path="/codeconnect/:projectId"
-            element={<CodeConnectDetails />}
-          />
-        </Routes>
-      </MemoryRouter>,
-    );
+    expect(screen.getByText("Súper Projecte de Prova")).toBeTruthy();
 
-    expect(screen.getByText(project.title)).toBeInTheDocument();
+    expect(screen.getByTestId("mock-project-team")).toBeTruthy();
+
+    expect(screen.getByText("Roadmap")).toBeTruthy();
   });
 });
