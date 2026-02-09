@@ -16,7 +16,6 @@ const SortDropdown = ({ isOpen = false, onToggle }: SortDropdownProps) => {
 
       {isOpen && (
         <div className="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden">
-          {/* Likes */}
           <button className="w-full px-6 py-2 text-left text-sm flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#B91879] hover:text-white">
             <svg
               className="w-4 h-4"
@@ -34,7 +33,6 @@ const SortDropdown = ({ isOpen = false, onToggle }: SortDropdownProps) => {
             Likes
           </button>
 
-          {/* Fecha de creación */}
           <button className="w-full px-6 py-2 text-left text-sm flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#B91879] hover:text-white">
             <svg
               className="w-4 h-4"
@@ -52,10 +50,8 @@ const SortDropdown = ({ isOpen = false, onToggle }: SortDropdownProps) => {
             Data de creació
           </button>
 
-          {/* Divider */}
           <div className="border-t border-gray-200 my-1"></div>
 
-          {/* Ascendente */}
           <button className="w-full px-6 py-2 text-left text-sm flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#B91879] hover:text-white">
             <svg
               className="w-4 h-4"
@@ -73,7 +69,6 @@ const SortDropdown = ({ isOpen = false, onToggle }: SortDropdownProps) => {
             Ascendent
           </button>
 
-          {/* Descendente */}
           <button className="w-full px-6 py-2 text-left text-sm flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#B91879] hover:text-white">
             <svg
               className="w-4 h-4"
