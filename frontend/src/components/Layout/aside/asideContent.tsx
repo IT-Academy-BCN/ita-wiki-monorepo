@@ -6,7 +6,7 @@ import { ResourcesIcon } from "../../../icons/ResourcesIcon";
 import { TechTestsIcon } from "../../../icons/TechTestsIcon";
 import { CodeConnectIcon } from "../../../icons/CodeConnectIcon";
 
-import { FC, SVGProps } from "react";
+import { FC, JSX, SVGProps } from "react";
 
 type SvgIcon = FC<SVGProps<SVGSVGElement>>;
 
@@ -21,8 +21,16 @@ export const asideContent: { icon: SvgIcon; label: Category }[] = [
   { icon: CircleIcon, label: "BBDD" },
 ];
 
-export const AsideNavbarData = [
-  { label: "Inici", ref: "/", icon: <HomeIcon className="w-full h-full" /> },
+export const AsideNavbarData: {
+  label: string;
+  ref: string;
+  icon: JSX.Element;
+}[] = [
+  {
+    label: "Inici",
+    ref: "/",
+    icon: <HomeIcon className="w-full h-full" />,
+  },
   {
     label: "Recursos",
     ref: "/resources/React",
