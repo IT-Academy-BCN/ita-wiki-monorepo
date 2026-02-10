@@ -1,11 +1,15 @@
 import { API_URL, END_POINTS } from "../config";
 import { IntCodeConnect } from "../types";
-import { CodeConnectError } from "../types/CodeConnectProjectTypes";
+import type {
+  CodeConnectError,
+  CodeConnectProjectDetailsResponse,
+  CodeConnectProjectsResponse,
+} from "../types/CodeConnectProjectTypes";
 
 export const createCodeConnect = async (
   formData: IntCodeConnect,
   signal?: AbortSignal,
-) => {
+): Promise<unknown> => {
   const url = `${API_URL}${END_POINTS.codeconnect.post}`;
 
   try {
@@ -23,7 +27,11 @@ export const createCodeConnect = async (
       let errorCode: string | undefined;
 
       try {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as {
+          message?: string;
+          code?: string;
+        };
+
         errorMessage = errorData.message || errorMessage;
         errorCode = errorData.code;
       } catch {
@@ -57,7 +65,9 @@ export const createCodeConnect = async (
   }
 };
 
-export const fetchCodeConnectAllProjects = async (signal?: AbortSignal) => {
+export const fetchCodeConnectAllProjects = async (
+  signal?: AbortSignal,
+): Promise<CodeConnectProjectsResponse> => {
   const url = `${API_URL}${END_POINTS.codeconnect.get}`;
 
   try {
@@ -72,7 +82,11 @@ export const fetchCodeConnectAllProjects = async (signal?: AbortSignal) => {
       let errorCode: string | undefined;
 
       try {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as {
+          message?: string;
+          code?: string;
+        };
+
         errorMessage = errorData.message || errorMessage;
         errorCode = errorData.code;
       } catch {
@@ -86,7 +100,7 @@ export const fetchCodeConnectAllProjects = async (signal?: AbortSignal) => {
       } as CodeConnectError;
     }
 
-    return await response.json();
+    return (await response.json()) as CodeConnectProjectsResponse;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw {
@@ -109,7 +123,7 @@ export const fetchCodeConnectAllProjects = async (signal?: AbortSignal) => {
 export const fetchCodeConnectProjectDetails = async (
   projectId: number,
   signal?: AbortSignal,
-) => {
+): Promise<CodeConnectProjectDetailsResponse> => {
   const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}`;
 
   try {
@@ -124,7 +138,11 @@ export const fetchCodeConnectProjectDetails = async (
       let errorCode: string | undefined;
 
       try {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as {
+          message?: string;
+          code?: string;
+        };
+
         errorMessage = errorData.message || errorMessage;
         errorCode = errorData.code;
       } catch {
@@ -138,7 +156,7 @@ export const fetchCodeConnectProjectDetails = async (
       } as CodeConnectError;
     }
 
-    return await response.json();
+    return (await response.json()) as CodeConnectProjectDetailsResponse;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw {

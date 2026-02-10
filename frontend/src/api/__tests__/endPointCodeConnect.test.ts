@@ -8,7 +8,7 @@ import type { IntCodeConnect } from "../../types";
 import { CodeConnectError } from "../../types/CodeConnectProjectTypes";
 
 vi.mock("../../config", () => ({
-  API_URL: "https://localhost:8000",
+  API_URL: "https://localhost",
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
@@ -59,7 +59,7 @@ describe("endPointCodeConnect", () => {
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://localhost:8000/codeconnect/create",
+        "https://localhost/codeconnect/create",
         expect.objectContaining({
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -154,7 +154,7 @@ describe("endPointCodeConnect", () => {
 
       expect(result).toEqual(mockData);
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://localhost:8000/codeconnect",
+        "https://localhost/codeconnect",
         expect.objectContaining({
           method: "GET",
           headers: { Accept: "application/json" },
@@ -212,7 +212,7 @@ describe("endPointCodeConnect", () => {
 
       expect(result).toEqual(mockData);
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://localhost:8000/codeconnect/1",
+        "https://localhost/codeconnect/1",
         expect.objectContaining({
           method: "GET",
           headers: { Accept: "application/json" },

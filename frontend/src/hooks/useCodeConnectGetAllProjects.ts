@@ -2,22 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchCodeConnectAllProjects } from "../api/endPointCodeConnect";
 import type {
   CodeConnectProject,
-  CodeConnectProjectsResponse,
   UseProjectsState,
 } from "../types/CodeConnectProjectTypes";
 
-const isCodeConnectProjectsResponse = (
-  value: unknown,
-): value is CodeConnectProjectsResponse => {
-  if (typeof value !== "object" || value === null) return false;
+const isAbortLikeError = (value: unknown): boolean => {
+  if (!value || typeof value !== "object") return false;
 
   const record = value as Record<string, unknown>;
 
-  return (
-    typeof record.success === "boolean" &&
-    typeof record.message === "string" &&
-    Array.isArray(record.data)
-  );
+  // nou flux: el vostre endpoint converteix AbortError a CodeConnectError { code: "ABORTED" }
+  if (record.code === "ABORTED") return true;
+
+  // fallback per si algun dia arriba el DOMException directament
+  return record.name === "AbortError";
 };
 
 export const useProjects = (
@@ -39,42 +36,31 @@ export const useProjects = (
       setErrorMessage(null);
 
       try {
-        const json: unknown = await fetchCodeConnectAllProjects(
+        const response = await fetchCodeConnectAllProjects(
           abortController.signal,
         );
 
-        if (!isCodeConnectProjectsResponse(json)) {
-          throw new Error("Invalid API response shape");
+        if (!response.success) {
+          throw new Error(response.message || "Invalid API response shape");
         }
 
-        if (!json.success) {
-          throw new Error(json.message || "API returned success=false");
-        }
-
-        const incomingProjects = json.data;
+        const incomingProjects = response.data;
 
         if (!normalizedFilter) {
           setProjects(incomingProjects);
           return;
         }
 
-        const filtered = incomingProjects.filter((project) => {
+        const filteredProjects = incomingProjects.filter((project) => {
           return (
             project.language_frontend.toLowerCase() === normalizedFilter ||
             project.language_backend.toLowerCase() === normalizedFilter
           );
         });
 
-        setProjects(filtered);
-      } catch (error) {
-        if (
-          error &&
-          typeof error === "object" &&
-          "name" in error &&
-          (error as { name: unknown }).name === "AbortError"
-        ) {
-          return;
-        }
+        setProjects(filteredProjects);
+      } catch (error: unknown) {
+        if (isAbortLikeError(error)) return;
 
         const message =
           error && typeof error === "object" && "message" in error
