@@ -36,7 +36,7 @@ export const AsideConfigLink = ({
           },
         )}
       >
-        <span className="w-[2rem] h-[2rem] [&>svg]:w-full [&>svg]:h-full">
+        <span className="w-[2rem] h-[2rem] shrink-0 [&>svg]:w-full [&>svg]:h-full">
           {icon}
         </span>
         {label}

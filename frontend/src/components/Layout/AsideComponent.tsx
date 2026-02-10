@@ -2,7 +2,7 @@ import { useLocation } from "react-router";
 
 import { AsideNavbarData, AsideConfigData } from "./aside/asideContent.tsx";
 import { AsideNavbarLink } from "./aside/AsideNavbarLink";
-import { AsideConfigLink } from "./aside/asideConfigLink";
+import { AsideConfigLink } from "./aside/AsideConfigLink";
 
 const AsideComponent: React.FC = () => {
   const location = useLocation();
@@ -11,7 +11,7 @@ const AsideComponent: React.FC = () => {
   const isPathActive = (path: string) => currentPath === path;
 
   return (
-    <aside className="flex flex-col px-6 lg:w-56 py-4">
+    <aside className="flex flex-col px-4 lg:w-57 py-4">
       <section>
         <ul className="py-6 space-y-3">
           {AsideNavbarData.map((data) => (
