@@ -17,18 +17,14 @@ const ResourcesPage = () => {
   return (
     <ResourcesFiltersProvider>
       <div className="container mx-auto px-4 py-6">
-        {/* Título */}
         <h1 className="text-2xl font-bold mb-6">Recursos de programació</h1>
 
-        {/* Container superior - 3 columnas */}
         <div className="flex justify-between items-start mb-6">
-          {/* Col 1: Tags de lenguajes */}
           <LanguageTagsBar
             initialSelected={category}
             onSelect={(lang) => setSelectedCategory(lang)}
           />
 
-          {/* Col 2 + 3: Botones dropdown */}
           <div className="flex gap-2">
             <SortDropdown
               isOpen={openDropdown === "sort"}
@@ -45,9 +41,6 @@ const ResourcesPage = () => {
           </div>
         </div>
 
-        {/* TODO: Conectar nuevo componente de cards */}
-        {/* Props disponibles: selectedCategory */}
-        {/* Hooks disponibles: useResourceFilter, useResources, useMinLoading */}
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500">
           Nou component de cards (pendent)
           {selectedCategory && (
