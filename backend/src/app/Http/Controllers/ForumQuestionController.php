@@ -44,17 +44,6 @@ class ForumQuestionController extends Controller
 
     public function store(Request $request, ListProjects $listProject): JsonResponse
     {
-        $questionCount = ForumQuestion::query()
-            ->where('list_project_id', $listProject->id)
-            ->count();
-
-        if ($questionCount >= 10) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Este proyecto ha alcanzado el limite de 10 preguntas.',
-            ], 422);
-        }
-
         $validated = $request->validate([
             'question' => 'required|string|max:500',
         ]);
