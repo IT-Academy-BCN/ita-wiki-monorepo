@@ -24,6 +24,8 @@ class User extends Authenticatable
         'github_id',
         'github_user_name',
         'avatar',
+        'email',
+        'password',
     ];
 
     /**
@@ -32,6 +34,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
+        'password',
         'remember_token',
     ];
 
@@ -80,6 +83,6 @@ class User extends Authenticatable
      */
     public function getGuardName(): string 
     { 
-        return $this->guard_name; 
+        return (string) $this->guard_name; 
     }
 }
