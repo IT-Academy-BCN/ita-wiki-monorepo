@@ -63,7 +63,9 @@ export const TechnicalTestForm = () => {
             />
             {errors.duration && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">{errors.duration.message}</p>
+                <p className="text-red-500 text-xs">
+                  {errors.duration.message}
+                </p>
               </div>
             )}
           </div>
@@ -84,7 +86,9 @@ export const TechnicalTestForm = () => {
             </select>
             {errors.difficulty && (
               <div className="py-4">
-                <p className="text-red-500 text-xs">{errors.difficulty.message}</p>
+                <p className="text-red-500 text-xs">
+                  {errors.difficulty.message}
+                </p>
               </div>
             )}
           </div>
