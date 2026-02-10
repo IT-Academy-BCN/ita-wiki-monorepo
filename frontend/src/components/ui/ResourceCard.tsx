@@ -41,11 +41,6 @@ const ResourceCard = ({
     }
   };
 
-  //   const handleLikeDisabled = () => {
-  //     setShowModal(true);
-  //     return;
-  //   };
-
   const formattedDate =
     typeof created_at === "string" && isNaN(Date.parse(created_at))
       ? created_at
