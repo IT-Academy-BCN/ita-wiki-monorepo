@@ -111,9 +111,9 @@ describe("AsideComponent Tests", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.getByText("Guardats")).toBeInTheDocument();
-    expect(screen.getByText("Creats")).toBeInTheDocument();
+    expect(screen.getByText("Configuració")).toBeInTheDocument();
+    expect(screen.getByText("Ajuda")).toBeInTheDocument();
+    expect(screen.getByText("Informació")).toBeInTheDocument();
   });
 
   test("should render 'Inici' link", () => {

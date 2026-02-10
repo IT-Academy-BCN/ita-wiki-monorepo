@@ -57,7 +57,11 @@ export const AsideNavbarData: {
   },
 ];
 
-export const AsideConfigData: { label: string; ref: string; icon: JSX.Element }[] = [
+export const AsideConfigData: {
+  label: string;
+  ref: string;
+  icon: JSX.Element;
+}[] = [
   {
     label: "Configuració",
     ref: "#",
