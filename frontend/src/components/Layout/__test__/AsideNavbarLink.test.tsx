@@ -5,7 +5,11 @@ import { AsideNavbarLink } from "../aside/AsideNavbarLink";
 
 const MockIcon = () => <svg data-testid="mock-icon" />;
 
-const renderNavLink = (isActive: boolean, path = "/test", label = "Test Link") => {
+const renderNavLink = (
+  isActive: boolean,
+  path = "/test",
+  label = "Test Link",
+) => {
   return render(
     <MemoryRouter>
       <AsideNavbarLink
@@ -16,7 +20,7 @@ const renderNavLink = (isActive: boolean, path = "/test", label = "Test Link") =
       />
     </MemoryRouter>,
   );
-}
+};
 
 describe("AsideNavbarLink Tests", () => {
   test("renders with active state", () => {
