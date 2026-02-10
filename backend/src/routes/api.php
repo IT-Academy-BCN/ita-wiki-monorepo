@@ -13,6 +13,8 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
+use App\Http\Controllers\ForumQuestionController;
+use App\Http\Controllers\ForumAnswerController;
 use Illuminate\Http\Request;
 
 // GitHub Auth System Endpoints (PUBLIC)
@@ -69,6 +71,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codeconnect/{listProject}/contributors', [ListProjectsController::class, 'addContributor'])->name('contributors.store');
     Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
     Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
+});
+
+// ========== FORUM ENDPOINTS ==========
+
+// PUBLIC
+Route::get('/codeconnect/{listProject}/forum', [ForumQuestionController::class, 'index'])->name('forum.questions.index');
+Route::get('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'show'])->name('forum.questions.show');
+
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/codeconnect/{listProject}/forum', [ForumQuestionController::class, 'store'])->name('forum.questions.store');
+    Route::put('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'update'])->name('forum.questions.update');
+    Route::delete('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'destroy'])->name('forum.questions.destroy');
+
+    Route::post('/codeconnect/{listProject}/forum/{question}/answers', [ForumAnswerController::class, 'store'])->name('forum.answers.store');
+    Route::put('/codeconnect/{listProject}/forum/{question}/answers/{answer}', [ForumAnswerController::class, 'update'])->name('forum.answers.update');
+    Route::delete('/codeconnect/{listProject}/forum/{question}/answers/{answer}', [ForumAnswerController::class, 'destroy'])->name('forum.answers.destroy');
 });
 
 // ========== RESOURCES ENDPOINTS ==========
