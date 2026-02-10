@@ -4,8 +4,6 @@ import { IntResource } from "../../types";
 import { useUserContext } from "../../context/UserContext";
 import BookmarkIconComponent from "../resources/BookmarkIconComponent";
 import { canBookmark } from "../../data/permission/tempRolesPremission";
-// import LikeIcon from "../resources/LikeIcon";
-// import { useLikeResources } from "../../hooks/useLikeResources";
 import GenericModal from "./Modal/GenericModal";
 import ContentTypeBadge from "../resources/ContentTypeBadge";
 import { displayLanguageIcon } from "../../utils/iconUtils";
@@ -29,8 +27,6 @@ const ResourceCard = ({
   const { user } = useUserContext();
 
   const categoryIcon: string = displayLanguageIcon(category);
-
-  //   const { voteCount, handleLike, disabled, isLikedByUser } = useLikeResources(resource);
 
   const hasBookmarkPermission = user && canBookmark(user.role);
 
@@ -100,7 +96,7 @@ const ResourceCard = ({
               key={index}
               className="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-700 bg-white"
             >
-              {tag}
+              {typeof tag === 'string' ? tag : tag.name}
             </div>
           ))}
         </div>

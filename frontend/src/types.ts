@@ -41,7 +41,7 @@ export interface IntResource {
   like_count?: number;
   bookmark_count?: number;
   comment_count?: number;
-  tags?: string[];
+  tags?: string[] | Tag[];
 }
 
 export interface IntCodeConnect {
