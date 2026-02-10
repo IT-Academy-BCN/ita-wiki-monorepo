@@ -1,11 +1,9 @@
 import { ReactNode } from "react";
 import { categories } from "./data/categories";
-import { themes } from "./data/themes";
 import { resourceTypes } from "./data/resourceTypes";
 import { FC, SVGProps } from "react";
 
 export type Category = (typeof categories)[number];
-export type Theme = (typeof themes)[number] | null;
 export type ResourceType = (typeof resourceTypes)[number];
 
 export type TypUserRole =
@@ -39,7 +37,6 @@ export interface IntResource {
   created_at?: Date | string;
   updated_at?: Date | string;
   category: Category;
-  theme: Theme;
   type: ResourceType;
   like_count?: number;
   bookmark_count?: number;
