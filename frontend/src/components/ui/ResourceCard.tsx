@@ -9,6 +9,7 @@ import { canBookmark } from "../../data/permission/tempRolesPremission";
 import GenericModal from "./Modal/GenericModal";
 import ContentTypeBadge from "../resources/ContentTypeBadge";
 import { displayLanguageIcon } from "../../utils/iconUtils";
+import heartIcon from "../../assets/heart.svg"
 
 interface ResourceCardProps {
   resource: IntResource;
@@ -23,9 +24,11 @@ const ResourceCard = ({
 }: ResourceCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  const { title, type, category, created_at, tags } = resource;
+  const { title, type, category, created_at, tags, like_count } = resource;
 
   const { user } = useUserContext();
+
+  const categoryIcon: string = displayLanguageIcon(category)
 
 //   const { voteCount, handleLike, disabled, isLikedByUser } = useLikeResources(resource);
 
@@ -61,8 +64,13 @@ const ResourceCard = ({
   return (
     <div>
         <div>
-          <div>{displayLanguageIcon(category)}</div>
-        
+            {categoryIcon ? (
+            <img 
+                src={categoryIcon} 
+                alt={`Icona de ${category}`} 
+                className="w-6 h-6" 
+            />
+            ) : null}        
           <div
             onClick={handleBookmarkClick}
             className={`${hasBookmarkPermission ? "cursor-pointer" : "cursor-not-allowed opacity-70"}`}
@@ -90,28 +98,17 @@ const ResourceCard = ({
         <div>
           <ContentTypeBadge type={type} />
           <div>
-              Likes
+              <img 
+                src={heartIcon}
+                alt="heart-icon"
+                className="w-6 h-6" 
+              />
+              <div>{like_count}</div>
           </div>
           <span className="flex items-center gap-1">
               <Calendar size={16} />
               {formattedDate}
           </span>
-          {/* <div
-            onClick={() => (disabled ? handleLikeDisabled() : handleLike())}
-            className={`flex flex-col items-center justify-center border-2 border-gray-200 rounded-lg px-4 py-1 hover:border-2 hover:border-[#c20087] ${
-                disabled ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
-            }`}
-            >
-            <LikeIcon active={isLikedByUser} />
-
-            <span
-                className={`text-sm font-medium ${
-                isLikedByUser ? "text-green-custom" : "text-black"
-                }`}
-            >
-                {voteCount}
-            </span>
-          </div> */}
         </div>
 
       {/* Modal */}
