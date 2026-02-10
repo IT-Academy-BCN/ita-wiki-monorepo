@@ -96,7 +96,7 @@ const ResourceCard = ({
               key={index}
               className="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-700 bg-white"
             >
-              {typeof tag === 'string' ? tag : tag.name}
+              {typeof tag === "string" ? tag : tag.name}
             </div>
           ))}
         </div>
