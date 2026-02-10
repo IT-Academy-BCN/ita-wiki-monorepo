@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
 import LanguageTagsBar from "../components/resources/LanguageTagsBar";
 import SortDropdown from "../components/resources/SortDropdown";
@@ -7,17 +8,27 @@ import FiltersDropdown from "../components/resources/FiltersDropdown";
 type OpenDropdown = "sort" | "filters" | null;
 
 const ResourcesPage = () => {
+  const { category } = useParams();
   const [openDropdown, setOpenDropdown] = useState<OpenDropdown>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    category || null,
+  );
 
   return (
     <ResourcesFiltersProvider>
       <div className="container mx-auto px-4 py-6">
+        {/* Título */}
         <h1 className="text-2xl font-bold mb-6">Recursos de programació</h1>
 
+        {/* Container superior - 3 columnas */}
         <div className="flex justify-between items-start mb-6">
-          <LanguageTagsBar onSelect={(lang) => setSelectedCategory(lang)} />
+          {/* Col 1: Tags de lenguajes */}
+          <LanguageTagsBar
+            initialSelected={category}
+            onSelect={(lang) => setSelectedCategory(lang)}
+          />
 
+          {/* Col 2 + 3: Botones dropdown */}
           <div className="flex gap-2">
             <SortDropdown
               isOpen={openDropdown === "sort"}

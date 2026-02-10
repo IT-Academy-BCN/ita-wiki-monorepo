@@ -61,7 +61,7 @@ const AsideComponent: React.FC = () => {
               <span className="w-3 h-3 rounded-full bg-primary" />
             )}
             <Link
-              to="/resources"
+              to="/resources/React"
               className={classNames("transition-colors", {
                 "!text-black !font-bold": isResourcesPathActive("/resources/"),
                 "text-gray-400": !isResourcesPathActive("/resources/"),

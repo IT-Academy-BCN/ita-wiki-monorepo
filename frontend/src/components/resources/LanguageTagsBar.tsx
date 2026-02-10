@@ -2,11 +2,15 @@ import { useState } from "react";
 import { categories } from "../../data/categories";
 
 interface LanguageTagsBarProps {
+  initialSelected?: string | null;
   onSelect?: (language: string | null) => void;
 }
 
-const LanguageTagsBar = ({ onSelect }: LanguageTagsBarProps) => {
-  const [selected, setSelected] = useState<string | null>(null);
+const LanguageTagsBar = ({
+  initialSelected = null,
+  onSelect,
+}: LanguageTagsBarProps) => {
+  const [selected, setSelected] = useState<string | null>(initialSelected);
 
   const handleClick = (language: string) => {
     const newSelected = selected === language ? null : language;
