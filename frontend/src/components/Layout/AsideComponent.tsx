@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import classNames from "classnames";
 
 import Bookmark from "../../assets/Bookmark.svg";
