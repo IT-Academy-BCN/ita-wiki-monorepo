@@ -5,18 +5,22 @@ import { AsideNavbarLink } from "../aside/AsideNavbarLink";
 
 const MockIcon = () => <svg data-testid="mock-icon" />;
 
+const renderNavLink = (isActive: boolean, path = "/test", label = "Test Link") => {
+  return render(
+    <MemoryRouter>
+      <AsideNavbarLink
+        path={path}
+        label={label}
+        isActive={isActive}
+        icon={<MockIcon />}
+      />
+    </MemoryRouter>,
+  );
+}
+
 describe("AsideNavbarLink Tests", () => {
   test("renders with active state", () => {
-    render(
-      <MemoryRouter>
-        <AsideNavbarLink
-          path="/test"
-          label="Test Link"
-          isActive={true}
-          icon={<MockIcon />}
-        />
-      </MemoryRouter>,
-    );
+    renderNavLink(true);
 
     const link = screen.getByText("Test Link");
     expect(link).toBeInTheDocument();
@@ -29,16 +33,7 @@ describe("AsideNavbarLink Tests", () => {
   });
 
   test("renders with inactive state", () => {
-    render(
-      <MemoryRouter>
-        <AsideNavbarLink
-          path="/test"
-          label="Test Link"
-          isActive={false}
-          icon={<MockIcon />}
-        />
-      </MemoryRouter>,
-    );
+    renderNavLink(false);
 
     const link = screen.getByText("Test Link");
     expect(link).toBeInTheDocument();
@@ -51,32 +46,14 @@ describe("AsideNavbarLink Tests", () => {
   });
 
   test("renders icon correctly", () => {
-    render(
-      <MemoryRouter>
-        <AsideNavbarLink
-          path="/test"
-          label="Test Link"
-          isActive={false}
-          icon={<MockIcon />}
-        />
-      </MemoryRouter>,
-    );
+    renderNavLink(false);
 
     const icon = screen.getByTestId("mock-icon");
     expect(icon).toBeInTheDocument();
   });
 
   test("applies correct classes to icon span", () => {
-    const { container } = render(
-      <MemoryRouter>
-        <AsideNavbarLink
-          path="/test"
-          label="Test Link"
-          isActive={false}
-          icon={<MockIcon />}
-        />
-      </MemoryRouter>,
-    );
+    const { container } = renderNavLink(false);
 
     const iconSpan = container.querySelector("span");
     expect(iconSpan).toHaveClass("w-[2rem]");
@@ -84,16 +61,7 @@ describe("AsideNavbarLink Tests", () => {
   });
 
   test("link has correct structure with icon and label", () => {
-    render(
-      <MemoryRouter>
-        <AsideNavbarLink
-          path="/home"
-          label="Home"
-          isActive={true}
-          icon={<MockIcon />}
-        />
-      </MemoryRouter>,
-    );
+    renderNavLink(true, "/home", "Home");
 
     const link = screen.getByText("Home");
     expect(link).toHaveClass("flex");
