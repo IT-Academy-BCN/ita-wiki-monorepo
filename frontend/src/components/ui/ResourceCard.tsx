@@ -9,7 +9,7 @@ import { canBookmark } from "../../data/permission/tempRolesPremission";
 import GenericModal from "./Modal/GenericModal";
 import ContentTypeBadge from "../resources/ContentTypeBadge";
 import { displayLanguageIcon } from "../../utils/iconUtils";
-import heartIcon from "../../assets/heart.svg"
+import heartIcon from "../../assets/heart.svg";
 
 interface ResourceCardProps {
   resource: IntResource;
@@ -28,9 +28,9 @@ const ResourceCard = ({
 
   const { user } = useUserContext();
 
-  const categoryIcon: string = displayLanguageIcon(category)
+  const categoryIcon: string = displayLanguageIcon(category);
 
-//   const { voteCount, handleLike, disabled, isLikedByUser } = useLikeResources(resource);
+  //   const { voteCount, handleLike, disabled, isLikedByUser } = useLikeResources(resource);
 
   const hasBookmarkPermission = user && canBookmark(user.role);
 
@@ -45,10 +45,10 @@ const ResourceCard = ({
     }
   };
 
-//   const handleLikeDisabled = () => {
-//     setShowModal(true);
-//     return;
-//   };
+  //   const handleLikeDisabled = () => {
+  //     setShowModal(true);
+  //     return;
+  //   };
 
   const formattedDate =
     typeof created_at === "string" && isNaN(Date.parse(created_at))
@@ -62,56 +62,70 @@ const ResourceCard = ({
         : "Data desconeguda";
 
   return (
-    <div>
-        <div>
-            {categoryIcon ? (
-            <img 
-                src={categoryIcon} 
-                alt={`Icona de ${category}`} 
-                className="w-6 h-6" 
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 max-w-sm">
+      <div className="flex justify-between items-start">
+        <div className="flex gap-2">
+          {categoryIcon && (
+            <img
+              src={categoryIcon}
+              alt={`Icona de ${category}`}
+              className="w-7 h-7 object-contain"
             />
-            ) : null}        
-          <div
-            onClick={handleBookmarkClick}
-            className={`${hasBookmarkPermission ? "cursor-pointer" : "cursor-not-allowed opacity-70"}`}
-            title={
-                !user
-                ? "Inicia sessió per desar recursos"
-                : !hasBookmarkPermission
-                    ? "No tens permisos per desar recursos. Contacta amb un admin."
-                    : undefined
-                }
-          >
-              <BookmarkIconComponent marked={isBookmarked} />
-          </div>
-        </div>
-        <div>
-            {title}
-        </div>
-        {tags && (
-            <div>
-                {tags.map((tag, index) => (
-                    <div key={index}>{tag}</div>
-                ))}
-            </div>
-        )}
-        <div>
-          <ContentTypeBadge type={type} />
-          <div>
-              <img 
-                src={heartIcon}
-                alt="heart-icon"
-                className="w-6 h-6" 
-              />
-              <div>{like_count}</div>
-          </div>
-          <span className="flex items-center gap-1">
-              <Calendar size={16} />
-              {formattedDate}
-          </span>
+          )}
         </div>
 
-      {/* Modal */}
+        <div
+          onClick={handleBookmarkClick}
+          className={`${hasBookmarkPermission ? "cursor-pointer" : "cursor-not-allowed opacity-70"} text-gray-400 hover:text-gray-600 transition-colors`}
+          title={
+            !user
+              ? "Inicia sessió per desar recursos"
+              : !hasBookmarkPermission
+                ? "No tens permisos per desar recursos. Contacta amb un admin."
+                : undefined
+          }
+        >
+          <BookmarkIconComponent marked={isBookmarked} />
+        </div>
+      </div>
+
+      <div className="text-xl font-bold text-gray-900 leading-tight">
+        {title}
+      </div>
+
+      {tags && (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag, index) => (
+            <div
+              key={index}
+              className="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-700 bg-white"
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 mt-2 text-gray-500 font-medium">
+        <div className="flex items-center gap-1.5">
+          <ContentTypeBadge type={type} />
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <img
+            src={heartIcon}
+            alt="heart-icon"
+            className="w-5 h-5 opacity-60"
+          />
+          <span className="text-sm">{like_count}</span>
+        </div>
+
+        <div className="flex items-center gap-1.5 ml-auto text-sm">
+          <Calendar size={18} className="text-gray-400" />
+          {formattedDate}
+        </div>
+      </div>
+
       <GenericModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
