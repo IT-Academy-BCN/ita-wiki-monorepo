@@ -4,12 +4,10 @@ import ResourceCard from "../../ui/ResourceCard";
 import { IntResource } from "../../../types";
 import { UserProvider } from "../../../context/UserContext";
 
-// Mock de les dependències externes per evitar errors de rutes o context
 vi.mock("../../utils/iconUtils", () => ({
   displayLanguageIcon: () => "mock-icon.png",
 }));
 
-// Mock simple de la data de permisos
 vi.mock("../../data/permission/tempRolesPremission", () => ({
   canBookmark: () => true,
 }));
@@ -35,17 +33,13 @@ describe("ResourceCard", () => {
       </UserProvider>,
     );
 
-    // Verifiquem el títol
     expect(screen.getByText(/Logic tutorial for Beginners/i)).toBeDefined();
 
-    // Verifiquem que apareixen els tags
     expect(screen.getByText("Lógica")).toBeDefined();
     expect(screen.getByText("Variables")).toBeDefined();
 
-    // Verifiquem el comptador de likes
     expect(screen.getByText("143")).toBeDefined();
 
-    // Verifiquem la data formatejada (per es-ES)
     expect(screen.getByText(/20 dic 2022/i)).toBeDefined();
   });
 });
