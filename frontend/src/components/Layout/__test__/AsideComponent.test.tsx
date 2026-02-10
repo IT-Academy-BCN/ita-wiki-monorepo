@@ -139,7 +139,7 @@ describe("AsideComponent Tests", () => {
     expect(screen.getByText("Inici")).toBeInTheDocument();
   });
 
-  test("should render 'Code Connect' link", () => {
+  test("should render 'Codeconnect' link", () => {
     vi.mocked(useUserContext).mockReturnValue({
       user: null,
       isAuthenticated: false,
@@ -159,7 +159,7 @@ describe("AsideComponent Tests", () => {
       </MemoryRouter>,
     );
 
-    const codeConnectLink = screen.getByText("Code Connect");
+    const codeConnectLink = screen.getByText("Codeconnect");
 
     expect(codeConnectLink).toBeInTheDocument();
 
@@ -189,7 +189,7 @@ describe("AsideComponent Tests", () => {
       </MemoryRouter>,
     );
 
-    const codeConnectLink = screen.getByText("Code Connect");
+    const codeConnectLink = screen.getByText("Codeconnect");
     const user = userEvent.setup();
     await user.click(codeConnectLink);
 
