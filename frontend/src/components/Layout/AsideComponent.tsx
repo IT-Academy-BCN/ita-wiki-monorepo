@@ -1,16 +1,12 @@
-import { useLocation, useNavigate } from "react-router";
-import classNames from "classnames";
+import { useLocation } from "react-router";
 
-import Bookmark from "../../assets/Bookmark.svg";
-import CreatedResources from "../../assets/CreatedResources.svg";
-
-import { AsideNavbarData } from "./aside/asideContent.tsx";
+import { AsideNavbarData, AsideConfigData } from "./aside/asideContent.tsx";
 import { AsideNavbarLink } from "./aside/AsideNavbarLink";
+import { AsideConfigLink } from "./aside/asideConfigLink";
 
 const AsideComponent: React.FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const navigate = useNavigate();
 
   const isPathActive = (path: string) => currentPath === path;
 
@@ -30,51 +26,17 @@ const AsideComponent: React.FC = () => {
       </section>
 
       <section className="py-6">
-        <p className="pb-3 font-bold text-lg mb-2 text-black">
-          Els meus recursos
-        </p>
-
-        <div className="flex flex-col gap-4">
-          <div
-            onClick={() => navigate("/resources/bookmarks")}
-            className="flex items-center space-x-3 py-1 cursor-pointer"
-          >
-            <img src={Bookmark} alt="Bookmark icon" className="w-6 h-6" />
-            <div
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive("/resources/bookmarks"),
-                "text-[var(--color-gray-foreground)]": !isPathActive(
-                  "/resources/bookmarks",
-                ),
-              })}
-            >
-              Guardats
-            </div>
-          </div>
-
-          <div
-            onClick={() => navigate("/resources/my-resources")}
-            className="flex items-center space-x-3 py-1 cursor-pointer"
-          >
-            <img
-              src={CreatedResources}
-              alt="Create resources icon"
-              className="w-6 h-6"
+        <ul className="py-6 space-y-3">
+          {AsideConfigData.map((data) => (
+            <AsideConfigLink
+              key={data.label}
+              label={data.label}
+              path={data.ref}
+              isActive={isPathActive(data.ref)}
+              icon={data.icon}
             />
-            <div
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive(
-                  "/resources/my-resources",
-                ),
-                "text-[var(--color-gray-foreground)]": !isPathActive(
-                  "/resources/my-resources",
-                ),
-              })}
-            >
-              Creats
-            </div>
-          </div>
-        </div>
+          ))}
+        </ul>
       </section>
     </aside>
   );

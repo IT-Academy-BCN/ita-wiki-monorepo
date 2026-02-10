@@ -5,6 +5,9 @@ import { HomeIcon } from "../../../icons/HomeIcon";
 import { ResourcesIcon } from "../../../icons/ResourcesIcon";
 import { TechTestsIcon } from "../../../icons/TechTestsIcon";
 import { CodeConnectIcon } from "../../../icons/CodeConnectIcon";
+import { SettingsIcon } from "../../../icons/SettingsIcon";
+import { QuestionIcon } from "../../../icons/QuestionIcon";
+import { InfoIcon } from "../../../icons/InfoIcon";
 
 import { FC, JSX, SVGProps } from "react";
 
@@ -51,5 +54,23 @@ export const AsideNavbarData: {
     label: "Codeconnect",
     ref: "/codeconnect",
     icon: <CodeConnectIcon className="w-full h-full" />,
+  },
+];
+
+export const AsideConfigData: { label: string; ref: string; icon: JSX.Element }[] = [
+  {
+    label: "Configuració",
+    ref: "#",
+    icon: <SettingsIcon className="w-full h-full" />,
+  },
+  {
+    label: "Ajuda",
+    ref: "#",
+    icon: <QuestionIcon className="w-full h-full" />,
+  },
+  {
+    label: "Informació",
+    ref: "#",
+    icon: <InfoIcon className="w-full h-full" />,
   },
 ];
