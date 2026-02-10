@@ -107,6 +107,13 @@ export interface TagsIdsByCategory {
   [category: string]: number[];
 }
 
+export interface Tag {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export type SvgIcon = FC<SVGProps<SVGSVGElement>>;
 
 export type FormatDocumentCategory =
