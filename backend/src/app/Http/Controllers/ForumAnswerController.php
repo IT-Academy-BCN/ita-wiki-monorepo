@@ -7,13 +7,14 @@ namespace App\Http\Controllers;
 use App\Enums\ContributorStatusEnum;
 use App\Models\ForumAnswer;
 use App\Models\ForumQuestion;
+use App\Models\ListProjects;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ForumAnswerController extends Controller
 {
-    public function store(Request $request, ForumQuestion $question): JsonResponse
+    public function store(Request $request, ListProjects $listProject, ForumQuestion $question): JsonResponse
     {
         if (!$this->canReplyToQuestion($question)) {
             return response()->json([
@@ -52,7 +53,7 @@ class ForumAnswerController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, ForumAnswer $answer): JsonResponse
+    public function update(Request $request, ListProjects $listProject, ForumQuestion $question, ForumAnswer $answer): JsonResponse
     {
         if (!$this->canManageAnswer($answer)) {
             return response()->json([
@@ -75,7 +76,7 @@ class ForumAnswerController extends Controller
         ], 200);
     }
 
-    public function destroy(ForumAnswer $answer): JsonResponse
+    public function destroy(ListProjects $listProject, ForumQuestion $question, ForumAnswer $answer): JsonResponse
     {
         if (!$this->canManageAnswer($answer)) {
             return response()->json([
@@ -104,10 +105,6 @@ class ForumAnswerController extends Controller
             return true;
         }
 
-        if ($user->hasRole(['admin', 'superadmin'])) {
-            return true;
-        }
-
         return $question->project
             ->contributorListProject()
             ->where('user_id', $user->id)
@@ -127,10 +124,6 @@ class ForumAnswerController extends Controller
             return true;
         }
 
-        if ($answer->question && $answer->question->project && $answer->question->project->owner_id === $user->id) {
-            return true;
-        }
-
-        return $user->hasRole(['admin', 'superadmin']);
+        return $answer->question && $answer->question->project && $answer->question->project->owner_id === $user->id;
     }
 }

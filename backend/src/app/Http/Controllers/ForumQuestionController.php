@@ -29,7 +29,7 @@ class ForumQuestionController extends Controller
         ], 200);
     }
 
-    public function show(ForumQuestion $question): JsonResponse
+    public function show(ListProjects $listProject, ForumQuestion $question): JsonResponse
     {
         $question->load([
             'user:id,name',
@@ -63,7 +63,7 @@ class ForumQuestionController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, ForumQuestion $question): JsonResponse
+    public function update(Request $request, ListProjects $listProject, ForumQuestion $question): JsonResponse
     {
         if (!$this->canManageQuestion($question)) {
             return response()->json([
@@ -86,7 +86,7 @@ class ForumQuestionController extends Controller
         ], 200);
     }
 
-    public function destroy(ForumQuestion $question): JsonResponse
+    public function destroy(ListProjects $listProject, ForumQuestion $question): JsonResponse
     {
         if (!$this->canManageQuestion($question)) {
             return response()->json([
@@ -115,10 +115,6 @@ class ForumQuestionController extends Controller
             return true;
         }
 
-        if ($question->project && $question->project->owner_id === $user->id) {
-            return true;
-        }
-
-        return $user->hasRole(['admin', 'superadmin']);
+        return $question->project && $question->project->owner_id === $user->id;
     }
 }
