@@ -39,7 +39,9 @@ describe("FiltersDropdown", () => {
   it("shows search input for tags", () => {
     render(<FiltersDropdown isOpen={true} />);
 
-    expect(screen.getByPlaceholderText("Buscar etiquetes...")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Buscar etiquetes..."),
+    ).toBeInTheDocument();
   });
 
   it("calls onToggle when button is clicked", () => {
