@@ -15,12 +15,12 @@ const ResourcesPage = () => {
 
   return (
     <ResourcesFiltersProvider>
-      <div>Recursos de programación</div>
+      <div>Recursos de programació</div>
       <div>
         <div>Javascript, PHP, Java, BBDD, Python</div>
-        <div>Ordenar, filtros</div>
+        <div>Ordenar, filtres</div>
       </div>
-      <div>Lista de recursos</div>
+      <div>Llista de recursos</div>
     </ResourcesFiltersProvider>
   );
 };
