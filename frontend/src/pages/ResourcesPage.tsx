@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useParams } from "react-router";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
+import { useResources } from "../context/ResourcesContext";
+import { useResourceFilter } from "../hooks/useResourceFilter";
+import { useMinLoading } from "../hooks/useMinLoading";
 import LanguageTagsBar from "../components/resources/LanguageTagsBar";
 import SortDropdown from "../components/resources/SortDropdown";
 import FiltersDropdown from "../components/resources/FiltersDropdown";
+import ResourceCard from "../components/ui/ResourceCard";
+import ResourceCardSkeleton from "../components/resources/ResourcesSkeleton";
 
 type OpenDropdown = "sort" | "filters" | null;
 
@@ -13,6 +18,13 @@ const ResourcesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     category || null,
   );
+
+  const { resources, isLoading, isBookmarked, toggleBookmark } = useResources();
+  const { filteredResources } = useResourceFilter({
+    resources,
+    selectedCategory,
+  });
+  const showLoader = useMinLoading(isLoading, 1500);
 
   return (
     <ResourcesFiltersProvider>
@@ -41,12 +53,29 @@ const ResourcesPage = () => {
           </div>
         </div>
 
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500">
-          Nou component de cards (pendent)
-          {selectedCategory && (
-            <p className="mt-2">Filtre actiu: {selectedCategory}</p>
-          )}
-        </div>
+        {showLoader ? (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <ResourceCardSkeleton key={index} />
+            ))}
+          </div>
+        ) : filteredResources.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No s'han trobat recursos
+            {selectedCategory && ` per a ${selectedCategory}`}
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-4">
+            {filteredResources.map((resource) => (
+              <ResourceCard
+                key={resource.id}
+                resource={resource}
+                isBookmarked={isBookmarked(resource)}
+                toggleBookmark={toggleBookmark}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     </ResourcesFiltersProvider>
   );
