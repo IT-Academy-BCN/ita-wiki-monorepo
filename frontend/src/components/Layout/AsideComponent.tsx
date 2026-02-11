@@ -26,6 +26,7 @@ const AsideComponent: React.FC = () => {
       </section>
 
       <section className="py-6">
+        <div className="-mx-4 border-t"></div>
         <ul className="py-6 space-y-3">
           {AsideConfigData.map((data) => (
             <AsideConfigLink
