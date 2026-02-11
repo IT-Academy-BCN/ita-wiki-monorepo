@@ -19,7 +19,7 @@ class ForumAnswerController extends Controller
         if (!$this->canReplyToQuestion($question)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Solo los miembros aceptados del proyecto pueden responder.',
+                'message' => 'Only accepted project members can reply.',
             ], 403);
         }
 
@@ -30,7 +30,7 @@ class ForumAnswerController extends Controller
         if ($answerCount >= 10) {
             return response()->json([
                 'success' => false,
-                'message' => 'Esta pregunta ha alcanzado el limite de 10 respuestas.',
+                'message' => 'This question has reached the limit of 10 answers.',
             ], 422);
         }
 
@@ -48,7 +48,7 @@ class ForumAnswerController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Respuesta anadida correctamente.',
+            'message' => 'Answer added successfully.',
             'data' => $answer,
         ], 201);
     }
@@ -58,7 +58,7 @@ class ForumAnswerController extends Controller
         if (!$this->canManageAnswer($answer)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No tienes permiso para editar esta respuesta.',
+                'message' => 'You do not have permission to edit this answer.',
             ], 403);
         }
 
@@ -71,7 +71,7 @@ class ForumAnswerController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Respuesta actualizada correctamente.',
+            'message' => 'Answer updated successfully.',
             'data' => $answer,
         ], 200);
     }
@@ -81,7 +81,7 @@ class ForumAnswerController extends Controller
         if (!$this->canManageAnswer($answer)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No tienes permiso para eliminar esta respuesta.',
+                'message' => 'You do not have permission to delete this answer.',
             ], 403);
         }
 
@@ -89,7 +89,7 @@ class ForumAnswerController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Respuesta eliminada correctamente.',
+            'message' => 'Answer deleted successfully.',
         ], 200);
     }
 

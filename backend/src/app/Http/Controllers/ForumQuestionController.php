@@ -58,7 +58,7 @@ class ForumQuestionController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Pregunta publicada correctamente.',
+            'message' => 'Question published successfully.',
             'data' => $question,
         ], 201);
     }
@@ -68,7 +68,7 @@ class ForumQuestionController extends Controller
         if (!$this->canManageQuestion($question)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No tienes permiso para editar esta pregunta.',
+                'message' => 'You do not have permission to edit this question.',
             ], 403);
         }
 
@@ -81,7 +81,7 @@ class ForumQuestionController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Pregunta actualizada correctamente.',
+            'message' => 'Question updated successfully.',
             'data' => $question,
         ], 200);
     }
@@ -91,7 +91,7 @@ class ForumQuestionController extends Controller
         if (!$this->canManageQuestion($question)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No tienes permiso para eliminar esta pregunta.',
+                'message' => 'You do not have permission to delete this question.',
             ], 403);
         }
 
@@ -99,7 +99,7 @@ class ForumQuestionController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Pregunta eliminada correctamente.',
+            'message' => 'Question deleted successfully.',
         ], 200);
     }
 
