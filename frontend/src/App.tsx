@@ -19,11 +19,10 @@ import RankingsPage from "./pages/RankingsPage";
 
 const App: FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <HeaderComponent />
-
-      <div className="flex flex-col lg:flex-row lg:flex-grow">
-        <AsideComponent />
+    <div className="min-h-screen flex flex-row">
+      <AsideComponent />
+      <div className="flex flex-col lg:flex-grow">
+        <HeaderComponent />  
         <div className="flex-grow">
           <Routes>
             {/* Public routes */}
