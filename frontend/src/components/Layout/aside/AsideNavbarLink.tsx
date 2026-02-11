@@ -23,7 +23,7 @@ export const AsideNavbarLink = ({
           "bg-primary/15": isActive,
           "": !isActive,
         },
-        "px-4 py-3 rounded-2xl",
+        "ps-4 pe-6 py-3 rounded-2xl",
       )}
     >
       <Link
