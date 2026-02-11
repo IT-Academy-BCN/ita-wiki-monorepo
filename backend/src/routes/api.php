@@ -144,4 +144,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])
         ->name('tickets.comments.store');
+
+    Route::put('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'update'])
+        ->name('tickets.comments.update');
+
+    Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])
+        ->name('tickets.comments.destroy');
 });

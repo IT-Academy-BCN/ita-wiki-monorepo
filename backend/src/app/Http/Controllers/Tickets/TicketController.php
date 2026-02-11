@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\Http\Requests\Tickets\CreateTicketRequest;
 use App\Http\Requests\Tickets\UpdateTicketRequest;
+use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
 use Illuminate\Http\JsonResponse;
 
 class TicketController extends Controller{
@@ -25,12 +26,12 @@ class TicketController extends Controller{
         $ticket = Ticket::findOrFail($id);
 
         return response()->json([
-            'succes' => true,
+            'success' => true,
             'data' => $ticket
-        ], 201);
+        ], 200);
     }
 
-    public function create(CreateTicketRequest $request): JsonResponse{
+    public function store(CreateTicketRequest $request): JsonResponse{
         
         $ticket = Ticket::create($request->validated());
     
@@ -38,7 +39,7 @@ class TicketController extends Controller{
             'success' => true,
             'message' => 'The Ticket has been created correctly',
             'data' => $ticket
-        ], 201);
+        ], 200);
     }
 
     public function update(UpdateTicketRequest $request, $id): JsonResponse{
@@ -63,6 +64,18 @@ class TicketController extends Controller{
         return response()->json([
             'success' => true,
             'message' => 'The Ticket has been removed',
+        ], 200);
+    }
+
+    public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->update(['status' => $request->validated()['status']]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'The Ticket status has been updated correctly',
+            'data' => $ticket
         ], 200);
     }
 }
