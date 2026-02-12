@@ -36,9 +36,11 @@ describe("LanguageTagsBar", () => {
   });
 
   it("deselects category on second click", () => {
-    render(<LanguageTagsBar initialSelected="React" />);
+    render(<LanguageTagsBar />);
 
     const reactButton = screen.getByText("React");
+    fireEvent.click(reactButton);
+    expect(reactButton).toHaveClass("bg-black", "text-white");
     fireEvent.click(reactButton);
 
     expect(reactButton).toHaveClass("bg-white", "text-gray-700");
