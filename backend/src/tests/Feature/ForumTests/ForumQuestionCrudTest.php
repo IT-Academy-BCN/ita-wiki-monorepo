@@ -93,7 +93,7 @@ class ForumQuestionCrudTest extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'success' => true,
-                'message' => 'Pregunta publicada correctamente.',
+                'message' => 'Question published successfully.',
             ]);
 
         $this->assertDatabaseHas('forum_questions', [
@@ -139,7 +139,7 @@ class ForumQuestionCrudTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Pregunta actualizada correctamente.',
+                'message' => 'Question updated successfully.',
             ]);
 
         $this->assertDatabaseHas('forum_questions', [
@@ -185,7 +185,7 @@ class ForumQuestionCrudTest extends TestCase
         $response->assertStatus(403)
             ->assertJson([
                 'success' => false,
-                'message' => 'No tienes permiso para editar esta pregunta.',
+                'message' => 'You do not have permission to edit this question.',
             ]);
     }
 
@@ -203,7 +203,7 @@ class ForumQuestionCrudTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Pregunta eliminada correctamente.',
+                'message' => 'Question deleted successfully.',
             ]);
 
         $this->assertDatabaseMissing('forum_questions', [

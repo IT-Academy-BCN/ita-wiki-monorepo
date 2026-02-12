@@ -55,7 +55,7 @@ class ForumAnswerCrudTest extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'success' => true,
-                'message' => 'Respuesta anadida correctamente.',
+                'message' => 'Answer added successfully.',
             ]);
 
         $this->assertDatabaseHas('forum_answers', [
@@ -92,7 +92,7 @@ class ForumAnswerCrudTest extends TestCase
         $response->assertStatus(403)
             ->assertJson([
                 'success' => false,
-                'message' => 'Solo los miembros aceptados del proyecto pueden responder.',
+                'message' => 'Only accepted project members can reply.',
             ]);
     }
 
@@ -141,7 +141,7 @@ class ForumAnswerCrudTest extends TestCase
         $response->assertStatus(422)
             ->assertJson([
                 'success' => false,
-                'message' => 'Esta pregunta ha alcanzado el limite de 10 respuestas.',
+                'message' => 'This question has reached the limit of 10 answers.',
             ]);
     }
 
@@ -174,7 +174,7 @@ class ForumAnswerCrudTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Respuesta actualizada correctamente.',
+                'message' => 'Answer updated successfully.',
             ]);
     }
 
@@ -235,7 +235,7 @@ class ForumAnswerCrudTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Respuesta eliminada correctamente.',
+                'message' => 'Answer deleted successfully.',
             ]);
 
         $this->assertDatabaseMissing('forum_answers', [
