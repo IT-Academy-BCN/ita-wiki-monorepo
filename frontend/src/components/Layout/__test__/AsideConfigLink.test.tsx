@@ -5,11 +5,15 @@ import { AsideConfigLink } from "../aside/AsideConfigLink";
 
 const MockIcon = () => <svg data-testid="mock-icon" />;
 
-const renderConfigLink = (
-  isActive: boolean,
+const renderConfigLink = ({
+  isActive,
   path = "/test",
   label = "Test Config",
-) => {
+}: {
+  isActive: boolean;
+  path?: string;
+  label?: string;
+}) => {
   return render(
     <MemoryRouter>
       <AsideConfigLink
@@ -24,7 +28,7 @@ const renderConfigLink = (
 
 describe("AsideConfigLink Tests", () => {
   test("renders with active state", () => {
-    renderConfigLink(true);
+    renderConfigLink({ isActive: true });
 
     const link = screen.getByText("Test Config");
     expect(link).toBeInTheDocument();
@@ -37,7 +41,7 @@ describe("AsideConfigLink Tests", () => {
   });
 
   test("renders with inactive state", () => {
-    renderConfigLink(false);
+    renderConfigLink({ isActive: false });
 
     const link = screen.getByText("Test Config");
     expect(link).toBeInTheDocument();
@@ -50,14 +54,14 @@ describe("AsideConfigLink Tests", () => {
   });
 
   test("renders icon correctly", () => {
-    renderConfigLink(false);
+    renderConfigLink({ isActive: false });
 
     const icon = screen.getByTestId("mock-icon");
     expect(icon).toBeInTheDocument();
   });
 
   test("applies correct classes to icon span", () => {
-    const { container } = renderConfigLink(false);
+    const { container } = renderConfigLink({ isActive: false });
 
     const iconSpan = container.querySelector("span");
     expect(iconSpan).toHaveClass("w-[2rem]");
@@ -66,7 +70,11 @@ describe("AsideConfigLink Tests", () => {
   });
 
   test("link has correct structure with icon and label", () => {
-    renderConfigLink(true, "/config", "Configuració");
+    renderConfigLink({
+      isActive: true,
+      path: "/config",
+      label: "Configuració",
+    });
 
     const link = screen.getByText("Configuració");
     expect(link).toHaveClass("flex");
