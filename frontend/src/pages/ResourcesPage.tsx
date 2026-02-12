@@ -1,26 +1,27 @@
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
-import { categories } from "../data/categories";
+import { useState } from "react";
+import { useParams } from "react-router";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
+import { useResources } from "../context/ResourcesContext";
+import ResourcesHeader from "../components/resources/ResourcesHeader";
+import { ResourcesList } from "../components/resources/ResourcesList";
 
 const ResourcesPage = () => {
   const { category } = useParams();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!category) {
-      navigate(`/resources/${categories[0]}`);
-    }
-  }, [category, navigate]);
+  const { resources } = useResources();
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+    category,
+  );
 
   return (
     <ResourcesFiltersProvider>
-      <div>Recursos de programació</div>
-      <div>
-        <div>Javascript, PHP, Java, BBDD, Python</div>
-        <div>Ordenar, filtres</div>
+      <div className="container mx-auto px-4 py-6">
+        <h1 className="text-2xl font-bold mb-6">Recursos de programació</h1>
+        <ResourcesHeader
+          initialCategory={category}
+          onCategoryChange={(cat) => setSelectedCategory(cat ?? undefined)}
+        />
+        <ResourcesList resources={resources} category={selectedCategory} />
       </div>
-      <div>Llista de recursos</div>
     </ResourcesFiltersProvider>
   );
 };
