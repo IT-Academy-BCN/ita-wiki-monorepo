@@ -22,7 +22,7 @@ const App: FC = () => {
     <div className="min-h-screen flex flex-row">
       <AsideComponent />
       <div className="flex flex-col lg:flex-grow">
-        <HeaderComponent />  
+        <HeaderComponent />
         <div className="flex-grow">
           <Routes>
             {/* Public routes */}

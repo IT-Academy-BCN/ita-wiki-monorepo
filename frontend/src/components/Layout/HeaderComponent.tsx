@@ -152,7 +152,6 @@ const HeaderComponent = () => {
 
   return (
     <header className="hidden lg:flex py-4 px-6 items-center justify-end">
-      
       <div className="flex items-center gap-[6px]">
         {hasPermission && (
           <ButtonComponent
