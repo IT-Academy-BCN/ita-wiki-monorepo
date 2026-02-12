@@ -12,20 +12,20 @@ use App\Models\ContributorListProject;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use App\Enums\LanguageEnum;
+use App\Enums\ContributorStatusEnum;
 
 class ListProjectsStoreTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $projectOne;
-    protected $contributorOne;
     protected $userOne;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->userOne = User::factory()->create(['id' => 1]);
+        $this->userOne = User::factory()->create();
 
         $this->projectOne = ListProjects::factory()->create([
             'id' => 1,
@@ -33,12 +33,6 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-        ]);
-
-        $this->contributorOne = ContributorListProject::factory()->create([
-            'user_id' => $this->userOne->id,
-            'programming_role' => 'Backend Developer',
-            'list_project_id' => $this->projectOne->id,
         ]);
     }
 
@@ -64,7 +58,7 @@ class ListProjectsStoreTest extends TestCase
 
     public function test_method_datas_not_valid_language(): void
     {
-        
+
         Sanctum::actingAs($this->userOne);
 
         $response = $this->postJson('/api/codeconnect/', [
@@ -109,6 +103,28 @@ class ListProjectsStoreTest extends TestCase
         $response->assertStatus(401);
         $response->assertJson([
             'message' => 'Unauthenticated.',
+        ]);
+    }
+
+    public function test_project_creator_is_added_as_contributor(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Delta',
+            'time_duration' => '2 months',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(200);
+
+        $project = ListProjects::where('title', 'Proyecto Delta')->firstOrFail();
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'list_project_id' => $project->id,
+            'user_id' => $this->userOne->id,
+            'status' => ContributorStatusEnum::Accepted->value,
         ]);
     }
 }

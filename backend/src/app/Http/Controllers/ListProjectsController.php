@@ -194,8 +194,19 @@ class ListProjectsController extends Controller
         }
 
         try {
-            $validatedData['owner_id'] = auth()->id();
+            $userId = auth()->id();
+
+            $validatedData['owner_id'] = $userId;
+
             $newProject = ListProjects::create($validatedData);
+
+            ContributorListProject::create([
+                'list_project_id' => $newProject->id,
+                'user_id' => $userId,
+                'programming_role' => 'Backend Developer',
+                'status' => ContributorStatusEnum::Accepted->value,
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully',
@@ -373,13 +384,13 @@ class ListProjectsController extends Controller
                 'message' => 'Contributor not found',
             ], 404);
         }
-        
+
         if ($user) {
             $isMember = ContributorListProject::where('list_project_id', $listProjectId)
                 ->where('user_id', $user->id)
                 ->where('status', ContributorStatusEnum::Accepted->value)
                 ->exists();
-            
+
             if (!$isMember) {
                 return response()->json([
                     'error' => 'You cannot validate this request',
@@ -713,9 +724,9 @@ class ListProjectsController extends Controller
         }
 
         $contributor = ContributorListProject::where('id', $contributorId)
-        ->where('list_project_id', $listProjectId)
-        ->first();
-        
+            ->where('list_project_id', $listProjectId)
+            ->first();
+
         if (!$contributor) {
             return response()->json([
                 'success' => false,
