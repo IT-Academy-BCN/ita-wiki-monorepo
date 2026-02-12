@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { IntResource } from "../../types";
 import { useResourceFilter } from "../../hooks/useResourceFilter";
@@ -16,10 +16,10 @@ interface ResourcesListProps {
   category?: string;
 }
 
-export const ResourcesList: FC<ResourcesListProps> = ({
+export const ResourcesList = ({
   resources,
   category,
-}) => {
+}: ResourcesListProps) => {
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
 
