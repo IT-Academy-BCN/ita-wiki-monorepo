@@ -7,7 +7,6 @@ import { useResources } from "../../context/ResourcesContext";
 import { useResourcesFilters } from "../../context/ResourcesFiltersContext";
 import ResourceCard from "../ui/ResourceCard";
 import ResourceCardSkeleton from "./ResourcesSkeleton";
-import SortButton from "./SortButton";
 import { useMinLoading } from "../../hooks/useMinLoading";
 import EmptyState from "../ui/EmptyState";
 
@@ -24,15 +23,17 @@ export const ResourcesList = ({
   const searchTerm = searchParams.get("search") || "";
 
   const { selectedResourceTypes, selectedTags } = useResourcesFilters();
+
   const { isBookmarked, toggleBookmark, isLoading, error } = useResources();
 
-  const showLoader = useMinLoading(isLoading, 1500);
+  const showLoader = useMinLoading(isLoading, 500);
 
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
-
-    return category
-      ? resources.filter((resource) => resource.category === category)
+    return category && category !== "all"
+      ? resources.filter((resource) => 
+          resource.category.toLowerCase() === category.toLowerCase()
+        )
       : resources;
   }, [resources, category]);
 
@@ -42,16 +43,15 @@ export const ResourcesList = ({
     selectedTags,
   });
 
-  const { sortedResources, setSortOption, sortOption } = useResourceSort({
+  const { sortedResources } = useResourceSort({
     resources: filteredResources,
   });
 
   const visibleResources = useMemo(() => {
     if (!searchTerm) return sortedResources;
-
     const lowerSearchTerm = searchTerm.toLowerCase();
     return sortedResources.filter((resource) =>
-      resource.title.toLowerCase().includes(lowerSearchTerm),
+      resource.title.toLowerCase().includes(lowerSearchTerm)
     );
   }, [sortedResources, searchTerm]);
 
@@ -59,7 +59,7 @@ export const ResourcesList = ({
     return (
       <EmptyState
         text="Error al obtenir recursos"
-        subtext="Hi ha hagut un problema. Torna-ho a provar."
+        subtext="Hi ha hagut un problema carregant les dades. Torna-ho a provar."
         textClassName="text-red-500"
       />
     );
@@ -67,8 +67,8 @@ export const ResourcesList = ({
 
   if (showLoader) {
     return (
-      <div className="flex flex-col gap-4 mt-10">
-        {Array.from({ length: 8 }).map((_, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+        {Array.from({ length: 6 }).map((_, index) => (
           <ResourceCardSkeleton key={index} />
         ))}
       </div>
@@ -79,37 +79,36 @@ export const ResourcesList = ({
     return (
       <EmptyState
         text="No hi ha recursos"
-        subtext="Torna-ho a provar més tard"
+        subtext="Encara no s'han afegit recursos a la plataforma."
       />
     );
   }
 
-  return (
-    <div className="lg:flex-1">
-      <div className="flex justify-end items-center">
-        <SortButton setSortOption={setSortOption} sortOption={sortOption} />
+  if (visibleResources.length === 0) {
+    return (
+      <div className="w-full py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
+        <p className="text-gray-900 font-medium text-lg">
+          No s'han trobat resultats
+        </p>
+        <p className="text-gray-500 text-sm mt-1">
+          Prova de canviar els filtres o la categoria seleccionada.
+        </p>
       </div>
+    );
+  }
 
-      {visibleResources.length === 0 ? (
-        <div className="flex flex-col gap-4 py-8">
-          <div className="text-center py-8 text-gray-500">
-            {categoryFilteredResources.length === 0
-              ? "No hi ha recursos disponibles per a aquesta categoria."
-              : "No s'han trobat recursos que coincideixin amb la cerca."}
-          </div>
-        </div>
-      ) : (
-        <ul className="flex flex-col gap-4 py-4">
-          {visibleResources.map((resource: IntResource) => (
-            <ResourceCard
-              key={resource.id}
-              resource={resource}
-              isBookmarked={isBookmarked(resource)}
-              toggleBookmark={toggleBookmark}
-            />
-          ))}
-        </ul>
-      )}
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+        {visibleResources.map((resource: IntResource) => (
+          <ResourceCard
+            key={resource.id}
+            resource={resource}
+            isBookmarked={isBookmarked(resource)}
+            toggleBookmark={toggleBookmark}
+          />
+        ))}
+      </div>
     </div>
   );
 };
