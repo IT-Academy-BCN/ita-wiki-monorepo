@@ -26,9 +26,9 @@ class User extends Authenticatable
         'github_id',
         'github_user_name',
         'name',
+        'avatar',
         'email',
         'password',
-        
     ];
 
     /**
@@ -50,7 +50,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 
@@ -60,6 +59,18 @@ class User extends Authenticatable
     public static function findByGithubId(int $githubId): ?self
     {
         return static::where('github_id', $githubId)->first();
+    }
+
+    public function getAvatarUrlAttribute(): ?string{
+        if(! $this->avatar){
+            return null;
+        }
+
+        if(str_starts_with($this->avatar, 'http')){
+            return $this->avatar;
+        }
+
+        return asset('storage/avatars/' . $this->avatar);
     }
 
     /**
@@ -75,7 +86,7 @@ class User extends Authenticatable
      */
     public function getGuardName(): string 
     { 
-        return $this->guard_name; 
+        return (string) $this->guard_name; 
     }
 
     /**
