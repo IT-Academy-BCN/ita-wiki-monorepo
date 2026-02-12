@@ -7,6 +7,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ForumQuestion;
 
 class ListProjects extends Model
 {
@@ -17,7 +18,8 @@ class ListProjects extends Model
         'title',
         'time_duration',
         'language_backend',
-        'language_frontend'
+        'language_frontend',
+    
     ];
 
     public function contributorListProject()
@@ -29,4 +31,9 @@ class ListProjects extends Model
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
+    public function forumQuestions()
+    {
+        return $this->hasMany(ForumQuestion::class, 'list_project_id');
+    }
+
 }
