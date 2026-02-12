@@ -1,5 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router";
-import logoItAcademy from "../../assets/LogoItAcademy.svg";
+import { useNavigate, useLocation } from "react-router";
 import addIcon from "../../assets/add.svg";
 import userIcon from "../../assets/user2.svg";
 import arrowDown from "../../assets/arrow-down.svg";
