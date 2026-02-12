@@ -28,6 +28,7 @@ export const ResourcesList = ({
 
   const showLoader = useMinLoading(isLoading, 500);
 
+  // 1. Primer filtrem manualment per la categoria seleccionada als botons
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
     return category && category !== "all"
@@ -37,10 +38,15 @@ export const ResourcesList = ({
       : resources;
   }, [resources, category]);
 
+  // 2. Apliquem la resta de filtres (Tags, Tipus, Cerca)
+  // IMPORTANT: Passem selectedCategory: null perquè el hook NO filtri per la URL.
+  // Ja hem filtrat per categoria al pas 1. Si no fem això, entra en conflicte
+  // quan la URL diu "React" però tu has clicat el botó "Node".
   const { filteredResources } = useResourceFilter({
     resources: categoryFilteredResources,
     selectedResourceTypes,
     selectedTags,
+    selectedCategory: null, 
   });
 
   const { sortedResources } = useResourceSort({
