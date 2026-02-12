@@ -1,13 +1,9 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { categories } from "../data/categories";
-import { ResourcesLayout } from "../components/resources/ResourcesLayout";
 import { ResourcesFiltersProvider } from "../context/ResourcesFiltersContext";
-import { useResources } from "../context/ResourcesContext";
-import PageTitle from "../components/ui/PageTitle";
 
-const ResourcesPage: FC = () => {
-  const { resources } = useResources();
+const ResourcesPage = () => {
   const { category } = useParams();
   const navigate = useNavigate();
 
@@ -19,9 +15,12 @@ const ResourcesPage: FC = () => {
 
   return (
     <ResourcesFiltersProvider>
-      <PageTitle title={`${category}`} />
-
-      <ResourcesLayout resources={resources} category={category} />
+      <div>Recursos de programació</div>
+      <div>
+        <div>Javascript, PHP, Java, BBDD, Python</div>
+        <div>Ordenar, filtres</div>
+      </div>
+      <div>Llista de recursos</div>
     </ResourcesFiltersProvider>
   );
 };
