@@ -16,6 +16,7 @@ use Database\Seeders\LikeSeeder;
 use Database\Seeders\TechnicalTestSeeder;
 use Database\Seeders\ListProjectsSeeder;
 use Database\Seeders\ContributorListProjectSeeder;
+use Database\Seeders\ForumSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             TechnicalTestSeeder::class,
             ListProjectsSeeder::class,
             ContributorListProjectSeeder::class,
+            ForumSeeder::class,
         ]);
     }
 }
