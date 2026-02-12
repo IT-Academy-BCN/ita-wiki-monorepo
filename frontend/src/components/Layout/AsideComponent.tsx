@@ -25,8 +25,9 @@ const AsideComponent: React.FC = () => {
           </Link>
         </div>
         <ul className="py-6 space-y-3">
-          {AsideNavbarData.map((data) => (
+          {AsideNavbarData.map((data, i) => (
             <AsideNavbarLink
+              key={i}
               label={data.label}
               path={data.ref}
               isActive={isPathActive(data.ref)}
