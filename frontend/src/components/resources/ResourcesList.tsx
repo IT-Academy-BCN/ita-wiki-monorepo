@@ -15,10 +15,7 @@ interface ResourcesListProps {
   category?: string;
 }
 
-export const ResourcesList = ({
-  resources,
-  category,
-}: ResourcesListProps) => {
+export const ResourcesList = ({ resources, category }: ResourcesListProps) => {
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
 
@@ -28,25 +25,21 @@ export const ResourcesList = ({
 
   const showLoader = useMinLoading(isLoading, 500);
 
-  // 1. Primer filtrem manualment per la categoria seleccionada als botons
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
     return category && category !== "all"
-      ? resources.filter((resource) => 
-          resource.category.toLowerCase() === category.toLowerCase()
+      ? resources.filter(
+          (resource) =>
+            resource.category.toLowerCase() === category.toLowerCase(),
         )
       : resources;
   }, [resources, category]);
 
-  // 2. Apliquem la resta de filtres (Tags, Tipus, Cerca)
-  // IMPORTANT: Passem selectedCategory: null perquè el hook NO filtri per la URL.
-  // Ja hem filtrat per categoria al pas 1. Si no fem això, entra en conflicte
-  // quan la URL diu "React" però tu has clicat el botó "Node".
   const { filteredResources } = useResourceFilter({
     resources: categoryFilteredResources,
     selectedResourceTypes,
     selectedTags,
-    selectedCategory: null, 
+    selectedCategory: null,
   });
 
   const { sortedResources } = useResourceSort({
@@ -57,7 +50,7 @@ export const ResourcesList = ({
     if (!searchTerm) return sortedResources;
     const lowerSearchTerm = searchTerm.toLowerCase();
     return sortedResources.filter((resource) =>
-      resource.title.toLowerCase().includes(lowerSearchTerm)
+      resource.title.toLowerCase().includes(lowerSearchTerm),
     );
   }, [sortedResources, searchTerm]);
 
