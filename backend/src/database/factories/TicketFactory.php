@@ -7,6 +7,7 @@ use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketPriorityEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,14 +23,16 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
+            'code_connect_id' => User::factory(),
             'name' => fake()->sentence(4),
             'incident_date' => fake()->date(),
             'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
             'type' => fake()->randomElement(TicketTypeEnum::values()),
+            'status' => TicketStatusEnum::Pending->value,
             'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
             'description' => fake()->paragraph(),
-            'status' => TicketStatusEnum::Pending->value,
-            'created_by' => User::factory(),
+            'priority' => fake()->randomElement(TicketPriorityEnum::values()),
+            
         ];
     }
 }

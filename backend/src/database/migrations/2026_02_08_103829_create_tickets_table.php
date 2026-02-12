@@ -18,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('code_connect_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->date('incident_date');
             $table->enum('affected_app', AffectedAppEnum::values());
@@ -26,14 +27,9 @@ return new class extends Migration
             $table->text('description');
             $table->enum('status', TicketStatusEnum::values())->default('pending');
             $table->enum('priority', TicketPriorityEnum::values())->nullable();
-            $table->foreignId('assigned_team_id')->nullable()->constrained('teams')->onDelete('set null');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-            $table->foreignId('assigned_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignID('closed_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->text('closing_comment')->nullable();
             $table->timestamp('closed_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

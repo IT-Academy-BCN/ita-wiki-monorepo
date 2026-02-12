@@ -82,19 +82,9 @@ class User extends Authenticatable
      * Relationships with Tickets System
      */
 
-    public function teams(): BelongsToMany
+    public function tickets(): HasMany
     {
-        return $this->belongsToMany(Team::class)->withTimestamps();
-    }
-
-    public function createdTickets(): HasMany
-    {
-        return $this->hasMany(Ticket::class, 'created_by');
-    }
-
-    public function assignedTickets(): HasMany
-    {
-        return $this->hasMany(Ticket::class, 'assigned_by');
+        return $this->hasMany(Ticket::class, 'code_connect_id');
     }
 
     public function closedTickets(): HasMany

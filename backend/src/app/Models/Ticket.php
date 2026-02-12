@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Enums\TicketPriorityEnum;
@@ -19,9 +18,9 @@ class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
+        'code_connect_id',
         'name',
         'incident_date',
         'affected_app',
@@ -30,10 +29,6 @@ class Ticket extends Model
         'description',
         'status',
         'priority',
-        'assigned_team_id',
-        'created_by',
-        'assigned_by',
-        'closing_comment',
         'closed_by',
         'closed_at'
     ];
@@ -48,19 +43,9 @@ class Ticket extends Model
         'closed_at' => 'datetime'
     ];
 
-    public function creator(): BelongsTo
+    public function codeConnect(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function assignedTeam(): BelongsTo
-    {
-        return $this->belongsTo(Team::class, 'assigned_team_id');
-    }
-
-    public function assignedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'assigned_by');
+        return $this->belongsTo(User::class, 'code_connect_id');
     }
 
     public function closedBy(): BelongsTo
