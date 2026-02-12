@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 import AsideComponent from "../AsideComponent";
 import { useUserContext } from "../../../context/UserContext";
 import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
+import { AsideNavbarData } from "../aside/asideContent.tsx";
 import userEvent from "@testing-library/user-event";
 
 import sql_vector from "../../../assets/sqlVector.svg?react";
@@ -114,6 +115,32 @@ describe("AsideComponent Tests", () => {
     expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
     expect(screen.getByText("Guardats")).toBeInTheDocument();
     expect(screen.getByText("Creats")).toBeInTheDocument();
+  });
+
+  test("should render IT Academy logo", () => {
+    render(
+      <MemoryRouter>
+        <AsideComponent />
+      </MemoryRouter>,
+    );
+
+    const logo = screen.getByAltText("logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("width", "130px");
+  });
+
+  test("should render AsideNavbarLink the correct number of times", () => {
+    render(
+      <MemoryRouter>
+        <AsideComponent />
+      </MemoryRouter>,
+    );
+
+    AsideNavbarData.forEach((data) => {
+      expect(screen.getByText(data.label)).toBeInTheDocument();
+    });
+
+    expect(AsideNavbarData).toHaveLength(4);
   });
 
   test("should render 'Inici' link", () => {
