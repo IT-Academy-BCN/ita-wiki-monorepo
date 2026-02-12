@@ -58,6 +58,27 @@ vi.mock("../../../assets/logo-node 1.svg?react", () => ({
 vi.mock("../../../assets/react.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
+vi.mock("../../../assets/homeIcon.svg?react", () => ({
+  default: () => <svg data-testid="home-icon" />,
+}));
+vi.mock("../../../assets/resourcesIcon.svg?react", () => ({
+  default: () => <svg data-testid="resources-icon" />,
+}));
+vi.mock("../../../assets/techTestsIcon.svg?react", () => ({
+  default: () => <svg data-testid="tech-tests-icon" />,
+}));
+vi.mock("../../../assets/codeConnectIcon.svg?react", () => ({
+  default: () => <svg data-testid="code-connect-icon" />,
+}));
+vi.mock("../../../assets/settingsIcon.svg?react", () => ({
+  default: () => <svg data-testid="settings-icon" />,
+}));
+vi.mock("../../../assets/questionIcon.svg?react", () => ({
+  default: () => <svg data-testid="question-icon" />,
+}));
+vi.mock("../../../assets/infoIcon.svg?react", () => ({
+  default: () => <svg data-testid="info-icon" />,
+}));
 
 vi.mock("react-router-dom", () => {
   const actual = vi.importActual("react-router-dom");
