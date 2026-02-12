@@ -16,6 +16,7 @@ class GitHubAuthControllerTest extends TestCase
         $abstractUser->shouldReceive('getName')->andReturn('Test User');
         $abstractUser->shouldReceive('getEmail')->andReturn('test_' . time() . '@example.com');
         $abstractUser->shouldReceive('getNickname')->andReturn('testuser');
+        $abstractUser->shouldReceive('getAvatar')->andReturn(null);
 
         Socialite::shouldReceive('driver->stateless->user')
             ->andReturn($abstractUser);
@@ -33,6 +34,7 @@ class GitHubAuthControllerTest extends TestCase
             'github_id' => '12345',
             'github_user_name' => 'testuser',
             'name' => 'Test User',
+            'avatar' => null,
         ]);
     }
 }
