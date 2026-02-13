@@ -38,6 +38,7 @@ class GitHubAuthController extends Controller
                 $user = User::create([
                     'github_id' => $githubUser->getId(),
                     'github_user_name' => $githubUser->getNickname(),
+                    'avatar' => $githubUser->getAvatar(),
                     'name' => $githubUser->getName() ?: $githubUser->getNickname(),
                     'email' => $githubUser->getEmail() ?? $githubUser->getNickname() . '@github.local',                   
                     'password' => Hash::make(Str::random(32)),
@@ -46,6 +47,7 @@ class GitHubAuthController extends Controller
                 $user->update([
                     'github_user_name' => $githubUser->getNickname(),
                     'name' => $githubUser->getName() ?: $githubUser->getNickname(),
+                    'avatar' => $githubUser->getAvatar(),
                     'email' => $githubUser->getEmail() ?? $user->email,                   
                 ]);
             }
@@ -77,8 +79,10 @@ class GitHubAuthController extends Controller
                 'id' => $request->user()->id,
                 'github_id' => $request->user()->github_id,
                 'github_user_name' => $request->user()->github_user_name,
+                'avatar' => $request->user()->avatar,
                 'name' => $request->user()->name,
                 'email' => $request->user()->email,               
+                
             ]
         ]);
     }
