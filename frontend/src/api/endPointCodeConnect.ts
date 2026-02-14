@@ -1,5 +1,5 @@
 import { API_URL, END_POINTS } from "../config";
-import { IntCodeConnect } from "../types";
+import { CreateCodeConnectPayload } from "../types/CodeConnectProject";
 
 export type CodeConnectError = {
   message: string;
@@ -8,7 +8,7 @@ export type CodeConnectError = {
 };
 
 export const createCodeConnect = async (
-  formData: IntCodeConnect,
+  formData: CreateCodeConnectPayload,
   signal?: AbortSignal,
 ) => {
   const url = `${API_URL}${END_POINTS.codeconnect.post}`;
@@ -18,6 +18,7 @@ export const createCodeConnect = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(formData),
       signal,

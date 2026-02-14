@@ -12,7 +12,7 @@ function makeProject(partial: Partial<Project> = {}): Project {
     duration: "1 mes",
     frontend: {
       tech: "Angular",
-      logo: "../assets/angular.svg",
+      logo: "../asse.svgts/technologies/angular-logo.svg",
       positions: 3,
       participants: [
         { name: "Natasha", avatar: "../assets/project-avatar.svg" },

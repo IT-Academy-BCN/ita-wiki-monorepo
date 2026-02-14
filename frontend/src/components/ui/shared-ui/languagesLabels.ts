@@ -1,12 +1,12 @@
 import { Category } from "../../../types";
-import sql_vector from "../../../assets/sqlVector.svg?react";
-import python_vector from "../../../assets/pythonVector.svg?react";
-import js_vector from "../../../assets/javascript.svg?react";
-import java_vector from "../../../assets/logo-java-1.svg?react";
-import php_vector from "../../../assets/logo-php-1.svg?react";
-import angular_vector from "../../../assets/angular.svg?react";
-import react_vector from "../../../assets/react.svg?react";
-import node_vector from "../../../assets/logo-node-1.svg?react";
+import sql_vector from "../../../assets/technologies/sql-logo.svg?react";
+import python_vector from "../../../assets/technologies/python-logo.svg?react";
+import js_vector from "../../../asse.svgts/technologies/javascript-logo.svg?react";
+import java_vector from "../../../assets/technologies/java-logo.svg?react";
+import php_vector from "../../../assets/technologies/php-logo.svg?react";
+import angular_vector from "../../../asse.svgts/technologies/angular-logo.svg?react";
+import react_vector from "../../../assets/technologies/react-logo.svg?react";
+import node_vector from "../../../asse.svgts/technologies/node-logo.svg?react";
 
 import { FC, SVGProps } from "react";
 

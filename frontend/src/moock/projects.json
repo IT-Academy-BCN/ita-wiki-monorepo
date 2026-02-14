@@ -5,7 +5,7 @@
     "duration": "1 mes",
     "frontend": {
       "tech": "Angular",
-      "logo": "../assets/angular.svg",
+      "logo": "../asse.svgts/technologies/angular-logo.svg",
       "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -27,7 +27,7 @@
     "duration": "1 mes",
     "frontend": {
       "tech": "React",
-      "logo": "../assets/react.svg",
+      "logo": "../assets/technologies/react-logo.svg",
       "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -51,7 +51,7 @@
     "duration": "2 semanas",
     "frontend": {
       "tech": "Angular",
-      "logo": "../assets/angular.svg",
+      "logo": "../asse.svgts/technologies/angular-logo.svg",
       "positions": 2,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -73,7 +73,7 @@
     "duration": "2 meses",
     "frontend": {
       "tech": "Angular",
-      "logo": "../assets/angular.svg",
+      "logo": "../asse.svgts/technologies/angular-logo.svg",
       "positions": 2,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -95,7 +95,7 @@
     "duration": "1 semana",
     "frontend": {
       "tech": "React",
-      "logo": "../assets/react.svg",
+      "logo": "../assets/technologies/react-logo.svg",
       "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -119,7 +119,7 @@
     "duration": "3 semanas",
     "frontend": {
       "tech": "Angular",
-      "logo": "../assets/angular.svg",
+      "logo": "../asse.svgts/technologies/angular-logo.svg",
       "positions": 2,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -143,7 +143,7 @@
     "duration": "2 meses",
     "frontend": {
       "tech": "React",
-      "logo": "../assets/react.svg",
+      "logo": "../assets/technologies/react-logo.svg",
       "positions": 4,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -168,7 +168,7 @@
     "duration": "6 semanas",
     "frontend": {
       "tech": "Angular",
-      "logo": "../assets/angular.svg",
+      "logo": "../asse.svgts/technologies/angular-logo.svg",
       "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
@@ -192,7 +192,7 @@
     "duration": "3 semanas",
     "frontend": {
       "tech": "React",
-      "logo": "../assets/react.svg",
+      "logo": "../assets/technologies/react-logo.svg",
       "positions": 4,
       "participants": [
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" },

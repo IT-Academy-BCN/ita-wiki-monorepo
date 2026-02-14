@@ -16,3 +16,10 @@ export type CodeConnectProjectDataContributor = {
   name: string;
   programming_role: string;
 };
+
+export type CreateCodeConnectPayload = {
+  title: string;
+  time_duration: string;
+  language_backend: string;
+  language_frontend: string;
+};

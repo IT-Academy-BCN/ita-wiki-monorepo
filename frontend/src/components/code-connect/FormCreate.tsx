@@ -4,6 +4,7 @@ import {
   contentTechsBackCodeConnect,
 } from "./techsLabelsContent";
 import { IntCodeConnect } from "../../types";
+import { CreateCodeConnectPayload } from "../../types/CodeConnectProject";
 import { createCodeConnect } from "../../api/endPointCodeConnect";
 import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { ArrowLeftIcon } from "lucide-react";
@@ -25,27 +26,88 @@ const FormCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleTechsFrontToggle = (tech: string) => {
+  // Changed
+  const allowedLanguages = new Set([
+    "PHP",
+    "JavaScript",
+    "Java",
+    "React",
+    "TypeScript",
+    "Python",
+    "SQL",
+  ]);
+
+  // Changed (alineat amb techsLabelsContent actual)
+  const frontendLabelToApiValue: Record<string, string> = {
+    React: "React",
+    Angular: "TypeScript",
+    Svelte: "JavaScript",
+    Vue: "JavaScript",
+    JavaScript: "JavaScript",
+  };
+
+  // Changed (alineat amb techsLabelsContent actual)
+  const backendLabelToApiValue: Record<string, string> = {
+    Node: "JavaScript",
+    PHP: "PHP",
+    Java: "Java",
+    Python: "Python",
+    SQL: "SQL",
+  };
+
+  // Changed
+  const getFrontendApiValue = (label: string) =>
+    frontendLabelToApiValue[label] ?? "";
+
+  // Changed
+  const getBackendApiValue = (label: string) =>
+    backendLabelToApiValue[label] ?? "";
+
+  // Changed
+  const isFrontendDisabled = (label: string) => {
+    const apiValue = getFrontendApiValue(label);
+    return !apiValue || !allowedLanguages.has(apiValue);
+  };
+
+  // Changed
+  const isBackendDisabled = (label: string) => {
+    const apiValue = getBackendApiValue(label);
+    return !apiValue || !allowedLanguages.has(apiValue);
+  };
+
+  // Changed
+  const buildTimeDuration = () => {
+    const timeValue = formData.time;
+    const unitValue = formData.unitTime;
+
+    if (!timeValue || !unitValue) return "";
+
+    if (unitValue === "month") {
+      return `${timeValue} ${timeValue === 1 ? "month" : "months"}`;
+    }
+    if (unitValue === "week") {
+      return `${timeValue} ${timeValue === 1 ? "week" : "weeks"}`;
+    }
+    return "";
+  };
+
+  // Changed (single select guardant el label)
+  const handleTechsFrontToggle = (label: string) => {
+    if (isFrontendDisabled(label)) return;
+
     setFormData((prev) => {
-      const isSelected = prev.techsFront.includes(tech);
-      return {
-        ...prev,
-        techsFront: isSelected
-          ? prev.techsFront.filter((item) => item !== tech)
-          : [...prev.techsFront, tech],
-      };
+      const isSelected = prev.techsFront[0] === label;
+      return { ...prev, techsFront: isSelected ? [] : [label] };
     });
   };
 
-  const handleTechsBackToggle = (tech: string) => {
+  // Changed (single select guardant el label)
+  const handleTechsBackToggle = (label: string) => {
+    if (isBackendDisabled(label)) return;
+
     setFormData((prev) => {
-      const isSelected = prev.techsBack.includes(tech);
-      return {
-        ...prev,
-        techsBack: isSelected
-          ? prev.techsBack.filter((item) => item !== tech)
-          : [...prev.techsBack, tech],
-      };
+      const isSelected = prev.techsBack[0] === label;
+      return { ...prev, techsBack: isSelected ? [] : [label] };
     });
   };
 
@@ -96,6 +158,12 @@ const FormCreate = () => {
       deadline,
     } = formData;
 
+    const timeDuration = buildTimeDuration();
+
+    // Changed (validem també que el mapping existeix)
+    const frontendApiValue = getFrontendApiValue(techsFront[0] ?? "");
+    const backendApiValue = getBackendApiValue(techsBack[0] ?? "");
+
     if (
       !title.trim() ||
       techsFront.length === 0 ||
@@ -105,7 +173,10 @@ const FormCreate = () => {
       numberDevsBack <= 0 ||
       time <= 0 ||
       !unitTime.trim() ||
-      !deadline
+      !deadline ||
+      !timeDuration ||
+      !frontendApiValue ||
+      !backendApiValue
     ) {
       toast.error("Completa tots els camps obligatoris.");
       return false;
@@ -121,20 +192,21 @@ const FormCreate = () => {
 
     setIsSubmitting(true);
 
-    const formPayload = {
+    const timeDuration = buildTimeDuration();
+
+    // Changed (map label -> valor que accepta el back)
+    const selectedFrontLabel = formData.techsFront[0] ?? "";
+    const selectedBackLabel = formData.techsBack[0] ?? "";
+
+    const apiPayload: CreateCodeConnectPayload = {
       title: formData.title,
-      techsFront: formData.techsFront,
-      techsBack: formData.techsBack,
-      description: formData.description,
-      numberDevsFront: formData.numberDevsFront,
-      numberDevsBack: formData.numberDevsBack,
-      time: formData.time,
-      unitTime: formData.unitTime,
-      deadline: formData.deadline,
+      time_duration: timeDuration,
+      language_frontend: getFrontendApiValue(selectedFrontLabel),
+      language_backend: getBackendApiValue(selectedBackLabel),
     };
 
     try {
-      await createCodeConnect(formPayload);
+      await createCodeConnect(apiPayload); // Changed (sense casts)
       toast.success("Code Connect publicat amb exit");
       navigate("/codeconnect");
     } catch (error) {
@@ -207,12 +279,17 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsFrontCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsFront.includes(item.label);
+
+            const disabled = isFrontendDisabled(item.label);
+            // Changed (selected compara label, no api value)
+            const isSelected = formData.techsFront[0] === item.label;
 
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                  disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
+                } ${
                   isSelected
                     ? "border-3 border-[#B91879] bg-white text-black"
                     : "border-gray-300 bg-white text-black"
@@ -223,7 +300,7 @@ const FormCreate = () => {
                   name="techsFront[]"
                   value={item.label}
                   checked={isSelected}
-                  required
+                  disabled={disabled}
                   onChange={() => handleTechsFrontToggle(item.label)}
                   className="sr-only"
                 />
@@ -240,12 +317,17 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsBackCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsBack.includes(item.label);
+
+            const disabled = isBackendDisabled(item.label);
+            // Changed (selected compara label, no api value)
+            const isSelected = formData.techsBack[0] === item.label;
 
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                  disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
+                } ${
                   isSelected
                     ? "border-3 border-[#B91879] bg-white text-black"
                     : "border-gray-300 bg-white text-black"
@@ -256,7 +338,7 @@ const FormCreate = () => {
                   name="techsBack[]"
                   value={item.label}
                   checked={isSelected}
-                  required
+                  disabled={disabled}
                   onChange={() => handleTechsBackToggle(item.label)}
                   className="sr-only"
                 />

@@ -76,28 +76,28 @@ test("POST includes tag IDs not names", async () => {
   });
 });
 
-vi.mock("../../../assets/sqlVector.svg?react", () => ({
+vi.mock("../../../assets/technologies/sql-logo.svg?react", () => ({
   default: () => <svg data-testid="sql-icon" />,
 }));
-vi.mock("../../../assets/pythonVector.svg?react", () => ({
+vi.mock("../../../assets/technologies/python-logo.svg?react", () => ({
   default: () => <svg data-testid="python-icon" />,
 }));
-vi.mock("../../../assets/javascript.svg?react", () => ({
+vi.mock("../../../asse.svgts/technologies/javascript-logo.svg?react", () => ({
   default: () => <svg data-testid="js-icon" />,
 }));
-vi.mock("../../../assets/logo-java-1.svg?react", () => ({
+vi.mock("../../../assets/technologies/java-logo.svg?react", () => ({
   default: () => <svg data-testid="java-icon" />,
 }));
-vi.mock("../../../assets/logo-php-1.svg?react", () => ({
+vi.mock("../../../assets/technologies/php-logo.svg?react", () => ({
   default: () => <svg data-testid="php-icon" />,
 }));
-vi.mock("../../../assets/angular.svg?react", () => ({
+vi.mock("../../../asse.svgts/technologies/angular-logo.svg?react", () => ({
   default: () => <svg data-testid="angular-icon" />,
 }));
-vi.mock("../../../assets/react.svg?react", () => ({
+vi.mock("../../../assets/technologies/react-logo.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
-vi.mock("../../../assets/logo-node-1.svg?react", () => ({
+vi.mock("../../../asse.svgts/technologies/node-logo.svg?react", () => ({
   default: () => <svg data-testid="node-icon" />,
 }));
 
