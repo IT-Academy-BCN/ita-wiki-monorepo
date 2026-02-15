@@ -19,6 +19,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('code_connect_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('assignee_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('name');
             $table->date('incident_date');
             $table->enum('affected_app', AffectedAppEnum::values());

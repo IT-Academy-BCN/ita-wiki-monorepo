@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 use App\Http\Requests\Tickets\CreateTicketRequest;
 use App\Http\Requests\Tickets\UpdateTicketRequest;
 use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
+use App\Http\Requests\Tickets\UpdatePriorityRequest;
+use App\Http\Requests\Tickets\AssignTicketRequest;
 use Illuminate\Http\JsonResponse;
 
 class TicketController extends Controller{
@@ -46,7 +47,7 @@ class TicketController extends Controller{
 
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->update($request->validated($id));
+        $ticket->update($request->validated());
 
         return response()->json([
             'success' => true,
@@ -79,13 +80,9 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function updatePriority(Request $request, $id): JsonResponse{
+    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
 
         $ticket = Ticket::findOrFail($id);
-
-        $request->validate([
-            'priority' => 'required|in:low,medium,high'
-        ]);
 
         $ticket->update(['priority' => $request->validated()['priority']]);
 
@@ -96,13 +93,9 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function assign(Request $request, $id): JsonResponse{
+    public function assign(AssignTicketRequest $request, $id): JsonResponse{
 
         $ticket = Ticket::findOrFail($id);
-
-        $request->validate([
-            'assignee_id' => 'required|integer|exists:users,id'
-        ]);
 
         $ticket->update(['assignee_id' => $request->validated()['assignee_id']]);
 
