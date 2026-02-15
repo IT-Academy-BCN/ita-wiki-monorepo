@@ -13,11 +13,14 @@ class UpdateTicketRequest extends FormRequest{
 
     public function rules(): array{
         return [
-            'title' => '',
-            'web_application' => '',
-            'type' => '',
-            'feature' => '',
-            'description' => '',
+            'code_connect_id' => 'nullable|integer|exists:code_connects,id',
+            'name' => 'required|string|max:255',
+            'incident_date' => 'required|date',
+            'affected_app' => 'nullable|string|max:255',
+            'type' => 'required|in:bug,feature,task',
+            'affected_function' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+
         ];
     }
 }

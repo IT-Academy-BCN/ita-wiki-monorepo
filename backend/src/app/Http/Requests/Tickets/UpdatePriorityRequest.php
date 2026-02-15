@@ -4,7 +4,7 @@ namespace App\Http\Requests\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTicketStatusRequest extends FormRequest{
+class UpdatePriorityRequest extends FormRequest{
 
     public function authorize(): bool{
 
@@ -12,8 +12,9 @@ class UpdateTicketStatusRequest extends FormRequest{
     }
 
     public function rules(): array{
+
         return [
-            'status' => 'required|in:pending,in_progress,blocked,ready,closed'
+            'priority' => 'required|in:low,medium,high,critical'
         ];
     }
 }

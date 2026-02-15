@@ -32,9 +32,9 @@ class TicketController extends Controller{
     }
 
     public function store(CreateTicketRequest $request): JsonResponse{
-        
+
         $ticket = Ticket::create($request->validated());
-    
+
         return response()->json([
             'success' => true,
             'message' => 'The Ticket has been created correctly',
@@ -45,7 +45,7 @@ class TicketController extends Controller{
     public function update(UpdateTicketRequest $request, $id): JsonResponse{
 
         $ticket = Ticket::findOrFail($id);
-        
+
         $ticket->update($request->validated($id));
 
         return response()->json([
@@ -55,7 +55,7 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function delete($id): JsonResponse{
+    public function destroy($id): JsonResponse{
 
         $ticket = Ticket::findOrFail($id);
 
@@ -75,6 +75,40 @@ class TicketController extends Controller{
         return response()->json([
             'success' => true,
             'message' => 'The Ticket status has been updated correctly',
+            'data' => $ticket
+        ], 200);
+    }
+
+    public function updatePriority(Request $request, $id): JsonResponse{
+
+        $ticket = Ticket::findOrFail($id);
+
+        $request->validate([
+            'priority' => 'required|in:low,medium,high'
+        ]);
+
+        $ticket->update(['priority' => $request->validated()['priority']]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'The Ticket priority has been updated correctly',
+            'data' => $ticket
+        ], 200);
+    }
+
+    public function assign(Request $request, $id): JsonResponse{
+
+        $ticket = Ticket::findOrFail($id);
+
+        $request->validate([
+            'assignee_id' => 'required|integer|exists:users,id'
+        ]);
+
+        $ticket->update(['assignee_id' => $request->validated()['assignee_id']]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'The Ticket has been assigned correctly',
             'data' => $ticket
         ], 200);
     }
