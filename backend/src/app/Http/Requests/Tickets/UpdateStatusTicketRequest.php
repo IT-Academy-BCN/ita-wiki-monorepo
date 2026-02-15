@@ -4,7 +4,7 @@ namespace App\Http\Requests\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTicketStatusRequest extends FormRequest{
+class UpdateStatusTicketRequest extends FormRequest{
 
     public function authorize(): bool{
 

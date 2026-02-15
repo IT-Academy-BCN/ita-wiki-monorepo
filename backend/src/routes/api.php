@@ -136,6 +136,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])
         ->name('tickets.priority.update');
 
+    Route::patch('tickets/{ticket}/assign', [TicketController::class, 'assign'])
+        ->name('tickets.assign');
+
     Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])
         ->name('tickets.comments.index');
 

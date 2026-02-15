@@ -13,14 +13,16 @@ class CreateTicketRequest extends FormRequest{
     public function rules(): array{
 
         return [
-            'code_connect_id' => 'nullable|integer|exists:code_connects,id',
+            'code_connect_id' => 'required|integer|exists:users,id',
+            'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'incident_date' => 'required|date',
-            'affected_app' => 'nullable|string|max:255',
-            'type' => 'required|in:bug,feature,task',
-            'affected_function' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-
+            'affected_app' => 'required|in:wiki_frontend,wiki_backend,code_connect,other',
+            'type' => 'required|in:error,suggestion',
+            'affected_function' => 'required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
+            'description' => 'required|string',
+            'priority' => 'nullable|in:low,medium,high,critical',
+            'status' => 'nullable|in:pending,in_progress,blocked,ready,closed',
         ];
     }
 }

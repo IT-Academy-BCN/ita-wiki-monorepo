@@ -12,9 +12,9 @@ use Illuminate\Http\JsonResponse;
 
 class TicketController extends Controller{
 
-    public function index(){
+    public function index(): JsonResponse{
 
-        $tickets = Ticket::all();
+        $tickets = Ticket::with(['codeConnect', 'assignee', 'closedBy'])->get();
 
         return response()->json([
             'success' => true,
@@ -24,7 +24,7 @@ class TicketController extends Controller{
 
     public function show($id): JsonResponse{
 
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -40,7 +40,7 @@ class TicketController extends Controller{
             'success' => true,
             'message' => 'The Ticket has been created correctly',
             'data' => $ticket
-        ], 200);
+        ], 201);
     }
 
     public function update(UpdateTicketRequest $request, $id): JsonResponse{
@@ -68,15 +68,25 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
+public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->update(['status' => $request->validated()['status']]);
+        $status = $request->validated()['status'];
+
+        $ticket->update(['status' => $status]);
+
+        // Si se cierra el ticket, almacenar quién y cuándo
+        if ($status === 'closed') {
+            $ticket->update([
+                'closed_by' => auth()->id(),
+                'closed_at' => now()
+            ]);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'The Ticket status has been updated correctly',
-            'data' => $ticket
+            'data' => $ticket->fresh()
         ], 200);
     }
 
