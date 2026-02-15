@@ -21,8 +21,6 @@ class CreateTicketRequest extends FormRequest{
             'type' => 'required|in:error,suggestion',
             'affected_function' => 'required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
-            'priority' => 'nullable|in:low,medium,high,critical',
-            'status' => 'nullable|in:pending,in_progress,blocked,ready,closed',
         ];
     }
 }

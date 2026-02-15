@@ -26,11 +26,21 @@ class TicketCommentController
     {
         $ticket = Ticket::findOrFail($ticketId);
 
+        $isClosingComment = $request->validated()['is_closing_comment'] ?? false;
+
         $comment = $ticket->comments()->create([
             'user_id' => $request->user()->id,
             'comment' => $request->validated()['comment'],
-            'is_closing_comment' => $request->validated()['is_closing_comment'] ?? false
+            'is_closing_comment' => $isClosingComment
         ]);
+
+        if ($isClosingComment) {
+            $ticket->update([
+                'status' => 'closed',
+                'closed_by' => $request->user()->id,
+                'closed_at' => now()
+            ]);
+        }
 
         $comment->load('user');
 
@@ -48,12 +58,19 @@ class TicketCommentController
             ->where('id', $commentId)
             ->firstOrFail();
 
+        if ($comment->user_id !== $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this comment'
+            ], 403);
+        }
+
         $comment->update($request->validated());
 
         return response()->json([
             'success' => true,
             'message' => 'Comment updated successfully',
-            'data' => $comment
+            'data' => $comment->fresh(['user'])
         ], 200);
     }
 
@@ -63,6 +80,13 @@ class TicketCommentController
         $comment = TicketComment::where('ticket_id', $ticket->id)
             ->where('id', $commentId)
             ->firstOrFail();
+
+        if ($comment->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this comment'
+            ], 403);
+        }
 
         $comment->delete();
 

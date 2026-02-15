@@ -14,7 +14,7 @@ class CreateCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'comment' => 'required|string',
+            'comment' => 'required|string|max:2000',
             'is_closing_comment' => 'sometimes|boolean'
         ];
     }

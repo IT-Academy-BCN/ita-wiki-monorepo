@@ -52,7 +52,7 @@ class TicketController extends Controller{
         return response()->json([
             'success' => true,
             'message' => 'The Ticket has been updated correctly',
-            'data' => $ticket
+            'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
 
@@ -68,25 +68,25 @@ class TicketController extends Controller{
         ], 200);
     }
 
-public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
+    public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
+
         $ticket = Ticket::findOrFail($id);
 
         $status = $request->validated()['status'];
 
-        $ticket->update(['status' => $status]);
+        $updateData = ['status' => $status];
 
-        // Si se cierra el ticket, almacenar quién y cuándo
         if ($status === 'closed') {
-            $ticket->update([
-                'closed_by' => auth()->id(),
-                'closed_at' => now()
-            ]);
+            $updateData['closed_by'] = auth()->id();
+            $updateData['closed_at'] = now();
         }
+
+        $ticket->update($updateData);
 
         return response()->json([
             'success' => true,
             'message' => 'The Ticket status has been updated correctly',
-            'data' => $ticket->fresh()
+            'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
 
@@ -99,7 +99,7 @@ public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonRespo
         return response()->json([
             'success' => true,
             'message' => 'The Ticket priority has been updated correctly',
-            'data' => $ticket
+            'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
 
@@ -112,7 +112,7 @@ public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonRespo
         return response()->json([
             'success' => true,
             'message' => 'The Ticket has been assigned correctly',
-            'data' => $ticket
+            'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
 }
