@@ -5,7 +5,9 @@ import ResourceCardBody from "../ResourceCardBody";
 import { Tag } from "../../../types";
 
 vi.mock("../../resources/ContentTypeBadge", () => ({
-  default: ({ type }: { type: string }) => <div data-testid="type-badge">{type}</div>,
+  default: ({ type }: { type: string }) => (
+    <div data-testid="type-badge">{type}</div>
+  ),
 }));
 
 vi.mock("lucide-react", () => ({
@@ -17,7 +19,6 @@ vi.mock("../../../assets/heart.svg", () => ({
 }));
 
 describe("ResourceCardBody", () => {
-  
   it("renders correctly with string tags", () => {
     render(
       <ResourceCardBody
@@ -25,7 +26,7 @@ describe("ResourceCardBody", () => {
         type="Blog"
         likeCount={42}
         formattedDate="10 Oct 2023"
-      />
+      />,
     );
 
     expect(screen.getByText("React")).toBeInTheDocument();
@@ -33,7 +34,7 @@ describe("ResourceCardBody", () => {
 
     expect(screen.getByText("42")).toBeInTheDocument();
     expect(screen.getByText("10 Oct 2023")).toBeInTheDocument();
-    
+
     expect(screen.getByTestId("type-badge")).toHaveTextContent("Blog");
   });
 
@@ -48,22 +49,17 @@ describe("ResourceCardBody", () => {
         type="Video"
         likeCount={0}
         formattedDate="01 Jan 2024"
-      />
+      />,
     );
 
     expect(screen.getByText("Advanced")).toBeInTheDocument();
   });
 
   it("renders correctly without tags", () => {
-    render(
-      <ResourceCardBody
-        type="Cursos"
-        formattedDate="Now"
-      />
-    );
+    render(<ResourceCardBody type="Cursos" formattedDate="Now" />);
 
     expect(screen.getByText("Now")).toBeInTheDocument();
-    
+
     expect(screen.getByTestId("type-badge")).toHaveTextContent("Cursos");
   });
 });

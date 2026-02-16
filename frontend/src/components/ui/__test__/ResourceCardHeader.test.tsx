@@ -22,11 +22,10 @@ const mockUser: IntUser = {
   email: "test@test.com",
   password: "password123",
   role: "student",
-  photoURL: "https://via.placeholder.com/150"
+  photoURL: "https://via.placeholder.com/150",
 };
 
 describe("ResourceCardHeader", () => {
-
   it("renders correctly and handles click when user has permission", () => {
     const handleBookmarkClick = vi.fn();
 
@@ -38,7 +37,7 @@ describe("ResourceCardHeader", () => {
         isBookmarked={false}
         handleBookmarkClick={handleBookmarkClick}
         hasBookmarkPermission={true}
-      />
+      />,
     );
 
     expect(screen.getByText("My Resource Title")).toBeInTheDocument();
@@ -49,7 +48,7 @@ describe("ResourceCardHeader", () => {
     const bookmarkButton = screen.getByTestId("bookmark-icon").parentElement!;
     fireEvent.click(bookmarkButton);
     expect(handleBookmarkClick).toHaveBeenCalledTimes(1);
-    
+
     expect(bookmarkButton).toHaveClass("cursor-pointer");
   });
 
@@ -62,14 +61,17 @@ describe("ResourceCardHeader", () => {
         isBookmarked={false}
         handleBookmarkClick={() => {}}
         hasBookmarkPermission={false}
-      />
+      />,
     );
 
     const bookmarkButton = screen.getByTestId("bookmark-icon").parentElement!;
-    
+
     expect(bookmarkButton).toHaveClass("cursor-not-allowed");
-    
-    expect(bookmarkButton).toHaveAttribute("title", expect.stringContaining("No tens permisos"));
+
+    expect(bookmarkButton).toHaveAttribute(
+      "title",
+      expect.stringContaining("No tens permisos"),
+    );
   });
 
   it("shows login message when no user is present", () => {
@@ -81,11 +83,14 @@ describe("ResourceCardHeader", () => {
         isBookmarked={false}
         handleBookmarkClick={() => {}}
         hasBookmarkPermission={false}
-      />
+      />,
     );
 
     const bookmarkButton = screen.getByTestId("bookmark-icon").parentElement!;
 
-    expect(bookmarkButton).toHaveAttribute("title", "Inicia sessió per desar recursos");
+    expect(bookmarkButton).toHaveAttribute(
+      "title",
+      "Inicia sessió per desar recursos",
+    );
   });
 });
