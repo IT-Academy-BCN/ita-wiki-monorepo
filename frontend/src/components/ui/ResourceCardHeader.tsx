@@ -2,7 +2,7 @@ import BookmarkIconComponent from "../resources/BookmarkIconComponent";
 import { displayLanguageIcon } from "../../utils/iconUtils";
 import type { Category, IntUser } from "../../types";
 
-interface ResourceCardHeaderProps {
+export interface ResourceCardHeaderProps {
   user: IntUser | null;
   category: Category;
   title: string;
@@ -36,6 +36,7 @@ const ResourceCardHeader = ({
 
         <div
           onClick={handleBookmarkClick}
+          data-testid="bookmark-button"
           className={`${hasBookmarkPermission ? "cursor-pointer" : "cursor-not-allowed opacity-70"} text-gray-400 hover:text-gray-600 transition-colors`}
           title={
             !user

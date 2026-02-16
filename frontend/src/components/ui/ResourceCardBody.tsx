@@ -3,7 +3,7 @@ import { Calendar } from "lucide-react";
 import heartIcon from "../../assets/heart.svg";
 import type { Tag, ResourceType } from "../../types";
 
-interface ResourceCardBodyProps {
+export interface ResourceCardBodyProps {
   tags?: string[] | Tag[];
   type: ResourceType;
   likeCount?: number;

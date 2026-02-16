@@ -17,6 +17,7 @@ const ResourceCard = ({
   isBookmarked,
   toggleBookmark,
 }: ResourceCardProps) => {
+  
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const { title, type, category, created_at, tags, like_count } = resource;
