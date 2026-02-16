@@ -99,7 +99,7 @@ export const ResourcesList: FC<ResourcesListProps> = ({
           </div>
         </div>
       ) : (
-        <ul className="flex gap-4 py-4">
+        <ul className="flex flex-col gap-4 py-4">
           {visibleResources.map((resource: IntResource) => (
             <ResourceCard
               key={resource.id}
