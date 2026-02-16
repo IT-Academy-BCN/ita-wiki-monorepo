@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ResourceCardHeader from "../ui/ResourceCardHeader";
-import ResourceCardBody from "../ui/ResourceCardBody";
+import ResourceCardHeader from "./ResourceCardHeader";
+import ResourceCardBody from "./ResourceCardBody";
 import { IntResource } from "../../types";
 import { useUserContext } from "../../context/UserContext";
 import { canBookmark } from "../../data/permission/tempRolesPremission";
-import GenericModal from "../ui/Modal/GenericModal";
+import GenericModal from "./Modal/GenericModal";
 
 interface ResourceCardProps {
   resource: IntResource;

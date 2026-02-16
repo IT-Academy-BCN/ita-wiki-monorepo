@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { IntResource } from "../../types";
-import ResourceCard from "./ResourceCard";
+import ResourceCard from "../ui/ResourceCard";
 
 import { useResources } from "../../context/ResourcesContext";
 

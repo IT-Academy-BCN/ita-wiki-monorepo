@@ -5,7 +5,7 @@ import { useResourceFilter } from "../../hooks/useResourceFilter";
 import { useResourceSort } from "../../hooks/useResourceSort";
 import { useResources } from "../../context/ResourcesContext";
 import { useResourcesFilters } from "../../context/ResourcesFiltersContext";
-import ResourceCard from "./ResourceCard";
+import ResourceCard from "../ui/ResourceCard";
 import ResourceCardSkeleton from "./ResourcesSkeleton";
 import SortButton from "./SortButton";
 import { useMinLoading } from "../../hooks/useMinLoading";
