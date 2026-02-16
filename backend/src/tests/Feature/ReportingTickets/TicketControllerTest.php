@@ -3,7 +3,7 @@
 namespace Tests\Feature\ReportingTickets;
 use App\Models\Ticket;
 use App\Models\User;
-
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,6 +15,7 @@ class TicketControllerTest extends TestCase{
     public function an_auth_user_can_create_a_ticket(): void{
 
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $response = $this->actingAs($user)->postJson('/api/tickets', [
             'code_connect_id' => $user->id,
@@ -69,10 +70,12 @@ class TicketControllerTest extends TestCase{
     public function an_auth_user_can_view_a_ticket(): void{
 
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create();
 
-        $response = $this->actingAs($user)->getJson("/api/tickets/{$ticket->id}");
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
 
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
@@ -103,8 +106,10 @@ class TicketControllerTest extends TestCase{
     public function an_auth_user_can_update_a_ticket(): void{
 
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create([
+
             'name' => 'Old Name',
             'affected_app' => 'wiki_frontend',
             'type' => 'error',
@@ -112,6 +117,7 @@ class TicketControllerTest extends TestCase{
             'description' => 'Old description.',
         ]);
         
+
 
         $response = $this->actingAs($user)->putJson("/api/tickets/{$ticket->id}", [
             'name' => 'Updated Name',
@@ -166,10 +172,11 @@ class TicketControllerTest extends TestCase{
     public function an_auth_user_can_delete_a_ticket(): void{
 
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create();
 
-        $response = $this->actingAs($user)->deleteJson("/api/tickets/{$ticket->id}");
+        $response = $this->deleteJson("/api/tickets/{$ticket->id}");
 
         $response->assertStatus(200);
 
@@ -192,6 +199,8 @@ class TicketControllerTest extends TestCase{
     public function a_ticket_required_fields(): void{
 
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
 
         $response = $this->actingAs($user)->postJson('/api/tickets', []);
 
@@ -203,8 +212,8 @@ class TicketControllerTest extends TestCase{
             'type',
             'affected_function',
             'description',
-        ]);
-
+        ]);  
+        
     }
 
 }
