@@ -24,15 +24,15 @@ class TicketFactory extends Factory
     {
         return [
             'code_connect_id' => User::factory(),
-            'name' => fake()->sentence(4),
+            'name' => fake()->sentence(3),
             'incident_date' => fake()->date(),
-            'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
-            'type' => fake()->randomElement(TicketTypeEnum::values()),
-            'status' => TicketStatusEnum::Pending->value,
-            'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
+            'affected_app' => fake()->randomElement(['wiki_frontend', 'wiki_backend', 'code_connect', 'other']),
+            'type' => fake()->randomElement(['error', 'suggestion']),
+            'affected_function' => fake()->randomElement(['login', 'challenges', 'resources', 'profile', 'technical_tests', 'code_connect', 'other']),
             'description' => fake()->paragraph(),
-            'priority' => fake()->randomElement(TicketPriorityEnum::values()),
-            
+            'status' => 'pending',
+            'priority' => fake()->randomElement(['low', 'medium', 'high', 'critical']),
         ];
+        
     }
 }

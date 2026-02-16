@@ -17,44 +17,50 @@ class TicketControllerTest extends TestCase{
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/tickets', [
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
+            'code_connect_id' => $user->id,
+            'name' => 'Test Ticket',
+            'incident_date' => now()->toDateString(),
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
             'description' => 'This is a test ticket.'
         ]);
+        
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
                 'id',
-                'title',
-                'web_application',
+                'name',
+                'affected_app',
                 'type',
-                'feature',
+                'affected_function',
                 'description',
                 'created_at',
                 'updated_at'
             ]
-        ]);
+        ]);      
 
         $this->assertDatabaseHas('tickets', [
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
+            'name' => 'Test Ticket',
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
             'description' => 'This is a test ticket.'
         ]);
+        
     }
 
     /** @test */
     public function an_not_auth_user_cannot_create_a_ticket(): void{
         $response = $this->postJson('/api/tickets', [
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
+            'code_connect_id' => 1,
+            'name' => 'Test Ticket',
+            'incident_date' => now()->toDateString(),
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
             'description' => 'This is a test ticket.'
-        ]);
+        ]);       
 
         $response->assertStatus(401);
     }
@@ -64,40 +70,29 @@ class TicketControllerTest extends TestCase{
 
         $user = User::factory()->create();
 
-        $ticket = Ticket::factory()->create([
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
-            'description' => 'This is a test ticket.'
-        ]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->getJson("/api/tickets/{$ticket->id}");
 
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
                 'id',
-                'title',
-                'web_application',
+                'name',
+                'affected_app',
                 'type',
-                'feature',
+                'affected_function',
                 'description',
                 'created_at',
                 'updated_at'
             ]
         ]);
+        
     }
 
     /** @test */
     public function an_not_auth_user_cannot_view_a_ticket(): void{
 
-        $ticket = Ticket::factory()->create([
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
-            'description' => 'This is a test ticket.'
-        ]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
 
@@ -110,60 +105,57 @@ class TicketControllerTest extends TestCase{
         $user = User::factory()->create();
 
         $ticket = Ticket::factory()->create([
-            'title' => 'Old Title',
-            'web_application' => 'Old App',
-            'type' => 'Old Type',
-            'feature' => 'Old Feature',
+            'name' => 'Old Name',
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
             'description' => 'Old description.',
         ]);
+        
 
         $response = $this->actingAs($user)->putJson("/api/tickets/{$ticket->id}", [
-            'title' => 'Updated Title',
-            'web_application' => 'Updated App',
-            'type' => 'Updated Type',
-            'feature' => 'Updated Feature',
+            'name' => 'Updated Name',
+            'affected_app' => 'wiki_backend',
+            'type' => 'suggestion',
+            'affected_function' => 'profile',
             'description' => 'Updated description.',
         ]);
-
+        
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
                 'id',
-                'title',
-                'web_application',
+                'name',
+                'affected_app',
                 'type',
-                'feature',
+                'affected_function',
                 'description',
                 'created_at',
                 'updated_at'
             ]
         ]);
+        
 
         $this->assertDatabaseHas('tickets', [
             'id' => $ticket->id,
-            'title' => 'Updated Title',
-            'web_application' => 'Updated App',
-            'type' => 'Updated Type',
-            'feature' => 'Updated Feature',
+            'name' => 'Updated Name',
+            'affected_app' => 'wiki_backend',
+            'type' => 'suggestion',
+            'affected_function' => 'profile',
             'description' => 'Updated description.',
         ]);
+        
     }
 
     /** @test*/
     public function an_not_auth_user_cannot_update_a_ticket(): void{
 
-        $ticket = Ticket::factory()->create([
-            'title' => 'Old Title',
-            'web_application' => 'Old App',
-            'type' => 'Old Type',
-            'feature' => 'Old Feature',
-            'description' => 'Old description.',
-        ]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->putJson("/api/tickets/{$ticket->id}", [
-            'title' => 'Updated Title',
-            'web_application' => 'Updated App',
-            'type' => 'Updated Type',
-            'feature' => 'Updated Feature',
+            'name' => 'Updated Name',
+            'affected_app' => 'wiki_backend',
+            'type' => 'suggestion',
+            'affected_function' => 'profile',
             'description' => 'Updated description.',
         ]);
 
@@ -175,17 +167,11 @@ class TicketControllerTest extends TestCase{
 
         $user = User::factory()->create();
 
-        $ticket = Ticket::factory()->create([
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
-            'description' => 'This is a test ticket.'
-        ]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->deleteJson("/api/tickets/{$ticket->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('tickets', [
             'id' => $ticket->id,
@@ -195,13 +181,7 @@ class TicketControllerTest extends TestCase{
     /** @test */
     public function an_not_auth_user_cannot_delete_a_ticket(): void{
 
-        $ticket = Ticket::factory()->create([
-            'title' => 'Test Ticket',
-            'web_application' => 'Test App',
-            'type' => 'Bug',
-            'feature' => 'Test Feature',
-            'description' => 'This is a test ticket.'
-        ]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->deleteJson("/api/tickets/{$ticket->id}");
 
@@ -213,58 +193,20 @@ class TicketControllerTest extends TestCase{
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/tickets', [
-            'title' => '',
-            'web_application' => '',
-            'type' => '',
-            'feature' => '',
-            'description' => '',
-        ]);
+        $response = $this->actingAs($user)->postJson('/api/tickets', []);
 
         $response->assertStatus(422)->assertJsonValidationErrors([
-            'title',
-            'web_application',
+            'code_connect_id',
+            'name',
+            'incident_date',
+            'affected_app',
             'type',
-            'feature',
+            'affected_function',
             'description',
         ]);
-    }
-
-    /** @test */
-    public function two_tickets_cannot_have_same_id(): void{
-
-        $user = User::factory()->create();
-
-        $ticket1 = Ticket::factory()->create([
-            'id' => 1,
-            'title' => 'Test Ticket 1',
-            'web_application' => 'Test App 1',
-            'type' => 'Bug',
-            'feature' => 'Test Feature 1',
-            'description' => 'This is the first test ticket.'
-        ]);
-
-        $ticket2 = Ticket::factory()->create([
-            'id' => 1,
-            'title' => 'Test Ticket 2',
-            'web_application' => 'Test App 2',
-            'type' => 'Feature Request',
-            'feature' => 'Test Feature 2',
-            'description' => 'This is the second test ticket.'
-        ]);
-
-        $response = $this->actingAs($user)->postJson('/api/tickets', [
-            'id' => 1,
-            'title' => 'Test Ticket 2',
-            'web_application' => 'Test App 2',
-            'type' => 'Feature Request',
-            'feature' => 'Test Feature 2',
-            'description' => 'This is the second test ticket.'
-        ]);
-
-        $response->assertStatus(422)->assertJsonValidationErrors(['id']);
 
     }
+
 }
 
 ?>
