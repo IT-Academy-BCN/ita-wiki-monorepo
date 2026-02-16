@@ -1,4 +1,3 @@
-
 import ContentTypeBadge from "../resources/ContentTypeBadge";
 import { Calendar } from "lucide-react";
 import heartIcon from "../../assets/heart.svg";
@@ -15,7 +14,7 @@ const ResourceCardBody = ({
   tags,
   type,
   likeCount,
-  formattedDate
+  formattedDate,
 }: ResourceCardBodyProps) => {
   return (
     <div>
@@ -50,9 +49,9 @@ const ResourceCardBody = ({
           <Calendar size={18} className="text-gray-400" />
           {formattedDate}
         </div>
-      </div>   
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default ResourceCardBody
+export default ResourceCardBody;

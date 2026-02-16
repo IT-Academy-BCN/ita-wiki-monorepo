@@ -17,8 +17,7 @@ const ResourceCard = ({
   isBookmarked,
   toggleBookmark,
 }: ResourceCardProps) => {
-
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const { title, type, category, created_at, tags, like_count } = resource;
 
@@ -64,7 +63,7 @@ const ResourceCard = ({
         likeCount={like_count}
         formattedDate={formattedDate}
       />
-      
+
       <GenericModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}

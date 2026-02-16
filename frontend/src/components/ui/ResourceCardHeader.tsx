@@ -17,14 +17,13 @@ const ResourceCardHeader = ({
   title,
   isBookmarked,
   handleBookmarkClick,
-  hasBookmarkPermission
-}: ResourceCardHeaderProps)  => {
-
+  hasBookmarkPermission,
+}: ResourceCardHeaderProps) => {
   const categoryIcon: string = displayLanguageIcon(category);
 
   return (
     <div>
-        <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start">
         <div className="flex gap-2">
           {categoryIcon && (
             <img
@@ -52,9 +51,9 @@ const ResourceCardHeader = ({
 
       <div className="text-xl font-bold text-gray-900 leading-tight">
         {title}
-      </div>    
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default ResourceCardHeader
+export default ResourceCardHeader;
