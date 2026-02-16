@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { ResourcesList } from "../ResourcesList";
 import { IntResource } from "../../../types";
+import { useMinLoading } from "../../../hooks/useMinLoading";
 
 vi.mock("react-router", () => ({
   useSearchParams: () => [new URLSearchParams(), vi.fn()],
@@ -37,7 +38,7 @@ vi.mock("../../../hooks/useResourceSort", () => ({
 }));
 
 vi.mock("../../../hooks/useMinLoading", () => ({
-  useMinLoading: () => false,
+  useMinLoading: vi.fn(() => false),
 }));
 
 vi.mock("../../ui/ResourceCard", () => ({
@@ -89,5 +90,39 @@ describe("ResourcesList", () => {
     render(<ResourcesList resources={[]} category="all" />);
 
     expect(screen.getByText("No hi ha recursos")).toBeInTheDocument();
+  });
+
+  it("displays 6 skeletons when showLoader is true", () => {
+    vi.mocked(useMinLoading).mockReturnValue(true);
+
+    render(<ResourcesList resources={mockResources} category="all" />);
+    const skeletons = screen.getAllByTestId("resource-card-skeleton");
+
+    expect(skeletons).toHaveLength(6);
+    expect(screen.queryByTestId("resource-card")).not.toBeInTheDocument();
+  });
+
+  it("should hide skeletons and show resources after loading is finished", () => {
+    const useMinLoadingMock = vi.mocked(useMinLoading);
+    useMinLoadingMock.mockReturnValue(true);
+
+    const { rerender } = render(
+      <ResourcesList resources={mockResources} category="all" />,
+    );
+
+    expect(screen.getAllByTestId("resource-card-skeleton")).toHaveLength(6);
+    expect(screen.queryByTestId("resource-card")).not.toBeInTheDocument();
+
+    useMinLoadingMock.mockReturnValue(false);
+
+    rerender(<ResourcesList resources={mockResources} category="all" />);
+
+    expect(
+      screen.queryByTestId("resource-card-skeleton"),
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByTestId("resource-card")).toHaveLength(
+      mockResources.length,
+    );
+    expect(screen.getByText("React Guide")).toBeInTheDocument();
   });
 });
