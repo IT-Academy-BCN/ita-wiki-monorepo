@@ -5,7 +5,7 @@ import { useResourceFilter } from "../../hooks/useResourceFilter";
 import { useResourceSort } from "../../hooks/useResourceSort";
 import { useResources } from "../../context/ResourcesContext";
 import { useResourcesFilters } from "../../context/ResourcesFiltersContext";
-import ResourceCard from "../ui/ResourceCard";
+import ResourceCard from "./ResourceCard";
 import ResourceCardSkeleton from "./ResourcesSkeleton";
 import SortButton from "./SortButton";
 import { useMinLoading } from "../../hooks/useMinLoading";
@@ -99,7 +99,7 @@ export const ResourcesList: FC<ResourcesListProps> = ({
           </div>
         </div>
       ) : (
-        <ul className="flex flex-col gap-4 py-4">
+        <ul className="flex gap-4 py-4">
           {visibleResources.map((resource: IntResource) => (
             <ResourceCard
               key={resource.id}

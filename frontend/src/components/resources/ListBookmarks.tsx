@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { IntResource } from "../../types";
-import ResourceCard from "../ui/ResourceCard";
+import ResourceCard from "./ResourceCard";
 
 interface ListBookmarksProps {
   bookmarkedResources: IntResource[];

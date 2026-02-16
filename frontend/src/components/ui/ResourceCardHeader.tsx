@@ -20,7 +20,7 @@ const ResourceCardHeader = ({
   hasBookmarkPermission
 }: ResourceCardHeaderProps)  => {
 
-    const categoryIcon: string = displayLanguageIcon(category);
+  const categoryIcon: string = displayLanguageIcon(category);
 
   return (
     <div>
