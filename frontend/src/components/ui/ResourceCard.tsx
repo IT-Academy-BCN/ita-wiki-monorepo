@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Calendar } from "lucide-react";
+import ResourceCardHeader from "./ResourceCardHeader";
 import { IntResource } from "../../types";
 import { useUserContext } from "../../context/UserContext";
-import BookmarkIconComponent from "../resources/BookmarkIconComponent";
 import { canBookmark } from "../../data/permission/tempRolesPremission";
 import GenericModal from "./Modal/GenericModal";
 import ContentTypeBadge from "../resources/ContentTypeBadge";
-import { displayLanguageIcon } from "../../utils/iconUtils";
 import heartIcon from "../../assets/heart.svg";
 
 interface ResourceCardProps {
@@ -20,15 +19,14 @@ const ResourceCard = ({
   isBookmarked,
   toggleBookmark,
 }: ResourceCardProps) => {
+
   const [showModal, setShowModal] = useState(false);
 
   const { title, type, category, created_at, tags, like_count } = resource;
 
   const { user } = useUserContext();
 
-  const categoryIcon: string = displayLanguageIcon(category);
-
-  const hasBookmarkPermission = user && canBookmark(user.role);
+  const hasBookmarkPermission: boolean | null = user && canBookmark(user.role);
 
   const handleBookmarkClick = () => {
     if (!user || !canBookmark(user.role)) {
@@ -54,36 +52,14 @@ const ResourceCard = ({
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 max-w-sm">
-      <div className="flex justify-between items-start">
-        <div className="flex gap-2">
-          {categoryIcon && (
-            <img
-              src={categoryIcon}
-              alt={`Icona de ${category}`}
-              className="w-7 h-7 object-contain"
-            />
-          )}
-        </div>
-
-        <div
-          onClick={handleBookmarkClick}
-          className={`${hasBookmarkPermission ? "cursor-pointer" : "cursor-not-allowed opacity-70"} text-gray-400 hover:text-gray-600 transition-colors`}
-          title={
-            !user
-              ? "Inicia sessió per desar recursos"
-              : !hasBookmarkPermission
-                ? "No tens permisos per desar recursos. Contacta amb un admin."
-                : undefined
-          }
-        >
-          <BookmarkIconComponent marked={isBookmarked} />
-        </div>
-      </div>
-
-      <div className="text-xl font-bold text-gray-900 leading-tight">
-        {title}
-      </div>
-
+      <ResourceCardHeader
+        user={user}
+        category={category}
+        title={title}
+        isBookmarked={isBookmarked}
+        handleBookmarkClick={handleBookmarkClick}
+        hasBookmarkPermission={hasBookmarkPermission}
+      />
       {tags && (
         <div className="flex flex-wrap gap-2">
           {tags.map((tag, index) => (
