@@ -4,12 +4,14 @@ import {
   CodeConnectError,
   fetchCodeConnectProject,
 } from "./endPointCodeConnect";
+import type { CreateCodeConnectPayload } from "../types/CodeConnectProject";
 
 vi.mock("../config", () => ({
   API_URL: "https://localhost:8000",
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
+      get: "/codeconnect",
     },
   },
 }));
@@ -33,13 +35,11 @@ describe("createCodeConnect", () => {
       status: "success",
     };
 
-    const mockNewCodeConnect = {
+    const mockNewCodeConnect: CreateCodeConnectPayload = {
       title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
+      time_duration: "2 months",
+      language_backend: "PHP",
+      language_frontend: "React",
     };
 
     mockFetch.mockResolvedValueOnce({
@@ -55,7 +55,10 @@ describe("createCodeConnect", () => {
       "https://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        }),
         body: JSON.stringify(mockNewCodeConnect),
         signal: undefined,
       }),
@@ -77,13 +80,11 @@ describe("createCodeConnect", () => {
       json: async () => mockErrorData,
     });
 
-    const mockNewCodeConnect = {
+    const mockNewCodeConnect: CreateCodeConnectPayload = {
       title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
+      time_duration: "2 months",
+      language_backend: "PHP",
+      language_frontend: "React",
     };
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
@@ -97,13 +98,12 @@ describe("createCodeConnect", () => {
 
   it("should throw an error on network failure", async () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
-    const mockNewCodeConnect = {
+
+    const mockNewCodeConnect: CreateCodeConnectPayload = {
       title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
+      time_duration: "2 months",
+      language_backend: "PHP",
+      language_frontend: "React",
     };
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({

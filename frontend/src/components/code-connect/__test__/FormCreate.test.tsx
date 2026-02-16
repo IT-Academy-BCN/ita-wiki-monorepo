@@ -37,7 +37,7 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const titleInput = screen.getByRole("textbox", {
     name: /títol/i,
   }) as HTMLInputElement;
-  await user.type(titleInput, "Test Project");
+  await user.type(titleInput, "Test");
 
   const descriptionTextarea = screen.getByRole("textbox", {
     name: /descripció/i,
@@ -77,7 +77,7 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.keyboard("2");
 
   await waitFor(() => {
-    expect(titleInput.value).toBe("Test Project");
+    expect(titleInput.value).toBe("Test");
     expect(descriptionTextarea.value).toBe("Test description");
     expect(devsFrontInput.value).toBe("2");
     expect(devsBackInput.value).toBe("2");
@@ -122,7 +122,7 @@ describe("FormCreateCodeConnect", () => {
 
       mockCreateCodeConnect.mockResolvedValueOnce({
         id: "123",
-        title: "Test Project",
+        title: "Test",
         techsFront: ["React"],
         techsBack: ["Node"],
         description: "Test description",
@@ -203,8 +203,8 @@ describe("FormCreateCodeConnect", () => {
         name: /títol/i,
       }) as HTMLInputElement;
 
-      const longTitle = "a".repeat(70);
-      await user.type(titleInput, longTitle);
+      await user.click(titleInput);
+      await user.paste("a".repeat(70));
 
       expect(titleInput.value.length).toBe(65);
     });

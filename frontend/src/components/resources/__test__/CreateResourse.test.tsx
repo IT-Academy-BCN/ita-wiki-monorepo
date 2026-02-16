@@ -82,7 +82,7 @@ vi.mock("../../../assets/technologies/sql-logo.svg?react", () => ({
 vi.mock("../../../assets/technologies/python-logo.svg?react", () => ({
   default: () => <svg data-testid="python-icon" />,
 }));
-vi.mock("../../../asse.svgts/technologies/javascript-logo.svg?react", () => ({
+vi.mock("../../../assets/technologies/javascript-logo.svg?react", () => ({
   default: () => <svg data-testid="js-icon" />,
 }));
 vi.mock("../../../assets/technologies/java-logo.svg?react", () => ({
@@ -91,17 +91,28 @@ vi.mock("../../../assets/technologies/java-logo.svg?react", () => ({
 vi.mock("../../../assets/technologies/php-logo.svg?react", () => ({
   default: () => <svg data-testid="php-icon" />,
 }));
-vi.mock("../../../asse.svgts/technologies/angular-logo.svg?react", () => ({
+vi.mock("../../../assets/technologies/angular-logo.svg?react", () => ({
   default: () => <svg data-testid="angular-icon" />,
 }));
 vi.mock("../../../assets/technologies/react-logo.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
-vi.mock("../../../asse.svgts/technologies/node-logo.svg?react", () => ({
+vi.mock("../../../assets/technologies/node-logo.svg?react", () => ({
   default: () => <svg data-testid="node-icon" />,
 }));
 
-test("renders all technology icons as SVG elements", () => {
+test("renders all technology icons as SVG elements", async () => {
+  const angularModule = await import(
+    "../../../assets/technologies/angular-logo.svg?react"
+  );
+
+  const nodeModule = await import(
+    "../../../assets/technologies/node-logo.svg?react"
+  );
+
+  expect(angularModule.default).toBeTypeOf("function");
+  expect(nodeModule.default).toBeTypeOf("function");
+
   render(
     <UserProvider>
       <MemoryRouter>

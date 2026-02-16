@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router";
 import CalendarIcon from "../../assets/Calendar.svg";
-import JSIcon from "../../asse.svgts/technologies/javascript-logo.svg";
+import JSIcon from "../../assets/technologies/javascript-logo.svg";
 import PageTitle from "../ui/PageTitle";
 import Container from "../ui/Container";
 import { ArrowLeftIcon } from "lucide-react";
