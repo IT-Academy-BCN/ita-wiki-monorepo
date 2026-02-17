@@ -184,7 +184,7 @@ class ForumQuestionController extends Controller
      *     path="/api/codeconnect/{listProject}/forum/{question}",
      *     summary="Update a forum question",
      *     tags={"Forum"},
-     *     description="Updates a forum question. Only the author or the project owner can update it. Requires authentication (Sanctum).",
+     *     description="Updates a forum question. Only the author can update it. Requires authentication (Sanctum).",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
      *         name="listProject",
@@ -255,7 +255,7 @@ class ForumQuestionController extends Controller
             ], 404);
         }
 
-        if (!$this->canManageQuestion($question)) {
+        if (Auth::id() !== $question->user_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You do not have permission to edit this question.',

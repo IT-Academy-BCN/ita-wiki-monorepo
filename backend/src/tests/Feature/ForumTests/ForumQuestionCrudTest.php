@@ -148,7 +148,7 @@ class ForumQuestionCrudTest extends TestCase
         ]);
     }
 
-    public function test_forum_question_owner_can_update(): void
+    public function test_forum_question_owner_cannot_update(): void
     {
         $owner = $this->project->owner;
         Sanctum::actingAs($owner);
@@ -162,9 +162,10 @@ class ForumQuestionCrudTest extends TestCase
             'question' => 'Editado por el owner',
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(403)
             ->assertJson([
-                'success' => true,
+                'success' => false,
+                'message' => 'You do not have permission to edit this question.',
             ]);
     }
 

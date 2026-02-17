@@ -136,7 +136,7 @@ class ForumAnswerController extends Controller
      *     path="/api/codeconnect/{listProject}/forum/{question}/answers/{answer}",
      *     summary="Update an answer",
      *     tags={"Forum"},
-     *     description="Updates an existing answer. Only the answer author or the project owner can update it. Requires authentication (Sanctum).",
+     *     description="Updates an existing answer. Only the answer author can update it. Requires authentication (Sanctum).",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
      *         name="listProject",
@@ -221,7 +221,7 @@ class ForumAnswerController extends Controller
             ], 404);
         }
 
-        if (!$this->canManageAnswer($answer)) {
+        if (Auth::id() !== $answer->user_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You do not have permission to edit this answer.',

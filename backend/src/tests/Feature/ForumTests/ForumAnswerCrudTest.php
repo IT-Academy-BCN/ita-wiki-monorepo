@@ -178,7 +178,7 @@ class ForumAnswerCrudTest extends TestCase
             ]);
     }
 
-    public function test_forum_answer_owner_can_update(): void
+    public function test_forum_answer_owner_cannot_update(): void
     {
         $answer = ForumAnswer::factory()->create([
             'forum_question_id' => $this->question->id,
@@ -192,9 +192,10 @@ class ForumAnswerCrudTest extends TestCase
             ['answer' => 'Editado por el owner.']
         );
 
-        $response->assertStatus(200)
+        $response->assertStatus(403)
             ->assertJson([
-                'success' => true,
+                'success' => false,
+                'message' => 'You do not have permission to edit this answer.',
             ]);
     }
 
