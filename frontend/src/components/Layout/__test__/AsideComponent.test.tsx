@@ -130,7 +130,7 @@ describe("AsideComponent Tests", () => {
   });
 
   test("should render AsideNavbarLink the correct number of times", () => {
-    render(
+    const { container } = render(
       <MemoryRouter>
         <AsideComponent />
       </MemoryRouter>,
@@ -140,7 +140,9 @@ describe("AsideComponent Tests", () => {
       expect(screen.getByText(data.label)).toBeInTheDocument();
     });
 
-    expect(AsideNavbarData).toHaveLength(4);
+    const ul = container.querySelector("ul");
+    const listItems = ul?.querySelectorAll("li");
+    expect(listItems?.length).toBe(AsideNavbarData.length);
   });
 
   test("should render 'Inici' link", () => {
