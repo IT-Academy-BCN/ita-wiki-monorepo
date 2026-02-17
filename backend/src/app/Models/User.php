@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -86,4 +88,24 @@ class User extends Authenticatable
     { 
         return (string) $this->guard_name; 
     }
+
+    /**
+     * Relationships with Tickets System
+     */
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'code_connect_id');
+    }
+
+    public function closedTickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'closed_by');
+    }
+
+    public function ticketComments(): HasMany
+    {
+        return $this->hasMany(TicketComment::class);
+    }
+
 }
