@@ -77,6 +77,12 @@ class ForumAnswerCreateTest extends TestCase
             ->assertJson([
                 'success' => true,
             ]);
+
+        $this->assertDatabaseHas('forum_answers', [
+            'forum_question_id' => $this->question->id,
+            'user_id' => $this->owner->id,
+            'answer' => 'Respuesta del owner.',
+        ]);
     }
 
     public function test_forum_answer_non_member_cannot_answer(): void
@@ -94,6 +100,11 @@ class ForumAnswerCreateTest extends TestCase
                 'success' => false,
                 'message' => 'Only accepted project members can reply.',
             ]);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'forum_question_id' => $this->question->id,
+            'user_id' => $randomUser->id,
+        ]);
     }
 
     public function test_forum_answer_pending_contributor_cannot_answer(): void
@@ -113,6 +124,11 @@ class ForumAnswerCreateTest extends TestCase
         );
 
         $response->assertStatus(403);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'forum_question_id' => $this->question->id,
+            'user_id' => $pendingUser->id,
+        ]);
     }
 
     public function test_forum_answer_unauthenticated_user_cannot_answer(): void
@@ -123,6 +139,10 @@ class ForumAnswerCreateTest extends TestCase
         );
 
         $response->assertStatus(401);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'answer' => 'Sin login.',
+        ]);
     }
 
     public function test_forum_answer_limit_of_10_per_question(): void
@@ -143,6 +163,8 @@ class ForumAnswerCreateTest extends TestCase
                 'success' => false,
                 'message' => 'This question has reached the limit of 10 answers.',
             ]);
+
+        $this->assertDatabaseCount('forum_answers', 10);
     }
 
     public function test_forum_answer_requires_text(): void
@@ -155,5 +177,10 @@ class ForumAnswerCreateTest extends TestCase
         );
 
         $response->assertStatus(422);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'forum_question_id' => $this->question->id,
+            'user_id' => $this->member->id,
+        ]);
     }
 }

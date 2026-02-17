@@ -70,6 +70,11 @@ class ForumQuestionUpdateTest extends TestCase
                 'success' => false,
                 'message' => 'You do not have permission to edit this question.',
             ]);
+
+        $this->assertDatabaseMissing('forum_questions', [
+            'id' => $question->id,
+            'question' => 'Editado por el owner',
+        ]);
     }
 
     public function test_forum_question_random_user_cannot_update(): void
@@ -91,5 +96,10 @@ class ForumQuestionUpdateTest extends TestCase
                 'success' => false,
                 'message' => 'You do not have permission to edit this question.',
             ]);
+
+        $this->assertDatabaseMissing('forum_questions', [
+            'id' => $question->id,
+            'question' => 'Intento de editar',
+        ]);
     }
 }

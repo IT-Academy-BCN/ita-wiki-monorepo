@@ -53,6 +53,10 @@ class ForumQuestionCreateTest extends TestCase
         ]);
 
         $response->assertStatus(401);
+
+        $this->assertDatabaseMissing('forum_questions', [
+            'question' => 'Pregunta sin login',
+        ]);
     }
 
     public function test_forum_question_requires_text(): void
@@ -64,5 +68,10 @@ class ForumQuestionCreateTest extends TestCase
         ]);
 
         $response->assertStatus(422);
+
+        $this->assertDatabaseMissing('forum_questions', [
+            'list_project_id' => $this->project->id,
+            'user_id' => $this->user->id,
+        ]);
     }
 }

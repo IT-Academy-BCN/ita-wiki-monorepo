@@ -62,6 +62,11 @@ class ForumAnswerUpdateTest extends TestCase
                 'success' => true,
                 'message' => 'Answer updated successfully.',
             ]);
+
+        $this->assertDatabaseHas('forum_answers', [
+            'id' => $answer->id,
+            'answer' => 'Respuesta editada.',
+        ]);
     }
 
     public function test_forum_answer_owner_cannot_update(): void
@@ -83,6 +88,11 @@ class ForumAnswerUpdateTest extends TestCase
                 'success' => false,
                 'message' => 'You do not have permission to edit this answer.',
             ]);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'id' => $answer->id,
+            'answer' => 'Editado por el owner.',
+        ]);
     }
 
     public function test_forum_answer_random_user_cannot_update(): void
@@ -104,5 +114,10 @@ class ForumAnswerUpdateTest extends TestCase
             ->assertJson([
                 'success' => false,
             ]);
+
+        $this->assertDatabaseMissing('forum_answers', [
+            'id' => $answer->id,
+            'answer' => 'Intento.',
+        ]);
     }
 }
