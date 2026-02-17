@@ -13,7 +13,7 @@ const AsideComponent: React.FC = () => {
 
   return (
     <aside className="flex flex-col lg:min-w-70 sticky top-0 bg-white h-screen overflow-hidden">
-      <section className="flex-1 flex flex-col min-h-0 px-3 pt-5 space-y-2">
+      <section className="flex-1 flex flex-col min-h-0 px-3 pt-5 space-y-5">
         <div className="flex justify-start flex-shrink-0">
           <Link to="/">
             <img src={logoItAcademy} alt="logo" width={"130px"} />
@@ -34,9 +34,9 @@ const AsideComponent: React.FC = () => {
         </nav>
       </section>
 
-      <section className="flex-shrink-0 px-3 pt-6 pb-4 text-[11px] sm:text-xs md:text-xs">
+      <section className="flex-shrink-0 px-3 text-[11px] sm:text-xs md:text-xs">
         <div className="-mx-4 border-t"></div>
-        <ul className="py-6 space-y-3">
+        <ul className="py-5 space-y-3">
           {AsideConfigData.map((data) => (
             <AsideConfigLink
               key={data.label}
