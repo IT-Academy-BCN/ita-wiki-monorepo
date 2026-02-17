@@ -2,19 +2,19 @@ import classNames from "classnames";
 import { Link } from "react-router";
 import { ReactNode } from "react";
 
-interface AsideNavbarLinkProps {
+interface AsideConfigLinkProps {
   path: string;
   label: string;
   isActive: boolean;
   icon: ReactNode;
 }
 
-export const AsideNavbarLink = ({
+export const AsideConfigLink = ({
   path,
   label,
   isActive,
   icon,
-}: AsideNavbarLinkProps) => {
+}: AsideConfigLinkProps) => {
   return (
     <li
       className={classNames(
