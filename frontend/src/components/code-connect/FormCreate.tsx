@@ -407,7 +407,8 @@ const FormCreate = () => {
               id="time"
               className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-t border-b border-l border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tl-lg rounded-bl-lg py-2 px-4 w-11"
               type="number"
-              value={formData.time}
+              value={formData.time === 0 ? "" : formData.time}
+              placeholder="0"
               required
               onChange={(e) => handleInputsNumber("time", e.target.value)}
             />
@@ -444,8 +445,10 @@ const FormCreate = () => {
             id="devs-front"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
             type="number"
-            value={formData.numberDevsFront}
-            required
+            value={
+              formData.numberDevsFront === 0 ? "" : formData.numberDevsFront
+            }
+            placeholder="0"
             onChange={(e) =>
               handleInputsNumber("numberDevsFront", e.target.value)
             }
@@ -462,8 +465,8 @@ const FormCreate = () => {
             id="devs-back"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
             type="number"
-            value={formData.numberDevsBack}
-            required
+            value={formData.numberDevsBack === 0 ? "" : formData.numberDevsBack}
+            placeholder="0"
             onChange={(e) =>
               handleInputsNumber("numberDevsBack", e.target.value)
             }
