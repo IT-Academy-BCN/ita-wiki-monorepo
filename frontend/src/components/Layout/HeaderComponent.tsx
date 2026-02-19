@@ -51,13 +51,13 @@ const HeaderComponent = () => {
     }
   }, [location.pathname, resource]);
 
-  const dropdowns = [
-    { ref: dropdownRef, setter: setShowDropdown },
-    { ref: langDropdownRef, setter: setShowLangDropdown },
-    { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
-  ];
-
   useEffect(() => {
+    const dropdowns = [
+      { ref: dropdownRef, setter: setShowDropdown },
+      { ref: langDropdownRef, setter: setShowLangDropdown },
+      { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
+    ];
+
     const handleClickOutside = (event: MouseEvent) => {
       dropdowns.forEach(({ ref, setter }) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
