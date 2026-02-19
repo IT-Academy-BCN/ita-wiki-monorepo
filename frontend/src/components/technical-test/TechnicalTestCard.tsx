@@ -31,7 +31,7 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
 
   return (
     <Link to={`/resources/technical-test/${test.id}`}>
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 h-full hover:bg-gray-50 transition-colors duration-100">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 max-w-sm min-h-[347px] hover:bg-gray-50 transition-colors duration-100">
         {/* Header: language icon + title + level icon */}
         <div>
           <div className="flex justify-between items-start">
@@ -47,7 +47,7 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
         </div>
 
         {/* Body: description + tags + footer */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 flex-1">
           {test.description && (
             <p className="text-sm text-gray-500 line-clamp-2">
               {test.description}
@@ -67,23 +67,23 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
             </div>
           )}
 
-          <div className="flex items-center gap-4 mt-1 text-gray-500 font-medium">
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2 mt-auto text-gray-500 font-medium flex-nowrap">
+            <div className="flex items-center gap-1 shrink-0">
               <img src={levelIcon} alt="Test level" className="h-4" />
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <Clock size={16} className="text-gray-400" />
-              <span className="text-sm">30 min</span>
+            <div className="flex items-center gap-1 shrink-0">
+              <Clock size={14} className="text-gray-400" />
+              <span className="text-xs whitespace-nowrap">30 min</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <Heart size={16} className="text-gray-400" />
-              <span className="text-sm">{likeCount}</span>
+            <div className="flex items-center gap-1 shrink-0">
+              <Heart size={14} className="text-gray-400" />
+              <span className="text-xs">{likeCount}</span>
             </div>
 
-            <div className="flex items-center gap-1.5 ml-auto text-sm">
-              <Calendar size={16} className="text-gray-400" />
+            <div className="flex items-center gap-1 ml-auto text-xs shrink-0 whitespace-nowrap">
+              <Calendar size={14} className="text-gray-400" />
               {formattedDate}
             </div>
           </div>

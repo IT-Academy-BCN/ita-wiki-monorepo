@@ -11,7 +11,7 @@ const TechnicalTestList: FC = () => {
 
   if (showLoader && !error) {
     return (
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
         {Array.from({ length: 6 }).map((_, index) => (
           <TechnicalTestSkeleton key={index} />
         ))}
@@ -39,7 +39,7 @@ const TechnicalTestList: FC = () => {
   }
 
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
       {technicalTests.map((test) => (
         <TechnicalTestCard key={test.id} test={test} />
       ))}
