@@ -64,8 +64,8 @@ describe("AsideConfigLink Tests", () => {
     const { container } = renderConfigLink({ isActive: false });
 
     const iconSpan = container.querySelector("span");
-    expect(iconSpan).toHaveClass("w-[2rem]");
-    expect(iconSpan).toHaveClass("h-[2rem]");
+    expect(iconSpan).toHaveClass("w-[1.25rem]");
+    expect(iconSpan).toHaveClass("h-[1.25rem]");
     expect(iconSpan).toHaveClass("shrink-0");
   });
 
@@ -79,7 +79,7 @@ describe("AsideConfigLink Tests", () => {
     const link = screen.getByText("Configuració");
     expect(link).toHaveClass("flex");
     expect(link).toHaveClass("items-center");
-    expect(link).toHaveClass("gap-3");
+    expect(link).toHaveClass("gap-2");
 
     const icon = screen.getByTestId("mock-icon");
     expect(icon).toBeInTheDocument();
