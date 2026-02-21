@@ -16,6 +16,7 @@ use App\Http\Controllers\ListProjectsController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketCommentController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FeatureFlagController;
 
 // GitHub Auth System Endpoints (PUBLIC)
 Route::get('/auth/github/redirect', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
@@ -124,6 +125,8 @@ Route::prefix('roles')->group(function () {
     Route::post('/assign', [RoleController::class, 'assignRole'])->name('roles.assign');
     Route::get('/users/{user}', [RoleController::class, 'getUserRoles'])->name('roles.user');
 });
+
+Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
 
 // ========== BUGS REPORTING TICKETING SYSTEM ==========
 

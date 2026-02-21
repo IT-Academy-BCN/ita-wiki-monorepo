@@ -344,11 +344,11 @@ class TechnicalTestController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }*/
 
-        /* if (!$user->can('edit all technical tests')) {
+        if (!$user->can('edit all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('edit own technical tests')) {
                 return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
             }
-        }*/
+        }
 
         try {
             DB::beginTransaction();
@@ -453,11 +453,11 @@ class TechnicalTestController extends Controller
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }*/
-        /* if (!$user->can('delete all technical tests')) {
+        if (!$user->can('delete all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('delete own technical tests')) {
                 return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
             }
-        }*/
+        }
 
 
         $technicalTest->delete();
