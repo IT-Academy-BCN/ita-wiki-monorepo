@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import TechnicalTestFilter from "../components/technical-test/TechnicalTestFilter";
 import TechnicalTestList from "../components/technical-test/TechnicalTestList";
+import LanguageTagsBar from "../components/technical-test/LanguageTagsBar";
 import Container from "../components/ui/Container";
 
 type TechnicalTestsFiltersState = {
@@ -17,11 +18,18 @@ function MyTechnicalTestsPage() {
   const location = useLocation();
   const toastShown = useRef(false);
 
-  const [filters, setFilters] = useState<TechnicalTestsFiltersState>({
-    languages: [],
+  const [languageFilter, setLanguageFilter] = useState<string | null>(null);
+  const [otherFilters, setOtherFilters] = useState<
+    Pick<TechnicalTestsFiltersState, "years" | "difficulties">
+  >({
     years: [],
     difficulties: [],
   });
+
+  const filters: TechnicalTestsFiltersState = {
+    languages: languageFilter ? [languageFilter] : [],
+    ...otherFilters,
+  };
 
   useEffect(() => {
     if (location.state?.successMessage && !toastShown.current) {
@@ -33,11 +41,15 @@ function MyTechnicalTestsPage() {
 
   return (
     <Container>
+      <div className="mb-6">
+        <LanguageTagsBar onSelect={setLanguageFilter} />
+      </div>
       <div className="flex flex-col md:flex-row">
-        {}
-        <TechnicalTestFilter onFiltersChange={setFilters} />
-
-        {}
+        <TechnicalTestFilter
+          onFiltersChange={({ years, difficulties }) =>
+            setOtherFilters({ years, difficulties })
+          }
+        />
         <TechnicalTestList filters={filters} />
       </div>
     </Container>
