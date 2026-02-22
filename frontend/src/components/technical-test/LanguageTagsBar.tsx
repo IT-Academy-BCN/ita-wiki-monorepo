@@ -24,7 +24,7 @@ const LanguageTagsBar = ({
         <button
           key={label}
           onClick={() => handleClick(label)}
-          className={`px-5 py-2 rounded-full border text-sm transition-colors
+          className={`px-5 py-2 rounded-full border text-sm transition-colors cursor-pointer
             ${
               selected === label
                 ? "bg-black text-white border-black"
