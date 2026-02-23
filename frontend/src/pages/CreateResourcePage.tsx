@@ -140,37 +140,36 @@ export default function CreateResourcePage() {
 
         <div className="flex mt-6 overflow-y-scroll">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
-            <h2 className="text-sm text-black font-medium mb-3">Títol</h2>
-            <FormInput
-              id="title"
-              placeholder=""
-              register={register}
-              errors={errors.title?.message}
-              className="max-w-[482px] max-h-[2.6rem] border-[0.06rem]  border-gray-300 focus:border-2 focus:border-[#B91879] outline-none "
-              maxLength={charLimitTitle}
-              onChange={(e) => {
-                setValue("title", e.target.value);
-              }}
-            />
-            <div className="w-1/2">
-              <p className="text-sm text-slate-600 -mt-5 text-center ml-75">
-                {titleValue?.length}/{charLimitTitle}
-              </p>
+            <div className="flex-col gap-5 my-5">
+              <FormInput
+                id="title"
+                label="Títol"
+                placeholder=""
+                limitedText={true}
+                register={register}
+                textLength={titleValue?.length}
+                errors={errors.title?.message}
+                className="max-h-[2.6rem]"
+                maxLength={charLimitTitle}
+                onChange={(e) => {
+                  setValue("title", e.target.value);
+                }}
+              />
+
+              <FormInput
+                id="url"
+                label="URL"
+                placeholder=""
+                register={register}
+                errors={errors.url?.message}
+                className="max-h-[2.6rem]"
+                onChange={(e) => {
+                  setValue("url", e.target.value);
+                }}
+              />
             </div>
 
-            <h2 className="text-sm text-black font-medium mb-2 ">URL</h2>
-            <FormInput
-              id="url"
-              placeholder=""
-              register={register}
-              errors={errors.url?.message}
-              className="max-w-[482px] max-h-[2.6rem] border-[0.06rem] border-gray-300 focus:border-2 focus:border-[#B91879] outline-none "
-              onChange={(e) => {
-                setValue("url", e.target.value);
-              }}
-            />
-
-            <h2 className="text-sm text-black font-medium mb-2">Llenguatge</h2>
+            <h2 className="text-sm text-black font-medium mb-3">Llenguatge</h2>
             <div className="flex flex-wrap gap-3">
               {contentResourcesForm.map((cat) => {
                 const IconComponent = cat.icon;
@@ -267,25 +266,20 @@ export default function CreateResourcePage() {
               <h2 className="text-base font-semibold mt-6 mb-6">
                 Informació addicional
               </h2>
-              <h2 className="text-sm text-black font-medium mt-2 mb-2">
-                Descripció
-              </h2>
               <FormInput
                 id="description"
+                label="Descripció"
                 placeholder=""
                 register={register}
+                limitedText={true}
+                textLength={descriptionValue?.length}
                 errors={errors.description?.message}
-                className="max-w-[482px] max-h-[4.5rem] border-[0.06rem] border-gray-300 focus:border-[#B91879] outline-none"
+                className="max-h-[4.5rem]"
                 maxLength={charLimitDescription}
                 onChange={(e) => {
                   setValue("description", e.target.value);
                 }}
               />
-              <div className="w-1/2">
-                <p className="text-sm text-slate-600 -mt-5 text-center ml-75">
-                  {descriptionValue?.length}/{charLimitDescription}
-                </p>
-              </div>
             </div>
           </form>
         </div>

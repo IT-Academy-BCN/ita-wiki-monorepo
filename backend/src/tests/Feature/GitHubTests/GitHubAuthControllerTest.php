@@ -16,6 +16,7 @@ class GitHubAuthControllerTest extends TestCase
         $abstractUser->shouldReceive('getName')->andReturn('Test User');
         $abstractUser->shouldReceive('getEmail')->andReturn('test_' . time() . '@example.com');
         $abstractUser->shouldReceive('getNickname')->andReturn('testuser');
+        $abstractUser->shouldReceive('getAvatar')->andReturn(null);
 
         Socialite::shouldReceive('driver->stateless->user')
             ->andReturn($abstractUser);
@@ -26,13 +27,14 @@ class GitHubAuthControllerTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
         
         $this->assertDatabaseHas('users', [
             'github_id' => '12345',
             'github_user_name' => 'testuser',
             'name' => 'Test User',
+            'avatar' => null,
         ]);
     }
 }

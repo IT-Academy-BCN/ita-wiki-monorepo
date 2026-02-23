@@ -6,12 +6,14 @@ interface UseResourceFilterProps {
   resources: IntResource[];
   selectedResourceTypes?: string[];
   selectedTags?: string[];
+  selectedCategory?: string | null;
 }
 
 export const useResourceFilter = ({
   resources,
   selectedResourceTypes = [],
   selectedTags = [],
+  selectedCategory,
 }: UseResourceFilterProps) => {
   const { category } = useParams();
   const [searchParams] = useSearchParams();
@@ -24,7 +26,10 @@ export const useResourceFilter = ({
       const normalize = (value: string) =>
         value.trim().toLowerCase().replace(/\s+/g, "-");
 
-      const categoryMatch = !category || resource.category === category;
+      const categoryToUse =
+        selectedCategory !== undefined ? selectedCategory : category;
+      const categoryMatch =
+        !categoryToUse || resource.category === categoryToUse;
       const typeMatch =
         selectedResourceTypes.length === 0 ||
         selectedResourceTypes.some(
@@ -45,7 +50,14 @@ export const useResourceFilter = ({
 
       return categoryMatch && typeMatch && searchMatch && tagMatch;
     });
-  }, [resources, category, selectedResourceTypes, searchQuery, selectedTags]);
+  }, [
+    resources,
+    category,
+    selectedResourceTypes,
+    searchQuery,
+    selectedTags,
+    selectedCategory,
+  ]);
 
   return {
     filteredResources,
