@@ -61,7 +61,6 @@ describe("TechnicalTestList", () => {
     });
   });
 
-<<<<<<< 126-language-tag-bar-technical-list
   it("filters by language when language prop is provided", () => {
     render(
       <MemoryRouter>
@@ -125,9 +124,6 @@ describe("TechnicalTestList", () => {
 
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
-
-=======
->>>>>>> develop
   it("shows EmptyState with error styling when there is an error", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: [],
