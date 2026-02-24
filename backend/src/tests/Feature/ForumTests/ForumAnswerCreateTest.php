@@ -167,6 +167,28 @@ class ForumAnswerCreateTest extends TestCase
         $this->assertDatabaseCount('forum_answers', 10);
     }
 
+    public function test_forum_answer_can_answer_when_9_answers_exist(): void
+    {
+        ForumAnswer::factory()->count(9)->create([
+            'forum_question_id' => $this->question->id,
+        ]);
+
+        Sanctum::actingAs($this->member);
+
+        $response = $this->postJson(
+            "/api/codeconnect/{$this->project->id}/forum/{$this->question->id}/answers",
+            ['answer' => 'Soy la respuesta número 10.']
+        );
+
+        $response->assertStatus(201)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Answer added successfully.',
+            ]);
+
+        $this->assertDatabaseCount('forum_answers', 10);
+    }
+
     public function test_forum_answer_requires_text(): void
     {
         Sanctum::actingAs($this->member);
