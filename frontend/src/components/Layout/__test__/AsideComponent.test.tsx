@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 import AsideComponent from "../AsideComponent";
 import { useUserContext } from "../../../context/UserContext";
 import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
+import { AsideNavbarData } from "../aside/asideContent.tsx";
 import userEvent from "@testing-library/user-event";
 
 import sql_vector from "../../../assets/sqlVector.svg?react";
@@ -57,6 +58,27 @@ vi.mock("../../../assets/logo-node 1.svg?react", () => ({
 }));
 vi.mock("../../../assets/react.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
+}));
+vi.mock("../../../assets/homeIcon.svg?react", () => ({
+  default: () => <svg data-testid="home-icon" />,
+}));
+vi.mock("../../../assets/resourcesIcon.svg?react", () => ({
+  default: () => <svg data-testid="resources-icon" />,
+}));
+vi.mock("../../../assets/techTestsIcon.svg?react", () => ({
+  default: () => <svg data-testid="tech-tests-icon" />,
+}));
+vi.mock("../../../assets/codeConnectIcon.svg?react", () => ({
+  default: () => <svg data-testid="code-connect-icon" />,
+}));
+vi.mock("../../../assets/settingsIcon.svg?react", () => ({
+  default: () => <svg data-testid="settings-icon" />,
+}));
+vi.mock("../../../assets/questionIcon.svg?react", () => ({
+  default: () => <svg data-testid="question-icon" />,
+}));
+vi.mock("../../../assets/infoIcon.svg?react", () => ({
+  default: () => <svg data-testid="info-icon" />,
 }));
 
 vi.mock("react-router-dom", () => {
@@ -111,9 +133,37 @@ describe("AsideComponent Tests", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.getByText("Guardats")).toBeInTheDocument();
-    expect(screen.getByText("Creats")).toBeInTheDocument();
+    expect(screen.getByText("Configuració")).toBeInTheDocument();
+    expect(screen.getByText("Ajuda")).toBeInTheDocument();
+    expect(screen.getByText("Informació")).toBeInTheDocument();
+  });
+
+  test("should render IT Academy logo", () => {
+    render(
+      <MemoryRouter>
+        <AsideComponent />
+      </MemoryRouter>,
+    );
+
+    const logo = screen.getByAltText("logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("width", "130px");
+  });
+
+  test("should render AsideNavbarLink the correct number of times", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <AsideComponent />
+      </MemoryRouter>,
+    );
+
+    AsideNavbarData.forEach((data) => {
+      expect(screen.getByText(data.label)).toBeInTheDocument();
+    });
+
+    const ul = container.querySelector("ul");
+    const listItems = ul?.querySelectorAll("li");
+    expect(listItems?.length).toBe(AsideNavbarData.length);
   });
 
   test("should render 'Inici' link", () => {
