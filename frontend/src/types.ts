@@ -1,11 +1,9 @@
 import { ReactNode } from "react";
 import { categories } from "./data/categories";
-import { themes } from "./data/themes";
 import { resourceTypes } from "./data/resourceTypes";
 import { FC, SVGProps } from "react";
 
 export type Category = (typeof categories)[number];
-export type Theme = (typeof themes)[number] | null;
 export type ResourceType = (typeof resourceTypes)[number];
 
 export type TypUserRole =
@@ -39,12 +37,11 @@ export interface IntResource {
   created_at?: Date | string;
   updated_at?: Date | string;
   category: Category;
-  theme: Theme;
   type: ResourceType;
   like_count?: number;
   bookmark_count?: number;
   comment_count?: number;
-  tags?: Tag[] | string[];
+  tags?: string[] | Tag[];
 }
 
 export interface IntCodeConnect {
@@ -100,13 +97,6 @@ export interface Like {
   updated_at: string;
 }
 
-export interface Tag {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface TagsByCategory {
   [category: string]: {
     [tagName: string]: number;
@@ -115,6 +105,13 @@ export interface TagsByCategory {
 
 export interface TagsIdsByCategory {
   [category: string]: number[];
+}
+
+export interface Tag {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type SvgIcon = FC<SVGProps<SVGSVGElement>>;

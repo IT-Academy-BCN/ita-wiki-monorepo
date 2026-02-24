@@ -1,5 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router";
-import logoItAcademy from "../../assets/LogoItAcademy.svg";
+import { useNavigate, useLocation } from "react-router";
 import addIcon from "../../assets/add.svg";
 import userIcon from "../../assets/user2.svg";
 import arrowDown from "../../assets/arrow-down.svg";
@@ -52,13 +51,13 @@ const HeaderComponent = () => {
     }
   }, [location.pathname, resource]);
 
-  const dropdowns = [
-    { ref: dropdownRef, setter: setShowDropdown },
-    { ref: langDropdownRef, setter: setShowLangDropdown },
-    { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
-  ];
-
   useEffect(() => {
+    const dropdowns = [
+      { ref: dropdownRef, setter: setShowDropdown },
+      { ref: langDropdownRef, setter: setShowLangDropdown },
+      { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
+    ];
+
     const handleClickOutside = (event: MouseEvent) => {
       dropdowns.forEach(({ ref, setter }) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -151,10 +150,7 @@ const HeaderComponent = () => {
   };
 
   return (
-    <header className="hidden lg:flex py-4 px-6 items-center justify-between">
-      <Link to="/">
-        <img src={logoItAcademy} alt="logo" width={"116px"} />
-      </Link>
+    <header className="hidden lg:flex py-4 px-6 items-center justify-end">
       <div className="flex items-center gap-[6px]">
         {hasPermission && (
           <ButtonComponent

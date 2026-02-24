@@ -1,25 +1,45 @@
-import { useLocation, useNavigate } from "react-router";
-import classNames from "classnames";
+import { Link, useLocation } from "react-router";
+import logoItAcademy from "../../assets/LogoItAcademy.svg";
 
-import Bookmark from "../../assets/Bookmark.svg";
-import CreatedResources from "../../assets/CreatedResources.svg";
-
-import { AsideNavbarData } from "./aside/asideContent.tsx";
+import { AsideNavbarData, AsideConfigData } from "./aside/asideContent.tsx";
 import { AsideNavbarLink } from "./aside/AsideNavbarLink";
+import { AsideConfigLink } from "./aside/AsideConfigLink";
 
 const AsideComponent: React.FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const navigate = useNavigate();
 
   const isPathActive = (path: string) => currentPath === path;
 
   return (
-    <aside className="flex flex-col px-6 lg:w-56 py-4">
-      <section>
-        <ul className="py-6 space-y-3">
-          {AsideNavbarData.map((data) => (
-            <AsideNavbarLink
+    <aside className="flex flex-col lg:min-w-70 sticky top-0 bg-white h-screen overflow-hidden">
+      <section className="flex-1 flex flex-col min-h-0 px-3 pt-5 space-y-5">
+        <div className="flex justify-start flex-shrink-0">
+          <Link to="/">
+            <img src={logoItAcademy} alt="logo" width={"130px"} />
+          </Link>
+        </div>
+        <nav className="flex-1 min-h-0 overflow-y-auto">
+          <ul className="space-y-3 text-[11px] sm:text-xs md:text-xs">
+            {AsideNavbarData.map((data, i) => (
+              <AsideNavbarLink
+                key={i}
+                label={data.label}
+                path={data.ref}
+                isActive={isPathActive(data.ref)}
+                icon={data.icon}
+              />
+            ))}
+          </ul>
+        </nav>
+      </section>
+
+      <section className="flex-shrink-0 px-3 text-[11px] sm:text-xs md:text-xs">
+        <div className="-mx-4 border-t"></div>
+        <ul className="py-5 space-y-3">
+          {AsideConfigData.map((data) => (
+            <AsideConfigLink
+              key={data.label}
               label={data.label}
               path={data.ref}
               isActive={isPathActive(data.ref)}
@@ -27,54 +47,6 @@ const AsideComponent: React.FC = () => {
             />
           ))}
         </ul>
-      </section>
-
-      <section className="py-6">
-        <p className="pb-3 font-bold text-lg mb-2 text-black">
-          Els meus recursos
-        </p>
-
-        <div className="flex flex-col gap-4">
-          <div
-            onClick={() => navigate("/resources/bookmarks")}
-            className="flex items-center space-x-3 py-1 cursor-pointer"
-          >
-            <img src={Bookmark} alt="Bookmark icon" className="w-6 h-6" />
-            <div
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive("/resources/bookmarks"),
-                "text-[var(--color-gray-foreground)]": !isPathActive(
-                  "/resources/bookmarks",
-                ),
-              })}
-            >
-              Guardats
-            </div>
-          </div>
-
-          <div
-            onClick={() => navigate("/resources/my-resources")}
-            className="flex items-center space-x-3 py-1 cursor-pointer"
-          >
-            <img
-              src={CreatedResources}
-              alt="Create resources icon"
-              className="w-6 h-6"
-            />
-            <div
-              className={classNames("transition-colors", {
-                "!text-black !font-bold": isPathActive(
-                  "/resources/my-resources",
-                ),
-                "text-[var(--color-gray-foreground)]": !isPathActive(
-                  "/resources/my-resources",
-                ),
-              })}
-            >
-              Creats
-            </div>
-          </div>
-        </div>
       </section>
     </aside>
   );

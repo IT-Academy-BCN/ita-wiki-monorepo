@@ -23,20 +23,20 @@ export const AsideNavbarLink = ({
           "bg-primary/15": isActive,
           "": !isActive,
         },
-        "px-4 py-3 rounded-2xl",
+        "ps-4 pe-6 py-3 rounded-2xl",
       )}
     >
       <Link
         to={path}
         className={classNames(
-          "!transition-colors flex items-center gap-3 text-lg !font-bold",
+          "!transition-colors flex items-center gap-2 text-sm !font-bold",
           {
             "!text-primary !font-extrabold": isActive,
             "!text-black hover:!text-primary": !isActive,
           },
         )}
       >
-        <span className="w-[2rem] h-[2rem] [&>svg]:w-full [&>svg]:h-full">
+        <span className="w-[1.25rem] h-[1.25rem] shrink-0 [&>svg]:w-full [&>svg]:h-full">
           {icon}
         </span>
         {label}
