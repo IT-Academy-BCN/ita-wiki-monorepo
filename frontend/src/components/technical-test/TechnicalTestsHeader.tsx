@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LanguageTagsBar from "./LanguageTagsBar";
+import LanguageTagsBar from "./LanguageTagsBar.tsx";
 import LikesSortButton from "./LikesSortButton";
 
 interface TechnicalTestsHeaderProps {

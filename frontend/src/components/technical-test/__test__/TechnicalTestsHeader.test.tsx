@@ -48,7 +48,7 @@ describe("TechnicalTestsHeader", () => {
     const button = screen.getByRole("button", { name: /likes/i });
     fireEvent.click(button);
     expect(button).toHaveAttribute("aria-pressed", "true");
-    expect(button).toHaveClass("bg-black");
+    expect(button).toHaveClass("text-white");
   });
 
   it("calls onSortByLikes with true when Likes button activated", () => {
