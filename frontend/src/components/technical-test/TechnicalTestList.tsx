@@ -10,7 +10,10 @@ interface TechnicalTestListProps {
   sortByLikes?: boolean;
 }
 
-const TechnicalTestList: FC<TechnicalTestListProps> = ({ language, sortByLikes }) => {
+const TechnicalTestList: FC<TechnicalTestListProps> = ({
+  language,
+  sortByLikes,
+}) => {
   const { technicalTests, isLoading, error } = useTechnicalTestList();
   const showLoader = useMinLoading(isLoading);
 
@@ -48,7 +51,9 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ language, sortByLikes }
     : technicalTests;
 
   const sortedTests = sortByLikes
-    ? [...filteredTests].sort((a, b) => (b.like_count ?? 0) - (a.like_count ?? 0))
+    ? [...filteredTests].sort(
+        (a, b) => (b.like_count ?? 0) - (a.like_count ?? 0),
+      )
     : filteredTests;
 
   if (filteredTests.length === 0) {
