@@ -61,6 +61,69 @@ describe("TechnicalTestList", () => {
     });
   });
 
+  it("filters by language when language prop is provided", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList language="JavaScript" />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test A")).toBeDefined();
+    expect(screen.queryByText("Test B")).toBeNull();
+  });
+
+  it("shows all tests when no language prop is provided", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test A")).toBeDefined();
+    expect(screen.getByText("Test B")).toBeDefined();
+  });
+
+  it("shows EmptyState when language filter returns no results", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList language="Python" />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
+
+  it("shows error message when there is an error", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: new Error("Algo ha fallado"),
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Error al obtenir proves tècniques")).toBeDefined();
+  });
+
+  it("shows EmptyState when there are no technical tests", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <TechnicalTestList />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
   it("shows EmptyState with error styling when there is an error", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: [],
