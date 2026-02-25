@@ -11,6 +11,8 @@ export interface FiltersValue {
 }
 
 interface FiltersButtonProps {
+  isOpen?: boolean;
+  onToggle?: () => void;
   onConfirm?: (filters: FiltersValue) => void;
 }
 
@@ -26,8 +28,11 @@ const YEAR_OPTIONS = Array.from(
   (_, i) => 2024 + i,
 );
 
-const FiltersButton: FC<FiltersButtonProps> = ({ onConfirm }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const FiltersButton: FC<FiltersButtonProps> = ({
+  isOpen = false,
+  onToggle,
+  onConfirm,
+}) => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
     null,
   );
@@ -37,14 +42,14 @@ const FiltersButton: FC<FiltersButtonProps> = ({ onConfirm }) => {
 
   const handleConfirm = () => {
     onConfirm?.({ difficulty: selectedDifficulty, year: selectedYear });
-    setIsOpen(false);
+    onToggle?.();
   };
 
   return (
     <div className="relative" data-testid="filters-button-container">
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={onToggle}
         aria-pressed={isOpen}
         data-testid="filters-button"
         className={[

@@ -3,6 +3,8 @@ import LanguageTagsBar from "./LanguageTagsBar.tsx";
 import LikesSortButton from "./LikesSortButton";
 import FiltersButton, { FiltersValue } from "./FiltersButton";
 
+type OpenDropdown = "filters" | null;
+
 interface TechnicalTestsHeaderProps {
   initialCategory?: string;
   onCategoryChange?: (category: string | null) => void;
@@ -17,6 +19,7 @@ const TechnicalTestsHeader = ({
   onFilter,
 }: TechnicalTestsHeaderProps) => {
   const [sortByLikes, setSortByLikes] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<OpenDropdown>(null);
 
   const handleLikesToggle = () => {
     const next = !sortByLikes;
@@ -33,7 +36,13 @@ const TechnicalTestsHeader = ({
 
       <div className="flex items-center gap-2">
         <LikesSortButton isActive={sortByLikes} onClick={handleLikesToggle} />
-        <FiltersButton onConfirm={onFilter} />
+        <FiltersButton
+          isOpen={openDropdown === "filters"}
+          onToggle={() =>
+            setOpenDropdown(openDropdown === "filters" ? null : "filters")
+          }
+          onConfirm={onFilter}
+        />
       </div>
     </div>
   );
