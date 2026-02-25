@@ -93,14 +93,14 @@ describe("TechnicalTestCard", () => {
     it("should format a valid ISO date to Catalan locale (ca-ES)", () => {
       renderWithRouter(<TechnicalTestCard test={mockTest} />);
 
-      const dateElement = screen.getByText(/24/);
+      const dateElement = screen.getByText(/15/);
       expect(dateElement).toBeInTheDocument();
     });
 
-    it("should display 'Data desconeguda' when updated_at is undefined", () => {
+    it("should display 'Data desconeguda' when created_at is undefined", () => {
       const testWithoutDate = {
         ...mockTest,
-        updated_at: undefined as unknown as string,
+        created_at: undefined as unknown as string,
       };
       renderWithRouter(<TechnicalTestCard test={testWithoutDate} />);
 
