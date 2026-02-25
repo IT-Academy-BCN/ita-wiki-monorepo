@@ -38,7 +38,7 @@ import { ReactNode } from "react";
 import clsx from "clsx";
 import closeIcon from "../../../assets/close2.svg";
 
-interface GenericModalProps {
+export interface GenericModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;

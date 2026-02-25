@@ -60,8 +60,8 @@ describe("AsideNavbarLink Tests", () => {
     const { container } = renderNavLink(false);
 
     const iconSpan = container.querySelector("span");
-    expect(iconSpan).toHaveClass("w-[2rem]");
-    expect(iconSpan).toHaveClass("h-[2rem]");
+    expect(iconSpan).toHaveClass("w-[1.25rem]");
+    expect(iconSpan).toHaveClass("h-[1.25rem]");
   });
 
   test("link has correct structure with icon and label", () => {
@@ -70,7 +70,7 @@ describe("AsideNavbarLink Tests", () => {
     const link = screen.getByText("Home");
     expect(link).toHaveClass("flex");
     expect(link).toHaveClass("items-center");
-    expect(link).toHaveClass("gap-3");
+    expect(link).toHaveClass("gap-2");
 
     const icon = screen.getByTestId("mock-icon");
     expect(icon).toBeInTheDocument();
