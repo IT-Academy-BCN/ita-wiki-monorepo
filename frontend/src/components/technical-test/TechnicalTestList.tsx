@@ -5,7 +5,11 @@ import { useMinLoading } from "../../hooks/useMinLoading";
 import TechnicalTestSkeleton from "./TechnicalTestSkeleton";
 import EmptyState from "../ui/EmptyState";
 
-const TechnicalTestList: FC = () => {
+interface TechnicalTestListProps {
+  language?: string | null;
+}
+
+const TechnicalTestList: FC<TechnicalTestListProps> = ({ language }) => {
   const { technicalTests, isLoading, error } = useTechnicalTestList();
   const showLoader = useMinLoading(isLoading);
 
@@ -38,9 +42,22 @@ const TechnicalTestList: FC = () => {
     );
   }
 
+  const filteredTests = language
+    ? technicalTests.filter((t) => t.language === language)
+    : technicalTests;
+
+  if (filteredTests.length === 0) {
+    return (
+      <EmptyState
+        text="No hi ha proves tècniques"
+        subtext="Torna-ho a provar més tard o crea una nova prova"
+      />
+    );
+  }
+
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-      {technicalTests.map((test) => (
+      {filteredTests.map((test) => (
         <TechnicalTestCard key={test.id} test={test} />
       ))}
     </ul>

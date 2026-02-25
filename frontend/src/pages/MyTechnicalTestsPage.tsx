@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ function MyTechnicalTestsPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const toastShown = useRef(false);
+  const [languageFilter, setLanguageFilter] = useState<string | null>(null);
 
   useEffect(() => {
     if (location.state?.successMessage && !toastShown.current) {
@@ -21,8 +22,8 @@ function MyTechnicalTestsPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6">Proves tècniques</h1>
-      <TechnicalTestsHeader />
-      <TechnicalTestList />
+      <TechnicalTestsHeader onCategoryChange={setLanguageFilter} />
+      <TechnicalTestList language={languageFilter} />
     </div>
   );
 }
