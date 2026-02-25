@@ -22,7 +22,7 @@ class ResourceController extends Controller
     public function __construct()
     {
         // $this->middleware('auth:api');
-        $this->middleware('check.permission:view resources')->only(['index', 'show']);
+        // $this->middleware('check.permission:view resources')->only(['index', 'show']);
         $this->middleware('check.permission:create resources')->only(['store']);
     }
 

@@ -21,9 +21,8 @@ class TechnicalTestUpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Authenticate user for all tests in this class
         $user = User::factory()->create();
+        $user->assignRole('mentor');
         Sanctum::actingAs($user);
     }
 

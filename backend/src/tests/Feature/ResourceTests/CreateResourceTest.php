@@ -26,9 +26,8 @@ class CreateResourceTest extends TestCase
     private function authenticateSanctumUser(int $githubId = 123456): User
     {
         $user = User::factory()->create(['github_id' => $githubId]);
-
+        $user->assignRole('student');
         Sanctum::actingAs($user, ['*']);
-
         return $user;
     }
 

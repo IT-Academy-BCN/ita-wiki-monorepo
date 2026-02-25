@@ -18,7 +18,7 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, string $permission, ?string $ownershipField = null): Response
     {
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
         
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);

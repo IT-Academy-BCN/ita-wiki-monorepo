@@ -339,10 +339,10 @@ class TechnicalTestController extends Controller
      */
     public function update(StoreTechnicalTestRequest $request, TechnicalTest $technicalTest)
     {
-       /* $user = auth('api')->user();
+        $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }*/
+        }
 
         if (!$user->can('edit all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('edit own technical tests')) {
@@ -449,10 +449,10 @@ class TechnicalTestController extends Controller
      */
     public function destroy(TechnicalTest $technicalTest)
     {
-       /* $user = auth('api')->user();
+        $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }*/
+        }
         if (!$user->can('delete all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('delete own technical tests')) {
                 return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
