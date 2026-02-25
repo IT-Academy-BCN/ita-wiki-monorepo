@@ -2,25 +2,23 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router";
 import { vi, describe, test, expect, beforeEach } from "vitest";
+import "@testing-library/jest-dom";
 import AsideComponent from "../AsideComponent";
 import { useUserContext } from "../../../context/UserContext";
 import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
+import { AsideNavbarData } from "../aside/asideContent.tsx";
 import userEvent from "@testing-library/user-event";
 
 import sql_vector from "../../../assets/sqlVector.svg?react";
 import python_vector from "../../../assets/pythonVector.svg?react";
 import ts_vector from "../../../assets/TypescriptVector.svg?react";
 import js_vector from "../../../assets/javascript.svg?react";
-import java_vector from "../../../assets/logo-java 1.svg?react";
-import php_vector from "../../../assets/logo-php 1.svg?react";
+import java_vector from "../../../assets/logo-java-1.svg?react";
+import php_vector from "../../../assets/logo-php-1.svg?react";
 import react_vector from "../../../assets/react.svg?react";
-
-// Mocks
-const MockIcon = () => <svg data-testid="mock-icon" />;
 
 const mockUseLocation = vi.fn();
 const mockUseNavigate = vi.fn();
-const mockUseSearchParams = vi.fn();
 
 vi.mock("../../../context/UserContext", () => ({
   useUserContext: vi.fn().mockReturnValue({
@@ -32,6 +30,8 @@ vi.mock("../../../context/UserContext", () => ({
     setError: vi.fn(),
     saveUser: vi.fn(),
     setUser: vi.fn(),
+    loading: false,
+    setIsLoading: vi.fn(),
   }),
 }));
 
@@ -59,6 +59,27 @@ vi.mock("../../../assets/logo-node 1.svg?react", () => ({
 vi.mock("../../../assets/react.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
+vi.mock("../../../assets/homeIcon.svg?react", () => ({
+  default: () => <svg data-testid="home-icon" />,
+}));
+vi.mock("../../../assets/resourcesIcon.svg?react", () => ({
+  default: () => <svg data-testid="resources-icon" />,
+}));
+vi.mock("../../../assets/techTestsIcon.svg?react", () => ({
+  default: () => <svg data-testid="tech-tests-icon" />,
+}));
+vi.mock("../../../assets/codeConnectIcon.svg?react", () => ({
+  default: () => <svg data-testid="code-connect-icon" />,
+}));
+vi.mock("../../../assets/settingsIcon.svg?react", () => ({
+  default: () => <svg data-testid="settings-icon" />,
+}));
+vi.mock("../../../assets/questionIcon.svg?react", () => ({
+  default: () => <svg data-testid="question-icon" />,
+}));
+vi.mock("../../../assets/infoIcon.svg?react", () => ({
+  default: () => <svg data-testid="info-icon" />,
+}));
 
 vi.mock("react-router-dom", () => {
   const actual = vi.importActual("react-router-dom");
@@ -66,14 +87,8 @@ vi.mock("react-router-dom", () => {
     ...actual,
     useLocation: () => mockUseLocation(),
     useNavigate: () => mockUseNavigate(),
-    useSearchParams: () => mockUseSearchParams(),
   };
 });
-
-const contentForTechnicalTestMock = [
-  { icon: MockIcon, label: "React" },
-  { icon: MockIcon, label: "Node" },
-];
 
 describe("AsideComponent Tests", () => {
   beforeEach(() => {
@@ -88,62 +103,17 @@ describe("AsideComponent Tests", () => {
     });
 
     mockUseNavigate.mockReturnValue(vi.fn());
-    mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
-  });
-
-  test("renders search input when user is not logged in", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
-
-    render(
-      <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
-      </MemoryRouter>,
-    );
-
-    const searchInput = screen.getByRole("textbox");
-    expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute("placeholder", "Cercar recurs");
-
-    expect(screen.queryByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.queryByText("Crear recurs")).toBeInTheDocument();
-  });
-
-  test("should display 'Els meus recursos' and 'Crear recurs' sections", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
-
-    render(
-      <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
   });
 
   test("renders user sections when logged in", () => {
     vi.mocked(useUserContext).mockReturnValue({
       user: {
         id: 12345,
-        displayName: "Test User",
+        github_id: 12345,
+        name: "Test User",
+        github_user_name: "testuser",
+        email: "test@example.com",
+        password: "hashedpass",
         photoURL: "https://example.com/photo.jpg",
       },
       isAuthenticated: true,
@@ -153,41 +123,47 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Els meus recursos")).toBeInTheDocument();
-    expect(screen.getByText("Guardats")).toBeInTheDocument();
-    expect(screen.getByText("Creats")).toBeInTheDocument();
-    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
+    expect(screen.getByText("Configuració")).toBeInTheDocument();
+    expect(screen.getByText("Ajuda")).toBeInTheDocument();
+    expect(screen.getByText("Informació")).toBeInTheDocument();
   });
 
-  test("renders search input with correct attributes", () => {
-    vi.mocked(useUserContext).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      signIn: vi.fn(),
-      signOut: vi.fn(),
-      error: null,
-      setError: vi.fn(),
-      saveUser: vi.fn(),
-      setUser: vi.fn(),
-    });
-
+  test("should render IT Academy logo", () => {
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
-    const searchInput = screen.getByRole("textbox");
-    expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute("placeholder", "Cercar recurs");
+    const logo = screen.getByAltText("logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("width", "130px");
+  });
+
+  test("should render AsideNavbarLink the correct number of times", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <AsideComponent />
+      </MemoryRouter>,
+    );
+
+    AsideNavbarData.forEach((data) => {
+      expect(screen.getByText(data.label)).toBeInTheDocument();
+    });
+
+    const ul = container.querySelector("ul");
+    const listItems = ul?.querySelectorAll("li");
+    expect(listItems?.length).toBe(AsideNavbarData.length);
   });
 
   test("should render 'Inici' link", () => {
@@ -200,18 +176,20 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
     expect(screen.getByText("Inici")).toBeInTheDocument();
   });
 
-  test("should render 'Code Connect' link", () => {
+  test("should render 'Codeconnect' link", () => {
     vi.mocked(useUserContext).mockReturnValue({
       user: null,
       isAuthenticated: false,
@@ -221,15 +199,17 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
       </MemoryRouter>,
     );
 
-    const codeConnectLink = screen.getByText("Code Connect");
+    const codeConnectLink = screen.getByText("Codeconnect");
 
     expect(codeConnectLink).toBeInTheDocument();
 
@@ -246,18 +226,20 @@ describe("AsideComponent Tests", () => {
       setError: vi.fn(),
       saveUser: vi.fn(),
       setUser: vi.fn(),
+      loading: false,
+      setIsLoading: vi.fn(),
     });
 
     render(
       <MemoryRouter initialEntries={["/"]}>
-        <AsideComponent contentForTechnicalTest={contentForTechnicalTestMock} />
+        <AsideComponent />
         <Routes>
           <Route path="/codeconnect" element={<div>Code Connect Page</div>} />
         </Routes>
       </MemoryRouter>,
     );
 
-    const codeConnectLink = screen.getByText("Code Connect");
+    const codeConnectLink = screen.getByText("Codeconnect");
     const user = userEvent.setup();
     await user.click(codeConnectLink);
 

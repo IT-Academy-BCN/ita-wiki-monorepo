@@ -9,6 +9,7 @@ import { canBookmark } from "../data/permission/tempRolesPremission";
 interface ResourcesContextType {
   resources: IntResource[];
   isLoading: boolean;
+  error: Error | null;
   bookmarkedResources: IntBookmarkElement[];
   loadingBookmarks: boolean;
   isBookmarked: (resource: IntResource) => boolean;
@@ -21,6 +22,7 @@ interface ResourcesContextType {
 const ResourcesContext = createContext<ResourcesContextType>({
   resources: [],
   isLoading: true,
+  error: null,
   bookmarkedResources: [],
   loadingBookmarks: true,
   isBookmarked: () => false,
@@ -40,6 +42,7 @@ export const ResourcesProvider = ({
   const { user } = useUserContext();
   const [resources, setResources] = useState<IntResource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
   const [bookmarkedResources, setBookmarkedResources] = useState<
     IntBookmarkElement[]
   >([]);
@@ -63,6 +66,7 @@ export const ResourcesProvider = ({
         setBookmarkCounts(initialCounts);
       } catch (err) {
         console.error("Error loading resources:", err);
+        setError(err as Error);
       } finally {
         setIsLoading(false);
       }
@@ -222,6 +226,7 @@ export const ResourcesProvider = ({
       value={{
         resources,
         isLoading,
+        error,
         bookmarkedResources,
         loadingBookmarks,
         isBookmarked,
