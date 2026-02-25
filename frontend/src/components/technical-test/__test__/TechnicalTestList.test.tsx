@@ -19,6 +19,7 @@ const mockTests: TechnicalTest[] = [
     duration: 60,
     exercises: [],
     state: "published",
+    like_count: 3,
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const mockTests: TechnicalTest[] = [
     duration: 120,
     exercises: [],
     state: "published",
+    like_count: 10,
   },
 ];
 
@@ -91,6 +93,34 @@ describe("TechnicalTestList", () => {
     );
 
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
+
+  it("sorts tests by likes descending when sortByLikes is true", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList sortByLikes={true} />
+      </MemoryRouter>,
+    );
+
+    const titles = screen
+      .getAllByRole("link")
+      .map((el) => el.textContent)
+      .join(",");
+    expect(titles.indexOf("Test B")).toBeLessThan(titles.indexOf("Test A"));
+  });
+
+  it("shows natural order when sortByLikes is false", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList sortByLikes={false} />
+      </MemoryRouter>,
+    );
+
+    const titles = screen
+      .getAllByRole("link")
+      .map((el) => el.textContent)
+      .join(",");
+    expect(titles.indexOf("Test A")).toBeLessThan(titles.indexOf("Test B"));
   });
 
   it("shows error message when there is an error", () => {
