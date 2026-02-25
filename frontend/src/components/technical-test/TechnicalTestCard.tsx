@@ -27,7 +27,7 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
 
   const likeCount = test.like_count ?? 0;
 
-  const levelIcon = getLevelIcon(test.title);
+  const levelIcon = getLevelIcon(test.difficulty_level);
 
   return (
     <Link to={`/resources/technical-test/${test.id}`}>

@@ -38,24 +38,24 @@ describe("TechnicalTestCard", () => {
     vi.clearAllMocks();
   });
 
-  describe("Level icon hashing", () => {
-    it("should always return the same icon for the same title", () => {
-      const title = "React Testing Best Practices";
-
-      const firstResult = getLevelIcon(title);
-      const secondResult = getLevelIcon(title);
+  describe("Level icon by difficulty", () => {
+    it("should return the same icon for the same difficulty level", () => {
+      const firstResult = getLevelIcon("easy");
+      const secondResult = getLevelIcon("easy");
 
       expect(firstResult).toBe(secondResult);
     });
 
-    it("should return different icons for clearly different titles", () => {
-      const titleA = "A";
-      const titleB = "B";
+    it("should return different icons for different difficulty levels", () => {
+      const resultEasy = getLevelIcon("easy");
+      const resultHard = getLevelIcon("hard");
 
-      const resultA = getLevelIcon(titleA);
-      const resultB = getLevelIcon(titleB);
+      expect(resultEasy).not.toBe(resultHard);
+    });
 
-      expect(resultA).not.toBe(resultB);
+    it("should return a default icon for null difficulty", () => {
+      const result = getLevelIcon(null);
+      expect(result).toBeTruthy();
     });
   });
 
