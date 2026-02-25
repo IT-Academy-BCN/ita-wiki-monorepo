@@ -13,15 +13,10 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
-<<<<<<< feature/125-add-logic-to-the-switch
-// use App\Http\Controllers\TicketController;
-// use App\Http\Controllers\TicketCommentController;
-=======
 use App\Http\Controllers\ForumQuestionController;
 use App\Http\Controllers\ForumAnswerController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\TicketCommentController;
->>>>>>> develop
+// use App\Http\Controllers\TicketController;
+// use App\Http\Controllers\TicketCommentController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FeatureFlagController;
 
