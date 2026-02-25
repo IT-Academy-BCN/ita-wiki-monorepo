@@ -9,7 +9,7 @@ use App\Http\Requests\Tickets\CreateCommentRequest;
 use App\Http\Requests\Tickets\UpdateCommentRequest;
 use Illuminate\Http\JsonResponse;
 
-class TicketCommentController
+class TicketCommentController extends Controller
 {
     public function index($ticketId): JsonResponse
     {
@@ -75,14 +75,14 @@ class TicketCommentController
         ], 200);
     }
 
-    public function destroy($ticketId, $commentId): JsonResponse
+    public function destroy($ticketId, $commentId, Request $request): JsonResponse
     {
         $ticket = Ticket::findOrFail($ticketId);
         $comment = TicketComment::where('ticket_id', $ticket->id)
             ->where('id', $commentId)
             ->firstOrFail();
 
-        if ($comment->user_id !== auth()->id()) {
+        if ($comment->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to delete this comment'

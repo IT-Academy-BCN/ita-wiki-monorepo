@@ -26,12 +26,12 @@ class TicketFactory extends Factory
             'code_connect_id' => User::factory(),
             'name' => fake()->sentence(3),
             'incident_date' => fake()->date(),
-            'affected_app' => fake()->randomElement(['wiki_frontend', 'wiki_backend', 'code_connect', 'other']),
+            'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
             'type' => fake()->randomElement(['error', 'suggestion']),
-            'affected_function' => fake()->randomElement(['login', 'challenges', 'resources', 'profile', 'technical_tests', 'code_connect', 'other']),
+            'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
             'description' => fake()->paragraph(),
             'status' => 'pending',
-            'priority' => fake()->randomElement(['low', 'medium', 'high', 'critical']),
+            'priority' => fake()->randomElement(TicketPriorityEnum::values()),
         ];
         
     }
