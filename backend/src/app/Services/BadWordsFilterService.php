@@ -6,10 +6,8 @@ class BadWordsFilterService
 {
     private array $badWords;
 
-    public function __construct()
-    {
-        $this->badWords = [
-            'asesinato',
+      private const DEFAULT_BAD_WORDS = [ 
+             'asesinato',
             'asno',
             'bastardo',
             'bollera',
@@ -76,7 +74,11 @@ class BadWordsFilterService
             'verga',
             'vete a la mierda',
             'vulva',
-        ];
+      ];
+
+    public function __construct(array $badWords = self::DEFAULT_BAD_WORDS)
+    {
+        $this->badWords = $badWords;
     }
 
     public function filter(string $text): string
