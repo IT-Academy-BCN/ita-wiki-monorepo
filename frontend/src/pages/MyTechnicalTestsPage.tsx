@@ -10,6 +10,7 @@ function MyTechnicalTestsPage() {
   const location = useLocation();
   const toastShown = useRef(false);
   const [languageFilter, setLanguageFilter] = useState<string | null>(null);
+  const [sortByLikes, setSortByLikes] = useState(false);
 
   useEffect(() => {
     if (location.state?.successMessage && !toastShown.current) {
@@ -22,8 +23,11 @@ function MyTechnicalTestsPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6">Proves tècniques</h1>
-      <TechnicalTestsHeader onCategoryChange={setLanguageFilter} />
-      <TechnicalTestList language={languageFilter} />
+      <TechnicalTestsHeader
+        onCategoryChange={setLanguageFilter}
+        onSortByLikes={setSortByLikes}
+      />
+      <TechnicalTestList language={languageFilter} sortByLikes={sortByLikes} />
     </div>
   );
 }
