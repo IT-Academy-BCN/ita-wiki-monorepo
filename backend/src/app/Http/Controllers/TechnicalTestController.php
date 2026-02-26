@@ -10,6 +10,7 @@ use App\Enums\DifficultyLevelEnum;
 use App\Enums\TechnicalTestStatusEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -447,7 +448,7 @@ class TechnicalTestController extends Controller
      *     @OA\Response(response=403, description="Forbidden - Not your technical test")
      * )
      */
-    public function destroy(StoreTechnicalTestRequest $request, TechnicalTest $technicalTest)
+    public function destroy(Request $request, TechnicalTest $technicalTest)
     {
         $user = $request->user();
         if (!$user) {
