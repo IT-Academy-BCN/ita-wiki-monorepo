@@ -8,6 +8,7 @@ use App\Models\TicketComment;
 use App\Http\Requests\Tickets\CreateCommentRequest;
 use App\Http\Requests\Tickets\UpdateCommentRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TicketCommentController extends Controller
 {
