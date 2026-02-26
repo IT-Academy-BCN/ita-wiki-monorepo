@@ -15,8 +15,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
 use App\Http\Controllers\ForumQuestionController;
 use App\Http\Controllers\ForumAnswerController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\TicketCommentController;
+use App\Http\Controllers\Tickets\TicketController;
+use App\Http\Controllers\Tickets\TicketCommentController;
 use Illuminate\Http\Request;
 
 // GitHub Auth System Endpoints (PUBLIC)

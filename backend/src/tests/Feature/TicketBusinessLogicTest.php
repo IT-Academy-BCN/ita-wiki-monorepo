@@ -29,9 +29,10 @@ class TicketBusinessLogicTest extends TestCase{
 
         $this->assertEquals($assignee1->id, $ticket->assignee_id);
 
-        $this->patchJson("/api/tickets/{$ticket->id}/assign", [
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/assign", [
             'assignee_id' => $assignee2->id,
         ]);
+        $response->assertStatus(200);
 
         $ticket->refresh();
         $this->assertEquals($assignee2->id, $ticket->assignee_id);
