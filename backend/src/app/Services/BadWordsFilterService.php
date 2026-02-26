@@ -82,18 +82,24 @@ class BadWordsFilterService
     }
 
     public function filter(string $text): string
-    {
-        if (empty($this->badWords)) {
+{
+    if (empty($this->badWords)) {
         return $text;
-        }
-
-        $escapedWords = array_map(
-        fn($word) => preg_quote(mb_strtolower($word), '/'),
-        $this->badWords
-        );
-
-        $pattern = '/\b(' . implode('|', $escapedWords) . ')\b/iu';
-
-        return preg_replace($pattern, '***', $text) ?? $text;
     }
+
+   
+    $words = $this->badWords;
+    usort($words, fn($a, $b) => mb_strlen($b) <=> mb_strlen($a));
+
+
+    $escapedWords = array_map(
+        fn($word) => preg_quote(mb_strtolower($word), '/'),
+        $words
+    );
+
+    
+    $pattern = '/\b(' . implode('|', $escapedWords) . ')\b/iu';
+
+    return preg_replace($pattern, '***', $text) ?? $text;
+}
 }

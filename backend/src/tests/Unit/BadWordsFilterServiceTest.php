@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Services\BadWordsFilterService;
+use Tests\TestCase;
 
 class BadWordsFilterServiceTest extends TestCase
 {
@@ -13,108 +13,64 @@ class BadWordsFilterServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->filter = new BadWordsFilterService([
-              'asesinato',
-            'asno',
-            'bastardo',
-            'bollera',
-            'cabrón',
-            'caca',
-            'chupada',
-            'chupapollas',
-            'chupetón',
-            'concha',
-            'concha de tu madre',
-            'coño',
-            'coprofagía',
-            'culo',
-            'drogas',
-            'esperma',
-            'fiesta de salchichas',
-            'follador',
-            'follar',
-            'gilipichis',
-            'gilipollas',
-            'hacer una paja',
-            'haciendo el amor',
-            'heroína',
-            'hija de puta',
-            'hijaputa',
-            'hijo de puta',
-            'hijoputa',
-            'idiota',
-            'imbécil',
-            'infierno',
-            'jilipollas',
-            'kapullo',
-            'lameculos',
-            'maciza',
-            'macizorra',
-            'maldito',
-            'mamada',
-            'marica',
-            'maricón',
-            'mariconazo',
-            'mierda',
-            'nazi',
-            'orina',
-            'pedo',
-            'pendejo',
-            'pervertido',
-            'pezón',
-            'pinche',
-            'pis',
-            'prostituta',
-            'puta',
-            'racista',
-            'ramera',
-            'sádico',
-            'semen',
-            'sexo',
-            'sexo oral',
-            'soplagaitas',
-            'soplapollas',
-            'tetas grandes',
-            'tía buena',
-            'travesti',
-            'trio',
-            'verga',
-            'vete a la mierda',
-            'vulva',
-        ]);
+      
+        $this->filter = new BadWordsFilterService();
     }
 
-    public function test_it_replaces_exact_bad_word()
+    public function test_it_replaces_exact_bad_word(): void
     {
         $result = $this->filter->filter('Eres una puta');
 
         $this->assertEquals('Eres una ***', $result);
     }
 
-    public function test_it_is_case_insensitive()
+    public function test_it_is_case_insensitive(): void
     {
         $result = $this->filter->filter('Eres una PUTA');
 
         $this->assertEquals('Eres una ***', $result);
     }
 
-    public function test_it_does_not_replace_partial_words()
+    public function test_it_does_not_replace_partial_words(): void
     {
         $result = $this->filter->filter('computadora');
 
         $this->assertEquals('computadora', $result);
     }
 
-    public function test_it_replaces_multiple_occurrences()
+    public function test_it_replaces_multiple_occurrences(): void
     {
         $result = $this->filter->filter('puta mierda');
 
         $this->assertEquals('*** ***', $result);
     }
 
-    public function test_clean_text_remains_unchanged()
+    public function test_it_replaces_multi_word_phrase(): void
     {
-        $result = $this->filter->filter('Hola mundo');
+        $result = $this->filter->filter('Eres una concha de tu madre');
+
+        $this->assertEquals('Eres una ***', $result);
+    }
+
+    public function test_it_replaces_accented_word(): void
+    {
+        $result = $this->filter->filter('Eres un cabrón');
+
+        $this->assertEquals('Eres un ***', $result);
+    }
+
+    public function test_empty_string_remains_unchanged(): void
+    {
+        $result = $this->filter->filter('');
+
+        $this->assertEquals('', $result);
+    }
+
+    public function test_empty_list_returns_same_text(): void
+    {
+        $filter = new BadWordsFilterService([]);
+
+        $result = $filter->filter('Hola mundo');
 
         $this->assertEquals('Hola mundo', $result);
     }
