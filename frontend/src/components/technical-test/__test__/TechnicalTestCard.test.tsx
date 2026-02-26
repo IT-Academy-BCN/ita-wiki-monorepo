@@ -72,10 +72,7 @@ describe("TechnicalTestCard", () => {
       });
 
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute(
-        "href",
-        "/resources/technical-test/123",
-      );
+      expect(link).toHaveAttribute("href", "/resources/technical-test/123");
     });
 
     it("should generate correct URL for different test IDs", () => {
@@ -86,10 +83,7 @@ describe("TechnicalTestCard", () => {
         name: new RegExp(differentTest.title, "i"),
       });
 
-      expect(link).toHaveAttribute(
-        "href",
-        "/resources/technical-test/456",
-      );
+      expect(link).toHaveAttribute("href", "/resources/technical-test/456");
     });
   });
 
