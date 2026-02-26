@@ -30,4 +30,40 @@ describe("TechnicalTestsHeader", () => {
     fireEvent.click(screen.getByText("React"));
     expect(mockOnChange).toHaveBeenCalledWith(null);
   });
+
+  it("renders the LikesSortButton", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.getByText("Likes")).toBeInTheDocument();
+  });
+
+  it("LikesSortButton starts inactive", () => {
+    render(<TechnicalTestsHeader />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(button).toHaveClass("bg-white");
+  });
+
+  it("LikesSortButton toggles active state on click", () => {
+    render(<TechnicalTestsHeader />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(button).toHaveClass("text-white");
+  });
+
+  it("calls onSortByLikes with true when Likes button activated", () => {
+    const mockOnSort = vi.fn();
+    render(<TechnicalTestsHeader onSortByLikes={mockOnSort} />);
+    fireEvent.click(screen.getByRole("button", { name: /likes/i }));
+    expect(mockOnSort).toHaveBeenCalledWith(true);
+  });
+
+  it("calls onSortByLikes with false when Likes button deactivated", () => {
+    const mockOnSort = vi.fn();
+    render(<TechnicalTestsHeader onSortByLikes={mockOnSort} />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(mockOnSort).toHaveBeenLastCalledWith(false);
+  });
 });

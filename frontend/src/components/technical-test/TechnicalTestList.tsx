@@ -7,9 +7,13 @@ import EmptyState from "../ui/EmptyState";
 
 interface TechnicalTestListProps {
   language?: string | null;
+  sortByLikes?: boolean;
 }
 
-const TechnicalTestList: FC<TechnicalTestListProps> = ({ language }) => {
+const TechnicalTestList: FC<TechnicalTestListProps> = ({
+  language,
+  sortByLikes,
+}) => {
   const { technicalTests, isLoading, error } = useTechnicalTestList();
   const showLoader = useMinLoading(isLoading);
 
@@ -46,6 +50,12 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ language }) => {
     ? technicalTests.filter((t) => t.language === language)
     : technicalTests;
 
+  const sortedTests = sortByLikes
+    ? [...filteredTests].sort(
+        (a, b) => (b.like_count ?? 0) - (a.like_count ?? 0),
+      )
+    : filteredTests;
+
   if (filteredTests.length === 0) {
     return (
       <EmptyState
@@ -57,7 +67,7 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({ language }) => {
 
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-      {filteredTests.map((test) => (
+      {sortedTests.map((test) => (
         <TechnicalTestCard key={test.id} test={test} />
       ))}
     </ul>
