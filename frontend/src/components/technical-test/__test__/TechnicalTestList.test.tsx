@@ -61,82 +61,36 @@ describe("TechnicalTestList", () => {
     });
   });
 
-  it("The title 'Proves tècniques' must be displayed", () => {
+  it("filters by language when language prop is provided", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList language="JavaScript" />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test A")).toBeDefined();
+    expect(screen.queryByText("Test B")).toBeNull();
+  });
+
+  it("shows all tests when no language prop is provided", () => {
     render(
       <MemoryRouter>
         <TechnicalTestList />
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Proves tècniques")).toBeDefined();
-  });
-
-  it("filters by language when filters are provided", () => {
-    render(
-      <MemoryRouter>
-        <TechnicalTestList
-          filters={{
-            languages: ["JavaScript"],
-            years: [],
-            difficulties: [],
-          }}
-        />
-      </MemoryRouter>,
-    );
-
     expect(screen.getByText("Test A")).toBeDefined();
-    expect(screen.queryByText("Test B")).toBeNull();
-  });
-
-  it("filters by year when filters are provided", () => {
-    render(
-      <MemoryRouter>
-        <TechnicalTestList
-          filters={{
-            languages: [],
-            years: ["2024"],
-            difficulties: [],
-          }}
-        />
-      </MemoryRouter>,
-    );
-
     expect(screen.getByText("Test B")).toBeDefined();
-    expect(screen.queryByText("Test A")).toBeNull();
   });
 
-  it("filters by difficulty (Bàsica -> easy)", () => {
+  it("shows EmptyState when language filter returns no results", () => {
     render(
       <MemoryRouter>
-        <TechnicalTestList
-          filters={{
-            languages: [],
-            years: [],
-            difficulties: ["Bàsica"],
-          }}
-        />
+        <TechnicalTestList language="Python" />
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Test A")).toBeDefined();
-    expect(screen.queryByText("Test B")).toBeNull();
-  });
-
-  it("filters by difficulty (Difícil -> hard)", () => {
-    render(
-      <MemoryRouter>
-        <TechnicalTestList
-          filters={{
-            languages: [],
-            years: [],
-            difficulties: ["Difícil"],
-          }}
-        />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("Test B")).toBeDefined();
-    expect(screen.queryByText("Test A")).toBeNull();
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
 
   it("shows error message when there is an error", () => {
@@ -170,23 +124,6 @@ describe("TechnicalTestList", () => {
 
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
-
-  it("shows EmptyState when filters return no results", () => {
-    render(
-      <MemoryRouter>
-        <TechnicalTestList
-          filters={{
-            languages: ["Python"],
-            years: [],
-            difficulties: [],
-          }}
-        />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
-  });
-
   it("shows EmptyState with error styling when there is an error", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: [],
