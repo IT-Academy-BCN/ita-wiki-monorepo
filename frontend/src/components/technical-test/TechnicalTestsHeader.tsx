@@ -1,14 +1,26 @@
-import LanguageTagsBar from "./LanguageTagsBar";
+import { useState } from "react";
+import LanguageTagsBar from "./LanguageTagsBar.tsx";
+import LikesSortButton from "./LikesSortButton";
 
 interface TechnicalTestsHeaderProps {
   initialCategory?: string;
   onCategoryChange?: (category: string | null) => void;
+  onSortByLikes?: (active: boolean) => void;
 }
 
 const TechnicalTestsHeader = ({
   initialCategory,
   onCategoryChange,
+  onSortByLikes,
 }: TechnicalTestsHeaderProps) => {
+  const [sortByLikes, setSortByLikes] = useState(false);
+
+  const handleLikesToggle = () => {
+    const next = !sortByLikes;
+    setSortByLikes(next);
+    onSortByLikes?.(next);
+  };
+
   return (
     <div className="flex justify-between items-start mb-6">
       <LanguageTagsBar
@@ -16,8 +28,9 @@ const TechnicalTestsHeader = ({
         onSelect={onCategoryChange}
       />
 
-      {/* Botons d'acció — pendents d'implementar */}
-      <div />
+      <div className="flex items-center gap-2">
+        <LikesSortButton isActive={sortByLikes} onClick={handleLikesToggle} />
+      </div>
     </div>
   );
 };
