@@ -25,13 +25,17 @@ const renderWithRouter = (component: React.ReactElement) => {
 
 describe("TechnicalTestCard", () => {
   const mockTest: TechnicalTest = {
-    id: "test-123",
+    id: 123,
     title: "React Testing Best Practices",
     language: "React",
     description: "Learn how to test React components",
     tags: ["testing", "react"],
     created_at: "2025-01-15T10:30:00Z",
     updated_at: "2025-11-24T14:20:00Z",
+    difficulty_level: "easy",
+    duration: null,
+    exercises: [],
+    state: "published",
   };
 
   beforeEach(() => {
@@ -70,12 +74,12 @@ describe("TechnicalTestCard", () => {
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute(
         "href",
-        `/resources/technical-test/${mockTest.id}`,
+        "/resources/technical-test/123",
       );
     });
 
     it("should generate correct URL for different test IDs", () => {
-      const differentTest = { ...mockTest, id: "test-456" };
+      const differentTest = { ...mockTest, id: 456 };
       renderWithRouter(<TechnicalTestCard test={differentTest} />);
 
       const link = screen.getByRole("link", {
@@ -84,7 +88,7 @@ describe("TechnicalTestCard", () => {
 
       expect(link).toHaveAttribute(
         "href",
-        "/resources/technical-test/test-456",
+        "/resources/technical-test/456",
       );
     });
   });
