@@ -89,4 +89,14 @@ class FeatureFlagControllerTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    public function test_unauthenticated_user_cannot_change_role(): void
+    {
+        $response = $this->putJson('/api/feature-flags/role-self-assignment', [
+            'github_id' => 123456,
+            'role' => 'student',
+        ]);
+
+        $response->assertStatus(401);
+    }
 }

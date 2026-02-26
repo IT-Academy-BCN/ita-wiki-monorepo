@@ -42,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'message' => 'Session closed successfully'
         ]);
     });
+
+    Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
 });
 
 
@@ -145,7 +147,7 @@ Route::prefix('roles')->group(function () {
     Route::get('/users/{user}', [RoleController::class, 'getUserRoles'])->name('roles.user');
 });
 
-Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
+
 
 // ========== BUGS REPORTING TICKETING SYSTEM ==========
 

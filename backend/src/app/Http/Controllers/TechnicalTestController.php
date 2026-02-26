@@ -447,7 +447,7 @@ class TechnicalTestController extends Controller
      *     @OA\Response(response=403, description="Forbidden - Not your technical test")
      * )
      */
-    public function destroy(TechnicalTest $technicalTest)
+    public function destroy(StoreTechnicalTestRequest $request, TechnicalTest $technicalTest)
     {
         $user = $request->user();
         if (!$user) {

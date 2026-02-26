@@ -44,12 +44,18 @@ class CheckPermission
     
     private function getModelFromRoute(Request $request)
     {
-        if ($request->route('resource')) {
-            return \App\Models\Resource::find($request->route('resource'));
+        $resource = $request->route('resource');
+        if ($resource) {
+            return $resource instanceof \App\Models\Resource
+                ? $resource
+                : \App\Models\Resource::find($resource);
         }
-        
-        if ($request->route('technicalTest')) {
-            return \App\Models\TechnicalTest::find($request->route('technicalTest'));
+
+        $technicalTest = $request->route('technicalTest');
+        if ($technicalTest) {
+            return $technicalTest instanceof \App\Models\TechnicalTest
+                ? $technicalTest
+                : \App\Models\TechnicalTest::find($technicalTest);
         }
         
         return null;
