@@ -15,9 +15,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
 use App\Http\Controllers\ForumQuestionController;
 use App\Http\Controllers\ForumAnswerController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\TicketCommentController;
+// use App\Http\Controllers\TicketController;
+// use App\Http\Controllers\TicketCommentController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FeatureFlagController;
 
 // GitHub Auth System Endpoints (PUBLIC)
 Route::get('/auth/github/redirect', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
@@ -41,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'message' => 'Session closed successfully'
         ]);
     });
+
+    Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
 });
 
 
@@ -144,23 +147,25 @@ Route::prefix('roles')->group(function () {
     Route::get('/users/{user}', [RoleController::class, 'getUserRoles'])->name('roles.user');
 });
 
+
+
 // ========== BUGS REPORTING TICKETING SYSTEM ==========
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('tickets', TicketController::class);
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::apiResource('tickets', TicketController::class);
 
-    Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus'])
-        ->name('tickets.status.update');
+//     Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus'])
+//         ->name('tickets.status.update');
 
-    Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])
-        ->name('tickets.priority.update');
+//     Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])
+//         ->name('tickets.priority.update');
 
-    Route::patch('tickets/{ticket}/assign', [TicketController::class, 'assign'])
-        ->name('tickets.assign');
+//     Route::patch('tickets/{ticket}/assign', [TicketController::class, 'assign'])
+//         ->name('tickets.assign');
 
-    Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])
-        ->name('tickets.comments.index');
+//     Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])
+//         ->name('tickets.comments.index');
 
-    Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])
-        ->name('tickets.comments.store');
-});
+//     Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])
+//         ->name('tickets.comments.store');
+// });
