@@ -14,8 +14,8 @@ class BookmarkController extends Controller
     public function __construct()
     {
         // $this->middleware('auth:api');
-        // $this->middleware('check.permission:create bookmarks')->only(['createStudentBookmark']);
-        // $this->middleware('check.permission:delete own bookmarks')->only(['deleteStudentBookmark']);
+        $this->middleware('check.permission:create bookmarks')->only(['createStudentBookmark']);
+        $this->middleware('check.permission:delete own bookmarks')->only(['deleteStudentBookmark']);
     }
 
     /**
