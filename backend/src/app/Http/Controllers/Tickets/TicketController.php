@@ -104,7 +104,7 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function assign(AssignTicketRequest $request, $id): JsonResponse{
+    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse{
 
         $ticket = Ticket::findOrFail($id);
 
