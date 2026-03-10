@@ -66,4 +66,32 @@ describe("TechnicalTestsHeader", () => {
     fireEvent.click(button);
     expect(mockOnSort).toHaveBeenLastCalledWith(false);
   });
+
+  it("renders the FiltersButton", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.getByTestId("filters-button")).toBeInTheDocument();
+  });
+
+  it("FiltersButton dropdown is hidden by default", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.queryByTestId("filters-dropdown")).not.toBeInTheDocument();
+  });
+
+  it("FiltersButton opens dropdown on click", () => {
+    render(<TechnicalTestsHeader />);
+    fireEvent.click(screen.getByTestId("filters-button"));
+    expect(screen.getByTestId("filters-dropdown")).toBeInTheDocument();
+  });
+
+  it("calls onFilter with selected filters on confirm", () => {
+    const mockOnFilter = vi.fn();
+    render(<TechnicalTestsHeader onFilter={mockOnFilter} />);
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("difficulty-easy"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+    expect(mockOnFilter).toHaveBeenCalledWith({
+      difficulty: "easy",
+      year: null,
+    });
+  });
 });
