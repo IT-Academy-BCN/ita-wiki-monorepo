@@ -17,7 +17,10 @@ fi
 
 echo "Loading environment variables from .env..."
 if [ -f .env ]; then
-    export $(grep -v '^[#[:space:]]' .env | xargs)
+    sed -i 's/\r//' .env
+    set -o allexport
+    source .env
+    set +o allexport
 fi
 
 echo "APP_ENV is set to: '$APP_ENV'"
@@ -30,7 +33,8 @@ fi
 echo "Waiting for database connection..."
 RETRIES=60
 until mysqladmin --skip-ssl --protocol=tcp -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" ping --silent  || [ $RETRIES -le 0 ]; do
-    echo "Database not ready. Retrying in 5 seconds..." RETRIES=$((RETRIES-1))
+    RETRIES=$((RETRIES-1))
+    echo "Database not ready. Retrying in 5 seconds... RETRIES=$RETRIES"
     sleep 5
 done
 
@@ -44,7 +48,9 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 
         if [ -f .env ]; then
-        export $(grep -v '^[#[:space:]]' .env | xargs)
+        set -o allexport
+        source .env
+        set +o allexport
     fi
 else
     echo "APP_KEY is already set. Skipping key:generate."
