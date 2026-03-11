@@ -81,3 +81,7 @@ chmod -R ug+rwx storage bootstrap/cache
 
 echo "Starting PHP-FPM and Nginx..."
 exec sh -c "php-fpm & nginx -g 'daemon off;'"
+
+
+
+
