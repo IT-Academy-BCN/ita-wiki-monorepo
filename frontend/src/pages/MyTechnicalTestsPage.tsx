@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import TechnicalTestsHeader from "../components/technical-test/TechnicalTestsHeader";
 import TechnicalTestList from "../components/technical-test/TechnicalTestList";
+import { FiltersValue } from "../components/technical-test/FiltersButton";
 
 function MyTechnicalTestsPage() {
   const navigate = useNavigate();
@@ -11,6 +12,13 @@ function MyTechnicalTestsPage() {
   const toastShown = useRef(false);
   const [languageFilter, setLanguageFilter] = useState<string | null>(null);
   const [sortByLikes, setSortByLikes] = useState(false);
+  const [difficulty, setDifficulty] = useState<string | null>(null);
+  const [year, setYear] = useState<number | null>(null);
+
+  const handleFilter = ({ difficulty, year }: FiltersValue) => {
+    setDifficulty(difficulty);
+    setYear(year);
+  };
 
   useEffect(() => {
     if (location.state?.successMessage && !toastShown.current) {
@@ -26,8 +34,14 @@ function MyTechnicalTestsPage() {
       <TechnicalTestsHeader
         onCategoryChange={setLanguageFilter}
         onSortByLikes={setSortByLikes}
+        onFilter={handleFilter}
       />
-      <TechnicalTestList language={languageFilter} sortByLikes={sortByLikes} />
+      <TechnicalTestList
+        language={languageFilter}
+        sortByLikes={sortByLikes}
+        difficulty={difficulty}
+        year={year}
+      />
     </div>
   );
 }

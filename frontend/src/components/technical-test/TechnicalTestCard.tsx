@@ -15,10 +15,10 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
   const IconComponent = language?.icon;
 
   const formattedDate =
-    typeof test.updated_at === "string" && isNaN(Date.parse(test.updated_at))
-      ? test.updated_at
-      : test.updated_at
-        ? new Date(test.updated_at).toLocaleDateString("ca-ES", {
+    typeof test.created_at === "string" && isNaN(Date.parse(test.created_at))
+      ? test.created_at
+      : test.created_at
+        ? new Date(test.created_at).toLocaleDateString("ca-ES", {
             day: "2-digit",
             month: "short",
             year: "numeric",
@@ -27,7 +27,7 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
 
   const likeCount = test.like_count ?? 0;
 
-  const levelIcon = getLevelIcon(test.title);
+  const levelIcon = getLevelIcon(test.difficulty_level);
 
   return (
     <Link to={`/resources/technical-test/${test.id}`}>

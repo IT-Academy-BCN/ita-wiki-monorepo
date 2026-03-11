@@ -8,11 +8,15 @@ import EmptyState from "../ui/EmptyState";
 interface TechnicalTestListProps {
   language?: string | null;
   sortByLikes?: boolean;
+  difficulty?: string | null;
+  year?: number | null;
 }
 
 const TechnicalTestList: FC<TechnicalTestListProps> = ({
   language,
   sortByLikes,
+  difficulty,
+  year,
 }) => {
   const { technicalTests, isLoading, error } = useTechnicalTestList();
   const showLoader = useMinLoading(isLoading);
@@ -46,9 +50,12 @@ const TechnicalTestList: FC<TechnicalTestListProps> = ({
     );
   }
 
-  const filteredTests = language
-    ? technicalTests.filter((t) => t.language === language)
-    : technicalTests;
+  const filteredTests = technicalTests.filter((t) => {
+    if (language && t.language !== language) return false;
+    if (difficulty && t.difficulty_level !== difficulty) return false;
+    if (year && new Date(t.created_at).getFullYear() !== year) return false;
+    return true;
+  });
 
   const sortedTests = sortByLikes
     ? [...filteredTests].sort(

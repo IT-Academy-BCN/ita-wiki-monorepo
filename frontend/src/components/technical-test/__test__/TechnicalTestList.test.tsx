@@ -95,6 +95,49 @@ describe("TechnicalTestList", () => {
     expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
   });
 
+  it("filters by difficulty when difficulty prop is provided", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList difficulty="easy" />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test A")).toBeDefined();
+    expect(screen.queryByText("Test B")).toBeNull();
+  });
+
+  it("filters by year when year prop is provided", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList year={2025} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test A")).toBeDefined();
+    expect(screen.queryByText("Test B")).toBeNull();
+  });
+
+  it("shows EmptyState when difficulty filter returns no results", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList difficulty="medium" />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No hi ha proves tècniques")).toBeDefined();
+  });
+
+  it("filters by difficulty and year combined", () => {
+    render(
+      <MemoryRouter>
+        <TechnicalTestList difficulty="hard" year={2024} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Test B")).toBeDefined();
+    expect(screen.queryByText("Test A")).toBeNull();
+  });
+
   it("sorts tests by likes descending when sortByLikes is true", () => {
     render(
       <MemoryRouter>

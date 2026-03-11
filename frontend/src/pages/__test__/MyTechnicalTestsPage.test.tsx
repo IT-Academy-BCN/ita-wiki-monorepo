@@ -45,6 +45,20 @@ const mockTechnicalTests = [
     state: "published",
     like_count: 99,
   },
+  {
+    id: 3,
+    title: "Old Medium Test",
+    language: "JavaScript",
+    description: "",
+    tags: [],
+    created_at: "2024-06-01T00:00:00Z",
+    updated_at: "2024-06-01T00:00:00Z",
+    difficulty_level: "medium",
+    duration: 45,
+    exercises: [],
+    state: "published",
+    like_count: 5,
+  },
 ];
 
 vi.mock("../../hooks/useTechnicalTestList");
@@ -90,6 +104,50 @@ describe("MyTechnicalTestsPage", () => {
     );
 
     expect(screen.getByText("Proves tècniques")).toBeInTheDocument();
+  });
+
+  it("filters by difficulty when confirmed from FiltersButton", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: mockTechnicalTests,
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("difficulty-easy"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+
+    expect(screen.getByText("Low Likes Test")).toBeInTheDocument();
+    expect(screen.queryByText("High Likes Test")).not.toBeInTheDocument();
+    expect(screen.queryByText("Old Medium Test")).not.toBeInTheDocument();
+  });
+
+  it("filters by year when confirmed from FiltersButton", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: mockTechnicalTests,
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("year-2024"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+
+    expect(screen.getByText("Old Medium Test")).toBeInTheDocument();
+    expect(screen.queryByText("Low Likes Test")).not.toBeInTheDocument();
+    expect(screen.queryByText("High Likes Test")).not.toBeInTheDocument();
   });
 
   it("sorts cards by likes descending when Likes button is clicked", () => {
