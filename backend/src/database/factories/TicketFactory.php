@@ -24,15 +24,15 @@ class TicketFactory extends Factory
     {
         return [
             'code_connect_id' => User::factory(),
-            'name' => fake()->sentence(4),
+            'name' => fake()->sentence(3),
             'incident_date' => fake()->date(),
             'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
-            'type' => fake()->randomElement(TicketTypeEnum::values()),
-            'status' => TicketStatusEnum::Pending->value,
+            'type' => fake()->randomElement(['error', 'suggestion']),
             'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
             'description' => fake()->paragraph(),
+            'status' => 'pending',
             'priority' => fake()->randomElement(TicketPriorityEnum::values()),
-            
         ];
+        
     }
 }

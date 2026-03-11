@@ -29,6 +29,7 @@ class Ticket extends Model
         'description',
         'status',
         'priority',
+        'assignee_id',
         'closed_by',
         'closed_at'
     ];
@@ -51,6 +52,11 @@ class Ticket extends Model
     public function closedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'closed_by');
+    }
+
+    public function assignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assignee_id');
     }
 
     public function comments(): HasMany
