@@ -1,0 +1,97 @@
+import "@testing-library/jest-dom/vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import TechnicalTestsHeader from "../TechnicalTestsHeader";
+import { contentForTechnicalTest } from "../languageLabelsContent";
+
+const firstLanguage = contentForTechnicalTest[0].label;
+
+describe("TechnicalTestsHeader", () => {
+  it("renders the LanguageTagsBar", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.getByText(firstLanguage)).toBeInTheDocument();
+  });
+
+  it("calls onCategoryChange when a language is selected", () => {
+    const mockOnChange = vi.fn();
+    render(<TechnicalTestsHeader onCategoryChange={mockOnChange} />);
+    fireEvent.click(screen.getByText(firstLanguage));
+    expect(mockOnChange).toHaveBeenCalledWith(firstLanguage);
+  });
+
+  it("calls onCategoryChange with null when language is deselected", () => {
+    const mockOnChange = vi.fn();
+    render(
+      <TechnicalTestsHeader
+        initialCategory="React"
+        onCategoryChange={mockOnChange}
+      />,
+    );
+    fireEvent.click(screen.getByText("React"));
+    expect(mockOnChange).toHaveBeenCalledWith(null);
+  });
+
+  it("renders the LikesSortButton", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.getByText("Likes")).toBeInTheDocument();
+  });
+
+  it("LikesSortButton starts inactive", () => {
+    render(<TechnicalTestsHeader />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(button).toHaveClass("bg-white");
+  });
+
+  it("LikesSortButton toggles active state on click", () => {
+    render(<TechnicalTestsHeader />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(button).toHaveClass("text-white");
+  });
+
+  it("calls onSortByLikes with true when Likes button activated", () => {
+    const mockOnSort = vi.fn();
+    render(<TechnicalTestsHeader onSortByLikes={mockOnSort} />);
+    fireEvent.click(screen.getByRole("button", { name: /likes/i }));
+    expect(mockOnSort).toHaveBeenCalledWith(true);
+  });
+
+  it("calls onSortByLikes with false when Likes button deactivated", () => {
+    const mockOnSort = vi.fn();
+    render(<TechnicalTestsHeader onSortByLikes={mockOnSort} />);
+    const button = screen.getByRole("button", { name: /likes/i });
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(mockOnSort).toHaveBeenLastCalledWith(false);
+  });
+
+  it("renders the FiltersButton", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.getByTestId("filters-button")).toBeInTheDocument();
+  });
+
+  it("FiltersButton dropdown is hidden by default", () => {
+    render(<TechnicalTestsHeader />);
+    expect(screen.queryByTestId("filters-dropdown")).not.toBeInTheDocument();
+  });
+
+  it("FiltersButton opens dropdown on click", () => {
+    render(<TechnicalTestsHeader />);
+    fireEvent.click(screen.getByTestId("filters-button"));
+    expect(screen.getByTestId("filters-dropdown")).toBeInTheDocument();
+  });
+
+  it("calls onFilter with selected filters on confirm", () => {
+    const mockOnFilter = vi.fn();
+    render(<TechnicalTestsHeader onFilter={mockOnFilter} />);
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("difficulty-easy"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+    expect(mockOnFilter).toHaveBeenCalledWith({
+      difficulty: "easy",
+      year: null,
+    });
+  });
+});

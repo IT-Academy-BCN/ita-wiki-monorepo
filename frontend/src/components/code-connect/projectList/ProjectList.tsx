@@ -1,6 +1,8 @@
-import ProjectCard from "../projectCard/ProjectCard";
-import type { Project } from "../projectCard/types/projectTypes";
+import { useState, useEffect } from "react";
 import projectsData from "../../../moock/projects.json";
+import { useMinLoading } from "../../../hooks/useMinLoading";
+import ProjectListUI from "./ProjectListUI";
+import type { Project } from "../projectCard/types/projectTypes";
 
 function ProjectList({
   onCardClick,
@@ -9,6 +11,15 @@ function ProjectList({
   onCardClick?: (id: number) => void;
   filter?: string | null;
 }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const error = null;
+  const showLoader = useMinLoading(isLoading);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const projects = (projectsData as Project[]).filter((p) => {
     if (!filter) return true;
     const f = filter.toLowerCase();
@@ -19,20 +30,12 @@ function ProjectList({
   });
 
   return (
-    <>
-      <h2 className="text-2xl font-bold  py-4 sm:py-6 text-black sm:mb-4">
-        Llista de projectes
-      </h2>
-      <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onClick={onCardClick}
-          />
-        ))}
-      </div>
-    </>
+    <ProjectListUI
+      projects={projects}
+      showLoader={showLoader}
+      error={error}
+      onCardClick={onCardClick}
+    />
   );
 }
 

@@ -52,12 +52,13 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
         $this->assertDatabaseHas('users', [
             'github_id' => '12345',
             'github_user_name' => 'testuser',
             'name' => 'Test User',
+            'avatar' => 'https://github.com/avatars/test.jpg'
         ]);
     }
 
@@ -66,6 +67,7 @@ class GitHubOAuthTest extends TestCase
             'github_id' => '12345',
             'github_user_name' => 'oldusername',
             'name' => 'Old Name',
+            'avatar' => 'https://github.com/avatars/old.jpg',
             'email' => 'test_update_' . time() . '@example.com'
         ]);
 
@@ -85,13 +87,14 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('token=', $redirectUrl);
 
         $this->assertDatabaseHas('users', [
             'id' => $existingUser->id,
             'github_user_name' => 'newusername',
-            'name' => 'New Name'
+            'name' => 'New Name',
+            'avatar' => 'https://github.com/avatars/new.jpg'
         ]);
     }
 
@@ -102,6 +105,7 @@ class GitHubOAuthTest extends TestCase
             'github_id' => '12345',
             'github_user_name' => 'testuser',
             'name' => 'Test User',
+            'avatar' => 'https://github.com/avatars/test.jpg',
             'email' => 'test_get_' . time() . '@example.com',
         ]);
 
@@ -122,6 +126,7 @@ class GitHubOAuthTest extends TestCase
                     'github_id' => '12345',
                     'github_user_name' => 'testuser',
                     'name' => 'Test User',
+                    'avatar' => 'https://github.com/avatars/test.jpg',
                 ]
             ])
             ->assertJsonStructure([
@@ -130,6 +135,7 @@ class GitHubOAuthTest extends TestCase
                     'id',
                     'github_id',
                     'name',
+                    'avatar',
                     'email',
                     'github_user_name',
                 ]
@@ -158,7 +164,7 @@ class GitHubOAuthTest extends TestCase
             ->assertRedirect();
 
         $redirectUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('http://localhost:5173/auth/callback', $redirectUrl);
+        $this->assertStringContainsString('http://localhost/auth/callback', $redirectUrl);
         $this->assertStringContainsString('success=false', $redirectUrl);
         $this->assertStringContainsString('error=Authentication+error', $redirectUrl);
     }
@@ -171,6 +177,7 @@ class GitHubOAuthTest extends TestCase
         $githubUser->id = '12345';
         $githubUser->nickname = 'testuser';
         $githubUser->name = 'Test User';
+        $githubUser->avatar = 'https://github.com/avatars/test.jpg';
         $githubUser->email = 'test@example.com';
 
         Socialite::shouldReceive('driver->stateless->user')

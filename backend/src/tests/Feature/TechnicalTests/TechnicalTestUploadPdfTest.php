@@ -20,6 +20,7 @@ class TechnicalTestUploadPdfTest extends TestCase
         
         // Authenticate user for all tests in this class
         $user = User::factory()->create();
+        $user->assignRole('mentor');
         Sanctum::actingAs($user);
     }
 
