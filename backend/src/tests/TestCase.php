@@ -49,8 +49,9 @@ abstract class TestCase extends BaseTestCase
     {
         $user = User::factory()->create();
         $user->assignRole($role);
-      
-        $this->actingAs($user, 'api');
+
+        \Laravel\Sanctum\Sanctum::actingAs($user);
+        //$this->actingAs($user, 'api');
         
         return $user;
     }

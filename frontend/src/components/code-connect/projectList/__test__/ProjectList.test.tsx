@@ -1,70 +1,78 @@
 import { describe, it, expect } from "vitest";
-import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import ProjectList from "../ProjectList";
-import projectsData from "../../../../moock/projects.json";
+import ProjectListUI from "../ProjectListUI";
 
-type Project = (typeof projectsData)[number];
+const mockProject = {
+  id: 1,
+  title: "Test Project",
+  frontend: {
+    tech: "React",
+    positions: 2,
+    participants: [],
+  },
+  backend: {
+    tech: "Node",
+    positions: 2,
+    participants: [],
+  },
+};
 
-function expectedCount(filter: string | null | undefined) {
-  const list = projectsData as Project[];
-  if (!filter) return list.length;
-  const f = filter.toLowerCase();
-  return list.filter(
-    (p) =>
-      p.frontend?.tech?.toLowerCase() === f ||
-      p.backend?.tech?.toLowerCase() === f,
-  ).length;
-}
-
-function countRenderedCards() {
-  return screen.queryAllByText("Frontend").length;
-}
-
-describe("ProjectList tech filter", () => {
-  it("renders all projects when filter is null", () => {
+describe("ProjectListUI", () => {
+  it("muestra skeletons cuando showLoader es true", () => {
     render(
       <MemoryRouter>
-        <ProjectList filter={null} />
+        <ProjectListUI projects={[]} showLoader={true} error={null} />
       </MemoryRouter>,
     );
-    expect(countRenderedCards()).toBe(expectedCount(null));
+    expect(screen.getByText("Llista de projectes")).toBeDefined();
+    // Skeletons se renderizan
   });
 
-  it("filters by frontend tech (React)", () => {
+  it("muestra EmptyState con error cuando hay error", () => {
     render(
       <MemoryRouter>
-        <ProjectList filter="React" />
+        <ProjectListUI
+          projects={[]}
+          showLoader={false}
+          error={new Error("Test error")}
+        />
       </MemoryRouter>,
     );
-    expect(countRenderedCards()).toBe(expectedCount("React"));
+    expect(screen.getByText("Error al obtenir projectes")).toBeDefined();
+    expect(
+      screen.getByText("Hi ha hagut un problema. Torna-ho a provar."),
+    ).toBeDefined();
   });
 
-  it("filters by backend tech (PHP)", () => {
+  it("muestra EmptyState cuando no hay proyectos", () => {
     render(
       <MemoryRouter>
-        <ProjectList filter="PHP" />
+        <ProjectListUI projects={[]} showLoader={false} error={null} />
       </MemoryRouter>,
     );
-    expect(countRenderedCards()).toBe(expectedCount("PHP"));
+    expect(screen.getByText("No hi ha projectes")).toBeDefined();
   });
 
-  it("is case-insensitive (rEaCt)", () => {
+  it("muestra lista de proyectos cuando hay datos", () => {
     render(
       <MemoryRouter>
-        <ProjectList filter="rEaCt" />
+        <ProjectListUI
+          projects={[mockProject]}
+          showLoader={false}
+          error={null}
+        />
       </MemoryRouter>,
     );
-    expect(countRenderedCards()).toBe(expectedCount("rEaCt"));
+    expect(screen.getByText("Test Project")).toBeDefined();
   });
 
-  it("returns 0 when no projects match", () => {
+  it("renderiza exactamente 6 skeletons durante la carga", () => {
     render(
       <MemoryRouter>
-        <ProjectList filter="go" />
+        <ProjectListUI projects={[]} showLoader={true} error={null} />
       </MemoryRouter>,
     );
-    expect(countRenderedCards()).toBe(0);
+    expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
   });
 });

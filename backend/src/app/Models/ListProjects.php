@@ -7,16 +7,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ForumQuestion;
 
 class ListProjects extends Model
 {
     use HasFactory;
     protected $table = 'list_projects';
     protected $fillable = [
+        'owner_id',
         'title',
         'time_duration',
         'language_backend',
-        'language_frontend'
+        'language_frontend',
+    
     ];
 
     public function contributorListProject()
@@ -24,8 +27,13 @@ class ListProjects extends Model
         return $this->hasMany(ContributorListProject::class, 'list_project_id');
     }
 
-    public function user()
+    public function owner()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'owner_id', 'id');
     }
+    public function forumQuestions()
+    {
+        return $this->hasMany(ForumQuestion::class, 'list_project_id');
+    }
+
 }

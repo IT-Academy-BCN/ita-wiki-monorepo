@@ -1,9 +1,10 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import React from "react";
 import MyTechnicalTestsPage from "../MyTechnicalTestsPage";
-import { vi } from "vitest";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router";
+import useTechnicalTestList from "../../hooks/useTechnicalTestList";
 
 const mockedNavigate = vi.fn();
 
@@ -15,17 +16,62 @@ vi.mock("react-router", async () => {
   };
 });
 
-vi.mock("../hooks/useTechnicalTests", () => ({
-  default: () => ({
-    technicalTests: [],
-    isLoading: false,
-    error: null,
-  }),
-}));
+const mockTechnicalTests = [
+  {
+    id: 1,
+    title: "Low Likes Test",
+    language: "JavaScript",
+    description: "",
+    tags: [],
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z",
+    difficulty_level: "easy",
+    duration: 30,
+    exercises: [],
+    state: "published",
+    like_count: 2,
+  },
+  {
+    id: 2,
+    title: "High Likes Test",
+    language: "TypeScript",
+    description: "",
+    tags: [],
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z",
+    difficulty_level: "hard",
+    duration: 60,
+    exercises: [],
+    state: "published",
+    like_count: 99,
+  },
+  {
+    id: 3,
+    title: "Old Medium Test",
+    language: "JavaScript",
+    description: "",
+    tags: [],
+    created_at: "2024-06-01T00:00:00Z",
+    updated_at: "2024-06-01T00:00:00Z",
+    difficulty_level: "medium",
+    duration: 45,
+    exercises: [],
+    state: "published",
+    like_count: 5,
+  },
+];
+
+vi.mock("../../hooks/useTechnicalTestList");
+const mockedUseTechnicalTestList = vi.mocked(useTechnicalTestList);
 
 describe("MyTechnicalTestsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: [],
+      isLoading: false,
+      error: null,
+    });
   });
 
   it("handles empty data", async () => {
@@ -50,36 +96,80 @@ describe("MyTechnicalTestsPage", () => {
     });
   });
 
-  it("navigates to create tech test page when 'Crear prueba' button is clicked", async () => {
+  it("renders the page title 'Proves tècniques'", () => {
     render(
-      <MemoryRouter initialEntries={["/resources/technical-test"]}>
+      <MemoryRouter>
         <MyTechnicalTestsPage />
       </MemoryRouter>,
     );
 
-    describe("Crear prueba button", () => {
-      beforeEach(() => {
-        vi.clearAllMocks();
-      });
+    expect(screen.getByText("Proves tècniques")).toBeInTheDocument();
+  });
 
-      it("renders and navigates when clicked", async () => {
-        render(
-          <MemoryRouter>
-            <MyTechnicalTestsPage />
-          </MemoryRouter>,
-        );
-
-        const button = await screen.findByRole("button", {
-          name: /crear prueba/i,
-        });
-        expect(button).toBeInTheDocument();
-
-        button.click();
-
-        expect(mockedNavigate).toHaveBeenCalledWith(
-          "/resources/technical-test/create",
-        );
-      });
+  it("filters by difficulty when confirmed from FiltersButton", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: mockTechnicalTests,
+      isLoading: false,
+      error: null,
     });
+
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("difficulty-easy"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+
+    expect(screen.getByText("Low Likes Test")).toBeInTheDocument();
+    expect(screen.queryByText("High Likes Test")).not.toBeInTheDocument();
+    expect(screen.queryByText("Old Medium Test")).not.toBeInTheDocument();
+  });
+
+  it("filters by year when confirmed from FiltersButton", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: mockTechnicalTests,
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId("filters-button"));
+    fireEvent.click(screen.getByTestId("year-2024"));
+    fireEvent.click(screen.getByTestId("filters-confirm"));
+
+    expect(screen.getByText("Old Medium Test")).toBeInTheDocument();
+    expect(screen.queryByText("Low Likes Test")).not.toBeInTheDocument();
+    expect(screen.queryByText("High Likes Test")).not.toBeInTheDocument();
+  });
+
+  it("sorts cards by likes descending when Likes button is clicked", () => {
+    mockedUseTechnicalTestList.mockReturnValue({
+      technicalTests: mockTechnicalTests,
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    const likesButton = screen.getByRole("button", { name: /likes/i });
+    fireEvent.click(likesButton);
+
+    const links = screen.getAllByRole("link");
+    const titles = links.map((el) => el.textContent ?? "").join(",");
+    expect(titles.indexOf("High Likes Test")).toBeLessThan(
+      titles.indexOf("Low Likes Test"),
+    );
   });
 });

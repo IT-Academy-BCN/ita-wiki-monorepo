@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost/api/";
 
 type EndPoints =
   | "resources/"
@@ -49,6 +49,7 @@ const END_POINTS = {
     get: "technical-tests" as EndPoints,
   },
   codeconnect: {
+    get: "codeconnect" as EndPoints,
     post: "codeconnect" as EndPoints,
   },
   auth: {
