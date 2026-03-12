@@ -200,7 +200,7 @@ class ContributorsCrudTest extends TestCase
     public function test_it_can_delete_a_contributor_when_user_is_project_owner(): void
     {
         $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
 
         $contributor = ContributorListProject::factory()->create([
             'list_project_id' => $project->id,
@@ -224,7 +224,7 @@ class ContributorsCrudTest extends TestCase
     public function test_delete_returns_404_when_contributor_does_not_exist(): void
     {
         $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
 
         Sanctum::actingAs($owner);
         $response = $this->deleteJson("/api/codeconnect/{$project->id}/contributors/99999");
@@ -239,7 +239,7 @@ class ContributorsCrudTest extends TestCase
     public function test_delete_returns_404_when_contributor_does_not_belong_to_project(): void
     {
         $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['owner_id' => $owner->id]);
+        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
 
         $otherProject = ListProjects::factory()->create();
         $contributor = ContributorListProject::factory()->create([
