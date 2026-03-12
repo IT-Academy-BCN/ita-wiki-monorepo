@@ -127,4 +127,25 @@ class ListProjectsStoreTest extends TestCase
             'status' => ContributorStatusEnum::Accepted->value,
         ]);
     }
+
+    public function test_list_projects_model_uses_user_id_column(): void
+    {
+        $user = User::factory()->create();
+
+        $project = ListProjects::create([
+            'user_id' => $user->id,
+            'title' => 'Test Project',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $this->assertDatabaseHas('list_projects', [
+            'id' => $project->id,
+            'user_id' => $user->id,
+        ]);
+
+        $this->assertEquals($user->id, $project->owner->id);
+    }
+
 }

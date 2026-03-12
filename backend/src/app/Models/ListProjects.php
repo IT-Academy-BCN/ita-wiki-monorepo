@@ -14,7 +14,7 @@ class ListProjects extends Model
     use HasFactory;
     protected $table = 'list_projects';
     protected $fillable = [
-        'owner_id',
+        'user_id',
         'title',
         'time_duration',
         'language_backend',
@@ -29,7 +29,7 @@ class ListProjects extends Model
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     public function forumQuestions()
     {
