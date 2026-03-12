@@ -1,6 +1,5 @@
 import { FC } from "react";
 import SortLikesIcon from "../../assets/sortLikesIcon.svg?react";
-import ChevronDownIcon from "../../assets/chevronDownIcon.svg?react";
 
 interface LikesSortButtonProps {
   isActive?: boolean;
@@ -25,7 +24,6 @@ const LikesSortButton: FC<LikesSortButtonProps> = ({
     >
       <SortLikesIcon aria-hidden="true" />
       <span>Likes</span>
-      <ChevronDownIcon aria-hidden="true" />
     </button>
   );
 };
