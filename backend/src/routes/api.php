@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
+    Route::patch('/users/me/update-role', [UserController::class, 'updateOwnRole'])->name('users.me.role');
+
 });
 
 
