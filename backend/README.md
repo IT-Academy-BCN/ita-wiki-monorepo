@@ -92,5 +92,6 @@ Alex Pasquero
 Sandra Gutierrez
 Antonia Minnucci
 Leandro da Silva Gusmao
+Alejandro Jarque
 Marc Sanchez
 Nacho Abollo (@ignatiusreillius)
