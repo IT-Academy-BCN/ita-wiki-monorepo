@@ -127,5 +127,4 @@ class ListProjectsStoreTest extends TestCase
             'status' => ContributorStatusEnum::Accepted->value,
         ]);
     }
-
 }
