@@ -18,7 +18,9 @@ const FiltersDropdown = ({
         aria-pressed={isActive}
         className={[
           "inline-flex items-center gap-2 px-4 h-9 rounded-lg border border-[#DCDFE4] text-sm font-medium cursor-pointer transition-colors duration-150",
-          isActive ? "bg-[#282828] text-white" : "bg-white text-[#282828] hover:bg-gray-50",
+          isActive
+            ? "bg-[#282828] text-white"
+            : "bg-white text-[#282828] hover:bg-gray-50",
         ].join(" ")}
       >
         <span>Filtres</span>
