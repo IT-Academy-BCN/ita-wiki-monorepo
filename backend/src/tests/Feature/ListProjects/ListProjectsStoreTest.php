@@ -127,4 +127,28 @@ class ListProjectsStoreTest extends TestCase
             'status' => ContributorStatusEnum::Accepted->value,
         ]);
     }
+
+    public function test_store_response_includes_contributor(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Epsilon',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'contributor' => [
+                'id',
+                'list_project_id',
+                'user_id',
+                'programming_role',
+                'status',
+            ]
+        ]);
+    }
+
 }
