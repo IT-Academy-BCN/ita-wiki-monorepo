@@ -324,4 +324,39 @@ class TechnicalTestCreateTest extends TestCase
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['exercises.0.title']);
     }
+
+    public function test_difficulty_level_defaults_to_easy_when_not_provided(): void
+    {
+        $data = [
+            'title' => 'Test Default Difficulty',
+            'language' => LanguageEnum::PHP->value,
+            'github_id' => 123456,
+        ];
+
+        $response = $this->postJson(route('technical-tests.store'), $data);
+
+        $response->assertStatus(201)
+                ->assertJsonPath('data.difficulty_level', 'easy');
+
+        $this->assertDatabaseHas('technical_tests', [
+            'title' => 'Test Default Difficulty',
+            'difficulty_level' => 'easy',
+        ]);
+    }
+
+    public function test_expert_difficulty_level_is_rejected(): void
+    {
+        $data = [
+            'title' => 'Test Expert Difficulty',
+            'language' => LanguageEnum::PHP->value,
+            'difficulty_level' => 'expert',
+            'github_id' => 123456,
+        ];
+
+        $response = $this->postJson(route('technical-tests.store'), $data);
+
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors(['difficulty_level']);
+    }
+
 }

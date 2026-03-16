@@ -250,7 +250,7 @@ class TechnicalTestController extends Controller
                 'description' => $request->description,
                 'tags' => $request->tags,
                 'github_id' => $request->github_id,
-                'difficulty_level' => $request->difficulty_level,
+                'difficulty_level' => $request->difficulty_level ?? 'easy',
                 'duration' => $request->duration,
                 'state' => $request->state ?? 'draft',
             ];
