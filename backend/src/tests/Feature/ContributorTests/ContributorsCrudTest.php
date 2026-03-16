@@ -350,4 +350,42 @@ class ContributorsCrudTest extends TestCase
             ]);
     }
 
+    public function test_owner_cannot_join_their_own_project(): void
+    {
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
+
+        Sanctum::actingAs($owner);
+
+        $response = $this->postJson("/api/codeconnect/{$project->id}/contributors", [
+            'user_id' => $owner->id,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => 'You are the owner of this project',
+            ]);
+    }
+
+    public function test_owner_cannot_be_added_as_contributor(): void
+    {
+        $owner = User::factory()->create();
+        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
+
+        Sanctum::actingAs($this->user);
+
+        $response = $this->postJson("/api/codeconnect/{$project->id}/contributors", [
+            'user_id' => $owner->id,
+            'programming_role' => 'Frontend Developer',
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => 'The owner cannot be added as a contributor',
+            ]);
+    }
+
 }
