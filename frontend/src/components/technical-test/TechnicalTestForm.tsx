@@ -82,7 +82,6 @@ export const TechnicalTestForm = () => {
               <option value="easy">Fàcil</option>
               <option value="medium">Mitjà</option>
               <option value="hard">Difícil</option>
-              <option value="expert">Expert</option>
             </select>
             {errors.difficulty && (
               <div className="py-4">

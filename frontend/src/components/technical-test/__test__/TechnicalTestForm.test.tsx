@@ -110,6 +110,5 @@ describe("TechnicalTestForm UI", () => {
     expect(screen.getByRole("option", { name: "Fàcil" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Mitjà" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Difícil" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Expert" })).toBeInTheDocument();
   });
 });
