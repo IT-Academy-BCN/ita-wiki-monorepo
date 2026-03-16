@@ -29,19 +29,24 @@ function MyTechnicalTestsPage() {
   }, [location, navigate]);
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Proves tècniques</h1>
+    <div className="container mx-auto px-4 py-6 h-[calc(100vh-90px)] flex flex-col">
+      <h1 className="text-2xl font-bold mb-6 shrink-0">Proves tècniques</h1>
       <TechnicalTestsHeader
         onCategoryChange={setLanguageFilter}
         onSortByLikes={setSortByLikes}
         onFilter={handleFilter}
       />
-      <TechnicalTestList
-        language={languageFilter}
-        sortByLikes={sortByLikes}
-        difficulty={difficulty}
-        year={year}
-      />
+      <div
+        data-testid="technical-tests-cards-scroll-container"
+        className="flex-1 overflow-y-auto pr-1"
+      >
+        <TechnicalTestList
+          language={languageFilter}
+          sortByLikes={sortByLikes}
+          difficulty={difficulty}
+          year={year}
+        />
+      </div>
     </div>
   );
 }
