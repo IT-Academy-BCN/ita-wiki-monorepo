@@ -13,7 +13,6 @@ class CreateTicketRequest extends FormRequest{
     public function rules(): array{
 
         return [
-            'code_connect_id' => 'required|integer|exists:users,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'incident_date' => 'required|date',

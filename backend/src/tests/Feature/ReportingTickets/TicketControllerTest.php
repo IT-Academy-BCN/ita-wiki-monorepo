@@ -18,7 +18,6 @@ class TicketControllerTest extends TestCase{
         Sanctum::actingAs($user);
 
         $response = $this->actingAs($user)->postJson('/api/tickets', [
-            'code_connect_id' => $user->id,
             'name' => 'Test Ticket',
             'incident_date' => now()->toDateString(),
             'affected_app' => 'wiki_frontend',
@@ -42,6 +41,7 @@ class TicketControllerTest extends TestCase{
         ]);      
 
         $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
             'name' => 'Test Ticket',
             'affected_app' => 'wiki_frontend',
             'type' => 'error',
@@ -205,7 +205,6 @@ class TicketControllerTest extends TestCase{
         $response = $this->actingAs($user)->postJson('/api/tickets', []);
 
         $response->assertStatus(422)->assertJsonValidationErrors([
-            'code_connect_id',
             'name',
             'incident_date',
             'affected_app',
@@ -214,6 +213,29 @@ class TicketControllerTest extends TestCase{
             'description',
         ]);  
         
+    }
+
+    /** @test */
+    public function ticket_is_auto_assigned_to_authenticated_user(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'name' => 'Test Ticket',
+            'incident_date' => now()->toDateString(),
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
+            'description' => 'This is a test ticket.',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+            'name' => 'Test Ticket',
+        ]);
     }
 
 }

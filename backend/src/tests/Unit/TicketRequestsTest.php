@@ -19,7 +19,6 @@ class TicketRequestsTest extends TestCase{
         $request = new CreateTicketRequest();
         //Determine the correct rules, here and the Request
         $this->assertEquals([
-            'code_connect_id' => 'required|integer|exists:users,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'incident_date' => 'required|date',
