@@ -216,6 +216,28 @@ class TicketControllerTest extends TestCase{
         
     }
 
+    /** @test */
+    public function an_auth_user_can_only_see_their_own_tickets(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        Ticket::factory()->create(['code_connect_id' => $user->id]);
+        Ticket::factory()->create(['code_connect_id' => $user->id]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+
+        $data = $response->json('data');
+        $this->assertCount(2, $data);
+
+        foreach ($data as $ticket) {
+            $this->assertEquals($user->id, $ticket['code_connect_id']);
+        }
+    }
 }
 
 ?>

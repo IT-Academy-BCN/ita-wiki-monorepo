@@ -15,7 +15,9 @@ class TicketController extends Controller{
 
     public function index(): JsonResponse{
 
-        $tickets = Ticket::with(['codeConnect', 'assignee', 'closedBy'])->get();
+        $tickets = Ticket::with(['codeConnect', 'assignee', 'closedBy'])
+            ->where('code_connect_id', auth()->id())
+            ->get();
 
         return response()->json([
             'success' => true,
