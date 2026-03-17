@@ -65,7 +65,7 @@ class CreateTicketTest extends TestCase
 
         $payload = [
             'code_connect_id' => $user->id,
-            'forum_answer_id' => 999999,
+            'forum_answer_id' => ForumAnswer::max('id') + 1,
             'name' => 'Reported forum answer',
             'incident_date' => now()->toDateString(),
             'affected_app' => 'code_connect',
