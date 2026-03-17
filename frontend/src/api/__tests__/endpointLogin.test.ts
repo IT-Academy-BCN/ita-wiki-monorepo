@@ -71,7 +71,10 @@ describe("get current user data", () => {
 
     const result = await getNewUser(mockToken);
 
-    expect(result).toMatchObject(mockCurrentUser);
+    expect(result).toEqual({
+      ...mockCurrentUser,
+      photoURL: `https://avatars.githubusercontent.com/u/${mockCurrentUser.github_id}`,
+    });
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining("auth/me"),
       expect.objectContaining({
