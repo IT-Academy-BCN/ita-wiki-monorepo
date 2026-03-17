@@ -1,4 +1,4 @@
-import FiltresIcon from "../../assets/filtresIcon.svg?react";
+import FiltresIcon from "../../assets/iconFilterResources.svg?react";
 
 interface FiltersDropdownProps {
   isOpen?: boolean;
