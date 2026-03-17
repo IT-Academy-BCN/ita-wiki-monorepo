@@ -2,6 +2,13 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import ProjectListUI from "../ProjectListUI";
+import { UserProvider } from "../../../../context/UserContext";
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <UserProvider>
+    <MemoryRouter>{children}</MemoryRouter>
+  </UserProvider>
+);
 
 const mockProject = {
   id: 1,
@@ -20,23 +27,20 @@ const mockProject = {
 
 describe("ProjectListUI", () => {
   it("muestra skeletons cuando showLoader es true", () => {
-    render(
-      <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={true} error={null} />
-      </MemoryRouter>,
-    );
+    render(<ProjectListUI projects={[]} showLoader={true} error={null} />, {
+      wrapper,
+    });
     expect(screen.getByText("Llista de projectes")).toBeDefined();
   });
 
   it("muestra EmptyState con error cuando hay error", () => {
     render(
-      <MemoryRouter>
-        <ProjectListUI
-          projects={[]}
-          showLoader={false}
-          error={new Error("Test error")}
-        />
-      </MemoryRouter>,
+      <ProjectListUI
+        projects={[]}
+        showLoader={false}
+        error={new Error("Test error")}
+      />,
+      { wrapper },
     );
     expect(screen.getByText("Error al obtenir projectes")).toBeDefined();
     expect(
@@ -45,53 +49,45 @@ describe("ProjectListUI", () => {
   });
 
   it("muestra EmptyState cuando no hay proyectos", () => {
-    render(
-      <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={false} error={null} />
-      </MemoryRouter>,
-    );
+    render(<ProjectListUI projects={[]} showLoader={false} error={null} />, {
+      wrapper,
+    });
     expect(screen.getByText("No hi ha projectes")).toBeDefined();
   });
 
   it("muestra lista de proyectos cuando hay datos", () => {
     render(
-      <MemoryRouter>
-        <ProjectListUI
-          projects={[mockProject]}
-          showLoader={false}
-          error={null}
-        />
-      </MemoryRouter>,
+      <ProjectListUI
+        projects={[mockProject]}
+        showLoader={false}
+        error={null}
+      />,
+      { wrapper },
     );
     expect(screen.getByText("Test Project")).toBeDefined();
   });
 
   it("renderiza exactamente 6 skeletons durante la carga", () => {
-    render(
-      <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={true} error={null} />
-      </MemoryRouter>,
-    );
+    render(<ProjectListUI projects={[]} showLoader={true} error={null} />, {
+      wrapper,
+    });
     expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
   });
 
   it("oculta skeletons después de completar la carga", () => {
     const { rerender } = render(
-      <MemoryRouter>
-        <ProjectListUI projects={[]} showLoader={true} error={null} />
-      </MemoryRouter>,
+      <ProjectListUI projects={[]} showLoader={true} error={null} />,
+      { wrapper },
     );
 
     expect(screen.getAllByTestId("skeleton-card")).toHaveLength(6);
 
     rerender(
-      <MemoryRouter>
-        <ProjectListUI
-          projects={[mockProject]}
-          showLoader={false}
-          error={null}
-        />
-      </MemoryRouter>,
+      <ProjectListUI
+        projects={[mockProject]}
+        showLoader={false}
+        error={null}
+      />,
     );
 
     expect(screen.queryByTestId("skeleton-card")).toBeNull();

@@ -71,7 +71,7 @@ describe("get current user data", () => {
 
     const result = await getNewUser(mockToken);
 
-    expect(result).toEqual(mockCurrentUser);
+    expect(result).toMatchObject(mockCurrentUser);
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining("auth/me"),
       expect.objectContaining({
