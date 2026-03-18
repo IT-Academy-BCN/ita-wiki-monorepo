@@ -34,7 +34,9 @@ class TicketController extends Controller{
     public function show($id): JsonResponse{
 
         $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
-
+        if ($ticket->code_connect_id !== auth()->id()) {
+        abort(403, 'Forbidden');
+        }
         return response()->json([
             'success' => true,
             'data' => $ticket
