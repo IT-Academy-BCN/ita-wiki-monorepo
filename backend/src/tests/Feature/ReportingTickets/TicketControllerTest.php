@@ -67,13 +67,13 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
-    public function an_auth_user_can_view_a_ticket(): void{
-
+    public function an_auth_user_can_view_their_own_ticket(): void{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $ticket = Ticket::factory()->create();
-
+        $ticket = Ticket::factory()->create([
+         'code_connect_id' => $user->id,
+        ]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
 
@@ -89,7 +89,22 @@ class TicketControllerTest extends TestCase{
                 'updated_at'
             ]
         ]);
-        
+    }
+
+    /** @test */
+    public function an_auth_user_cannot_view_another_users_ticket(): void{
+        $user = User::factory()->create();
+        $owner = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        $ticket = Ticket::factory()->create([
+         'code_connect_id' => $owner->id,
+        ]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(403);
     }
 
     /** @test */
