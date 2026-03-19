@@ -53,7 +53,7 @@ class ListProjectsStoreTest extends TestCase
             'message' => 'Project created successfully',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function test_method_datas_not_valid_language(): void
@@ -117,7 +117,7 @@ class ListProjectsStoreTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $project = ListProjects::where('title', 'Proyecto Delta')->firstOrFail();
 
@@ -139,14 +139,18 @@ class ListProjectsStoreTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $response->assertJsonStructure([
-            'contributor' => [
-                'id',
-                'list_project_id',
-                'user_id',
-                'programming_role',
-                'status',
+            'data' => [
+                'contributor_list_project' => [
+                    '*' => [
+                        'id',
+                        'list_project_id',
+                        'user_id',
+                        'programming_role',
+                        'status',
+                    ]
+                ]
             ]
         ]);
     }

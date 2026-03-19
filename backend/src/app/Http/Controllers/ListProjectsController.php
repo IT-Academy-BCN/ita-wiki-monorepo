@@ -207,12 +207,13 @@ class ListProjectsController extends Controller
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
 
+            $newProject = ListProjects::with('contributorListProject')->find($newProject->id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully',
                 'data' => $newProject,
-                'contributor' => $contributor,
-            ], 200);
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
