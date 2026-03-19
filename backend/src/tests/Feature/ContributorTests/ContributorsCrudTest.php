@@ -328,4 +328,26 @@ class ContributorsCrudTest extends TestCase
             'id' => $contributor->id,
         ]);
     }
+
+    public function test_contributor_is_listed_with_correct_user_id(): void
+    {
+        ContributorListProject::factory()->create([
+            'user_id' => $this->user->id,
+            'list_project_id' => $this->project->id,
+            'status' => ContributorStatusEnum::Accepted->value,
+        ]);
+
+        $response = $this->getJson("/api/codeconnect/{$this->project->id}/contributors");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'data' => [
+                    [
+                        'user_id' => $this->user->id,
+                    ],
+                ],
+            ]);
+    }
+
 }
