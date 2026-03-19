@@ -40,6 +40,7 @@ class ListProjectRequest extends FormRequest
             'time_duration.string' => "The time duration must be a string.",
             'language_backend.required' => "The backend language field is required.",
             'language_frontend.required' => "The frontend language field is required.",
+            'programming_role.in' => 'The programming role must be one of: Frontend Developer, Backend Developer, Fullstack Developer, Other.',
         ];
     }
 }

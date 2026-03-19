@@ -148,4 +148,27 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
+    public function test_store_uses_default_programming_role_when_not_specified(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Eta',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(200);
+
+        $project = ListProjects::where('title', 'Proyecto Eta')->firstOrFail();
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'list_project_id' => $project->id,
+            'user_id' => $this->userOne->id,
+            'programming_role' => 'Backend Developer',
+        ]);
+    }
+
+
 }
