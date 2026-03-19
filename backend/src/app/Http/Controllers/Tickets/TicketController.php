@@ -31,12 +31,11 @@ class TicketController extends Controller{
         ]);
     }
 
-    public function show($id): JsonResponse{
-
+    public function show($id): JsonResponse
+    {
         $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
-        if ($ticket->code_connect_id !== auth()->id()) {
-        abort(403, 'Forbidden');
-        }
+        $this->ensureTicketOwnership($ticket);
+
         return response()->json([
             'success' => true,
             'data' => $ticket
@@ -58,9 +57,10 @@ class TicketController extends Controller{
         ], 201);
     }
 
-    public function update(UpdateTicketRequest $request, $id): JsonResponse{
-
+    public function update(UpdateTicketRequest $request, $id): JsonResponse
+    {
         $ticket = Ticket::findOrFail($id);
+        $this->ensureTicketOwnership($ticket);
 
         $ticket->update($request->validated());
 
@@ -71,9 +71,10 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function destroy($id): JsonResponse{
-
+    public function destroy($id): JsonResponse
+    {
         $ticket = Ticket::findOrFail($id);
+        $this->ensureTicketOwnership($ticket);
 
         $ticket->delete();
 
@@ -83,12 +84,12 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse{
-
+    public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse
+    {
         $ticket = Ticket::findOrFail($id);
+        $this->ensureTicketOwnership($ticket);
 
         $status = $request->validated()['status'];
-
         $updateData = ['status' => $status];
 
         if ($status === 'closed') {
@@ -105,9 +106,10 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
-
+    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse
+    {
         $ticket = Ticket::findOrFail($id);
+        $this->ensureTicketOwnership($ticket);
 
         $ticket->update(['priority' => $request->validated()['priority']]);
 
@@ -118,9 +120,10 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse{
-
+    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse
+    {
         $ticket = Ticket::findOrFail($id);
+        $this->ensureTicketOwnership($ticket);
 
         $ticket->update(['assignee_id' => $request->validated()['assignee_id']]);
 
@@ -130,5 +133,11 @@ class TicketController extends Controller{
             'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
+
+    private function ensureTicketOwnership(Ticket $ticket): void
+    {
+        if ((int) $ticket->code_connect_id !== (int) auth()->id()) {
+            abort(403, 'Forbidden');
+        }
+    }
 }
-?>
