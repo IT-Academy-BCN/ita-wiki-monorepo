@@ -629,7 +629,7 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
-        if (auth()->id() === $project->owner_id) {
+        if (auth()->id() === $project->owner_id && $validatedData['user_id'] === $project->owner_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You are the owner of this project'
@@ -642,6 +642,7 @@ class ListProjectsController extends Controller
                 'message' => 'The owner cannot be added as a contributor'
             ], 403);
         }
+
 
         $existingContributor = ContributorListProject::where('list_project_id', $listProjectId)
             ->where('user_id', $validatedData['user_id'])
