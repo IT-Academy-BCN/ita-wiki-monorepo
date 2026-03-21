@@ -367,6 +367,6 @@ class ForumQuestionController extends Controller
             return true;
         }
 
-        return $question->project && $question->project->owner_id === $user->id;
+        return $question->project && $question->project->user_id === $user->id;
     }
 }

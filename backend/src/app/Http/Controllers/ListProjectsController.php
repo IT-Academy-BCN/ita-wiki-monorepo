@@ -196,7 +196,7 @@ class ListProjectsController extends Controller
         try {
             $userId = auth()->id();
 
-            $validatedData['owner_id'] = $userId;
+            $validatedData['user_id'] = $userId;
 
             $newProject = ListProjects::create($validatedData);
 
@@ -736,7 +736,7 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
-        if ($project->owner_id !== $user->id && $contributor->user_id !== $user->id) {
+        if ($project->user_id !== $user->id && $contributor->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You are not allowed to remove this contributor'
