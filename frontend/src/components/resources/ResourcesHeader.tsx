@@ -25,12 +25,14 @@ const ResourcesHeader = ({
       <div className="flex gap-2">
         <SortDropdown
           isOpen={openDropdown === "sort"}
+          isActive={openDropdown === "sort"}
           onToggle={() =>
             setOpenDropdown(openDropdown === "sort" ? null : "sort")
           }
         />
         <FiltersDropdown
           isOpen={openDropdown === "filters"}
+          isActive={openDropdown === "filters"}
           onToggle={() =>
             setOpenDropdown(openDropdown === "filters" ? null : "filters")
           }

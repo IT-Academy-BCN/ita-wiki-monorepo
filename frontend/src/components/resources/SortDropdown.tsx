@@ -1,8 +1,10 @@
 import DropdownItem from "./DropdownItem";
 import SortIcon, { SortIconName } from "./SortIcon";
+import OrdenarIcon from "../../assets/ordenarIcon.svg?react";
 
 interface SortDropdownProps {
   isOpen?: boolean;
+  isActive?: boolean;
   onToggle?: () => void;
 }
 
@@ -16,15 +18,25 @@ const orderOptions: { icon: SortIconName; label: string }[] = [
   { icon: "chevronDown", label: "Descendent" },
 ];
 
-const SortDropdown = ({ isOpen = false, onToggle }: SortDropdownProps) => {
+const SortDropdown = ({
+  isOpen = false,
+  isActive = false,
+  onToggle,
+}: SortDropdownProps) => {
   return (
     <div className="relative">
       <button
         onClick={onToggle}
-        className="px-4 py-2 border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+        aria-pressed={isActive}
+        className={[
+          "inline-flex items-center gap-2 px-4 h-9 rounded-lg border border-[#DCDFE4] text-sm font-medium cursor-pointer transition-colors duration-150",
+          isActive
+            ? "bg-[#282828] text-white"
+            : "bg-white text-[#282828] hover:bg-gray-50",
+        ].join(" ")}
       >
-        Ordenar
-        <span className="text-xs">▼</span>
+        <span>Ordenar</span>
+        <OrdenarIcon aria-hidden="true" />
       </button>
 
       {isOpen && (
