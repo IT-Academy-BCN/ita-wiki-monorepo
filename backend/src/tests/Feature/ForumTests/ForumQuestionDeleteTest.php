@@ -50,7 +50,7 @@ class ForumQuestionDeleteTest extends TestCase
 
     public function test_forum_question_owner_can_delete(): void
     {
-        $owner = $this->project->owner;
+        $owner = $this->project->user;
         Sanctum::actingAs($owner);
 
         $question = ForumQuestion::factory()->create([
