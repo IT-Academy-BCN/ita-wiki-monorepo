@@ -170,5 +170,22 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
+    public function test_store_returns_422_for_invalid_programming_role(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Theta',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'DevOps',
+        ]);
+
+        $response->assertStatus(422);
+
+        $response->assertJsonValidationErrors(['programming_role']);
+    }
+
 
 }
