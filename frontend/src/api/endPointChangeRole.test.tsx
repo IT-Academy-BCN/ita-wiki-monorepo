@@ -1,94 +1,54 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { changeRole } from "./endPointChangeRole";
-import { getUserRole } from "./userApi";
-import { createRole } from "./endPointRoles";
 
-vi.mock("./userApi", () => ({
-  getUserRole: vi.fn(),
-}));
-
-vi.mock("./endPointRoles", () => ({
-  createRole: vi.fn(),
-}));
+const mockSuccessResponse = {
+  message: "Role updated successfully",
+  role: {
+    github_id: 123,
+    role: "admin",
+  },
+};
 
 describe("changeRole", () => {
-  const mockGithubId = 123;
-  const mockRole = "student";
-
   beforeEach(() => {
-    vi.clearAllMocks();
-    global.fetch = vi.fn();
-  });
-
-  afterEach(() => {
     vi.restoreAllMocks();
+    localStorage.clear();
   });
 
-  it("should create a new role for an anonymous user", async () => {
-    (getUserRole as ReturnType<typeof vi.fn>).mockResolvedValueOnce(null);
-    (createRole as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      message: "Role created successfully",
-      role: {
-        github_id: mockGithubId,
-        role: mockRole,
-      },
-    });
+  it("should update role successfully", async () => {
+    localStorage.setItem("auth_token", "mock-token");
 
-    const request = {
-      github_id: mockGithubId,
-      role: mockRole,
-    };
-
-    const response = await changeRole(request, mockGithubId);
-
-    expect(getUserRole).toHaveBeenCalledWith(mockGithubId);
-    expect(createRole).toHaveBeenCalledWith({
-      github_id: mockGithubId,
-      role: mockRole,
-      authorized_github_id: 1,
-    });
-    expect(response).toEqual({
-      message: "Role created successfully",
-      role: {
-        github_id: mockGithubId,
-        role: mockRole,
-      },
-    });
-  });
-
-  it("should update role for a user with existing role", async () => {
-    (getUserRole as ReturnType<typeof vi.fn>).mockResolvedValueOnce("mentor");
-
-    const mockFetchResponse = {
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
-      json: async () => ({
-        message: "Role updated successfully",
-        role: {
-          github_id: mockGithubId,
-          role: "admin",
-        },
+      json: async () => mockSuccessResponse,
+    } as Response);
+
+    const response = await changeRole({ github_id: 123, role: "admin" });
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("feature-flags/role-self-assignment"),
+      expect.objectContaining({
+        method: "PUT",
+        headers: expect.objectContaining({
+          Authorization: "Bearer mock-token",
+        }),
       }),
-    };
-
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
-      mockFetchResponse as Response,
     );
+    expect(response).toEqual(mockSuccessResponse);
+  });
 
-    const request = {
-      github_id: mockGithubId,
-      role: "admin",
-    };
+  it("should throw error when request fails", async () => {
+    localStorage.setItem("auth_token", "mock-token");
 
-    const response = await changeRole(request, mockGithubId);
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      statusText: "Unauthorized",
+      json: async () => ({ message: "Unauthenticated." }),
+    } as Response);
 
-    expect(getUserRole).toHaveBeenCalledWith(mockGithubId);
-    expect(fetch).toHaveBeenCalled();
-    expect(response).toEqual({
-      message: "Role updated successfully",
-      role: {
-        github_id: mockGithubId,
-        role: "admin",
-      },
-    });
+    await expect(changeRole({ github_id: 123, role: "admin" })).rejects.toThrow(
+      "Unauthenticated.",
+    );
   });
 });
