@@ -14,11 +14,11 @@ export function useChangeUserRole() {
 
     try {
       const request = {
-        github_id: user.id,
+        github_id: user.github_id,
         role: newRole,
       };
 
-      const response = await changeRole(request, user.id);
+      const response = await changeRole(request);
 
       if (response && response.role) {
         saveUser({ ...user, role: newRole });
