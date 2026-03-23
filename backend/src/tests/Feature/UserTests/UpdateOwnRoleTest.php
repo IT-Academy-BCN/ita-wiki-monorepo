@@ -19,7 +19,7 @@ class UpdateOwnRoleTest extends TestCase
         $user->assignRole('student');
         Sanctum::actingAs($user);
 
-        $response = $this->patchJson('/api/users/me/update-role', [
+        $response = $this->patchJson("/api/users/{$user->id}/role", [
             'role' => 'mentor',
         ]);
         
@@ -38,7 +38,9 @@ class UpdateOwnRoleTest extends TestCase
 
     public function test_unauthenticated_user_cannot_update_role(): void
     {
-        $response = $this->patchJson('/api/users/me/update-role', [
+        $user = User::factory()->create();
+
+        $response = $this->patchJson("/api/users/{$user->id}/role", [
             'role' => 'mentor',
         ]);
 
@@ -51,7 +53,7 @@ class UpdateOwnRoleTest extends TestCase
         $user->assignRole('student');
         Sanctum::actingAs($user);
 
-        $response = $this->patchJson('/api/users/me/update-role', []);
+        $response = $this->patchJson("/api/users/{$user->id}/role", []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['role']);
@@ -63,7 +65,7 @@ class UpdateOwnRoleTest extends TestCase
         $user->assignRole('student');
         Sanctum::actingAs($user);
 
-        $response = $this->patchJson('/api/users/me/update-role', [
+        $response = $this->patchJson("/api/users/{$user->id}/role", [
             'role' => 'supervillain',
         ]);
 
@@ -78,11 +80,24 @@ class UpdateOwnRoleTest extends TestCase
             $user->assignRole('student');
             Sanctum::actingAs($user);
 
-            $response = $this->patchJson('/api/users/me/update-role', [
+            $response = $this->patchJson("/api/users/{$user->id}/role", [
                 'role' => $role,
             ]);
             
             $response->assertStatus(200);
         }
+    }
+
+    public function test_user_cannot_update_another_users_role(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->patchJson("/api/users/{$otherUser->id}/role", [
+            'role' => 'mentor',
+        ]);
+
+        $response->assertStatus(403);
     }
 }

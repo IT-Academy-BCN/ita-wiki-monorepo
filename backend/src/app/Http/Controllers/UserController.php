@@ -114,8 +114,12 @@ class UserController extends Controller
         }
     }
 
-    public function updateOwnRole(Request $request)
+    public function updateOwnRole(Request $request, User $user)
     {
+        if ($request->user()->id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
         $request->validate([
             'role' => 'required|string|in:student,mentor,admin,superadmin',
         ]);
