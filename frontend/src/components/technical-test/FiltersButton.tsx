@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import FilterIcon from "../../assets/filterIcon.svg?react";
+import FilterIcon from "../../assets/iconFilterTechnicalTest.svg?react";
 import ChevronDownIcon from "../../assets/chevronDownIcon.svg?react";
 import testLevel1 from "../../assets/testsLevel.svg";
 import testLevel2 from "../../assets/testsLevel2.svg";

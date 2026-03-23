@@ -29,4 +29,20 @@ describe("SortDropdown", () => {
     fireEvent.click(screen.getByText("Ordenar"));
     expect(mockOnToggle).toHaveBeenCalledTimes(1);
   });
+
+  it("button has black background when isActive is true", () => {
+    render(<SortDropdown isActive={true} />);
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(button.className).toContain("bg-[#282828]");
+    expect(button.className).toContain("text-white");
+  });
+
+  it("button has white background when isActive is false", () => {
+    render(<SortDropdown isActive={false} />);
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(button.className).toContain("bg-white");
+    expect(button.className).toContain("text-[#282828]");
+  });
 });
