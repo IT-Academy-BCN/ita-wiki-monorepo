@@ -196,22 +196,24 @@ class ListProjectsController extends Controller
         try {
             $userId = auth()->id();
 
-            $validatedData['owner_id'] = $userId;
+            $validatedData['user_id'] = $userId;
 
             $newProject = ListProjects::create($validatedData);
 
-            ContributorListProject::create([
+            $contributor = ContributorListProject::create([
                 'list_project_id' => $newProject->id,
                 'user_id' => $userId,
-                'programming_role' => 'Backend Developer',
+                'programming_role' => $request->input('programming_role', 'Backend Developer'),
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
+
+            $newProject = ListProjects::with('contributorListProject')->find($newProject->id);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully',
-                'data' => $newProject
-            ], 200);
+                'data' => $newProject,
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -734,7 +736,7 @@ class ListProjectsController extends Controller
             ], 404);
         }
 
-        if ($project->owner_id !== $user->id && $contributor->user_id !== $user->id) {
+        if ($project->user_id !== $user->id && $contributor->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You are not allowed to remove this contributor'

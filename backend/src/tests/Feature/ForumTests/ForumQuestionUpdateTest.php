@@ -53,7 +53,7 @@ class ForumQuestionUpdateTest extends TestCase
 
     public function test_forum_question_owner_cannot_update(): void
     {
-        $owner = $this->project->owner;
+        $owner = $this->project->user;
         Sanctum::actingAs($owner);
 
         $question = ForumQuestion::factory()->create([

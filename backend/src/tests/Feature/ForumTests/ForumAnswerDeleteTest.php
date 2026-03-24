@@ -28,7 +28,7 @@ class ForumAnswerDeleteTest extends TestCase
         parent::setUp();
 
         $this->owner = User::factory()->create();
-        $this->project = ListProjects::factory()->create(['owner_id' => $this->owner->id]);
+        $this->project = ListProjects::factory()->create(['user_id' => $this->owner->id]);
 
         $this->member = User::factory()->create();
         ContributorListProject::factory()->create([

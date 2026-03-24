@@ -343,7 +343,7 @@ class ForumAnswerController extends Controller
             return false;
         }
 
-        if ($question->project->owner_id === $user->id) {
+        if ($question->project->user_id === $user->id) {
             return true;
         }
 
@@ -366,6 +366,6 @@ class ForumAnswerController extends Controller
             return true;
         }
 
-        return $answer->question && $answer->question->project && $answer->question->project->owner_id === $user->id;
+        return $answer->question && $answer->question->project && $answer->question->project->user_id === $user->id;
     }
 }

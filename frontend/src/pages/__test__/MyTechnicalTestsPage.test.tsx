@@ -106,6 +106,21 @@ describe("MyTechnicalTestsPage", () => {
     expect(screen.getByText("Proves tècniques")).toBeInTheDocument();
   });
 
+  it("renders a scrollable container for the cards list", () => {
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    const scrollContainer = screen.getByTestId(
+      "technical-tests-cards-scroll-container",
+    );
+
+    expect(scrollContainer.className).toContain("overflow-y-auto");
+    expect(scrollContainer.className).toContain("flex-1");
+  });
+
   it("filters by difficulty when confirmed from FiltersButton", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: mockTechnicalTests,

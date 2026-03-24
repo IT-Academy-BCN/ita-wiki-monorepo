@@ -7,9 +7,12 @@ import type { ProjectCardProps } from "./types/projectTypes";
 export type { Participant } from "./types/projectTypes";
 import { Link } from "react-router";
 import { useProjectJoin } from "./hooks/useProjectJoin";
+import { useUserContext } from "../../../context/UserContext";
 
 function ProjectCard({ project }: ProjectCardProps) {
   const { slots, joinModal, decisionModal } = useProjectJoin(project.id);
+  const { user } = useUserContext();
+  const userAvatar = user?.photoURL ?? avatarPlaceholder;
 
   const availableFrontend =
     project.frontend.positions - project.frontend.participants.length;
@@ -76,7 +79,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   >
                     <img
                       className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`}
-                      src={avatarPlaceholder}
+                      src={userAvatar}
                       alt="Pending contributor"
                     />
                   </div>
@@ -133,7 +136,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   >
                     <img
                       className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`}
-                      src={avatarPlaceholder}
+                      src={userAvatar}
                       alt="Pending contributor"
                     />
                   </div>
