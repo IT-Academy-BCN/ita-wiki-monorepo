@@ -25,6 +25,7 @@ class TicketRequestValidationTest extends TestCase{
         $request = new CreateTicketRequest();
 
         $expectedRules = [
+            'forum_answer_id' => 'nullable|integer|exists:forum_answers,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'incident_date' => 'required|date',
