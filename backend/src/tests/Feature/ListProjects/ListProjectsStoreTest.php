@@ -140,7 +140,7 @@ class ListProjectsStoreTest extends TestCase
             'programming_role' => 'Fullstack Developer',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $this->assertDatabaseHas('contributors_list_project', [
             'user_id' => $this->userOne->id,
