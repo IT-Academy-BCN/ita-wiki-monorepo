@@ -25,7 +25,6 @@ class TicketRequestValidationTest extends TestCase{
         $request = new CreateTicketRequest();
 
         $expectedRules = [
-            'code_connect_id' => 'required|integer|exists:users,id',
             'forum_answer_id' => 'nullable|integer|exists:forum_answers,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
@@ -46,7 +45,6 @@ class TicketRequestValidationTest extends TestCase{
         $validator = Validator::make([], $request->rules());
 
         $this->assertTrue($validator->fails());
-        $this->assertTrue($validator->errors()->has('code_connect_id'));
         $this->assertTrue($validator->errors()->has('name'));
         $this->assertTrue($validator->errors()->has('incident_date'));
         $this->assertTrue($validator->errors()->has('affected_app'));

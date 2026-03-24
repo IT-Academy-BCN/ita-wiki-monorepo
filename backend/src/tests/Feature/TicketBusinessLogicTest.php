@@ -85,25 +85,6 @@ class TicketBusinessLogicTest extends TestCase{
     }
 
     /** @test */
-    public function ticket_creation_fails_with_invalid_user_id(): void{
-
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $response = $this->postJson('/api/tickets', [
-            'code_connect_id' => 99999,
-            'name' => 'Test',
-            'incident_date' => '2026-02-15',
-            'affected_app' => 'wiki_frontend',
-            'type' => 'error',
-            'affected_function' => 'login',
-            'description' => 'Test',
-        ]);
-
-        $response->assertStatus(422)->assertJsonValidationErrors(['code_connect_id']);
-    }
-
-    /** @test */
     public function ticket_update_fails_when_not_found(): void{
 
         $user = User::factory()->create();
@@ -123,7 +104,6 @@ class TicketBusinessLogicTest extends TestCase{
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors([
-                'code_connect_id',
                 'incident_date',
                 'affected_app',
                 'type',
@@ -255,7 +235,6 @@ class TicketBusinessLogicTest extends TestCase{
         Sanctum::actingAs($user);
 
         $ticketData = [
-            'code_connect_id' => $user->id,
             'name' => 'Duplicate Name',
             'incident_date' => '2026-02-15',
             'affected_app' => 'wiki_frontend',
@@ -271,4 +250,33 @@ class TicketBusinessLogicTest extends TestCase{
         $response2->assertStatus(201);
         $this->assertNotEquals($response1->json('data.id'), $response2->json('data.id'));
     }
+
+    /** @test */
+    public function ticket_ignores_code_connect_id_from_request_body(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'code_connect_id' => $otherUser->id,
+            'name' => 'Test Ticket',
+            'incident_date' => now()->toDateString(),
+            'affected_app' => 'wiki_frontend',
+            'type' => 'error',
+            'affected_function' => 'login',
+            'description' => 'This is a test ticket.',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+        ]);
+
+        $this->assertDatabaseMissing('tickets', [
+            'code_connect_id' => $otherUser->id,
+        ]);
+    }
+
 }
