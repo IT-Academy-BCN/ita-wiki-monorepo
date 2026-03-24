@@ -128,6 +128,26 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
+    public function test_store_uses_specified_programming_role(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Zeta',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Fullstack Developer',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'user_id' => $this->userOne->id,
+            'programming_role' => 'Fullstack Developer',
+        ]);
+    }
+
     public function test_store_response_includes_contributor(): void
     {
         Sanctum::actingAs($this->userOne);
@@ -154,5 +174,4 @@ class ListProjectsStoreTest extends TestCase
             ]
         ]);
     }
-
 }

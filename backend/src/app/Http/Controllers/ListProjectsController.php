@@ -203,7 +203,7 @@ class ListProjectsController extends Controller
             $contributor = ContributorListProject::create([
                 'list_project_id' => $newProject->id,
                 'user_id' => $userId,
-                'programming_role' => 'Backend Developer',
+                'programming_role' => $request->input('programming_role', 'Backend Developer'),
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
 

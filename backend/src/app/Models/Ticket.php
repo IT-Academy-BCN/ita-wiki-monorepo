@@ -13,7 +13,7 @@ use App\Enums\TicketTypeEnum;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
-
+use App\Models\ForumAnswer;
 class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
@@ -21,6 +21,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'code_connect_id',
+        'forum_answer_id',
         'name',
         'incident_date',
         'affected_app',
@@ -62,6 +63,10 @@ class Ticket extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(TicketComment::class);
+    }
+    public function forumAnswer(): BelongsTo
+    {
+        return $this->belongsTo(ForumAnswer::class, 'forum_answer_id');
     }
     
 }
