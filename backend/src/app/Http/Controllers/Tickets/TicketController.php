@@ -36,7 +36,7 @@ class TicketController extends Controller{
     public function store(CreateTicketRequest $request): JsonResponse{
 
         $ticket = Ticket::create($request->validated());
-
+        
         return response()->json([
             'success' => true,
             'message' => 'The Ticket has been created correctly',
