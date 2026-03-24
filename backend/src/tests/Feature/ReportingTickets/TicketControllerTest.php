@@ -216,6 +216,65 @@ class TicketControllerTest extends TestCase{
         
     }
 
+    /** @test */
+    public function a_mentor_can_only_see_their_own_tickets(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('mentor');
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        Ticket::factory()->create(['code_connect_id' => $user->id]);
+        Ticket::factory()->create(['code_connect_id' => $user->id]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+
+        $data = $response->json('data');
+        $this->assertCount(2, $data);
+
+        foreach ($data as $ticket) {
+            $this->assertEquals($user->id, $ticket['code_connect_id']);
+        }
+    }
+
+    /** @test */
+    public function an_admin_can_see_all_tickets(): void
+    {
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($admin);
+
+        Ticket::factory()->create(['code_connect_id' => $admin->id]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+        $this->assertCount(2, $response->json('data'));
+    }
+
+    /** @test */
+    public function a_student_can_only_see_their_own_tickets(): void
+    {
+        $student = User::factory()->create();
+        $student->assignRole('student');
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($student);
+
+        Ticket::factory()->create(['code_connect_id' => $student->id]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+        $this->assertCount(1, $response->json('data'));
+        $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
+    }
+
 }
 
 ?>
