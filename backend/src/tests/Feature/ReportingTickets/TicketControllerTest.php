@@ -236,6 +236,7 @@ class TicketControllerTest extends TestCase{
             'code_connect_id' => $user->id,
             'name' => 'Test Ticket',
         ]);
+    }
       
     /** @test */
     public function a_mentor_can_only_see_their_own_tickets(): void
