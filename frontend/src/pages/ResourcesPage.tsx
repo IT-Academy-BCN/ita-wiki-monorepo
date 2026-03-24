@@ -14,13 +14,20 @@ const ResourcesPage = () => {
 
   return (
     <ResourcesFiltersProvider>
-      <div className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold mb-6">Recursos de programació</h1>
+      <div className="container mx-auto px-4 py-6 h-[calc(100vh-90px)] flex flex-col">
+        <h1 className="text-2xl font-bold mb-6 shrink-0">
+          Recursos de programació
+        </h1>
         <ResourcesHeader
           initialCategory={category}
           onCategoryChange={(cat) => setSelectedCategory(cat ?? undefined)}
         />
-        <ResourcesList resources={resources} category={selectedCategory} />
+        <div
+          data-testid="resources-cards-scroll-container"
+          className="flex-1 overflow-y-auto pr-1"
+        >
+          <ResourcesList resources={resources} category={selectedCategory} />
+        </div>
       </div>
     </ResourcesFiltersProvider>
   );
