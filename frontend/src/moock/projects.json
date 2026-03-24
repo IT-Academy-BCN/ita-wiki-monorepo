@@ -14,7 +14,7 @@
     },
     "backend": {
       "tech": "Java",
-      "logo": "../assets/logo-java 1.svg",
+      "logo": "../assets/logo-java-1.svg",
       "positions": 2,
       "participants": []
     },
@@ -36,7 +36,7 @@
     },
     "backend": {
       "tech": "PHP",
-      "logo": "../assets/logo-php 1.svg",
+      "logo": "../assets/logo-php-1.svg",
       "positions": 4,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
@@ -60,7 +60,7 @@
     },
     "backend": {
       "tech": "Java",
-      "logo": "../assets/logo-java 1.svg",
+      "logo": "../assets/logo-java-1.svg",
       "positions": 2,
       "participants": []
     },
@@ -82,7 +82,7 @@
     },
     "backend": {
       "tech": "Java",
-      "logo": "../assets/logo-java 1.svg",
+      "logo": "../assets/logo-java-1.svg",
       "positions": 2,
       "participants": []
     },
@@ -104,7 +104,7 @@
     },
     "backend": {
       "tech": "PHP",
-      "logo": "../assets/logo-php 1.svg",
+      "logo": "../assets/logo-php-1.svg",
       "positions": 2,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
@@ -128,7 +128,7 @@
     },
     "backend": {
       "tech": "Java",
-      "logo": "../assets/logo-java 1.svg",
+      "logo": "../assets/logo-java-1.svg",
       "positions": 4,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
@@ -152,7 +152,7 @@
     },
     "backend": {
       "tech": "PHP",
-      "logo": "../assets/logo-php 1.svg",
+      "logo": "../assets/logo-php-1.svg",
       "positions": 4,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" },
@@ -177,7 +177,7 @@
     },
     "backend": {
       "tech": "Java",
-      "logo": "../assets/logo-java 1.svg",
+      "logo": "../assets/logo-java-1.svg",
       "positions": 3,
       "participants": [
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" }
@@ -201,7 +201,7 @@
     },
     "backend": {
       "tech": "PHP",
-      "logo": "../assets/logo-php 1.svg",
+      "logo": "../assets/logo-php-1.svg",
       "positions": 4,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" },
