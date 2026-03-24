@@ -114,4 +114,36 @@ class UserController extends Controller
         }
     }
 
+    public function updateOwnRole(Request $request, User $user)
+    {
+        if ($request->user()->id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $request->validate([
+            'role' => 'required|string|in:student,mentor,admin,superadmin',
+        ]);
+
+        try {
+
+            $user = $request->user();
+    
+            $user->syncRoles([$request->role]);
+    
+            return response()->json([
+                'message' => 'Role updated successfully',
+                'role' => [
+                    'github_id' => $user->github_id,
+                    'role' => $request->role,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'Error updating role',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
