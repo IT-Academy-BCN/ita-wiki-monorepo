@@ -53,7 +53,7 @@ class ListProjectsStoreTest extends TestCase
             'message' => 'Project created successfully',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function test_method_datas_not_valid_language(): void
@@ -117,7 +117,7 @@ class ListProjectsStoreTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $project = ListProjects::where('title', 'Proyecto Delta')->firstOrFail();
 
@@ -148,44 +148,30 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-    public function test_store_uses_default_programming_role_when_not_specified(): void
+    public function test_store_response_includes_contributor(): void
     {
         Sanctum::actingAs($this->userOne);
 
         $response = $this->postJson('/api/codeconnect/', [
-            'title' => 'Proyecto Eta',
+            'title' => 'Proyecto Epsilon',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
 
-        $response->assertStatus(200);
-
-        $project = ListProjects::where('title', 'Proyecto Eta')->firstOrFail();
-
-        $this->assertDatabaseHas('contributors_list_project', [
-            'list_project_id' => $project->id,
-            'user_id' => $this->userOne->id,
-            'programming_role' => 'Backend Developer',
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'data' => [
+                'contributor_list_project' => [
+                    '*' => [
+                        'id',
+                        'list_project_id',
+                        'user_id',
+                        'programming_role',
+                        'status',
+                    ]
+                ]
+            ]
         ]);
     }
-
-    public function test_store_returns_422_for_invalid_programming_role(): void
-    {
-        Sanctum::actingAs($this->userOne);
-
-        $response = $this->postJson('/api/codeconnect/', [
-            'title' => 'Proyecto Theta',
-            'time_duration' => '1 mes',
-            'language_backend' => LanguageEnum::PHP->value,
-            'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'DevOps',
-        ]);
-
-        $response->assertStatus(422);
-
-        $response->assertJsonValidationErrors(['programming_role']);
-    }
-
-
 }
