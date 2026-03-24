@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\DifficultyLevelEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\LanguageEnum;
 
@@ -14,6 +15,7 @@ class TechnicalTestFactory extends Factory
             'language' => $this->faker->randomElement(LanguageEnum::values()),
             'description' => $this->faker->paragraph(),
             'tags' => $this->faker->randomElements(['backend', 'frontend', 'database', 'testing'], 2),
+            'difficulty_level' => $this->faker->randomElement(DifficultyLevelEnum::values()),
         ];
     }
         
