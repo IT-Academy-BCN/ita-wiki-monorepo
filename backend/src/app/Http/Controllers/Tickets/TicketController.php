@@ -40,12 +40,15 @@ class TicketController extends Controller
 
     public function store(CreateTicketRequest $request): JsonResponse
     {
-        $ticket = Ticket::create($request->validated());
+        $data = $request->validated();
+        $data['code_connect_id'] = auth()->id();
+
+        $ticket = Ticket::create($data);
 
         return response()->json([
-            'success' => true,
-            'message' => 'The Ticket has been created correctly',
-            'data' => $ticket
+        'success' => true,
+        'message' => 'The Ticket has been created correctly',
+        'data' => $ticket
         ], 201);
     }
 
