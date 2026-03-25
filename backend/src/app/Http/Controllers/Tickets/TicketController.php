@@ -11,23 +11,19 @@ use App\Http\Requests\Tickets\UpdatePriorityRequest;
 use App\Http\Requests\Tickets\AssignTicketRequest;
 use Illuminate\Http\JsonResponse;
 
-class TicketController extends Controller{
-
-    public function index(): JsonResponse{
-
-        $user = auth()->user();
-
+class TicketController extends Controller
+{
+    public function index(): JsonResponse
+    {
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
-        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
-            $query->where('code_connect_id', $user->id);
+        if (! auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
+            $query->where('code_connect_id', auth()->id());
         }
-
-        $tickets = $query->get();
 
         return response()->json([
             'success' => true,
-            'data' => $tickets
+            'data' => $query->get()
         ]);
     }
 
@@ -42,13 +38,9 @@ class TicketController extends Controller{
         ], 200);
     }
 
-    public function store(CreateTicketRequest $request): JsonResponse{
-
-        $ticket = Ticket::create([
-            ...$request->validated(),
-            'code_connect_id' => auth()->id(),
-        ]);
-
+    public function store(CreateTicketRequest $request): JsonResponse
+    {
+        $ticket = Ticket::create($request->validated());
 
         return response()->json([
             'success' => true,
@@ -136,6 +128,10 @@ class TicketController extends Controller{
 
     private function ensureTicketOwnership(Ticket $ticket): void
     {
+        if (auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
+            return;
+        }
+
         if ((int) $ticket->code_connect_id !== (int) auth()->id()) {
             abort(403, 'Forbidden');
         }
