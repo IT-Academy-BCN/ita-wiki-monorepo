@@ -200,18 +200,20 @@ class ListProjectsController extends Controller
 
             $newProject = ListProjects::create($validatedData);
 
-            ContributorListProject::create([
+            $contributor = ContributorListProject::create([
                 'list_project_id' => $newProject->id,
                 'user_id' => $userId,
-                'programming_role' => 'Backend Developer',
+                'programming_role' => $request->input('programming_role', 'Backend Developer'),
                 'status' => ContributorStatusEnum::Accepted->value,
             ]);
+
+            $newProject = ListProjects::with('contributorListProject')->find($newProject->id);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully',
-                'data' => $newProject
-            ], 200);
+                'data' => $newProject,
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()

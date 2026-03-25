@@ -53,7 +53,7 @@ class ListProjectsStoreTest extends TestCase
             'message' => 'Project created successfully',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function test_method_datas_not_valid_language(): void
@@ -117,7 +117,7 @@ class ListProjectsStoreTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $project = ListProjects::where('title', 'Proyecto Delta')->firstOrFail();
 
@@ -125,6 +125,53 @@ class ListProjectsStoreTest extends TestCase
             'list_project_id' => $project->id,
             'user_id' => $this->userOne->id,
             'status' => ContributorStatusEnum::Accepted->value,
+        ]);
+    }
+
+    public function test_store_uses_specified_programming_role(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Zeta',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Fullstack Developer',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'user_id' => $this->userOne->id,
+            'programming_role' => 'Fullstack Developer',
+        ]);
+    }
+
+    public function test_store_response_includes_contributor(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Epsilon',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'data' => [
+                'contributor_list_project' => [
+                    '*' => [
+                        'id',
+                        'list_project_id',
+                        'user_id',
+                        'programming_role',
+                        'status',
+                    ]
+                ]
+            ]
         ]);
     }
 }

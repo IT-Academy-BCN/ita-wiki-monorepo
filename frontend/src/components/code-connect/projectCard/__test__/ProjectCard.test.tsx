@@ -4,6 +4,13 @@ import { render, screen } from "@testing-library/react";
 import { Project } from "../types/projectTypes";
 import ProjectCard from "../ProjectCard";
 import { MemoryRouter } from "react-router";
+import { UserProvider } from "../../../../context/UserContext";
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <UserProvider>
+    <MemoryRouter>{children}</MemoryRouter>
+  </UserProvider>
+);
 
 function makeProject(partial: Partial<Project> = {}): Project {
   const base: Project = {
@@ -34,11 +41,7 @@ function makeProject(partial: Partial<Project> = {}): Project {
 describe("ProjectCard", () => {
   it("renders title, duration, and role labels", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     expect(screen.getByText(project.title)).toBeInTheDocument();
     expect(
@@ -51,11 +54,7 @@ describe("ProjectCard", () => {
 
   it("renders logos and participant avatars with correct alt text", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const frontLogo = screen.getByAltText(
       project.frontend.tech,
@@ -79,11 +78,7 @@ describe("ProjectCard", () => {
     const availableBackend =
       project.backend.positions - project.backend.participants.length;
 
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const addButtons = screen.getAllByRole("button", { name: "+" });
     expect(addButtons.length).toBe(availableFrontend + availableBackend);
@@ -91,11 +86,7 @@ describe("ProjectCard", () => {
 
   it("renders a link to the project details route", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const link = screen.getByRole("link");
     expect(link).toBeInTheDocument();

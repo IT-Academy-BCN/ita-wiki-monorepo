@@ -13,7 +13,7 @@ class CreateTicketRequest extends FormRequest{
     public function rules(): array{
 
         return [
-            'code_connect_id' => 'required|integer|exists:users,id',
+            'forum_answer_id' => 'nullable|integer|exists:forum_answers,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'incident_date' => 'required|date',
@@ -24,5 +24,3 @@ class CreateTicketRequest extends FormRequest{
         ];
     }
 }
-
-?>

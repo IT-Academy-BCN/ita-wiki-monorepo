@@ -15,7 +15,15 @@ class TicketController extends Controller{
 
     public function index(): JsonResponse{
 
-        $tickets = Ticket::with(['codeConnect', 'assignee', 'closedBy'])->get();
+        $user = auth()->user();
+
+        $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
+            $query->where('code_connect_id', $user->id);
+        }
+
+        $tickets = $query->get();
 
         return response()->json([
             'success' => true,
@@ -35,7 +43,11 @@ class TicketController extends Controller{
 
     public function store(CreateTicketRequest $request): JsonResponse{
 
-        $ticket = Ticket::create($request->validated());
+        $ticket = Ticket::create([
+            ...$request->validated(),
+            'code_connect_id' => auth()->id(),
+        ]);
+
 
         return response()->json([
             'success' => true,

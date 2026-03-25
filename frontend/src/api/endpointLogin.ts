@@ -41,7 +41,10 @@ export const getNewUser = async (token: string) => {
 
   const data: { success: boolean; user: IntUser } = await response.json();
 
-  return data.user;
+  return {
+    ...data.user,
+    photoURL: `https://avatars.githubusercontent.com/u/${data.user.github_id}`,
+  };
 };
 
 export const logout = async (token: string) => {
