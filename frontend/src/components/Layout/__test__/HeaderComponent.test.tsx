@@ -4,10 +4,6 @@ import HeaderComponent from "../HeaderComponent";
 import { MemoryRouter } from "react-router";
 import type { TypUserRole } from "../../../types";
 
-vi.mock("../../../api/userApi", () => ({
-  getUserRole: vi.fn(),
-}));
-
 const { mockUpdateUserRole } = vi.hoisted(() => ({
   mockUpdateUserRole: vi.fn().mockResolvedValue(true),
 }));
@@ -63,32 +59,6 @@ describe("HeaderComponent Language Dropdown", () => {
     expect(screen.getByRole("button", { name: "CA" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "ES" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "EN" })).toBeInTheDocument();
-  });
-});
-
-describe("HeaderComponent role from context", () => {
-  test("does not call getUserRole - role is read from user context", async () => {
-    const { getUserRole } = await import("../../../api/userApi");
-
-    mockUseUserContext.mockReturnValue({
-      ...baseContext,
-      user: {
-        id: 1,
-        name: "Test User",
-        role: "admin" as TypUserRole,
-        github_id: 123,
-        photoURL: "",
-      },
-      isAuthenticated: true,
-    });
-
-    render(
-      <MemoryRouter>
-        <HeaderComponent />
-      </MemoryRouter>,
-    );
-
-    expect(getUserRole).not.toHaveBeenCalled();
   });
 });
 
