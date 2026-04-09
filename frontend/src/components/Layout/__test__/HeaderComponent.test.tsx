@@ -72,7 +72,13 @@ describe("HeaderComponent role from context", () => {
 
     mockUseUserContext.mockReturnValue({
       ...baseContext,
-      user: { id: 1, name: "Test User", role: "admin" as TypUserRole, github_id: 123, photoURL: "" },
+      user: {
+        id: 1,
+        name: "Test User",
+        role: "admin" as TypUserRole,
+        github_id: 123,
+        photoURL: "",
+      },
       isAuthenticated: true,
     });
 
