@@ -61,7 +61,9 @@ export const useTechnicalTestForm = () => {
     }
   };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    navigate("/resources/technical-test/all-tech-tests");
+  };
 
   return {
     form,
