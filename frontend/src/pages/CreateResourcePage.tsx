@@ -1,19 +1,19 @@
-import { IntResource, Category, Tag } from "../types";
-import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resourceSchema } from "../validations/resourceSchema";
-import FormInput from "../components/resources/create-resources/FormInput";
-import TagInput from "../components/forms/TagInput";
-import { createResource } from "../api/endPointResources";
-import { toast } from "sonner";
-import ButtonComponent from "../components/atoms/ButtonComponent";
-import PageTitle from "../components/ui/PageTitle";
-import { useState, useCallback } from "react";
-import arrowLeft from "../assets/arrow-left.svg";
+import { useCallback, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router";
-import Container from "../components/ui/Container";
+import { toast } from "sonner";
+import { createResource } from "../api/endPointResources";
+import arrowLeft from "../assets/arrow-left.svg";
+import ButtonComponent from "../components/atoms/ButtonComponent";
+import TagInput from "../components/forms/TagInput";
+import FormInput from "../components/resources/create-resources/FormInput";
 import { contentResourcesForm } from "../components/resources/create-resources/languagesLabelsContent";
+import Container from "../components/ui/Container";
+import PageTitle from "../components/ui/PageTitle";
 import { useResources } from "../context/ResourcesContext";
+import { Category, IntResource, Tag } from "../types";
+import { resourceSchema } from "../validations/resourceSchema";
 
 export default function CreateResourcePage() {
   const navigate = useNavigate();
@@ -64,8 +64,8 @@ export default function CreateResourcePage() {
     const tagsWithIds =
       Array.isArray(data.tags) && data.tags.length
         ? data.tags.map((tag) =>
-            typeof tag === "string" ? tag : String(tag.id),
-          )
+          typeof tag === "string" ? tag : String(tag.id),
+        )
         : [];
 
     const newResource = {
@@ -81,10 +81,8 @@ export default function CreateResourcePage() {
     try {
       await createResource(newResource);
       toast.success("¡Recurso creado con éxito!");
-      refreshResources();
-      setTimeout(() => {
-        navigate(`/resources/${data?.category}`);
-      }, 1000);
+      await refreshResources();
+      navigate(`/resources/${data?.category}`);
       reset();
     } catch (error) {
       console.error("Error al crear el recurso:", error);
@@ -179,11 +177,10 @@ export default function CreateResourcePage() {
                     type="button"
                     variant="secondary"
                     onClick={() => handleCategorySelect(cat.label)}
-                    className={`!w-fit text-black  ${
-                      selectedCategory === cat.label
+                    className={`!w-fit text-black  ${selectedCategory === cat.label
                         ? "border-2 focus:border-[#B91879]"
                         : ""
-                    }`}
+                      }`}
                     key={cat.label}
                   >
                     <div className="flex justify-center items-center gap-1 h-fit">
