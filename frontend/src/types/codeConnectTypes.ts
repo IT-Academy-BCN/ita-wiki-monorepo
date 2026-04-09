@@ -29,7 +29,7 @@ export interface ApiProjectContributor {
   programming_role: ProgrammingRole;
 }
 
-export interface ApiProject {
+export interface ApiProjectData {
   id: number;
   title: string;
   time_duration: string;
@@ -40,13 +40,13 @@ export interface ApiProject {
 
 export interface ApiProjectsResponse {
   success: boolean;
-  data: ApiProject[];
+  data: ApiProjectData[];
   message: string;
 }
 
 export interface ApiProjectResponse {
   success: boolean;
-  data: ApiProject;
+  data: ApiProjectData;
   message: string;
 }
 
