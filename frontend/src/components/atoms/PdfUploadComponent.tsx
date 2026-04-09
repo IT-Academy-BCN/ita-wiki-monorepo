@@ -73,11 +73,7 @@ function PdfUploadComponent({ value, onFileSelect }: PdfUploadComponentProps) {
         <span
           className={`truncate text-sm p-2 rounded-[12px] w-3/4 flex items-center ${isUploaded && "text-black"}`}
         >
-          {fileName && (
-            <FileUploadIcon
-              className="text-primary mr-1"
-            />
-          )}
+          {fileName && <FileUploadIcon className="text-primary mr-1" />}
           {fileName ? fileName : "Cap fitxer seleccionat"}
         </span>
 

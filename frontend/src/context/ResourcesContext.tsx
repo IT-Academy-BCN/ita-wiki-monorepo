@@ -26,10 +26,10 @@ const ResourcesContext = createContext<ResourcesContextType>({
   bookmarkedResources: [],
   loadingBookmarks: true,
   isBookmarked: () => false,
-  toggleBookmark: () => { },
+  toggleBookmark: () => {},
   getBookmarkCount: () => 0,
-  refreshResources: async () => { },
-  updateResourceLikeCount: () => { },
+  refreshResources: async () => {},
+  updateResourceLikeCount: () => {},
 });
 
 export const useResources = () => useContext(ResourcesContext);
