@@ -3,9 +3,14 @@ import { API_URL, END_POINTS } from "../config";
 export const createTechnicalTest = async (formData: FormData) => {
   const url = `${API_URL}${END_POINTS.technicaltests.create}`;
 
+  const token = localStorage.getItem("auth_token");
+
   try {
     const response = await fetch(url, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
