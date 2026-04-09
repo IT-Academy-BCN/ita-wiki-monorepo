@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FaCheck, FaSpinner } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa";
 import FileUploadIcon from "../../icons/FileUploadIcon";
 
 interface PdfUploadComponentProps {
@@ -9,7 +9,6 @@ interface PdfUploadComponentProps {
 
 function PdfUploadComponent({ value, onFileSelect }: PdfUploadComponentProps) {
   const [fileName, setFileName] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const maxPdfSize = 5 * 1024 * 1024;
@@ -19,14 +18,12 @@ function PdfUploadComponent({ value, onFileSelect }: PdfUploadComponentProps) {
 
     if (!file) {
       setFileName(null);
-      setIsLoading(false);
       setIsUploaded(false);
       if (inputRef.current) {
         inputRef.current.value = "";
       }
     } else {
       setFileName(file.name);
-      setIsLoading(false);
       setIsUploaded(true);
     }
   }, [value]);
@@ -34,7 +31,6 @@ function PdfUploadComponent({ value, onFileSelect }: PdfUploadComponentProps) {
   const resetState = () => {
     onFileSelect(null);
     setFileName(null);
-    setIsLoading(false);
     setIsUploaded(false);
   };
 
@@ -67,41 +63,34 @@ function PdfUploadComponent({ value, onFileSelect }: PdfUploadComponentProps) {
       return;
     }
     setFileName(file.name);
-    setIsLoading(true);
-    setIsUploaded(false);
+    setIsUploaded(true);
     onFileSelect(file);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsUploaded(true);
-    }, 2000);
   };
 
   return (
     <div className="max-w-sm">
       <div className="flex items-center justify-between border border-gray-300 rounded-[12px] p-2">
         <span
-          className={`truncate text-sm p-2 rounded-[12px] w-3/4 flex items-center ${isLoading && "bg-primary text-white"} ${isUploaded && "text-black"}`}
+          className={`truncate text-sm p-2 rounded-[12px] w-3/4 flex items-center ${isUploaded && "text-black"}`}
         >
           {fileName && (
             <FileUploadIcon
-              className={`${isLoading ? "text-white" : "text-primary"} mr-1`}
+              className="text-primary mr-1"
             />
           )}
           {fileName ? fileName : "Cap fitxer seleccionat"}
         </span>
 
         <div className="ml-2">
-          {isLoading ? (
-            <FaSpinner className="animate-spin text-primary" />
-          ) : isUploaded ? (
+          {isUploaded ? (
             <div className="bg-green-700 p-1 rounded-full">
               <FaCheck className="text-white text-xs" />
             </div>
           ) : (
             <button
+              type="button"
               onClick={handleClick}
-              className="p-3 bg-primary text-white text-sm rounded-[12px]"
+              className="p-3 bg-primary text-white text-sm rounded-[12px] cursor-pointer"
             >
               Cerca
             </button>
