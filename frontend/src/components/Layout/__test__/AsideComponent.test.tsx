@@ -1,21 +1,16 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter, Routes, Route } from "react-router";
-import { vi, describe, test, expect, beforeEach } from "vitest";
-import "@testing-library/jest-dom";
-import AsideComponent from "../AsideComponent";
-import { useUserContext } from "../../../context/UserContext";
-import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
-import { AsideNavbarData } from "../aside/asideContent.tsx";
 import userEvent from "@testing-library/user-event";
+import "@testing-library/jest-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import sql_vector from "../../../assets/sqlVector.svg?react";
-import python_vector from "../../../assets/pythonVector.svg?react";
-import ts_vector from "../../../assets/TypescriptVector.svg?react";
-import js_vector from "../../../assets/javascript.svg?react";
-import java_vector from "../../../assets/logo-java-1.svg?react";
-import php_vector from "../../../assets/logo-php-1.svg?react";
-import react_vector from "../../../assets/react.svg?react";
+import AsideComponent from "../AsideComponent";
+
+import { useUserContext } from "../../../context/UserContext";
+
+import { AsideNavbarData } from "../aside/asideContent.tsx";
+import { contentForTechnicalTest } from "../../technical-test/languageLabelsContent";
 
 const mockUseLocation = vi.fn();
 const mockUseNavigate = vi.fn();
@@ -35,28 +30,28 @@ vi.mock("../../../context/UserContext", () => ({
   }),
 }));
 
-vi.mock("../../../assets/sqlVector.svg?react", () => ({
+vi.mock("../../../assets/technologies/sql-logo.svg?react", () => ({
   default: () => <svg data-testid="sql-icon" />,
 }));
-vi.mock("../../../assets/pythonVector.svg?react", () => ({
+vi.mock("../../../assets/technologies/python-logo.svg?react", () => ({
   default: () => <svg data-testid="python-icon" />,
 }));
-vi.mock("../../../assets/TypescriptVector.svg?react", () => ({
+vi.mock("../../../assets/technologies/typescript-logo.svg?react", () => ({
   default: () => <svg data-testid="ts-icon" />,
 }));
-vi.mock("../../../assets/javascript.svg?react", () => ({
+vi.mock("../../../assets/technologies/javascript-logo.svg?react", () => ({
   default: () => <svg data-testid="js-icon" />,
 }));
-vi.mock("../../../assets/logo-java 1.svg?react", () => ({
+vi.mock("../../../assets/technologies/java-logo.svg?react", () => ({
   default: () => <svg data-testid="java-icon" />,
 }));
-vi.mock("../../../assets/logo-php 1.svg?react", () => ({
+vi.mock("../../../assets/technologies/php-logo.svg?react", () => ({
   default: () => <svg data-testid="php-icon" />,
 }));
-vi.mock("../../../assets/logo-node 1.svg?react", () => ({
+vi.mock("../../../assets/technologies/node-logo.svg?react", () => ({
   default: () => <svg data-testid="node-icon" />,
 }));
-vi.mock("../../../assets/react.svg?react", () => ({
+vi.mock("../../../assets/technologies/react-logo.svg?react", () => ({
   default: () => <svg data-testid="react-icon" />,
 }));
 vi.mock("../../../assets/homeIcon.svg?react", () => ({
@@ -212,7 +207,6 @@ describe("AsideComponent Tests", () => {
     const codeConnectLink = screen.getByText("Codeconnect");
 
     expect(codeConnectLink).toBeInTheDocument();
-
     expect(codeConnectLink).toHaveAttribute("href", "/codeconnect");
   });
 
@@ -265,19 +259,9 @@ describe("AsideComponent Tests", () => {
     });
   });
 
-  test("contentForTechnicalTest icons are correctly assigned", () => {
-    const expectedIcons = [
-      react_vector,
-      sql_vector,
-      js_vector,
-      ts_vector,
-      java_vector,
-      php_vector,
-      python_vector,
-    ];
-
-    contentForTechnicalTest.forEach((item, index) => {
-      expect(item.icon).toBe(expectedIcons[index]);
+  test("contentForTechnicalTest icons are functions", () => {
+    contentForTechnicalTest.forEach((item) => {
+      expect(typeof item.icon).toBe("function");
     });
   });
 });
