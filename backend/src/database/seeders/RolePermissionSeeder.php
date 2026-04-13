@@ -48,6 +48,8 @@ class RolePermissionSeeder extends Seeder
                 'delete own bookmarks',
                 'create likes',
                 'delete own likes',
+                'view own tickets',
+                'update ticket status',
             ],
 
             'mentor' => [
@@ -66,6 +68,10 @@ class RolePermissionSeeder extends Seeder
                 'delete own bookmarks',
                 'create likes',
                 'delete own likes',
+                'view own tickets',
+                'update ticket status',
+                'update ticket priority',
+                'assign tickets',
             ],
 
             'admin' => [
@@ -84,6 +90,13 @@ class RolePermissionSeeder extends Seeder
                 'delete own bookmarks',
                 'create likes',
                 'delete own likes',
+                'view own tickets',
+                'view all tickets',
+                'update ticket status',
+                'close ticket',
+                'update ticket priority',
+                'assign tickets',
+                'add closing comment',
             ],
 
             'superadmin' => 'all',  // Special marker for all permissions
