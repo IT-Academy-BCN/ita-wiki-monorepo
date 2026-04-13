@@ -297,6 +297,52 @@ class TicketControllerTest extends TestCase{
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
     }
 
+    /** @test */
+    public function admin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('admin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'high']);
+    }
+
+    /** @test */
+    public function superadmin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('superadmin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'critical']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'critical']);
+    }
+
+    /** @test */
+    public function student_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+
+        $response->assertStatus(403);
+    }
+
 }
 
 ?>
