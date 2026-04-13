@@ -156,6 +156,7 @@ class TicketBusinessLogicTest extends TestCase{
 
         $creator = User::factory()->create();
         $closer = User::factory()->create();
+        $closer->assignRole('admin');
         Sanctum::actingAs($closer);
 
         $ticket = Ticket::factory()->create([
