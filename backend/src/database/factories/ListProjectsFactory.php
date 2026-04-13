@@ -24,6 +24,10 @@ class ListProjectsFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'title' => $this->faker->sentence(3),
+            'description'=> $this->faker->paragraph(),
+            'limit_date_inscription' => $this->faker->optional()->dateTimeBetween('now', '+3 months')?->format('Y-m-d'),
+            'dev_front_number' => $this->faker->optional()->numberBetween(1, 5),
+            'dev_back_number' => $this->faker->optional()->numberBetween(1, 5),
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
             'language_frontend' => $this->faker->randomElement($languages),
