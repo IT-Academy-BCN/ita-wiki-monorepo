@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import projectsData from "../../../moock/projects.json";
+import { useEffect, useState } from "react";
 import { useMinLoading } from "../../../hooks/useMinLoading";
-import ProjectListUI from "./ProjectListUI";
+import projectsData from "../../../moock/projects.json";
 import type { Project } from "../projectCard/types/projectTypes";
+import ProjectListUI from "./ProjectListUI";
 
 function ProjectList({
   onCardClick,
@@ -11,23 +11,26 @@ function ProjectList({
   onCardClick?: (id: number) => void;
   filter?: string | null;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const error = null;
   const showLoader = useMinLoading(isLoading);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    setIsLoading(true);
+    const projectsToShow = (projectsData as Project[])
+      .filter((p) => {
+        if (!filter) return true;
+        const f = filter.toLowerCase();
+        return (
+          p.frontend?.tech?.toLowerCase() === f ||
+          p.backend?.tech?.toLowerCase() === f
+        );
+      });
+    setProjects(projectsToShow);
+    setIsLoading(false);
+  }, [filter])
 
-  const projects = (projectsData as Project[]).filter((p) => {
-    if (!filter) return true;
-    const f = filter.toLowerCase();
-    return (
-      p.frontend?.tech?.toLowerCase() === f ||
-      p.backend?.tech?.toLowerCase() === f
-    );
-  });
 
   return (
     <ProjectListUI
