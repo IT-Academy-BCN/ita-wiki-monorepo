@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "../Modal/Modal";
 import GitHubLogin from "../github-login/GitHubLogin";
 import { AddUsersModal } from "../resources/AddUserModal";
-import { getUserRole } from "../../api/userApi";
 import { TermsAndConditionsModal } from "../Modal/TermsAndConditionsModal";
 import RoleDropdownComponent from "./header/RoleDropdownComponent";
 import { TypUserRole } from "../../types";
@@ -108,22 +107,7 @@ const HeaderComponent = () => {
   const openTermsModal = () => setIsTermsModalOpen(true);
   const closeTermsModal = () => setIsTermsModalOpen(false);
 
-  const [userRole, setUserRole] = useState<TypUserRole | null>(null);
-
-  useEffect(() => {
-    if (user && user.id) {
-      getUserRole(user.id)
-        .then((roleData) => {
-          setUserRole(roleData || null);
-        })
-        .catch((err) => {
-          console.error("Error fetching role:", err);
-          setUserRole(null);
-        });
-    } else {
-      setUserRole(null);
-    }
-  }, [user]);
+  const userRole: TypUserRole | null = (user?.role as TypUserRole) ?? null;
 
   const hasPermission = userRole
     ? ["superadmin", "admin", "mentor"].includes(userRole)
