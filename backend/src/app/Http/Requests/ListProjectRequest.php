@@ -28,7 +28,11 @@ class ListProjectRequest extends FormRequest
             'time_duration' => 'required|string|max:255',
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
-            'programming_role' => 'required|string|in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
+            'programming_role' => [
+                $this->isMethod('post') ? 'required' : 'nullable',
+                'string',
+                'in:Frontend Developer,Backend Developer,Fullstack Developer,Other'
+            ],
         ];
     }
 
