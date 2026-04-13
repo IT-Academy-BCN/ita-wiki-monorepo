@@ -18,19 +18,17 @@ function ProjectList({
 
   useEffect(() => {
     setIsLoading(true);
-    const projectsToShow = (projectsData as Project[])
-      .filter((p) => {
-        if (!filter) return true;
-        const f = filter.toLowerCase();
-        return (
-          p.frontend?.tech?.toLowerCase() === f ||
-          p.backend?.tech?.toLowerCase() === f
-        );
-      });
+    const projectsToShow = (projectsData as Project[]).filter((p) => {
+      if (!filter) return true;
+      const f = filter.toLowerCase();
+      return (
+        p.frontend?.tech?.toLowerCase() === f ||
+        p.backend?.tech?.toLowerCase() === f
+      );
+    });
     setProjects(projectsToShow);
     setIsLoading(false);
-  }, [filter])
-
+  }, [filter]);
 
   return (
     <ProjectListUI
