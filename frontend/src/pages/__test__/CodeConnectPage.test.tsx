@@ -19,7 +19,8 @@ describe("CodeConnectPage", () => {
           <Routes>
             <Route path="/codeconnect" element={<CodeConnectPage />} />
           </Routes>
-        </UserProvider>,
+        </UserProvider>
+        ,
       </MemoryRouter>,
     );
 
