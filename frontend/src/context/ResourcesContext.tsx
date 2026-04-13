@@ -6,6 +6,8 @@ import { canBookmark } from "../data/permission/tempRolesPremission";
 import { useBookmarkToggle } from "../hooks/useBookmarkToggle";
 import { Bookmark, IntBookmarkElement, IntResource } from "../types";
 
+/* eslint-disable react-refresh/only-export-components */
+
 interface ResourcesContextType {
   resources: IntResource[];
   isLoading: boolean;
@@ -26,10 +28,10 @@ const ResourcesContext = createContext<ResourcesContextType>({
   bookmarkedResources: [],
   loadingBookmarks: true,
   isBookmarked: () => false,
-  toggleBookmark: () => {},
+  toggleBookmark: () => { },
   getBookmarkCount: () => 0,
-  refreshResources: async () => {},
-  updateResourceLikeCount: () => {},
+  refreshResources: async () => { },
+  updateResourceLikeCount: () => { },
 });
 
 export const useResources = () => useContext(ResourcesContext);
@@ -145,7 +147,7 @@ export const ResourcesProvider = ({
     };
 
     fetchBookmarks();
-  }, [user]);
+  }, [user, resources]);
 
   const { toggleBookmark: toggleBookmarkAction } = useBookmarkToggle();
 
