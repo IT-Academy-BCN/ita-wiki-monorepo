@@ -180,18 +180,26 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-    public function test_store_requires_programming_role(): void
+    public function test_store_saves_programming_role_from_request(): void 
     {
         Sanctum::actingAs($this->userOne);
 
         $response = $this->postJson('/api/codeconnect/', [
-            'title' => 'Proyecto sin rol',
+            'title' => 'Proyecto Frontend',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Frontend Developer',
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['programming_role']);
+        $response->assertStatus(201);
+
+        $project = ListProjects::where('title', 'Proyecto Frontend')->firstOrFail();
+
+        $this->assertDatabaseHas('contributors_list_project', [
+            'list_project_id' => $project->id,
+            'user_id' => $this->userOne->id,
+            'programming_role' => 'Frontend Developer',
+        ]);
     }
 }
