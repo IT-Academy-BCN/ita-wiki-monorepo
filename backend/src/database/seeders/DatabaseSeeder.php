@@ -17,6 +17,9 @@ use Database\Seeders\TechnicalTestSeeder;
 use Database\Seeders\ListProjectsSeeder;
 use Database\Seeders\ContributorListProjectSeeder;
 use Database\Seeders\ForumSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RolePermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
