@@ -66,6 +66,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
 
         $response->assertJsonFragment([
@@ -86,6 +87,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
         $response->assertStatus(422);
     }
@@ -173,5 +175,20 @@ class ListProjectsStoreTest extends TestCase
                 ]
             ]
         ]);
+    }
+
+    public function test_store_requires_programming_role(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Sin Rol',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['programming_role']);
     }
 }
