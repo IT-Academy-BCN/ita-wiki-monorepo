@@ -174,4 +174,27 @@ class ListProjectsStoreTest extends TestCase
             ]
         ]);
     }
+
+    public function test_store_with_description_and_roadmap(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Con Descripcion',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'description' => 'Una descripcion del proyecto',
+            'roadmap' => 'Un roadmap del proyecto',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('list_projects', [
+            'title' => 'Proyecto Con Descripcion',
+            'description' => 'Una descripcion del proyecto',
+            'roadmap' => 'Un roadmap del proyecto',
+        ]);
+    }
+
 }

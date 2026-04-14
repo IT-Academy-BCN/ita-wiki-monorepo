@@ -23,6 +23,8 @@ class ListProjects extends Model
         'time_duration',
         'language_backend',
         'language_frontend',
+        'description',
+        'roadmap'
     
     ];
 

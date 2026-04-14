@@ -29,6 +29,9 @@ class ListProjectRequest extends FormRequest
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
             'programming_role' => 'nullable|string|in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
+            'description' => 'nullable|string',
+            'roadmap' => 'nullable|string',
+
         ];
     }
 
