@@ -18,177 +18,115 @@ function ProjectCard({ project }: ProjectCardProps) {
     project.frontend.positions - project.frontend.participants.length;
   const availableBackend =
     project.backend.positions - project.backend.participants.length;
+
   return (
-    <div className="flex flex-col border scale-95 sm:scale-none border-gray-500 text-black items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10">
+    <article className="flex flex-col border scale-95 sm:scale-none border-gray-500 text-black items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10">
       <div className="w-full">
         <Link to={`/codeconnect/${project.id}`}>
-          <h1 className="font-extrabold text-black w-fit hover:text-primary transition-colors duration-300 text-xl text-start">
+          <h2 className="font-extrabold text-black w-fit hover:text-primary transition-colors duration-300 text-xl text-start">
             {project.title}
-          </h1>
+          </h2>
         </Link>
-        <p className="text-sm font-bold text-gray-500 text-start">
-          Durada: {project.duration}
-        </p>
       </div>
-      <div className="flex w-full gap-4 mt-5">
-        <div className="flex w-full items-center gap-3 sm:gap-4 xl:gap-6">
-          <h2 className="text-sm font-bold">Frontend</h2>
-          <img
-            className="w-7"
-            src={resolveAsset(project.frontend.logo)}
-            alt={project.frontend.tech}
-          />
-        </div>
-        <div className="flex w-full items-center gap-3 sm:gap-5 xl:gap-7">
-          <h2 className="text-sm font-bold">Backend</h2>
-          <img
-            className="w-7"
-            src={resolveAsset(project.backend.logo)}
-            alt={project.backend.tech}
-          />
-        </div>
-      </div>
-      <div className="flex w-full gap-2 mt-4">
-        <div className="w-full grid grid-cols-2 gap-4 grid-rows-2 border-r-2 pr-2 border-gray-200">
-          {project.frontend.participants.map((p, i) => (
-            <figure className="flex flex-col items-center" key={i}>
-              <img
-                className="w-12 h-12"
-                src={resolveAsset(p.avatar)}
-                alt={p.name}
-              />
-              <figcaption className="text-xs mt-1 font-bold text-gray-500">
-                {p.name}
-              </figcaption>
-            </figure>
-          ))}
-          {[...Array(availableFrontend)].map((_, i) => {
-            const index = project.frontend.participants.length + i;
-            const pending = slots.isPending("frontend", index);
-            const accepted = slots.isAccepted("frontend", index);
 
-            if (pending) {
+      <div className="w-full mt-6">
+        <h2 className="font-extrabold text-xl text-start mb-4">Equip</h2>
+
+        <div className="flex w-full items-center gap-4 mb-4">
+          <h3 className="text-sm font-bold">Frontend</h3>
+          <img className="w-7" src={resolveAsset(project.frontend.logo)} alt={project.frontend.tech} />
+        </div>
+        <div className="flex w-full gap-2 mb-4">
+          <div className="w-full grid grid-cols-3 gap-2 justify-items-start">
+            {project.frontend.participants.map((p, i) => (
+              <figure className="flex flex-col items-center" key={i}>
+                <img className="w-12 h-12" src={resolveAsset(p.avatar)} alt={p.name} />
+                <figcaption className="text-xs mt-1 font-bold text-gray-500">{p.name}</figcaption>
+              </figure>
+            ))}
+            {[...Array(availableFrontend)].map((_, i) => {
+              const index = project.frontend.participants.length + i;
+              const pending = slots.isPending("frontend", index);
+              const accepted = slots.isAccepted("frontend", index);
+              if (pending) {
+                return (
+                  <figure key={`front-pending-${index}`} className="flex flex-col items-center" onClick={() => decisionModal.open("frontend", index)}>
+                    <div className={`w-12 h-12 rounded-full border-2 cursor-pointer overflow-hidden flex items-center justify-center ${accepted ? "border-transparent" : "border-orange-500"}`}>
+                      <img className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`} src={userAvatar} alt="Pending contributor" />
+                    </div>
+                    <figcaption className="text-xs mt-1 font-bold text-gray-500">{accepted ? "Contributor" : "Pending"}</figcaption>
+                  </figure>
+                );
+              }
               return (
-                <figure
-                  key={`front-pending-${index}`}
-                  className="flex flex-col items-center"
-                  onClick={() => decisionModal.open("frontend", index)}
-                >
-                  <div
-                    className={`w-12 h-12 rounded-full border-2 cursor-pointer overflow-hidden flex items-center justify-center ${accepted ? "border-transparent" : "border-orange-500"}`}
-                  >
-                    <img
-                      className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`}
-                      src={userAvatar}
-                      alt="Pending contributor"
-                    />
-                  </div>
-                  <figcaption className="text-xs mt-1 font-bold text-gray-500">
-                    {accepted ? "Contributor" : "Pending"}
-                  </figcaption>
-                </figure>
+                <ProjectButton key={`front-${index}`} onClick={() => joinModal.open({ area: "frontend", index, role: "Frontend Developer" })}>+</ProjectButton>
               );
-            }
-
-            return (
-              <ProjectButton
-                key={`front-${index}`}
-                onClick={() =>
-                  joinModal.open({
-                    area: "frontend",
-                    index,
-                    role: "Frontend Developer",
-                  })
-                }
-              >
-                +
-              </ProjectButton>
-            );
-          })}
+            })}
+          </div>
         </div>
-        <div className="w-full grid grid-cols-2 justify-items-center grid-rows-2 pl-1 gap-4">
-          {project.backend.participants.map((p, i) => (
-            <figure className="flex flex-col items-center" key={i}>
-              <img
-                className="w-12 h-12"
-                src={resolveAsset(p.avatar)}
-                alt={p.name}
-              />
-              <figcaption className="text-xs mt-1 font-bold text-gray-500">
-                {p.name}
-              </figcaption>
-            </figure>
-          ))}
-          {[...Array(availableBackend)].map((_, i) => {
-            const index = project.backend.participants.length + i;
-            const pending = slots.isPending("backend", index);
-            const accepted = slots.isAccepted("backend", index);
 
-            if (pending) {
+        <div className="flex w-full items-center gap-4 mb-4">
+          <h3 className="text-sm font-bold">Backend</h3>
+          <img className="w-7" src={resolveAsset(project.backend.logo)} alt={project.backend.tech} />
+        </div>
+        <div className="flex w-full gap-2">
+          <div className="w-full grid grid-cols-3 gap-2 justify-items-start">
+            {project.backend.participants.map((p, i) => (
+              <figure className="flex flex-col items-center" key={i}>
+                <img className="w-12 h-12" src={resolveAsset(p.avatar)} alt={p.name} />
+                <figcaption className="text-xs mt-1 font-bold text-gray-500">{p.name}</figcaption>
+              </figure>
+            ))}
+            {[...Array(availableBackend)].map((_, i) => {
+              const index = project.backend.participants.length + i;
+              const pending = slots.isPending("backend", index);
+              const accepted = slots.isAccepted("backend", index);
+              if (pending) {
+                return (
+                  <figure key={`back-pending-${index}`} className="flex flex-col items-center" onClick={() => decisionModal.open("backend", index)}>
+                    <div className={`w-12 h-12 rounded-full cursor-pointer border-2 overflow-hidden flex items-center justify-center ${accepted ? "border-transparent" : "border-orange-500"}`}>
+                      <img className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`} src={userAvatar} alt="Pending contributor" />
+                    </div>
+                    <figcaption className="text-xs mt-1 font-bold text-gray-500">{accepted ? "Contributor" : "Pending"}</figcaption>
+                  </figure>
+                );
+              }
               return (
-                <figure
-                  key={`back-pending-${index}`}
-                  className="flex flex-col items-center"
-                  onClick={() => decisionModal.open("backend", index)}
-                >
-                  <div
-                    className={`w-12 h-12 rounded-full cursor-pointer border-2 overflow-hidden flex items-center justify-center ${accepted ? "border-transparent" : "border-orange-500"}`}
-                  >
-                    <img
-                      className={`w-full h-full object-cover ${accepted ? "" : "grayscale"}`}
-                      src={userAvatar}
-                      alt="Pending contributor"
-                    />
-                  </div>
-                  <figcaption className="text-xs mt-1 font-bold text-gray-500">
-                    {accepted ? "Contributor" : "Pending"}
-                  </figcaption>
-                </figure>
+                <ProjectButton key={`back-${index}`} onClick={() => joinModal.open({ area: "backend", index, role: "Backend Developer" })}>+</ProjectButton>
               );
-            }
-
-            return (
-              <ProjectButton
-                key={`back-${index}`}
-                onClick={() =>
-                  joinModal.open({
-                    area: "backend",
-                    index,
-                    role: "Backend Developer",
-                  })
-                }
-              >
-                +
-              </ProjectButton>
-            );
-          })}
+            })}
+          </div>
         </div>
       </div>
+
+      <div className="w-full mt-10">
+        <h2 className="font-extrabold text-xl text-start mb-4">Termini d'inscripció</h2>
+        <ProgressBar title="Progrés del projecte" startDate={project.startDate} endDate={project.endDate} />
+      </div>
+
+      <div className="w-full mt-10">
+        <h2 className="font-extrabold text-xl text-start mb-4">Durada</h2>
+        <p className="text-sm font-bold text-start">{project.duration || "No especificada"}</p>
+      </div>
+
       <div className="w-full">
-        <h2 className="text-sm mt-10 font-bold text-start mb-2">Inscripció</h2>
-        <ProgressBar
-          title="Progrés del projecte"
-          startDate={project.startDate}
-          endDate={project.endDate}
-        />
+        <button className="my-5 w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition cursor-pointer font-bold">
+          Apuntar-me
+        </button>
       </div>
+
       <GenericModal
         isOpen={joinModal.isOpen}
         onClose={joinModal.close}
         title="Unir-te al projecte"
         showPrimaryButton
         primaryButtonText={joinModal.isSubmitting ? "Enviant..." : "Confirmar"}
-        primaryButtonAction={
-          joinModal.isSubmitting ? undefined : joinModal.confirm
-        }
+        primaryButtonAction={joinModal.isSubmitting ? undefined : joinModal.confirm}
         showSecondaryButton
         secondaryButtonText="Cancel·lar"
         secondaryButtonAction={joinModal.close}
       >
-        <p>
-          Vols unir-te com a {joinModal.selectedSlot?.role ?? "participant"} al
-          projecte "{project.title}"?
-        </p>
+        <p>Vols unir-te com a {joinModal.selectedSlot?.role ?? "participant"} al projecte "{project.title}"?</p>
       </GenericModal>
       <GenericModal
         isOpen={decisionModal.isOpen}
@@ -201,12 +139,9 @@ function ProjectCard({ project }: ProjectCardProps) {
         secondaryButtonText="Rebutjar"
         secondaryButtonAction={decisionModal.reject}
       >
-        <p>
-          Vols acceptar o rebutjar aquest contribuidor pendent al projecte "
-          {project.title}"?
-        </p>
+        <p>Vols acceptar o rebutjar aquest contribuidor pendent al projecte "{project.title}"?</p>
       </GenericModal>
-    </div>
+    </article>
   );
 }
 

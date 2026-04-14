@@ -15,7 +15,7 @@
     "backend": {
       "tech": "Java",
       "logo": "../assets/logo-java-1.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": []
     },
     "startDate": "10-01-2025",
@@ -37,7 +37,7 @@
     "backend": {
       "tech": "PHP",
       "logo": "../assets/logo-php-1.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
       ]
@@ -52,7 +52,7 @@
     "frontend": {
       "tech": "Angular",
       "logo": "../assets/angular.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" }
@@ -61,7 +61,7 @@
     "backend": {
       "tech": "Java",
       "logo": "../assets/logo-java-1.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": []
     },
     "startDate": "10-20-2025",
@@ -74,7 +74,7 @@
     "frontend": {
       "tech": "Angular",
       "logo": "../assets/angular.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
         { "name": "Jordi", "avatar": "../assets/project-avatar2.jpg" }
@@ -83,7 +83,7 @@
     "backend": {
       "tech": "Java",
       "logo": "../assets/logo-java-1.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": []
     },
     "startDate": "10-25-2025",
@@ -105,7 +105,7 @@
     "backend": {
       "tech": "PHP",
       "logo": "../assets/logo-php-1.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
       ]
@@ -120,7 +120,7 @@
     "frontend": {
       "tech": "Angular",
       "logo": "../assets/angular.svg",
-      "positions": 2,
+      "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" }
@@ -129,7 +129,7 @@
     "backend": {
       "tech": "Java",
       "logo": "../assets/logo-java-1.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" }
       ]
@@ -144,7 +144,7 @@
     "frontend": {
       "tech": "React",
       "logo": "../assets/react.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" },
         { "name": "Jordi", "avatar": "../assets/project-avatar2.jpg" }
@@ -153,7 +153,7 @@
     "backend": {
       "tech": "PHP",
       "logo": "../assets/logo-php-1.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" },
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" }
@@ -193,7 +193,7 @@
     "frontend": {
       "tech": "React",
       "logo": "../assets/react.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Aina", "avatar": "../assets/project-avatar4.jpg" },
         { "name": "Jordi", "avatar": "../assets/project-avatar2.jpg" }
@@ -202,7 +202,7 @@
     "backend": {
       "tech": "PHP",
       "logo": "../assets/logo-php-1.svg",
-      "positions": 4,
+      "positions": 3,
       "participants": [
         { "name": "Roman", "avatar": "../assets/project-avatar3.jpg" },
         { "name": "Natasha", "avatar": "../assets/project-avatar.jpg" }
