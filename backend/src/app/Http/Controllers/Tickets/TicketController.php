@@ -30,7 +30,6 @@ class TicketController extends Controller
     public function show($id): JsonResponse
     {
         $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
-        $this->ensureTicketOwnership($ticket);
 
         $user = auth()->user();
 
