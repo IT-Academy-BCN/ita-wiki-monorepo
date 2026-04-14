@@ -37,10 +37,10 @@ class TicketController extends Controller{
 
         $user = auth()->user();
 
-        if (!$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
-            && $ticket->assignee_id !== $user->id
-        ) {
+        $isCreator  = (int) $ticket->code_connect_id === (int) $user->id;
+        $isAssignee = (int) $ticket->assignee_id === (int) $user->id;
+
+        if (!$user->hasAnyRole(['admin', 'superadmin']) && !$isCreator && !$isAssignee) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to view this ticket',
