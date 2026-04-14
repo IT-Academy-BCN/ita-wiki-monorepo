@@ -174,4 +174,21 @@ class ListProjectsStoreTest extends TestCase
             ]
         ]);
     }
+
+    public function test_store_returns_custom_message_when_programming_role_missing(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Sin Rol',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'programming_role' => ['The programming role field is required.'],
+        ]);
+    }
 }
