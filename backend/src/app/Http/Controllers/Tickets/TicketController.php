@@ -35,6 +35,18 @@ class TicketController extends Controller{
 
         $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
 
+        $user = auth()->user();
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])
+            && $ticket->code_connect_id !== $user->id
+            && $ticket->assignee_id !== $user->id
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to view this ticket',
+            ], 403);
+        }
+        
         return response()->json([
             'success' => true,
             'data' => $ticket

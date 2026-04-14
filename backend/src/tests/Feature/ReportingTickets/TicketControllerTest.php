@@ -72,8 +72,7 @@ class TicketControllerTest extends TestCase{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $ticket = Ticket::factory()->create();
-
+        $ticket = Ticket::factory()->create(['code_connect_id' => $user->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
 
@@ -296,6 +295,69 @@ class TicketControllerTest extends TestCase{
         $this->assertCount(1, $response->json('data'));
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
     }
+
+    /** @test */
+    public function admin_can_view_any_ticket(): void{
+
+        $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function creator_can_view_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function assignee_can_view_assigned_ticket(): void{
+
+        $assignee = $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id' => $assignee->id,
+        ]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function student_cannot_view_ticket_they_did_not_create_or_are_not_assigned_to(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_view_ticket_they_did_not_create_or_are_not_assigned_to(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(403);
+    }
+
 
 }
 
