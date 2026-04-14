@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('list_projects', function (Blueprint $table) {
             
-            $table->text('description')->nullable();
             $table->text('roadmap')->nullable();
         });
     }
@@ -25,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('list_projects', function (Blueprint $table) {
 
-            $table->dropColumn(['description', 'roadmap']);
+            $table->dropColumn(['roadmap']);
         });
     }
 };
