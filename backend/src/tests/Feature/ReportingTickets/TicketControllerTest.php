@@ -297,6 +297,70 @@ class TicketControllerTest extends TestCase{
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
     }
 
+    /** @test */
+    public function admin_can_assign_ticket(): void{
+
+        $admin = $this->authenticateUserWithRole('admin');
+        $assignee = User::factory()->create();
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/assignee", [
+            'assignee_id' => $assignee->id,
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id' => $ticket->id,
+            'assignee_id' => $assignee->id,
+        ]);
+    }
+
+    /** @test */
+    public function superadmin_can_assign_ticket(): void{
+
+        $superadmin = $this->authenticateUserWithRole('superadmin');
+        $assignee = User::factory()->create();
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/assignee", [
+            'assignee_id' => $assignee->id,
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id' => $ticket->id,
+            'assignee_id' => $assignee->id,
+        ]);
+    }
+
+    /** @test */
+    public function student_cannot_assign_ticket(): void{
+
+        $this->authenticateUserWithRole('student');
+        $assignee = User::factory()->create();
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/assignee", [
+            'assignee_id' => $assignee->id,
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_assign_ticket(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $assignee = User::factory()->create();
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/assignee", [
+            'assignee_id' => $assignee->id,
+        ]);
+
+        $response->assertStatus(403);
+    }
+
 }
 
 ?>

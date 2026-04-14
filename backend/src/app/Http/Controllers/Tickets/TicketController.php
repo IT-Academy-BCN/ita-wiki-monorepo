@@ -118,6 +118,15 @@ class TicketController extends Controller{
 
     public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse{
 
+        $user = auth()->user();
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to assign this ticket',
+            ], 403);
+        }
+        
         $ticket = Ticket::findOrFail($id);
 
         $ticket->update(['assignee_id' => $request->validated()['assignee_id']]);
