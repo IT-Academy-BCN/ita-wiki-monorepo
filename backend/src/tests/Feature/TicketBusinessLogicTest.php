@@ -155,18 +155,19 @@ class TicketBusinessLogicTest extends TestCase{
 
     /** @test */
     public function closing_ticket_sets_closed_by_automatically(): void{
-
-        $creator = User::factory()->create();
+    
         $closer = User::factory()->create();
         Sanctum::actingAs($closer);
 
         $ticket = Ticket::factory()->create([
-            'code_connect_id' => $creator->id,
-            'closed_by' => null,
-            'closed_at' => null,
+          'code_connect_id' => $closer->id,
+          'closed_by' => null,
+          'closed_at' => null,
         ]);
 
-        $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
 
         $ticket->refresh();
         $this->assertEquals($closer->id, $ticket->closed_by);
