@@ -149,32 +149,25 @@ Route::prefix('roles')->group(function () {
     Route::get('/users/{user}', [RoleController::class, 'getUserRoles'])->name('roles.user');
 });
 
-
-
 // ========== BUGS REPORTING TICKETING SYSTEM ==========
 
 Route::middleware('auth:sanctum')->group(function () {
-     Route::apiResource('tickets', TicketController::class);
+    Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+    Route::patch('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update.patch');
+    Route::delete('tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
 
-     Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus'])
-         ->name('tickets.status.update');
+    Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus'])->name('tickets.status.update');
+    Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])->name('tickets.priority.update');
+    Route::patch('tickets/{ticket}/assignee', [TicketController::class, 'updateAssignee'])->name('tickets.assignee');
 
-     Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])
-         ->name('tickets.priority.update');
-
-     Route::patch('tickets/{ticket}/assignee', [TicketController::class, 'updateAssignee'])
-         ->name('tickets.assignee');
-
-     Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])
-         ->name('tickets.comments.index');
-
-    Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])
-        ->name('tickets.comments.store');
-
-    Route::put('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'update'])
-        ->name('tickets.comments.update');
-
-    Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])
-        ->name('tickets.comments.destroy');
+    Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])->name('tickets.comments.index');
+    Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])->name('tickets.comments.store');
+    Route::put('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'update'])->name('tickets.comments.update');
+    Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])->name('tickets.comments.destroy');
 });
+
+
 

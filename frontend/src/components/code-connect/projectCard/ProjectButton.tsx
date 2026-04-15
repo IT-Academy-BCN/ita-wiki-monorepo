@@ -1,4 +1,4 @@
-import type { ProjectButtonProps } from "./types/projectTypes";
+import type { ProjectButtonProps } from "../../../types/codeConnectTypes";
 
 function ProjectButton({ children, onClick }: ProjectButtonProps) {
   return (
