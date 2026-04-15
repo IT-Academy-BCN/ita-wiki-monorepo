@@ -3,78 +3,76 @@ import { fetchCodeConnectAllProjects } from "../api/endPointCodeConnect";
 import type { ApiProjectData } from "../types/codeConnectTypes";
 
 const isAbortLikeError = (value: unknown): boolean => {
-    if (!value || typeof value !== "object") return false;
+  if (!value || typeof value !== "object") return false;
 
-    const record = value as Record<string, unknown>;
+  const record = value as Record<string, unknown>;
 
-    // nou flux: el vostre endpoint converteix AbortError a CodeConnectError { code: "ABORTED" }
-    if (record.code === "ABORTED") return true;
+  // nou flux: el vostre endpoint converteix AbortError a CodeConnectError { code: "ABORTED" }
+  if (record.code === "ABORTED") return true;
 
-    // fallback per si algun dia arriba el DOMException directament
-    return record.name === "AbortError";
+  // fallback per si algun dia arriba el DOMException directament
+  return record.name === "AbortError";
 };
 
-export const useProjects = (
-    filter: string | null | undefined,
-) => {
-    const [projects, setProjects] = useState<ApiProjectData[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+export const useProjects = (filter: string | null | undefined) => {
+  const [projects, setProjects] = useState<ApiProjectData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const normalizedFilter = useMemo(() => {
-        return filter ? filter.trim().toLowerCase() : null;
-    }, [filter]);
+  const normalizedFilter = useMemo(() => {
+    return filter ? filter.trim().toLowerCase() : null;
+  }, [filter]);
 
-    useEffect(() => {
-        const abortController = new AbortController();
+  useEffect(() => {
+    const abortController = new AbortController();
 
-        const fetchProjects = async (): Promise<void> => {
-            setIsLoading(true);
-            setErrorMessage(null);
+    const fetchProjects = async (): Promise<void> => {
+      setIsLoading(true);
+      setErrorMessage(null);
 
-            try {
-                const response = await fetchCodeConnectAllProjects(
-                    abortController.signal,
-                );
+      try {
+        const response = await fetchCodeConnectAllProjects(
+          abortController.signal,
+        );
 
-                if (!response.success) {
-                    throw new Error(response.message || "Invalid API response shape");
-                }
+        if (!response.success) {
+          throw new Error(response.message || "Invalid API response shape");
+        }
 
-                const incomingProjects = response.data;
+        const incomingProjects = response.data;
 
-                if (!normalizedFilter) {
-                    setProjects(incomingProjects);
-                    return;
-                }
+        if (!normalizedFilter) {
+          setProjects(incomingProjects);
+          return;
+        }
 
-                const filteredProjects = incomingProjects.filter((project) => {
-                    return (
-                        project.language_frontend.toLowerCase() === normalizedFilter ||
-                        project.language_backend.toLowerCase() === normalizedFilter
-                    );
-                });
+        const filteredProjects = incomingProjects.filter((project) => {
+          return (
+            project.language_frontend.toLowerCase() === normalizedFilter ||
+            project.language_backend.toLowerCase() === normalizedFilter
+          );
+        });
 
-                setProjects(filteredProjects);
-            } catch (error: unknown) {
-                if (isAbortLikeError(error)) return;
+        setProjects(filteredProjects);
+      } catch (error: unknown) {
+        if (isAbortLikeError(error)) return;
 
-                const message =
-                    error && typeof error === "object" && "message" in error
-                        ? String((error as { message: unknown }).message)
-                        : "Unknown error";
+        const message =
+          error && typeof error === "object" && "message" in error
+            ? String((error as { message: unknown }).message)
+            : "Unknown error";
 
-                setErrorMessage(message);
-                setProjects([]);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+        setErrorMessage(message);
+        setProjects([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        fetchProjects();
+    fetchProjects();
 
-        return () => abortController.abort();
-    }, [normalizedFilter]);
+    return () => abortController.abort();
+  }, [normalizedFilter]);
 
-    return { projects, isLoading, errorMessage };
+  return { projects, isLoading, errorMessage };
 };
