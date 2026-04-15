@@ -258,10 +258,4 @@ describe("AsideComponent Tests", () => {
       expect(typeof contentForTechnicalTest[index].icon).toBe("function");
     });
   });
-
-  test("contentForTechnicalTest icons are functions", () => {
-    contentForTechnicalTest.forEach((item) => {
-      expect(typeof item.icon).toBe("function");
-    });
-  });
 });
