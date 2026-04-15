@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
 
-export type ProgrammingRole = "Frontend Developer" | "Backend Developer";
+import type { ProgrammingRole } from "../types/codeConnectTypes";
 
 export async function joinProject(
   listProjectId: number,

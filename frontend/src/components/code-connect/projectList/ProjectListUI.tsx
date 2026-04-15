@@ -1,4 +1,4 @@
-import type { Project } from "../projectCard/types/projectTypes";
+import type { Project } from "../../../types/codeConnectTypes";
 import ProjectCard from "../projectCard/ProjectCard";
 import CodeConnectCardSkeleton from "../CodeConnectCardSkeleton";
 import EmptyState from "../../ui/EmptyState";
