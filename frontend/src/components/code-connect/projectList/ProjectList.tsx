@@ -15,7 +15,6 @@ function ProjectList({
   const error = null;
   const showLoader = useMinLoading(isLoading);
 
-
   const projects = (projectsData as Project[]).filter((p) => {
     if (!filter) return true;
     const f = filter.toLowerCase();
