@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMinLoading } from "../../../hooks/useMinLoading";
 import projectsData from "../../../moock/projects.json";
-import type { Project } from "../projectCard/types/projectTypes";
+import { Project } from "../../../types/codeConnectTypes";
 import ProjectListUI from "./ProjectListUI";
 
 function ProjectList({
@@ -11,7 +11,7 @@ function ProjectList({
   onCardClick?: (id: number) => void;
   filter?: string | null;
 }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const error = null;
   const showLoader = useMinLoading(isLoading);
 
