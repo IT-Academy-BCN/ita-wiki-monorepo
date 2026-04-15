@@ -23,7 +23,7 @@ class ResourceController extends Controller
     {
         // $this->middleware('auth:api');
         // $this->middleware('check.permission:view resources')->only(['index', 'show']);
-        $this->middleware('check.permission:create resources')->only(['store']);
+        // $this->middleware('check.permission:create resources')->only(['store']);
         $this->middleware('check.permission:edit own resources,resource')->only(['update']);
         $this->middleware('check.permission:delete own resources,resource')->only(['destroy']);
     }
