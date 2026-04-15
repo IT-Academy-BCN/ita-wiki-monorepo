@@ -1,9 +1,9 @@
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router";
-import { describe, it, vi, beforeEach, expect } from "vitest";
-import ResourcesPage from "../ResourcesPage";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useResources } from "../../context/ResourcesContext";
+import ResourcesPage from "../ResourcesPage";
 
 vi.mock("../../context/ResourcesContext", () => ({
   useResources: vi.fn(),
@@ -43,5 +43,17 @@ describe("ResourcesPage", () => {
 
     expect(scrollContainer.className).toContain("overflow-y-auto");
     expect(scrollContainer.className).toContain("flex-1");
+  });
+
+  it("shows the create resource button", () => {
+    render(
+      <MemoryRouter initialEntries={["/resources"]}>
+        <Routes>
+          <Route path="/resources" element={<ResourcesPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Crear Recurso")).toBeInTheDocument();
   });
 });
