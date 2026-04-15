@@ -2,12 +2,12 @@ import ProgressBar from "../../code-connect/projectCard/ProgressBar";
 import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
-import { CodeConnectProjectDataContributor } from "../../../types/CodeConnectProject";
+import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
-  contributors?: CodeConnectProjectDataContributor[];
+  contributors?: ApiProjectContributor[];
   timeDuration?: string;
 }
 

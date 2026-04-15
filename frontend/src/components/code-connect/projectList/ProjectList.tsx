@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import projectsData from "../../../moock/projects.json";
 import { useMinLoading } from "../../../hooks/useMinLoading";
 import ProjectListUI from "./ProjectListUI";
-import type { Project } from "../projectCard/types/projectTypes";
+import type { Project } from "../../../types/codeConnectTypes";
 
 function ProjectList({
   onCardClick,
