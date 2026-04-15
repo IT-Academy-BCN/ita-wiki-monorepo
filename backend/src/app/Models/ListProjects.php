@@ -16,7 +16,6 @@ class ListProjects extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'description',
         'limit_date_inscription',
         'dev_front_number',
         'dev_back_number',
