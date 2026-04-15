@@ -25,13 +25,20 @@ class TicketPermissionsTest extends TestCase {
         $this->assertTrue($role->hasPermissionTo('view own tickets'));
         $this->assertTrue($role->hasPermissionTo('update ticket status'));
 
-        $this->assertFalse($role->hasPermissionTo('view all tickets'));
-        $this->assertFalse($role->hasPermissionTo('close ticket'));
+    }
+    
+    /** @test */
+    public function student_has_not_correct_ticket_permissions(): void
+    {
+        $role = Role::findByName('student', 'api');
+
         $this->assertFalse($role->hasPermissionTo('update ticket priority'));
         $this->assertFalse($role->hasPermissionTo('assign tickets'));
         $this->assertFalse($role->hasPermissionTo('add closing comment'));
+        $this->assertFalse($role->hasPermissionTo('view all tickets'));
+        $this->assertFalse($role->hasPermissionTo('close ticket'));
     }
-
+    
     /** @test */
     public function mentor_has_correct_ticket_permissions(): void
     {
@@ -42,6 +49,13 @@ class TicketPermissionsTest extends TestCase {
         $this->assertTrue($role->hasPermissionTo('update ticket priority'));
         $this->assertTrue($role->hasPermissionTo('assign tickets'));
 
+    }
+    
+    /** @test */
+    public function mentor_has_not_correct_ticket_permissions(): void
+    {
+        $role = Role::findByName('mentor', 'api');
+        $this->assertFalse($role->hasPermissionTo('add closing comment'));
         $this->assertFalse($role->hasPermissionTo('view all tickets'));
         $this->assertFalse($role->hasPermissionTo('close ticket'));
         $this->assertFalse($role->hasPermissionTo('add closing comment'));
