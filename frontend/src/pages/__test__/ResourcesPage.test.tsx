@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import * as ReactRouter from "react-router";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useResources } from "../../context/ResourcesContext";
@@ -55,5 +56,21 @@ describe("ResourcesPage", () => {
     );
 
     expect(screen.getByText("Crear Recurso")).toBeInTheDocument();
+  });
+
+  it("resource button should redirect the user to the create resource page", async () => {
+    const mockNavigate = vi.fn();
+    vi.spyOn(ReactRouter, "useNavigate").mockReturnValue(mockNavigate);
+
+    render(
+      <MemoryRouter initialEntries={["/resources"]}>
+        <Routes>
+          <Route path="/resources" element={<ResourcesPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByText("Crear Recurso"));
+    expect(mockNavigate).toHaveBeenCalledWith("/resources/add");
   });
 });
