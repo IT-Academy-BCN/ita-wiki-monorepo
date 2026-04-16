@@ -12,7 +12,7 @@ function ProjectList({
   onCardClick?: (id: number) => void;
   filter?: string | null;
 }) {
-  const { projects, isLoading, errorMessage } = useProjects(filter ?? null);
+  const { projects, isLoading, errorMessage } = useProjects();
   const showLoader = useMinLoading(isLoading);
 
   const filteredProjects = useMemo(() => {
@@ -22,8 +22,8 @@ function ProjectList({
 
     return projects.filter((project) => {
       return (
-        project.language_frontend.toLowerCase() === normalizedFilter ||
-        project.language_backend.toLowerCase() === normalizedFilter
+        project.frontend.tech.toLowerCase() === normalizedFilter ||
+        project.backend.tech.toLowerCase() === normalizedFilter
       );
     });
   }, [projects, filter]);

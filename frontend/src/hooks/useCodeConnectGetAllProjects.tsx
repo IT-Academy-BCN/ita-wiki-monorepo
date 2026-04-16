@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchCodeConnectAllProjects } from "../api/endPointCodeConnect";
-import type { ApiProjectData } from "../types/codeConnectTypes";
+import { Project } from "../types/codeConnectTypes";
 
 const isAbortLikeError = (value: unknown): boolean => {
   if (!value || typeof value !== "object") return false;
@@ -14,56 +14,66 @@ const isAbortLikeError = (value: unknown): boolean => {
   return record.name === "AbortError";
 };
 
-export const useProjects = (filter: string | null | undefined) => {
-  const [projects, setProjects] = useState<ApiProjectData[]>([]);
+export const useProjects = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const normalizedFilter = useMemo(() => {
-    return filter ? filter.trim().toLowerCase() : null;
-  }, [filter]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
-
     const fetchProjects = async (): Promise<void> => {
       setIsLoading(true);
       setErrorMessage(null);
 
       try {
-        const response = await fetchCodeConnectAllProjects(
-          abortController.signal,
-        );
+        const response = await fetchCodeConnectAllProjects(abortController.signal);
 
         if (!response.success) {
           throw new Error(response.message || "Invalid API response shape");
         }
 
         const incomingProjects = response.data;
+        if (incomingProjects.length) {
+          const newProjects = incomingProjects.map(p => ({
+            id: p.id,
+            title: p.title,
+            duration: p.time_duration,
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString(),
+            frontend: {
+              tech: p.language_frontend,
+              logo: `../assets/technologies/${p.language_frontend}-logo.svg`,
+              positions: 2,
+              participants: p.contributors
+                ?.filter(c => c.programming_role === "Frontend Developer")
+                ?.map(c => ({
+                  ...c,
+                  avatar: ""
+                })) ?? []
+            },
+            backend: {
+              tech: p.language_backend,
+              logo: `../assets/technologies/${p.language_backend}-logo.svg`,
+              positions: 2,
+              participants: p.contributors
+                ?.filter(c => c.programming_role === "Backend Developer")
+                ?.map(c => ({
+                  ...c,
+                  avatar: ""
+                })) ?? []
+            }
+          }));
 
-        if (!normalizedFilter) {
-          setProjects(incomingProjects);
-          return;
+          setProjects(newProjects);
         }
-
-        const filteredProjects = incomingProjects.filter((project) => {
-          return (
-            project.language_frontend.toLowerCase() === normalizedFilter ||
-            project.language_backend.toLowerCase() === normalizedFilter
-          );
-        });
-
-        setProjects(filteredProjects);
       } catch (error: unknown) {
         if (isAbortLikeError(error)) return;
-
         const message =
           error && typeof error === "object" && "message" in error
             ? String((error as { message: unknown }).message)
             : "Unknown error";
 
         setErrorMessage(message);
-        setProjects([]);
       } finally {
         setIsLoading(false);
       }
@@ -72,7 +82,7 @@ export const useProjects = (filter: string | null | undefined) => {
     fetchProjects();
 
     return () => abortController.abort();
-  }, [normalizedFilter]);
+  }, []);
 
   return { projects, isLoading, errorMessage };
 };

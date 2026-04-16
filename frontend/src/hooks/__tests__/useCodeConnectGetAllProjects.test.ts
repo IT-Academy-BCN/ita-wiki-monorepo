@@ -34,8 +34,8 @@ describe("useProjects", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns projects when API success=true and no filter is provided", async () => {
-    const projects: ApiProjectData[] = [
+  it("returns mapped projects when API success=true", async () => {
+    const apiProjects: ApiProjectData[] = [
       makeProject(),
       makeProject({ id: 2, title: "Projecte 2" }),
     ];
@@ -43,57 +43,58 @@ describe("useProjects", () => {
     const response: ApiProjectsResponse = {
       success: true,
       message: "ok",
-      data: projects,
+      data: apiProjects,
     };
 
     vi.mocked(fetchCodeConnectAllProjects).mockResolvedValueOnce(response);
-
-    const { result } = renderHook(() => useProjects(null));
+    const { result } = renderHook(() => useProjects());
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    expect(result.current.errorMessage).toBeNull();
-    expect(result.current.projects).toEqual(projects);
     expect(fetchCodeConnectAllProjects).toHaveBeenCalledTimes(1);
-  });
-
-  it("filters projects by frontend/backend language (trim + lowercase)", async () => {
-    const projects: ApiProjectData[] = [
-      makeProject({
-        id: 1,
-        language_frontend: "React",
-        language_backend: "PHP",
-      }),
-      makeProject({
-        id: 2,
-        language_frontend: "Angular",
-        language_backend: "Java",
-      }),
-      makeProject({
-        id: 3,
-        language_frontend: "Vue",
-        language_backend: "Node",
-      }),
-    ];
-
-    const response: ApiProjectsResponse = {
-      success: true,
-      message: "ok",
-      data: projects,
-    };
-
-    vi.mocked(fetchCodeConnectAllProjects).mockResolvedValueOnce(response);
-
-    const { result } = renderHook(() => useProjects("  react  "));
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
     expect(result.current.errorMessage).toBeNull();
-    expect(result.current.projects.map((project) => project.id)).toEqual([1]);
+    expect(result.current.projects).toEqual([
+      {
+        id: 1,
+        title: "Projecte 1",
+        duration: "1 mes",
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        frontend: {
+          tech: "react",
+          logo: "../assets/technologies/react-logo.svg",
+          positions: 2,
+          participants: [],
+        },
+        backend: {
+          tech: "java",
+          logo: "../assets/technologies/java-logo.svg",
+          positions: 2,
+          participants: [],
+        },
+      },
+      {
+        id: 2,
+        title: "Projecte 2",
+        duration: "1 mes",
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        frontend: {
+          tech: "react",
+          logo: "../assets/technologies/react-logo.svg",
+          positions: 2,
+          participants: [],
+        },
+        backend: {
+          tech: "java",
+          logo: "../assets/technologies/java-logo.svg",
+          positions: 2,
+          participants: [],
+        },
+      },
+    ]);
   });
 
   it("sets errorMessage when API success=false", async () => {
@@ -105,7 +106,7 @@ describe("useProjects", () => {
 
     vi.mocked(fetchCodeConnectAllProjects).mockResolvedValueOnce(response);
 
-    const { result } = renderHook(() => useProjects(null));
+    const { result } = renderHook(() => useProjects());
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -122,7 +123,7 @@ describe("useProjects", () => {
       invalidResponse as ApiProjectsResponse,
     );
 
-    const { result } = renderHook(() => useProjects(null));
+    const { result } = renderHook(() => useProjects());
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -137,7 +138,7 @@ describe("useProjects", () => {
       new Error("Network down"),
     );
 
-    const { result } = renderHook(() => useProjects(null));
+    const { result } = renderHook(() => useProjects());
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -152,7 +153,7 @@ describe("useProjects", () => {
 
     vi.mocked(fetchCodeConnectAllProjects).mockRejectedValueOnce(abortError);
 
-    const { result } = renderHook(() => useProjects(null));
+    const { result } = renderHook(() => useProjects());
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
