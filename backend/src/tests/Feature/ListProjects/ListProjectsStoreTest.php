@@ -46,6 +46,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertJsonFragment([
@@ -66,6 +67,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertJsonFragment([
@@ -86,6 +88,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
         $response->assertStatus(422);
     }
@@ -115,6 +118,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertStatus(201);
@@ -157,6 +161,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertStatus(201);
