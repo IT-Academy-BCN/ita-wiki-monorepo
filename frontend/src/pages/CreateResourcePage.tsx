@@ -84,10 +84,8 @@ export default function CreateResourcePage() {
     try {
       await createResource(newResource);
       toast.success("¡Recurso creado con éxito!");
-      refreshResources();
-      setTimeout(() => {
-        navigate(`/resources/${data?.category}`);
-      }, 1000);
+      await refreshResources();
+      navigate(`/resources/${data?.category}`);
       reset();
     } catch (error) {
       console.error("Error al crear el recurso:", error);
