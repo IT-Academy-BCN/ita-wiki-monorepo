@@ -20,26 +20,30 @@ describe("createCodeConnect", () => {
   beforeEach(() => {
     mockFetch = vi.fn();
     global.fetch = mockFetch;
+    localStorage.clear();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
+  const mockNewCodeConnect = {
+    title: "Lorem ipsum",
+    techsFront: ["React", "Angular"],
+    techsBack: ["Spring", "Node", "Express"],
+    description: "Some random text to describe lorem ipsum",
+    numberDevsFront: 3,
+    numberDevsBack: 10,
+    time: 3,
+    unitTime: "month",
+    deadline: "2026-12-31",
+  };
+
   it("should create and return on successful request", async () => {
     const mockResponseData = {
       id: "123",
       message: "Code connect created successfully",
       status: "success",
-    };
-
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
     };
 
     mockFetch.mockResolvedValueOnce({
@@ -55,13 +59,31 @@ describe("createCodeConnect", () => {
       "https://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer null",
+        },
         body: JSON.stringify(mockNewCodeConnect),
         signal: undefined,
       }),
     );
 
     expect(result).toEqual(mockResponseData);
+  });
+
+  it("should send Authorization header with token from localStorage", async () => {
+    localStorage.setItem("auth_token", "fake-token-123");
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    });
+
+    await createCodeConnect(mockNewCodeConnect);
+
+    const calledWithOptions = mockFetch.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBe("Bearer fake-token-123");
   });
 
   it("should throw an error on failed request", async () => {
@@ -77,15 +99,6 @@ describe("createCodeConnect", () => {
       json: async () => mockErrorData,
     });
 
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
-    };
-
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
       message: "Invalid code format",
       status: 400,
@@ -97,14 +110,6 @@ describe("createCodeConnect", () => {
 
   it("should throw an error on network failure", async () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
-    };
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
       message: "Error de conexión. Verifica tu conexión a internet.",
