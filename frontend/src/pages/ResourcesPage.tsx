@@ -26,7 +26,7 @@ const ResourcesPage = () => {
               variant="primary"
               onClick={() => navigate("/resources/add")}
             >
-              Crear Recurso
+              Crear Recurs
             </ButtonComponent>
           </div>
         </div>

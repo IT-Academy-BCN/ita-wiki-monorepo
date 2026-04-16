@@ -7,6 +7,7 @@ import { createResource } from "../api/endPointResources";
 import arrowLeft from "../assets/arrow-left.svg";
 import ButtonComponent from "../components/atoms/ButtonComponent";
 import TagInput from "../components/forms/TagInput";
+import { SignInComponent } from "../components/Layout/header/SignInComponent";
 import FormInput from "../components/resources/create-resources/FormInput";
 import { contentResourcesForm } from "../components/resources/create-resources/languagesLabelsContent";
 import Container from "../components/ui/Container";
@@ -17,6 +18,7 @@ import { Category, IntResource, Tag } from "../types";
 import { resourceSchema } from "../validations/resourceSchema";
 
 export default function CreateResourcePage() {
+  const [signInModalOpen, setSignInModalOpen] = useState(false);
   const navigate = useNavigate();
   const { refreshResources } = useResources();
   const { user } = useUserContext();
@@ -63,7 +65,10 @@ export default function CreateResourcePage() {
   };
 
   const onSubmit = async (data: Partial<IntResource>) => {
-    if (!user) return;
+    if (!user) {
+      setSignInModalOpen(true);
+      return;
+    }
     const tagsWithIds =
       Array.isArray(data.tags) && data.tags.length
         ? data.tags.map((tag) =>
@@ -285,6 +290,9 @@ export default function CreateResourcePage() {
           </form>
         </div>
       </Container>
+      {signInModalOpen && (
+        <SignInComponent setIsModalOpen={setSignInModalOpen} />
+      )}
     </>
   );
 }
