@@ -176,7 +176,6 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(401);
     }
 
-
    /** @test */
     public function an_auth_user_can_delete_their_own_ticket(): void{
         $user = User::factory()->create();
@@ -368,6 +367,19 @@ class TicketControllerTest extends TestCase{
 
         $response->assertStatus(403);
     }
+
+    /** @test */
+    public function superadmin_can_view_any_ticket(): void{
+
+        $this->authenticateUserWithRole('superadmin');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(200);
+    }
+
 
 
 }

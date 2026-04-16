@@ -146,7 +146,9 @@ class TicketController extends Controller
             return;
         }
 
-        if ((int) $ticket->code_connect_id !== (int) auth()->id()) {
+        $userId = (int) auth()->id();
+
+        if ((int) $ticket->code_connect_id !== $userId && (int) $ticket->assignee_id !== $userId) {
             abort(403, 'Forbidden');
         }
     }
