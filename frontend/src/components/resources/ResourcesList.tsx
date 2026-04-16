@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router";
-import { IntResource } from "../../types";
-import { useResourceFilter } from "../../hooks/useResourceFilter";
-import { useResourceSort } from "../../hooks/useResourceSort";
 import { useResources } from "../../context/ResourcesContext";
 import { useResourcesFilters } from "../../context/ResourcesFiltersContext";
+import { useMinLoading } from "../../hooks/useMinLoading";
+import { useResourceFilter } from "../../hooks/useResourceFilter";
+import { useResourceSort } from "../../hooks/useResourceSort";
+import { IntResource } from "../../types";
+import EmptyState from "../ui/EmptyState";
 import ResourceCard from "../ui/ResourceCard";
 import ResourceCardSkeleton from "./ResourcesSkeleton";
-import { useMinLoading } from "../../hooks/useMinLoading";
-import EmptyState from "../ui/EmptyState";
 
 interface ResourcesListProps {
   resources: IntResource[];
@@ -23,7 +23,7 @@ export const ResourcesList = ({ resources, category }: ResourcesListProps) => {
 
   const { isBookmarked, toggleBookmark, isLoading, error } = useResources();
 
-  const showLoader = useMinLoading(isLoading, 500);
+  const showLoader = useMinLoading(isLoading);
 
   const categoryFilteredResources = useMemo(() => {
     if (!resources?.length) return [];
