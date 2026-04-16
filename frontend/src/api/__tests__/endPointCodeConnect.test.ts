@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
   createCodeConnect,
-  CodeConnectError,
+  type CodeConnectError,
   fetchCodeConnectProject,
 } from "../endPointCodeConnect";
 
@@ -10,12 +10,25 @@ vi.mock("../config", () => ({
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
+      get: "/codeconnect",
     },
   },
 }));
 
 describe("createCodeConnect", () => {
   let mockFetch: ReturnType<typeof vi.fn>;
+
+  const mockNewCodeConnect = {
+    title: "Lorem ipsum",
+    techsFront: ["React", "Angular"],
+    techsBack: ["Spring", "Node", "Express"],
+    description: "Some random text to describe lorem ipsum",
+    numberDevsFront: 3,
+    numberDevsBack: 10,
+    time: 2,
+    unitTime: "months",
+    deadline: "2026-12-31",
+  };
 
   beforeEach(() => {
     mockFetch = vi.fn();
@@ -26,20 +39,11 @@ describe("createCodeConnect", () => {
     vi.clearAllMocks();
   });
 
-  it("should create and return on successful request", async () => {
+  test("should create and return on successful request", async () => {
     const mockResponseData = {
       id: "123",
       message: "Code connect created successfully",
       status: "success",
-    };
-
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
     };
 
     mockFetch.mockResolvedValueOnce({
@@ -64,7 +68,7 @@ describe("createCodeConnect", () => {
     expect(result).toEqual(mockResponseData);
   });
 
-  it("should throw an error on failed request", async () => {
+  test("should throw an error on failed request", async () => {
     const mockErrorData = {
       message: "Invalid code format",
       code: "INVALID_FORMAT",
@@ -77,15 +81,6 @@ describe("createCodeConnect", () => {
       json: async () => mockErrorData,
     });
 
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
-    };
-
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
       message: "Invalid code format",
       status: 400,
@@ -95,16 +90,8 @@ describe("createCodeConnect", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw an error on network failure", async () => {
+  test("should throw an error on network failure", async () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
-    const mockNewCodeConnect = {
-      title: "Lorem ipsum",
-      techsFront: ["React", "Angular"],
-      techsBack: ["Spring", "Node", "Express"],
-      description: "Some ramdom text to describe lorem ipsum",
-      numberdevsfront: 3,
-      numberdevsback: 10,
-    };
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
       message: "Error de connexió. Verifica la teva connexió a internet.",
@@ -120,8 +107,20 @@ describe("fetchCodeConnectProject", () => {
     vi.restoreAllMocks();
   });
 
-  it("crida a l'endpoint correcte i retorna les dades", async () => {
-    const mockData = { id: 1, title: "Projecte Test" };
+  test("crida a l'endpoint correcte i retorna les dades", async () => {
+    const mockData = {
+      success: true,
+      message: "Project retrieved successfully",
+      data: {
+        title: "Projecte Test",
+        description: "",
+        roadmap: "",
+        time_duration: "1 month",
+        language_backend: "PHP",
+        language_frontend: "JavaScript",
+        contributors: [],
+      },
+    };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -131,6 +130,8 @@ describe("fetchCodeConnectProject", () => {
     const result = await fetchCodeConnectProject(1);
 
     expect(result).toEqual(mockData);
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("/1"));
+    expect(global.fetch).toHaveBeenCalledWith(
+      "https://localhost:8000/codeconnect/1",
+    );
   });
 });
