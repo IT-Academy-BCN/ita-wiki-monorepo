@@ -55,7 +55,9 @@ describe("ResourcesPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Crear recurs/i }),
+    ).toBeInTheDocument();
   });
 
   it("resource button should redirect the user to the create resource page", async () => {
@@ -70,7 +72,7 @@ describe("ResourcesPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.click(screen.getByText("Crear recurs"));
+    fireEvent.click(screen.getByRole("button", { name: /Crear recurs/i }));
     expect(mockNavigate).toHaveBeenCalledWith("/resources/add");
   });
 });
