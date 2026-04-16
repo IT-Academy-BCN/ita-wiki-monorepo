@@ -3,7 +3,7 @@ import {
   createCodeConnect,
   CodeConnectError,
   fetchCodeConnectProject,
-} from "./endPointCodeConnect";
+} from "../endPointCodeConnect";
 
 vi.mock("../config", () => ({
   API_URL: "https://localhost:8000",
@@ -107,7 +107,7 @@ describe("createCodeConnect", () => {
     };
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
-      message: "Error de conexión. Verifica tu conexión a internet.",
+      message: "Error de connexió. Verifica la teva connexió a internet.",
       code: "NETWORK_ERROR",
     } as CodeConnectError);
 
