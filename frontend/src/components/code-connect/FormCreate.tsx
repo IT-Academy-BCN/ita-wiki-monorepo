@@ -361,7 +361,9 @@ const FormCreate = () => {
             id="devs-front"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsFront === 0 ? "" : formData.numberDevsFront}
+            value={
+              formData.numberDevsFront === 0 ? "" : formData.numberDevsFront
+            }
             placeholder="0"
             required
             onChange={(e) =>
