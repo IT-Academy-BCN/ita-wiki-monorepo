@@ -6,7 +6,7 @@ import {
 } from "../endPointCodeConnect";
 
 vi.mock("../config", () => ({
-  API_URL: "https://localhost:8000",
+  API_URL: "http://localhost:8000",
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
@@ -56,7 +56,7 @@ describe("createCodeConnect", () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://localhost:8000/codeconnect/create",
+      "http://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -131,7 +131,7 @@ describe("fetchCodeConnectProject", () => {
 
     expect(result).toEqual(mockData);
     expect(global.fetch).toHaveBeenCalledWith(
-      "https://localhost:8000/codeconnect/1",
+      "http://localhost:8000/codeconnect/1",
     );
   });
 });
