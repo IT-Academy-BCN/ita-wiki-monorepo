@@ -55,7 +55,7 @@ describe("ResourcesPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Crear Recurso")).toBeInTheDocument();
+    expect(screen.getByText("Crear recurs")).toBeInTheDocument();
   });
 
   it("resource button should redirect the user to the create resource page", async () => {
@@ -70,7 +70,7 @@ describe("ResourcesPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.click(screen.getByText("Crear Recurso"));
+    fireEvent.click(screen.getByText("Crear recurs"));
     expect(mockNavigate).toHaveBeenCalledWith("/resources/add");
   });
 });
