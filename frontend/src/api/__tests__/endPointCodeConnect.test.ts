@@ -5,7 +5,7 @@ import {
   fetchCodeConnectProject,
 } from "../endPointCodeConnect";
 
-vi.mock("../config", () => ({
+vi.mock("../../config", () => ({
   API_URL: "http://localhost:8000",
   END_POINTS: {
     codeconnect: {
