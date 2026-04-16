@@ -21,6 +21,10 @@ class ListProjectsSeeder extends Seeder
         $Project1 = ListProjects::firstOrCreate([
             'user_id' => $owner->id,
             'title' => 'Project Alpha',
+            'description' => 'This is an example project description',
+            'limit_date_inscription' => '2026-06-30',
+            'dev_front_number' => 2,
+            'dev_back_number' => 3,
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
@@ -28,6 +32,10 @@ class ListProjectsSeeder extends Seeder
         $Project2 = ListProjects::firstOrCreate([
             'user_id' => $owner->id,
             'title' => 'Project Beta',
+            'description' => 'This is an example project description',
+            'limit_date_inscription' => '2026-07-15',
+            'dev_front_number' => 2,
+            'dev_back_number' => 2,
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::React->value,
@@ -35,6 +43,10 @@ class ListProjectsSeeder extends Seeder
         $project3 = ListProjects::firstOrCreate([
             'user_id' => $owner->id,
             'title' => 'Project Gamma',
+            'description' => 'This is an example project description',
+            'limit_date_inscription' => '2026-08-01',
+            'dev_front_number' => 3,
+            'dev_back_number' => 4,
             'time_duration' => '3 weeks',
             'language_backend' => LanguageEnum::Java->value,
             'language_frontend' => LanguageEnum::TypeScript->value,
