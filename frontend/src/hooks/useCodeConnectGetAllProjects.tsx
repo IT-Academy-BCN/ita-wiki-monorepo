@@ -26,7 +26,9 @@ export const useProjects = () => {
       setErrorMessage(null);
 
       try {
-        const response = await fetchCodeConnectAllProjects(abortController.signal);
+        const response = await fetchCodeConnectAllProjects(
+          abortController.signal,
+        );
 
         if (!response.success) {
           throw new Error(response.message || "Invalid API response shape");
@@ -34,7 +36,7 @@ export const useProjects = () => {
 
         const incomingProjects = response.data;
         if (incomingProjects.length) {
-          const newProjects = incomingProjects.map(p => ({
+          const newProjects = incomingProjects.map((p) => ({
             id: p.id,
             title: p.title,
             duration: p.time_duration,
@@ -44,24 +46,26 @@ export const useProjects = () => {
               tech: p.language_frontend,
               logo: `../assets/technologies/${p.language_frontend}-logo.svg`,
               positions: 2,
-              participants: p.contributors
-                ?.filter(c => c.programming_role === "Frontend Developer")
-                ?.map(c => ({
-                  ...c,
-                  avatar: ""
-                })) ?? []
+              participants:
+                p.contributors
+                  ?.filter((c) => c.programming_role === "Frontend Developer")
+                  ?.map((c) => ({
+                    ...c,
+                    avatar: "",
+                  })) ?? [],
             },
             backend: {
               tech: p.language_backend,
               logo: `../assets/technologies/${p.language_backend}-logo.svg`,
               positions: 2,
-              participants: p.contributors
-                ?.filter(c => c.programming_role === "Backend Developer")
-                ?.map(c => ({
-                  ...c,
-                  avatar: ""
-                })) ?? []
-            }
+              participants:
+                p.contributors
+                  ?.filter((c) => c.programming_role === "Backend Developer")
+                  ?.map((c) => ({
+                    ...c,
+                    avatar: "",
+                  })) ?? [],
+            },
           }));
 
           setProjects(newProjects);
