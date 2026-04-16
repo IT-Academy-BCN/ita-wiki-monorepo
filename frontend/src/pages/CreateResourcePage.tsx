@@ -67,8 +67,8 @@ export default function CreateResourcePage() {
     const tagsWithIds =
       Array.isArray(data.tags) && data.tags.length
         ? data.tags.map((tag) =>
-          typeof tag === "string" ? tag : String(tag.id),
-        )
+            typeof tag === "string" ? tag : String(tag.id),
+          )
         : [];
 
     const newResource = {
@@ -182,10 +182,11 @@ export default function CreateResourcePage() {
                     type="button"
                     variant="secondary"
                     onClick={() => handleCategorySelect(cat.label)}
-                    className={`!w-fit text-black  ${selectedCategory === cat.label
+                    className={`!w-fit text-black  ${
+                      selectedCategory === cat.label
                         ? "border-2 focus:border-[#B91879]"
                         : ""
-                      }`}
+                    }`}
                     key={cat.label}
                   >
                     <div className="flex justify-center items-center gap-1 h-fit">
