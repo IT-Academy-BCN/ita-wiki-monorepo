@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { getResources } from "./endPointResources";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IntResource } from "../types";
+import { getResources } from "./endPointResources";
 
 type MinimalResource = Pick<IntResource, "id" | "title" | "type">;
 

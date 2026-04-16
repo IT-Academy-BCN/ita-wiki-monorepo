@@ -1,10 +1,10 @@
-import { vi, expect, test, type Mock } from "vitest";
+import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
-import CreateResourcePage from "../../../pages/CreateResourcePage";
+import { expect, test, vi, type Mock } from "vitest";
 import UserProvider from "../../../context/UserContext";
-import "@testing-library/jest-dom";
+import CreateResourcePage from "../../../pages/CreateResourcePage";
 
 const mockTags = [
   { id: 18, name: "node", created_at: "", updated_at: "" },
@@ -17,6 +17,22 @@ const mockGetTagsByCategory = (category: string) => {
   }
   return [];
 };
+
+vi.mock("../../../context/UserContext", async () => {
+  const actual = await vi.importActual("../../../context/UserContext");
+  return {
+    ...actual,
+    useUserContext: () => ({
+      user: {
+        uid: "test-uid",
+        displayName: "Test User",
+        email: "test@example.com",
+        github_id: 123,
+        photoURL: null,
+      },
+    }),
+  };
+});
 
 vi.mock("../../../context/TagsContext", async () => {
   const actual = await vi.importActual("../../../context/TagsContext");
@@ -41,11 +57,9 @@ test("POST includes tag IDs not names", async () => {
   const { createResource } = await import("../../../api/endPointResources");
 
   render(
-    <UserProvider>
-      <MemoryRouter>
-        <CreateResourcePage />
-      </MemoryRouter>
-    </UserProvider>,
+    <MemoryRouter>
+      <CreateResourcePage />
+    </MemoryRouter>,
   );
 
   const textboxes = screen.getAllByRole("textbox");
