@@ -223,7 +223,6 @@ const FormCreate = () => {
                   name="techsFront[]"
                   value={item.label}
                   checked={isSelected}
-                  required
                   onChange={() => handleTechsFrontToggle(item.label)}
                   className="sr-only"
                 />
@@ -256,7 +255,6 @@ const FormCreate = () => {
                   name="techsBack[]"
                   value={item.label}
                   checked={isSelected}
-                  required
                   onChange={() => handleTechsBackToggle(item.label)}
                   className="sr-only"
                 />
@@ -323,9 +321,10 @@ const FormCreate = () => {
           <div className="flex lg:col-start-2 lg:col-span-1">
             <input
               id="time"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-t border-b border-l border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tl-lg rounded-bl-lg py-2 px-4 w-11"
+              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-t border-b border-l border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tl-lg rounded-bl-lg py-2 px-4 w-16"
               type="number"
-              value={formData.time}
+              value={formData.time === 0 ? "" : formData.time}
+              placeholder="0"
               required
               onChange={(e) => handleInputsNumber("time", e.target.value)}
             />
@@ -360,9 +359,10 @@ const FormCreate = () => {
           </label>
           <input
             id="devs-front"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsFront}
+            value={formData.numberDevsFront === 0 ? "" : formData.numberDevsFront}
+            placeholder="0"
             required
             onChange={(e) =>
               handleInputsNumber("numberDevsFront", e.target.value)
@@ -378,9 +378,10 @@ const FormCreate = () => {
           </label>
           <input
             id="devs-back"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsBack}
+            value={formData.numberDevsBack === 0 ? "" : formData.numberDevsBack}
+            placeholder="0"
             required
             onChange={(e) =>
               handleInputsNumber("numberDevsBack", e.target.value)
