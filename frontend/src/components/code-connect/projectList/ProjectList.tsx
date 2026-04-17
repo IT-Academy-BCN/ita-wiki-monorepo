@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import projectsData from "../../../moock/projects.json";
+import { useState } from "react";
 import { useMinLoading } from "../../../hooks/useMinLoading";
+import projectsData from "../../../moock/projects.json";
+import { Project } from "../../../types/codeConnectTypes";
 import ProjectListUI from "./ProjectListUI";
-import type { Project } from "../../../types/codeConnectTypes";
 
 function ProjectList({
   onCardClick,
@@ -11,14 +11,9 @@ function ProjectList({
   onCardClick?: (id: number) => void;
   filter?: string | null;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
   const error = null;
   const showLoader = useMinLoading(isLoading);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const projects = (projectsData as Project[]).filter((p) => {
     if (!filter) return true;
