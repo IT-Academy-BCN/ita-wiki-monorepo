@@ -96,10 +96,18 @@ const FormCreate = () => {
       deadline,
     } = formData;
 
+    if (techsFront.length === 0) {
+      toast.error("Selecciona almenys una tecnologia frontend.");
+      return false;
+    }
+
+    if (techsBack.length === 0) {
+      toast.error("Selecciona almenys una tecnologia backend.");
+      return false;
+    }
+
     if (
       !title.trim() ||
-      techsFront.length === 0 ||
-      techsBack.length === 0 ||
       !description.trim() ||
       numberDevsFront <= 0 ||
       numberDevsBack <= 0 ||

@@ -265,7 +265,9 @@ describe("FormCreateCodeConnect", () => {
       fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona almenys una tecnologia frontend.",
+        );
       });
     });
 
@@ -280,7 +282,9 @@ describe("FormCreateCodeConnect", () => {
       fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona almenys una tecnologia backend.",
+        );
       });
     });
 
