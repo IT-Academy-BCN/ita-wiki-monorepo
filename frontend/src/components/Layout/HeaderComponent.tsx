@@ -16,8 +16,6 @@ import { SignInComponent } from "./header/SignInComponent";
 
 const HeaderComponent = () => {
   const { user, signOut } = useUserContext();
-
-  console.log(user);
   const { isChanging, updateUserRole } = useChangeUserRole();
   const navigate = useNavigate();
   const location = useLocation();
