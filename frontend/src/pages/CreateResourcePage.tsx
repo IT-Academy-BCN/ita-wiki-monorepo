@@ -1,19 +1,19 @@
-import { IntResource, Category, Tag } from "../types";
-import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resourceSchema } from "../validations/resourceSchema";
-import FormInput from "../components/resources/create-resources/FormInput";
-import TagInput from "../components/forms/TagInput";
-import { createResource } from "../api/endPointResources";
-import { toast } from "sonner";
-import ButtonComponent from "../components/atoms/ButtonComponent";
-import PageTitle from "../components/ui/PageTitle";
-import { useState, useCallback } from "react";
-import arrowLeft from "../assets/arrow-left.svg";
+import { useCallback, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router";
-import Container from "../components/ui/Container";
+import { toast } from "sonner";
+import { createResource } from "../api/endPointResources";
+import arrowLeft from "../assets/arrow-left.svg";
+import ButtonComponent from "../components/atoms/ButtonComponent";
+import TagInput from "../components/forms/TagInput";
+import FormInput from "../components/resources/create-resources/FormInput";
 import { contentResourcesForm } from "../components/resources/create-resources/languagesLabelsContent";
+import Container from "../components/ui/Container";
+import PageTitle from "../components/ui/PageTitle";
 import { useResources } from "../context/ResourcesContext";
+import { Category, IntResource, Tag } from "../types";
+import { resourceSchema } from "../validations/resourceSchema";
 
 export default function CreateResourcePage() {
   const navigate = useNavigate();
@@ -81,10 +81,8 @@ export default function CreateResourcePage() {
     try {
       await createResource(newResource);
       toast.success("¡Recurso creado con éxito!");
-      refreshResources();
-      setTimeout(() => {
-        navigate(`/resources/${data?.category}`);
-      }, 1000);
+      await refreshResources();
+      navigate(`/resources/${data?.category}`);
       reset();
     } catch (error) {
       console.error("Error al crear el recurso:", error);

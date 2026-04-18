@@ -1,10 +1,10 @@
-import react from "../assets/react.svg";
-import php from "../assets/logo-php-1.svg";
-import angular from "../assets/angular.svg";
-import javascript from "../assets/javascript.svg";
-import python from "../assets/pythonVector.svg";
-import java from "../assets/logo-java-1.svg";
-import typescript from "../assets/TypescriptVector.svg";
+import react from "../assets/technologies/react-logo.svg";
+import php from "../assets/technologies/php-logo.svg";
+import angular from "../assets/technologies/angular-logo.svg";
+import javascript from "../assets/technologies/javascript-logo.svg";
+import python from "../assets/technologies/python-logo.svg";
+import java from "../assets/technologies/java-logo.svg";
+import typescript from "../assets/technologies/typescript-logo.svg";
 
 export const displayLanguageIcon = (
   language: string | undefined | null,
