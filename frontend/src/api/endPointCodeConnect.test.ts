@@ -61,7 +61,6 @@ describe("createCodeConnect", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer null",
         },
         body: JSON.stringify(mockNewCodeConnect),
         signal: undefined,
@@ -69,6 +68,19 @@ describe("createCodeConnect", () => {
     );
 
     expect(result).toEqual(mockResponseData);
+  });
+
+  it("should not send Authorization header when no token in localStorage", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    });
+
+    await createCodeConnect(mockNewCodeConnect);
+
+    const calledWithOptions = mockFetch.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBeUndefined();
   });
 
   it("should send Authorization header with token from localStorage", async () => {
@@ -83,7 +95,9 @@ describe("createCodeConnect", () => {
     await createCodeConnect(mockNewCodeConnect);
 
     const calledWithOptions = mockFetch.mock.calls[0][1];
-    expect(calledWithOptions.headers.Authorization).toBe("Bearer fake-token-123");
+    expect(calledWithOptions.headers.Authorization).toBe(
+      "Bearer fake-token-123",
+    );
   });
 
   it("should throw an error on failed request", async () => {
