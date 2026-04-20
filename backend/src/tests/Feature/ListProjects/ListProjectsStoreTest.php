@@ -174,4 +174,124 @@ class ListProjectsStoreTest extends TestCase
             ]
         ]);
     }
+
+    public function test_store_with_new_fields_succesfully():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Project with new fields',
+            'description' => 'Project with new fields',
+            'limit_date_inscription' => '2026-12-31',
+            'dev_front_number' => 2,
+            'dev_back_number' => 2,
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'success' => true,
+            'message' => 'Project created successfully',
+        ]);
+    }
+
+    public function test_description_must_be_a_string():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'description' => ['not', 'a', 'string'],
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_limit_date_inscription_must_be_a_valid_date():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'limit_date_inscription' => 'invalid-date',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_limit_date_inscription_must_be_today_or_future():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'limit_date_inscription' => '2026-04-15',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_dev_front_number_must_be_an_integer():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'dev_front_number' => 'two',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_dev_front_number_must_be_at_least_1():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'dev_front_number' => 0,
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_dev_back_number_must_be_an_integer():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'dev_back_number' => 'two',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_dev_back_number_must_be_at_least_1():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Invalid project',
+            'dev_back_number' => 0,
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
 }
