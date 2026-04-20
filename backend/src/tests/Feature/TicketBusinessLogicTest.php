@@ -155,6 +155,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function closing_ticket_sets_closed_by_automatically(): void{
     
         $closer = User::factory()->create();
+        $closer->assignRole('admin');
         Sanctum::actingAs($closer);
 
         $ticket = Ticket::factory()->create([
