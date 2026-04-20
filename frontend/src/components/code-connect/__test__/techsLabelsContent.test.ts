@@ -8,16 +8,16 @@ const frontIconLabelMap = [
   { label: "React", iconName: "react_vector" },
   { label: "Angular", iconName: "angular_vector" },
   { label: "Svelte", iconName: "js_vector" },
-  { label: "Vue", iconName: "js_vector" },
-  { label: "Java", iconName: "js_vector" },
+  { label: "Typescript", iconName: "ts_vector" },
+  { label: "Javascript", iconName: "js_vector" },
 ];
 
 const backIconLabelMap = [
-  { label: "Spring", iconName: "node_vector" },
-  { label: "Laravel", iconName: "node_vector" },
   { label: "Node", iconName: "node_vector" },
-  { label: "Rails", iconName: "node_vector" },
-  { label: "Express", iconName: "node_vector" },
+  { label: "PHP", iconName: "php_vector" },
+  { label: "Java", iconName: "java_vector" },
+  { label: "Python", iconName: "python_vector" },
+  { label: "SQL", iconName: "sql_vector" },
 ];
 
 describe("contentTechsFrontCodeConnect Tests", () => {

@@ -5,7 +5,8 @@ export function LanguageSelector() {
   const [languages, setLanguages] = useState<Language[]>([]);
 
   useEffect(() => {
-    getLanguages().then(setLanguages);
+    const mockLanguages = getLanguages();
+    setLanguages(mockLanguages);
   }, []);
 
   return (
