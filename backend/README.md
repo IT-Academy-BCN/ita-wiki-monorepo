@@ -97,3 +97,4 @@ Marc Sanchez
 Nacho Abollo (@ignatiusreillius)
 Victor Charneco
 Alex Beltran
+Vicenç Sirvent
