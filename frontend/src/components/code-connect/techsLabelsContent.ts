@@ -3,7 +3,8 @@ import { FC, SVGProps } from "react";
 import react_logo from "../../assets/technologies/react-logo.svg?react";
 import angular_logo from "../../assets/technologies/angular-logo.svg?react";
 import javascript_logo from "../../assets/technologies/javascript-logo.svg?react";
-import typescript_logo from "../../assets/technologies/typescript-logo.svg?react";
+import svelte_logo from "../../assets/technologies/svelte-logo.svg?react";
+import vue_logo from "../../assets/technologies/vue-logo.svg?react";
 import node_logo from "../../assets/technologies/node-logo.svg?react";
 import php_logo from "../../assets/technologies/php-logo.svg?react";
 import java_logo from "../../assets/technologies/java-logo.svg?react";
@@ -20,9 +21,9 @@ type TechnologyItem = {
 export const contentTechsFrontCodeConnect: TechnologyItem[] = [
   { icon: react_logo, label: "React" },
   { icon: angular_logo, label: "Angular" },
-  { icon: javascript_logo, label: "Svelte" },
-  { icon: typescript_logo, label: "Typescript" },
-  { icon: javascript_logo, label: "Javascript" },
+  { icon: svelte_logo, label: "Svelte" },
+  { icon: vue_logo, label: "Vue" },
+  { icon: javascript_logo, label: "JavaScript" },
 ];
 
 export const contentTechsBackCodeConnect: TechnologyItem[] = [
