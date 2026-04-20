@@ -40,6 +40,15 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'create likes', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'delete own likes', 'guard_name' => 'api']);
 
+        // Permisos - Tickets
+        Permission::firstOrCreate(['name' => 'view own tickets', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'view all tickets', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'update ticket status', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'close ticket', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'update ticket priority', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'assign tickets', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'add closing comment', 'guard_name' => 'api']);
+
         $this->command->info('✅ Permissions created successfully!');
         $this->command->info('Total permissions: ' . Permission::count());
     }

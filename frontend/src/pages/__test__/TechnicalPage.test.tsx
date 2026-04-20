@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router";
 import userEvent from "@testing-library/user-event";
-import TechnicalPage from "./TechnicalPage";
+import TechnicalPage from "../TechnicalPage";
 import useTechnicalTestPage from "../../hooks/useTechnicalTestPage";
 
 vi.mock("../../components/ui/Container", () => ({
