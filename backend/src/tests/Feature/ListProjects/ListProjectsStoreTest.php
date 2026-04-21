@@ -215,6 +215,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
 
         $response->assertStatus(201);
