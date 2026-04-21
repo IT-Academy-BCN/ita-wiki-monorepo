@@ -18,6 +18,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function ticket_cannot_have_multiple_assignees_simultaneously(): void{
 
         $user = User::factory()->create();
+        $user->assignRole('admin');
         $assignee1 = User::factory()->create();
         $assignee2 = User::factory()->create();
         Sanctum::actingAs($user);
@@ -136,6 +137,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function ticket_preserves_creator_through_updates(): void{
 
         $creator = User::factory()->create();
+        $creator->assignRole('admin');
         $assignee = User::factory()->create();
         Sanctum::actingAs($creator);
 
