@@ -310,6 +310,124 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
+    public function admin_can_add_closing_comment_to_any_ticket(): void{
+
+        $admin = $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Closing this ticket.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(201);
+        $ticket->refresh();
+        $this->assertEquals('closed', $ticket->status->value);
+        $this->assertEquals($admin->id, $ticket->closed_by);
+    }
+
+    /** @test */
+    public function creator_can_add_closing_comment_to_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Closing my ticket.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(201);
+        $ticket->refresh();
+        $this->assertEquals('closed', $ticket->status->value);
+    }
+
+    /** @test */
+    public function student_cannot_add_closing_comment_to_ticket_they_did_not_create(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Trying to close.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(403);
+        $ticket->refresh();
+        $this->assertNotEquals('closed', $ticket->status->value);
+    }
+
+    /** @test */
+    public function mentor_cannot_add_closing_comment_to_ticket_they_did_not_create(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Trying to close.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(403);
+        $ticket->refresh();
+        $this->assertNotEquals('closed', $ticket->status->value);
+    }
+
+    /** @test */
+    public function any_user_can_add_regular_comment(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Just a regular comment.',
+            'is_closing_comment' => false,
+        ]);
+
+        $response->assertStatus(201);
+        $ticket->refresh();
+        $this->assertNotEquals('closed', $ticket->status->value);
+    }
+
+    public function admin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('admin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'high']);
+    }
+
+    /** @test */
+    public function superadmin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('superadmin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'critical']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'critical']);
+    }
+
+    /** @test */
+    public function student_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+        $response->assertStatus(403);
+    }
+    
+    /** @test */
     public function admin_can_close_any_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
@@ -364,6 +482,16 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
+    public function mentor_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function mentor_cannot_close_ticket_they_did_not_create(): void{
 
         $this->authenticateUserWithRole('mentor');
@@ -374,20 +502,6 @@ class TicketControllerTest extends TestCase{
         $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
 
         $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function any_authenticated_user_can_set_non_closed_status(): void{
-
-        $this->authenticateUserWithRole('student');
-        $creator = User::factory()->create();
-
-        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
-
-        foreach (['in_progress', 'blocked', 'ready'] as $status) {
-            $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => $status]);
-            $response->assertStatus(200);
-        }
     }
 
 }

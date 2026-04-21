@@ -219,6 +219,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function ticket_accepts_all_valid_priority_values(): void{
 
         $user = User::factory()->create();
+        $user->assignRole('admin');
         Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create(['code_connect_id' => $user->id]);
