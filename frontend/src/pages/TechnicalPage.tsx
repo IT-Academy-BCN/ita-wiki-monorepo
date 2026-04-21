@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router";
-import CalendarIcon from "../../assets/Calendar.svg";
-import JSIcon from "../../assets/javascript.svg";
-import PageTitle from "../ui/PageTitle";
-import Container from "../ui/Container";
+import CalendarIcon from "../assets/Calendar.svg";
+import JSIcon from "../assets/technologies/javascript-logo.svg";
+import PageTitle from "../components/ui/PageTitle";
+import Container from "../components/ui/Container";
 import { ArrowLeftIcon } from "lucide-react";
-import ButtonComponent from "../atoms/ButtonComponent";
-import UiCheckbox from "../ui/shared-ui/UiCheckbox";
-import useTechnicalTestPage from "../../hooks/useTechnicalTestPage";
+import ButtonComponent from "../components/atoms/ButtonComponent";
+import UiCheckbox from "../components/ui/shared-ui/UiCheckbox";
+import useTechnicalTestPage from "../hooks/useTechnicalTestPage";
 
 const TechnicalPage = () => {
   const navigate = useNavigate();

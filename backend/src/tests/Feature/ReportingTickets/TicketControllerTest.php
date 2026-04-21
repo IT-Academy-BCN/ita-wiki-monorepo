@@ -67,13 +67,13 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
-    public function an_auth_user_can_view_a_ticket(): void{
-
+    public function an_auth_user_can_view_their_own_ticket(): void{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $ticket = Ticket::factory()->create();
-
+        $ticket = Ticket::factory()->create([
+         'code_connect_id' => $user->id,
+        ]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
 
@@ -89,7 +89,22 @@ class TicketControllerTest extends TestCase{
                 'updated_at'
             ]
         ]);
-        
+    }
+
+    /** @test */
+    public function an_auth_user_cannot_view_another_users_ticket(): void{
+        $user = User::factory()->create();
+        $owner = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        $ticket = Ticket::factory()->create([
+         'code_connect_id' => $owner->id,
+        ]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(403);
     }
 
     /** @test */
@@ -102,56 +117,51 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(401);
     }
 
-    /** @test */
-    public function an_auth_user_can_update_a_ticket(): void{
-
+   /** @test */
+    public function an_auth_user_can_update_their_own_ticket(): void{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create([
-
-            'name' => 'Old Name',
-            'affected_app' => 'wiki_frontend',
-            'type' => 'error',
-            'affected_function' => 'login',
-            'description' => 'Old description.',
+         'code_connect_id' => $user->id,
+         'name' => 'Old Name',
+         'affected_app' => 'wiki_frontend',
+         'type' => 'error',
+         'affected_function' => 'login',
+         'description' => 'Old description.',
         ]);
-        
 
-
-        $response = $this->actingAs($user)->putJson("/api/tickets/{$ticket->id}", [
-            'name' => 'Updated Name',
-            'affected_app' => 'wiki_backend',
-            'type' => 'suggestion',
-            'affected_function' => 'profile',
-            'description' => 'Updated description.',
+        $response = $this->putJson("/api/tickets/{$ticket->id}", [
+         'name' => 'Updated Name',
+         'affected_app' => 'wiki_backend',
+         'type' => 'suggestion',
+         'affected_function' => 'profile',
+         'description' => 'Updated description.',
         ]);
-        
+
         $response->assertStatus(200)->assertJsonStructure([
-            'data' => [
-                'id',
-                'name',
-                'affected_app',
-                'type',
-                'affected_function',
-                'description',
-                'created_at',
-                'updated_at'
-            ]
-        ]);
-        
+        'data' => [
+            'id',
+            'name',
+            'affected_app',
+            'type',
+            'affected_function',
+            'description',
+            'created_at',
+            'updated_at'
+        ]
+    ]);
 
-        $this->assertDatabaseHas('tickets', [
-            'id' => $ticket->id,
-            'name' => 'Updated Name',
-            'affected_app' => 'wiki_backend',
-            'type' => 'suggestion',
-            'affected_function' => 'profile',
-            'description' => 'Updated description.',
-        ]);
-        
-    }
-
+    $this->assertDatabaseHas('tickets', [
+        'id' => $ticket->id,
+        'code_connect_id' => $user->id,
+        'name' => 'Updated Name',
+        'affected_app' => 'wiki_backend',
+        'type' => 'suggestion',
+        'affected_function' => 'profile',
+        'description' => 'Updated description.',
+    ]);
+}
     /** @test*/
     public function an_not_auth_user_cannot_update_a_ticket(): void{
 
@@ -168,20 +178,22 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(401);
     }
 
-    /** @test */
-    public function an_auth_user_can_delete_a_ticket(): void{
 
+   /** @test */
+    public function an_auth_user_can_delete_their_own_ticket(): void{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $ticket = Ticket::factory()->create();
+        $ticket = Ticket::factory()->create([
+         'code_connect_id' => $user->id,
+       ]);
 
         $response = $this->deleteJson("/api/tickets/{$ticket->id}");
 
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('tickets', [
-            'id' => $ticket->id,
+         'id' => $ticket->id,
         ]);
     }
 
@@ -295,6 +307,87 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(200);
         $this->assertCount(1, $response->json('data'));
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
+    }
+
+    /** @test */
+    public function admin_can_close_any_ticket(): void{
+
+        $admin = $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function superadmin_can_close_any_ticket(): void{
+
+        $superadmin = $this->authenticateUserWithRole('superadmin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function creator_can_close_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function non_creator_student_cannot_close_ticket(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_close_ticket_they_did_not_create(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function any_authenticated_user_can_set_non_closed_status(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        foreach (['in_progress', 'blocked', 'ready'] as $status) {
+            $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => $status]);
+            $response->assertStatus(200);
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { PendingSlot } from "../types/projectTypes";
+import type { PendingSlot } from "../../../../types/codeConnectTypes";
 import { joinProject } from "../../../../api/endPointJoinProject";
 
 type PendingStatus = "pending" | "accepted" | "rejected";
