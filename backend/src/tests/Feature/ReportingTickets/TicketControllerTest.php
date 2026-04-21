@@ -369,6 +369,10 @@ class TicketControllerTest extends TestCase{
         $response = $this->patchJson("/api/tickets/{$ticket->id}/assignee", [
             'assignee_id' => $assignee->id,
         ]);
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function admin_can_add_closing_comment_to_any_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
