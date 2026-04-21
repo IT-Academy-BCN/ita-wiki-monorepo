@@ -30,8 +30,19 @@ class TicketController extends Controller
     public function show($id): JsonResponse
     {
         $ticket = Ticket::with(['codeConnect', 'assignee', 'closedBy', 'comments.user'])->findOrFail($id);
-        $this->ensureTicketOwnership($ticket);
 
+        $user = auth()->user();
+
+        $isCreator  = (int) $ticket->code_connect_id === (int) $user->id;
+        $isAssignee = (int) $ticket->assignee_id === (int) $user->id;
+
+        if (!$user->hasAnyRole(['admin', 'superadmin']) && !$isCreator && !$isAssignee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to view this ticket',
+            ], 403);
+        }
+        
         return response()->json([
             'success' => true,
             'data' => $ticket
@@ -111,8 +122,17 @@ class TicketController extends Controller
         ], 200);
     }
 
-    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse
-    {
+    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
+
+        $user = auth()->user();
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to change ticket priority',
+            ], 403);
+        }
+
         $ticket = Ticket::findOrFail($id);
         $this->ensureTicketOwnership($ticket);
 
@@ -125,8 +145,17 @@ class TicketController extends Controller
         ], 200);
     }
 
-    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse
-    {
+    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse{
+
+        $user = auth()->user();
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to assign this ticket',
+            ], 403);
+        }
+        
         $ticket = Ticket::findOrFail($id);
         $this->ensureTicketOwnership($ticket);
 
@@ -145,7 +174,9 @@ class TicketController extends Controller
             return;
         }
 
-        if ((int) $ticket->code_connect_id !== (int) auth()->id()) {
+        $userId = (int) auth()->id();
+
+        if ((int) $ticket->code_connect_id !== $userId && (int) $ticket->assignee_id !== $userId) {
             abort(403, 'Forbidden');
         }
     }
