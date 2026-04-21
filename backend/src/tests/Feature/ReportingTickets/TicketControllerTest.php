@@ -320,6 +320,16 @@ class TicketControllerTest extends TestCase{
 
     /** @test */
     public function creator_can_view_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /** @test */
     public function admin_can_assign_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
@@ -406,9 +416,14 @@ class TicketControllerTest extends TestCase{
         $creator = $this->authenticateUserWithRole('student');
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
-        $response = $this->getJson("/api/tickets/{$ticket->id}");
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment' => 'Closing my ticket.',
+            'is_closing_comment' => true,
+        ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
+        $ticket->refresh();
+        $this->assertEquals('closed', $ticket->status->value);
     }
 
     /** @test */
@@ -428,14 +443,13 @@ class TicketControllerTest extends TestCase{
 
     /** @test */
     public function student_cannot_view_ticket_they_did_not_create_or_are_not_assigned_to(): void{
-        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
-            'comment' => 'Closing my ticket.',
-            'is_closing_comment' => true,
-        ]);
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
-        $response->assertStatus(201);
-        $ticket->refresh();
-        $this->assertEquals('closed', $ticket->status->value);
+        $response = $this->getJson("/api/tickets/{$ticket->id}");
+
+        $response->assertStatus(403);
     }
 
     /** @test */
@@ -479,10 +493,6 @@ class TicketControllerTest extends TestCase{
         $creator = User::factory()->create();
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
-        $response = $this->getJson("/api/tickets/{$ticket->id}");
-        $response->assertStatus(403);
-    }
-
         $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
             'comment' => 'Just a regular comment.',
             'is_closing_comment' => false,
@@ -493,6 +503,7 @@ class TicketControllerTest extends TestCase{
         $this->assertNotEquals('closed', $ticket->status->value);
     }
 
+    /** @test */
     public function admin_can_update_ticket_priority(): void{
 
         $this->authenticateUserWithRole('admin');
@@ -593,6 +604,18 @@ class TicketControllerTest extends TestCase{
 
     /** @test */
     public function mentor_cannot_close_ticket_they_did_not_create(): void{
+        
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(403);
+    }
+    
+    /** @test */
     public function mentor_cannot_update_ticket_priority(): void{
 
         $this->authenticateUserWithRole('mentor');
@@ -616,16 +639,14 @@ class TicketControllerTest extends TestCase{
 
     /** @test */
     public function any_authenticated_user_can_set_non_closed_status(): void{
-    public function mentor_cannot_close_ticket_they_did_not_create(): void{
 
-        $this->authenticateUserWithRole('mentor');
-        $creator = User::factory()->create();
+        $user = $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create(['code_connect_id' => $user->id]);
 
-        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'in_progress']);
 
-        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
-
-        $response->assertStatus(403);
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'in_progress']);
     }
 
 }
