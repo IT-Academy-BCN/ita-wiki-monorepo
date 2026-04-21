@@ -1,24 +1,35 @@
-import js_vector from "../../assets/javascript.svg?react";
-import angular_vector from "../../assets/angular.svg?react";
-import react_vector from "../../assets/react.svg?react";
-import node_vector from "../../assets/logo-node-1.svg?react";
 import { FC, SVGProps } from "react";
+
+import react_logo from "../../assets/technologies/react-logo.svg?react";
+import angular_logo from "../../assets/technologies/angular-logo.svg?react";
+import javascript_logo from "../../assets/technologies/javascript-logo.svg?react";
+import svelte_logo from "../../assets/technologies/svelte-logo.svg?react";
+import vue_logo from "../../assets/technologies/vue-logo.svg?react";
+import node_logo from "../../assets/technologies/node-logo.svg?react";
+import php_logo from "../../assets/technologies/php-logo.svg?react";
+import java_logo from "../../assets/technologies/java-logo.svg?react";
+import python_logo from "../../assets/technologies/python-logo.svg?react";
+import sql_logo from "../../assets/technologies/sql-logo.svg?react";
 
 type SvgIcon = FC<SVGProps<SVGSVGElement>>;
 
-export const contentTechsFrontCodeConnect: { icon: SvgIcon; label: string }[] =
-  [
-    { icon: react_vector, label: "React" },
-    { icon: angular_vector, label: "Angular" },
-    { icon: js_vector, label: "Svelte" },
-    { icon: js_vector, label: "Vue" },
-    { icon: js_vector, label: "Java" },
-  ];
+type TechnologyItem = {
+  icon: SvgIcon;
+  label: string;
+};
 
-export const contentTechsBackCodeConnect: { icon: SvgIcon; label: string }[] = [
-  { icon: node_vector, label: "Spring" },
-  { icon: node_vector, label: "Laravel" },
-  { icon: node_vector, label: "Node" },
-  { icon: node_vector, label: "Rails" },
-  { icon: node_vector, label: "Express" },
+export const contentTechsFrontCodeConnect: TechnologyItem[] = [
+  { icon: react_logo, label: "React" },
+  { icon: angular_logo, label: "Angular" },
+  { icon: svelte_logo, label: "Svelte" },
+  { icon: vue_logo, label: "Vue" },
+  { icon: javascript_logo, label: "JavaScript" },
+];
+
+export const contentTechsBackCodeConnect: TechnologyItem[] = [
+  { icon: node_logo, label: "Node" },
+  { icon: php_logo, label: "PHP" },
+  { icon: java_logo, label: "Java" },
+  { icon: python_logo, label: "Python" },
+  { icon: sql_logo, label: "SQL" },
 ];

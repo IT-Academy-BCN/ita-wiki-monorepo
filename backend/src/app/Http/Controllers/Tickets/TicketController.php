@@ -93,9 +93,19 @@ class TicketController extends Controller
     public function updateStatus(UpdateStatusTicketRequest $request, $id): JsonResponse
     {
         $ticket = Ticket::findOrFail($id);
-        $this->ensureTicketOwnership($ticket);
-
+        $user = auth()->user();
         $status = $request->validated()['status'];
+
+        if ($status === 'closed'
+            && !$user->hasAnyRole(['admin', 'superadmin'])
+            && $ticket->code_connect_id !== $user->id
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to close this ticket',
+            ], 403);
+        }
+
         $updateData = ['status' => $status];
 
         if ($status === 'closed') {

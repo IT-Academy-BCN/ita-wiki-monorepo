@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { MemoryRouter, Routes, Route } from "react-router";
-import CodeConnectPage from "../CodeConnectPage";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router";
 import { vi } from "vitest";
+import UserProvider from "../../context/UserContext";
+import CodeConnectPage from "../CodeConnectPage";
 
 vi.mock("../../components/ui/PageTitle", () => ({
   default: ({ title }: { title: string }) => (
@@ -14,9 +15,12 @@ describe("CodeConnectPage", () => {
   it("renders when navigating to /codeconnect", () => {
     render(
       <MemoryRouter initialEntries={["/codeconnect"]}>
-        <Routes>
-          <Route path="/codeconnect" element={<CodeConnectPage />} />
-        </Routes>
+        <UserProvider>
+          <Routes>
+            <Route path="/codeconnect" element={<CodeConnectPage />} />
+          </Routes>
+        </UserProvider>
+        ,
       </MemoryRouter>,
     );
 
@@ -31,13 +35,15 @@ describe("CodeConnectPage", () => {
   it("navigates to /codeconnect/create when clicking the button", () => {
     render(
       <MemoryRouter initialEntries={["/codeconnect"]}>
-        <Routes>
-          <Route path="/codeconnect" element={<CodeConnectPage />} />
-          <Route
-            path="/codeconnect/create"
-            element={<div>Create Code Connect Page</div>}
-          />
-        </Routes>
+        <UserProvider>
+          <Routes>
+            <Route path="/codeconnect" element={<CodeConnectPage />} />
+            <Route
+              path="/codeconnect/create"
+              element={<div>Create Code Connect Page</div>}
+            />
+          </Routes>
+        </UserProvider>
       </MemoryRouter>,
     );
 

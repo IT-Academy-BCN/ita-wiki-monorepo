@@ -352,6 +352,55 @@ class TicketControllerTest extends TestCase{
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
+    public function admin_can_close_any_ticket(): void{
+
+        $admin = $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function superadmin_can_close_any_ticket(): void{
+
+        $superadmin = $this->authenticateUserWithRole('superadmin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function creator_can_close_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function non_creator_student_cannot_close_ticket(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
 
         $response->assertStatus(403);
     }
@@ -364,6 +413,14 @@ class TicketControllerTest extends TestCase{
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
+    public function mentor_cannot_close_ticket_they_did_not_create(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
 
         $response->assertStatus(403);
     }
@@ -381,6 +438,19 @@ class TicketControllerTest extends TestCase{
     }
 
 
+
+    public function any_authenticated_user_can_set_non_closed_status(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        foreach (['in_progress', 'blocked', 'ready'] as $status) {
+            $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => $status]);
+            $response->assertStatus(200);
+        }
+    }
 
 }
 
