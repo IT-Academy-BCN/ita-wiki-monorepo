@@ -46,6 +46,8 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
             'programming_role' => 'Backend Developer'
         ]);
 
@@ -118,6 +120,8 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
             'programming_role' => 'Backend Developer'
         ]);
 
@@ -161,6 +165,8 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
             'programming_role' => 'Backend Developer'
         ]);
 
@@ -180,7 +186,7 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-    public function test_store_saves_programming_role_from_request(): void 
+    public function test_store_saves_programming_role_from_request(): void
     {
         Sanctum::actingAs($this->userOne);
 
@@ -202,6 +208,7 @@ class ListProjectsStoreTest extends TestCase
             'programming_role' => 'Frontend Developer',
         ]);
     }
+
 
     public function test_store_with_new_fields_succesfully():void{
         Sanctum::actingAs($this->userOne);

@@ -111,8 +111,17 @@ class TicketController extends Controller
         ], 200);
     }
 
-    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse
-    {
+    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
+
+        $user = auth()->user();
+
+        if (!$user->hasAnyRole(['admin', 'superadmin'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to change ticket priority',
+            ], 403);
+        }
+
         $ticket = Ticket::findOrFail($id);
         $this->ensureTicketOwnership($ticket);
 
