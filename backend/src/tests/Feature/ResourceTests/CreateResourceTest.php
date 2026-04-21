@@ -56,6 +56,12 @@ class CreateResourceTest extends TestCase
 
     // ========== VALIDATION TESTS ==========
 
+    public function test_authenticated_student_can_create_resource():void{
+        $this->authenticateSanctumUser();
+        $response = $this->postJson(route('resources.store'), $this->getResourceData());
+        $response->assertStatus(201);
+    }
+
     #[DataProvider('resourceCreationValidationProvider')]
     public function test_create_resource_validation(array $invalidData, string $fieldName): void
     {
