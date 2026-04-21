@@ -83,7 +83,6 @@ export default function CreateResourcePage() {
       category: data.category,
       tags: tagsWithIds,
       type: data.type,
-      github_id: user.github_id,
     };
 
     try {
