@@ -93,7 +93,7 @@ class ListProjectsUpdateTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer',
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertStatus(400);

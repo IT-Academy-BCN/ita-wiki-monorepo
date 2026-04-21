@@ -67,7 +67,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer',
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertJsonFragment([
@@ -180,7 +180,40 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-    public function test_store_saves_programming_role_from_request(): void 
+    public function test_store_returns_custom_message_when_programming_role_missing(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Sin Rol',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'programming_role' => ['The programming role field is required.'],
+        ]);
+    }
+
+    public function test_store_requires_programming_role(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Proyecto Sin Rol',
+            'time_duration' => '1 mes',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['programming_role']);
+    }
+
+
+    public function test_store_saves_programming_role_from_request(): void
     {
         Sanctum::actingAs($this->userOne);
 
