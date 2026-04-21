@@ -100,11 +100,11 @@ Route::middleware('auth:sanctum')->group(function () {
 // ========== RESOURCES ENDPOINTS ==========
 
 // PUBLIC
-Route::apiResource('resources', ResourceController::class)->only(['index', 'show', 'store']);
+Route::apiResource('resources', ResourceController::class)->only(['index', 'show']);
 
 // PROTECTED
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('resources', ResourceController::class)->except(['index', 'show', 'store']);
+    Route::apiResource('resources', ResourceController::class)->except(['index', 'show']);
 });
 
 // TECHNICAL TESTS

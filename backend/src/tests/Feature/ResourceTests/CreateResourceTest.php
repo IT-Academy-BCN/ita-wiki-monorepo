@@ -112,9 +112,8 @@ class CreateResourceTest extends TestCase
     }
 
     public function test_create_resource_without_authentication():void{
-        $user = User::factory()->create(['github_id' => 123456]);
 
         $response = $this->postJson(route('resources.store'), $this->getResourceData());
-        $response->assertStatus(201);
+        $response->assertStatus(401);
     }
 }
