@@ -352,6 +352,8 @@ class TicketControllerTest extends TestCase{
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
+    }
+    
     public function admin_can_close_any_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
