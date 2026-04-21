@@ -186,7 +186,7 @@ class ListProjectsStoreTest extends TestCase
         public function test_store_requires_programming_role(): void
     {
         Sanctum::actingAs($this->userOne);
-        
+
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Sin Rol',
             'time_duration' => '1 mes',
@@ -282,8 +282,6 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['programming_role']);
-    }
-
     }
 
     public function test_limit_date_inscription_must_be_a_valid_date():void{
