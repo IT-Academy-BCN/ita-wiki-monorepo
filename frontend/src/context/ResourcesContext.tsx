@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { IntResource, IntBookmarkElement, Bookmark } from "../types";
-import { getResources } from "../api/endPointResources";
 import { getBookmarks } from "../api/endPointBookmark";
-import { useBookmarkToggle } from "../hooks/useBookmarkToggle";
+import { getResources } from "../api/endPointResources";
 import { useUserContext } from "../context/UserContext";
 import { canBookmark } from "../data/permission/tempRolesPremission";
+import { useBookmarkToggle } from "../hooks/useBookmarkToggle";
+import { Bookmark, IntBookmarkElement, IntResource } from "../types";
+
+/* eslint-disable react-refresh/only-export-components */
 
 interface ResourcesContextType {
   resources: IntResource[];
@@ -15,7 +17,7 @@ interface ResourcesContextType {
   isBookmarked: (resource: IntResource) => boolean;
   toggleBookmark: (resource: IntResource) => void;
   getBookmarkCount: (resourceId: number | string) => number;
-  refreshResources: () => void;
+  refreshResources: () => Promise<void>;
   updateResourceLikeCount: (resourceId: number, newCount: number) => void;
 }
 
@@ -28,7 +30,7 @@ const ResourcesContext = createContext<ResourcesContextType>({
   isBookmarked: () => false,
   toggleBookmark: () => {},
   getBookmarkCount: () => 0,
-  refreshResources: () => {},
+  refreshResources: async () => {},
   updateResourceLikeCount: () => {},
 });
 
@@ -145,7 +147,7 @@ export const ResourcesProvider = ({
     };
 
     fetchBookmarks();
-  }, [user]);
+  }, [user, resources]);
 
   const { toggleBookmark: toggleBookmarkAction } = useBookmarkToggle();
 
