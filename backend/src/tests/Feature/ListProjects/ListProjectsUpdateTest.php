@@ -72,6 +72,7 @@ class ListProjectsUpdateTest extends TestCase
             'time_duration' => '3 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
 
 

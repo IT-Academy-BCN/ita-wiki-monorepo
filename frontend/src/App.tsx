@@ -14,7 +14,7 @@ import RequireAuth from "./components/RequireAuth";
 import CodeConnectPage from "./pages/CodeConnectPage";
 import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
 import CodeConnectDetails from "./pages/CodeConnectDetails";
-import TechnicalPage from "./components/technical-page/TechnicalPage";
+import TechnicalPage from "./pages/TechnicalPage";
 import RankingsPage from "./pages/RankingsPage";
 
 const App: FC = () => {
