@@ -352,8 +352,10 @@ class TicketControllerTest extends TestCase{
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
+        $response->assertStatus(403);
     }
-    
+
+    /** @test */
     public function admin_can_close_any_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
@@ -415,6 +417,10 @@ class TicketControllerTest extends TestCase{
         $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
 
         $response = $this->getJson("/api/tickets/{$ticket->id}");
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function mentor_cannot_close_ticket_they_did_not_create(): void{
 
         $this->authenticateUserWithRole('mentor');
@@ -439,8 +445,7 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(200);
     }
 
-
-
+    /** @test */
     public function any_authenticated_user_can_set_non_closed_status(): void{
 
         $this->authenticateUserWithRole('student');
