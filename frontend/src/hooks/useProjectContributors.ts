@@ -1,7 +1,7 @@
-import { CodeConnectProjectDataContributor } from "../types/CodeConnectProject";
+import { ApiProjectContributor } from "../types/codeConnectTypes";
 
 export const useProjectContributors = (
-  contributors: CodeConnectProjectDataContributor[] = [],
+  contributors: ApiProjectContributor[] = [],
 ) => {
   const getTeamByRole = (role: string) => {
     const roleMembers = contributors
