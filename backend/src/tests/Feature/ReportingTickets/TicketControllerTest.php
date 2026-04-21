@@ -309,6 +309,117 @@ class TicketControllerTest extends TestCase{
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
     }
 
+    /** @test */
+    public function admin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('admin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'high']);
+    }
+
+    /** @test */
+    public function superadmin_can_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('superadmin');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'critical']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'priority' => 'critical']);
+    }
+
+    /** @test */
+    public function student_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('student');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+        $response->assertStatus(403);
+    }
+    
+    /** @test */
+    public function admin_can_close_any_ticket(): void{
+
+        $admin = $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function superadmin_can_close_any_ticket(): void{
+
+        $superadmin = $this->authenticateUserWithRole('superadmin');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function creator_can_close_own_ticket(): void{
+
+        $creator = $this->authenticateUserWithRole('student');
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'closed']);
+    }
+
+    /** @test */
+    public function non_creator_student_cannot_close_ticket(): void{
+
+        $this->authenticateUserWithRole('student');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_update_ticket_priority(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $ticket = Ticket::factory()->create();
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/priority", ['priority' => 'high']);
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function mentor_cannot_close_ticket_they_did_not_create(): void{
+
+        $this->authenticateUserWithRole('mentor');
+        $creator = User::factory()->create();
+
+        $ticket = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", ['status' => 'closed']);
+
+        $response->assertStatus(403);
+    }
+
 }
 
 ?>

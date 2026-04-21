@@ -155,6 +155,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function closing_ticket_sets_closed_by_automatically(): void{
     
         $closer = User::factory()->create();
+        $closer->assignRole('admin');
         Sanctum::actingAs($closer);
 
         $ticket = Ticket::factory()->create([
@@ -218,6 +219,7 @@ class TicketBusinessLogicTest extends TestCase{
     public function ticket_accepts_all_valid_priority_values(): void{
 
         $user = User::factory()->create();
+        $user->assignRole('admin');
         Sanctum::actingAs($user);
 
         $ticket = Ticket::factory()->create(['code_connect_id' => $user->id]);
