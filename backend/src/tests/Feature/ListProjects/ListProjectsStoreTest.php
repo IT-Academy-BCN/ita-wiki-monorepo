@@ -47,6 +47,8 @@ class ListProjectsStoreTest extends TestCase
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
 
         $response->assertJsonFragment([
@@ -67,7 +69,7 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer',
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertJsonFragment([
@@ -119,6 +121,8 @@ class ListProjectsStoreTest extends TestCase
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertStatus(201);
@@ -162,6 +166,8 @@ class ListProjectsStoreTest extends TestCase
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer'
         ]);
 
         $response->assertStatus(201);
@@ -218,9 +224,7 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-
-    public function test_store_with_new_fields_succesfully(): void
-    {
+    public function test_store_with_new_fields_succesfully():void{
         Sanctum::actingAs($this->userOne);
 
         $response = $this->postJson('/api/codeconnect/', [
