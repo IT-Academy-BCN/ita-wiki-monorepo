@@ -180,7 +180,6 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-<<<<<<< feature/216-set-user-role-from-form
     public function test_store_saves_programming_role_from_request(): void 
     {
         Sanctum::actingAs($this->userOne);
@@ -203,7 +202,7 @@ class ListProjectsStoreTest extends TestCase
             'programming_role' => 'Frontend Developer',
         ]);
     }
-=======
+
     public function test_store_with_new_fields_succesfully():void{
         Sanctum::actingAs($this->userOne);
 
@@ -322,6 +321,4 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
     }
-
->>>>>>> develop
 }
