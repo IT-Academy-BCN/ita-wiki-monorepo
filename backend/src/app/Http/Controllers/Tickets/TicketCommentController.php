@@ -27,8 +27,19 @@ class TicketCommentController extends Controller
     public function store(CreateCommentRequest $request, $ticketId): JsonResponse
     {
         $ticket = Ticket::findOrFail($ticketId);
+        $user = $request->user();
 
         $isClosingComment = $request->validated()['is_closing_comment'] ?? false;
+
+        if ($isClosingComment
+            && !$user->hasAnyRole(['admin', 'superadmin'])
+            && $ticket->code_connect_id !== $user->id
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to close this ticket',
+            ], 403);
+        }
 
         $comment = $ticket->comments()->create([
             'user_id' => $request->user()->id,
