@@ -392,6 +392,9 @@ class TicketControllerTest extends TestCase{
         $response->assertStatus(201);
         $ticket->refresh();
         $this->assertNotEquals('closed', $ticket->status->value);
+    }
+
+    /** @test */
     public function admin_can_close_any_ticket(): void{
 
         $admin = $this->authenticateUserWithRole('admin');
