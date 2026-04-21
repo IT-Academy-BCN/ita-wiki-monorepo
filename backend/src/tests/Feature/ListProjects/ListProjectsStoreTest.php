@@ -46,12 +46,9 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-<<<<<<< feature/217-validate-owner-role-from-imput
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
-=======
             'programming_role' => 'Backend Developer'
->>>>>>> develop
         ]);
 
         $response->assertJsonFragment([
@@ -123,12 +120,9 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-<<<<<<< feature/217-validate-owner-role-from-imput
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
-=======
             'programming_role' => 'Backend Developer'
->>>>>>> develop
         ]);
 
         $response->assertStatus(201);
@@ -171,12 +165,9 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-<<<<<<< feature/217-validate-owner-role-from-imput
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Backend Developer',
-=======
             'programming_role' => 'Backend Developer'
->>>>>>> develop
         ]);
 
         $response->assertStatus(201);
@@ -195,16 +186,12 @@ class ListProjectsStoreTest extends TestCase
         ]);
     }
 
-<<<<<<< feature/217-validate-owner-role-from-imput
     public function test_store_requires_programming_role(): void
-=======
     public function test_store_saves_programming_role_from_request(): void 
->>>>>>> develop
     {
         Sanctum::actingAs($this->userOne);
 
         $response = $this->postJson('/api/codeconnect/', [
-<<<<<<< feature/217-validate-owner-role-from-imput
             'title' => 'Proyecto Sin Rol',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
@@ -213,7 +200,6 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['programming_role']);
-=======
             'title' => 'Proyecto Frontend',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
@@ -350,6 +336,5 @@ class ListProjectsStoreTest extends TestCase
         ]);
 
         $response->assertStatus(422);
->>>>>>> develop
     }
 }
