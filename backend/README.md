@@ -98,3 +98,6 @@ Nacho Abollo (@ignatiusreillius)
 Victor Charneco
 Alex Beltran
 Vicenç Sirvent
+Inbisat Naveed 
+Hebe Stark
+Flavio De Souza

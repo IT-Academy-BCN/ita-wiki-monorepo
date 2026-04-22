@@ -7,9 +7,9 @@ import {
 const frontIconLabelMap = [
   { label: "React", iconName: "react_vector" },
   { label: "Angular", iconName: "angular_vector" },
-  { label: "Svelte", iconName: "js_vector" },
-  { label: "Typescript", iconName: "ts_vector" },
-  { label: "Javascript", iconName: "js_vector" },
+  { label: "Svelte", iconName: "svelte_vector" },
+  { label: "Vue", iconName: "vue_vector" },
+  { label: "JavaScript", iconName: "js_vector" },
 ];
 
 const backIconLabelMap = [

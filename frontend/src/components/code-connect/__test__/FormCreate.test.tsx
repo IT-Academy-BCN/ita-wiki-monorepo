@@ -94,11 +94,14 @@ describe("FormCreateCodeConnect", () => {
 
   describe("validateForm", () => {
     it("should show error when submitting empty form", async () => {
-      const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const submitButton = screen.getByRole("button", { name: /publicar/i });
-      await user.click(submitButton);
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
     });
 
     it("should pass validation with all required fields filled correctly", async () => {
@@ -247,6 +250,61 @@ describe("FormCreateCodeConnect", () => {
       await user.click(backLink);
 
       expect(mockNavigate).toHaveBeenCalledWith("/codeconnect");
+    });
+  });
+
+  describe("Tech selection", () => {
+    it("should show error when submitting without selecting any frontend technology", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
+      await user.click(nodeCheckbox);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona almenys una tecnologia frontend.",
+        );
+      });
+    });
+
+    it("should show error when submitting without selecting any backend technology", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
+      await user.click(reactCheckbox);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona almenys una tecnologia backend.",
+        );
+      });
+    });
+
+    it("should show placeholder '0' and empty value when number inputs are at default", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const timeInput = document.getElementById("time") as HTMLInputElement;
+      const devsFrontInput = document.getElementById(
+        "devs-front",
+      ) as HTMLInputElement;
+      const devsBackInput = document.getElementById(
+        "devs-back",
+      ) as HTMLInputElement;
+
+      expect(timeInput.value).toBe("");
+      expect(timeInput.placeholder).toBe("0");
+      expect(devsFrontInput.value).toBe("");
+      expect(devsFrontInput.placeholder).toBe("0");
+      expect(devsBackInput.value).toBe("");
+      expect(devsBackInput.placeholder).toBe("0");
     });
   });
 });
