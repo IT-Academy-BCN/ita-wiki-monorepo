@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 vi.unmock("./endPointTechnicalTests");
-import { fetchTechnicalTests, createTechnicalTest } from "../endPointTechnicalTests";
+import {
+  fetchTechnicalTests,
+  createTechnicalTest,
+} from "../endPointTechnicalTests";
 
 const fetchMock = vi.fn();
 vi.stubGlobal("fetch", fetchMock);
@@ -160,7 +163,9 @@ describe("createTechnicalTest", () => {
 
     const formData = new FormData();
 
-    await expect(createTechnicalTest(formData)).rejects.toThrow("Network Error");
+    await expect(createTechnicalTest(formData)).rejects.toThrow(
+      "Network Error",
+    );
     expect(consoleSpy).toHaveBeenCalledWith(
       "Error al crear prueba técnica:",
       networkError,
