@@ -97,3 +97,6 @@ Marc Sanchez
 Nacho Abollo (@ignatiusreillius)
 Victor Charneco
 Alex Beltran
+Inbisat Naveed 
+Hebe Stark
+Flavio De Souza
