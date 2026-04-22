@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
-import { Project } from "../types/projectTypes";
-import ProjectCard from "../ProjectCard";
 import { MemoryRouter } from "react-router";
+import { describe, expect, it } from "vitest";
 import { UserProvider } from "../../../../context/UserContext";
+import { Project } from "../../../../types/codeConnectTypes";
+import ProjectCard from "../ProjectCard";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <UserProvider>
@@ -69,6 +69,21 @@ describe("ProjectCard", () => {
       const avatar = screen.getByAltText(p.name) as HTMLImageElement;
       expect(avatar).toBeInTheDocument();
     });
+  });
+
+  it("renders avatar placeholder when participant avatar is empty", () => {
+    const project = makeProject({
+      frontend: {
+        tech: "Angular",
+        logo: "../assets/technologies/angular-logo.svg",
+        positions: 3,
+        participants: [{ name: "Natasha", avatar: "" }],
+      },
+    });
+    render(<ProjectCard project={project} />, { wrapper });
+    const avatar = screen.getByAltText("Natasha") as HTMLImageElement;
+    expect(avatar).toBeInTheDocument();
+    expect(avatar.src).not.toBe("");
   });
 
   it('shows "+" buttons equal to available slots per role', () => {

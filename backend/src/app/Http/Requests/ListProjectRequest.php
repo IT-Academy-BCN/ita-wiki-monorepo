@@ -32,7 +32,11 @@ class ListProjectRequest extends FormRequest
             'time_duration' => 'required|string|max:255',
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
-            'programming_role' => 'nullable|string|in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
+            'programming_role' => [
+                $this->isMethod('post') ? 'required' : 'nullable',
+                'string',
+                'in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
+            ],
         ];
     }
 
@@ -51,6 +55,7 @@ class ListProjectRequest extends FormRequest
             'time_duration.string' => "The time duration must be a string.",
             'language_backend.required' => "The backend language field is required.",
             'language_frontend.required' => "The frontend language field is required.",
+            'programming_role.required' => 'The programming role field is required.',
             'programming_role.in' => 'The programming role must be one of: Frontend Developer, Backend Developer, Fullstack Developer, Other.',
         ];
     }

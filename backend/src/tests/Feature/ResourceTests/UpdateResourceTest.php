@@ -93,6 +93,22 @@ class UpdateResourceTest extends TestCase
 
     // ========== VALIDATION TESTS ==========
 
+    public function test_student_cannot_update_other_users_resource():void{
+        $resource = Resource::factory()->create(['github_id' => 222222]);
+        $this->authenticateSanctumUserWithGithubId(333333);
+        $response = $this->putJson(route('resources.update', $resource->id), $this->getUpdateData());
+        $response->assertStatus(403);
+    }
+
+    public function test_mentor_can_update_any_resource():void{
+        $resource = Resource::factory()->create(['github_id' => 444444]);
+        $mentor = $this->authenticateSanctumUserWithGithubId(555555);
+        $mentor->assignRole('mentor');
+        Sanctum::actingAs($mentor, ['*']);
+        $response = $this->putJson(route('resources.update', $resource->id), $this->getUpdateData());
+        $response->assertStatus(200);
+    }
+
     #[DataProvider('resourceUpdateValidationProvider')]
     public function test_update_resource_validation(array $invalidData, string $fieldName): void
     {
