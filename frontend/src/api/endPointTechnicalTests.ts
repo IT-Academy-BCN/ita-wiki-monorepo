@@ -9,7 +9,7 @@ export const createTechnicalTest = async (formData: FormData) => {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: formData,
     });

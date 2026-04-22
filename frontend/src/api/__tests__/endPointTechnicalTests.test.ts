@@ -87,8 +87,7 @@ describe("createTechnicalTest", () => {
   });
 
   it("should return data when API responds with ok: true", async () => {
-    // Simula uma resposta bem-sucedida do backend
-    const mockResponse = { id: 1, title: "Novo teste" };
+    const mockResponse = { id: 1, title: "New test" };
 
     fetchMock.mockResolvedValue({
       ok: true,
@@ -96,15 +95,27 @@ describe("createTechnicalTest", () => {
     });
 
     const formData = new FormData();
-    formData.append("title", "Novo teste");
+    formData.append("title", "New test");
 
     const result = await createTechnicalTest(formData);
 
     expect(result).toEqual(mockResponse);
   });
 
+  it("should not send Authorization header when no token in localStorage", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const formData = new FormData();
+    await createTechnicalTest(formData);
+
+    const calledWithOptions = fetchMock.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBeUndefined();
+  });
+
   it("should send Authorization header with token from localStorage", async () => {
-    // Guarda um token falso no localStorage (simula utilizador autenticado)
     localStorage.setItem("auth_token", "fake-token-123");
 
     fetchMock.mockResolvedValue({
@@ -115,7 +126,6 @@ describe("createTechnicalTest", () => {
     const formData = new FormData();
     await createTechnicalTest(formData);
 
-    // Verifica que o fetch foi chamado com o header correto
     const calledWithOptions = fetchMock.mock.calls[0][1];
     expect(calledWithOptions.headers.Authorization).toBe(
       "Bearer fake-token-123",
@@ -123,25 +133,22 @@ describe("createTechnicalTest", () => {
   });
 
   it("should throw an error when API responds with ok: false", async () => {
-    // Simula resposta de erro do backend com mensagem
     fetchMock.mockResolvedValue({
       ok: false,
       status: 422,
       statusText: "Unprocessable Entity",
-      json: async () => ({ message: "O título é obrigatório" }),
+      json: async () => ({ message: "Title is required" }),
     });
 
     const formData = new FormData();
 
-    // Verifica que a função lança um erro com a mensagem do backend
     await expect(createTechnicalTest(formData)).rejects.toThrow(
-      "O título é obrigatório",
+      "Title is required",
     );
     expect(consoleSpy).toHaveBeenCalled();
   });
 
   it("should throw a generic error when API error has no message", async () => {
-    // Simula resposta de erro sem mensagem — usa o status como fallback
     fetchMock.mockResolvedValue({
       ok: false,
       status: 500,
@@ -157,7 +164,6 @@ describe("createTechnicalTest", () => {
   });
 
   it("should throw and log error on network failure", async () => {
-    // Simula falha de rede (fetch lança exceção)
     const networkError = new Error("Network Error");
     fetchMock.mockRejectedValue(networkError);
 
