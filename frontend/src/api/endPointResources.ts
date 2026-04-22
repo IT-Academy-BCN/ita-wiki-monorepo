@@ -41,11 +41,14 @@ const getResources = async (timeoutMs = 0): Promise<IntResource[]> => {
 };
 
 const createResource = async (resource: Partial<IntResource>) => {
+  const token = localStorage.getItem("auth_token");
   try {
     const response = await fetch(`${API_URL}${END_POINTS.resources.post}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(resource),
     });
@@ -64,4 +67,4 @@ const createResource = async (resource: Partial<IntResource>) => {
   }
 };
 
-export { getResources, createResource };
+export { createResource, getResources };

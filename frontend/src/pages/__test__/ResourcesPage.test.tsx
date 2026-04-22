@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import * as ReactRouter from "react-router";
 import { MemoryRouter, Route, Routes } from "react-router";
-import { describe, it, vi, beforeEach, expect } from "vitest";
-import ResourcesPage from "../ResourcesPage";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useResources } from "../../context/ResourcesContext";
+import ResourcesPage from "../ResourcesPage";
 
 vi.mock("../../context/ResourcesContext", () => ({
   useResources: vi.fn(),
@@ -43,5 +44,35 @@ describe("ResourcesPage", () => {
 
     expect(scrollContainer.className).toContain("overflow-y-auto");
     expect(scrollContainer.className).toContain("flex-1");
+  });
+
+  it("shows the create resource button", () => {
+    render(
+      <MemoryRouter initialEntries={["/resources"]}>
+        <Routes>
+          <Route path="/resources" element={<ResourcesPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("button", { name: /Crear recurs/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("resource button should redirect the user to the create resource page", async () => {
+    const mockNavigate = vi.fn();
+    vi.spyOn(ReactRouter, "useNavigate").mockReturnValue(mockNavigate);
+
+    render(
+      <MemoryRouter initialEntries={["/resources"]}>
+        <Routes>
+          <Route path="/resources" element={<ResourcesPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Crear recurs/i }));
+    expect(mockNavigate).toHaveBeenCalledWith("/resources/add");
   });
 });
