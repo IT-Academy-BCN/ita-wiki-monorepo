@@ -102,7 +102,7 @@ class ResourceController extends Controller
         // $user = auth('api')->user();
 
         $resource = Resource::create([
-            'github_id' => $request->github_id,  
+            'github_id' => $request->user()->github_id,  
             'title' => $request->title,
             'description' => $request->description,
             'url' => $request->url,

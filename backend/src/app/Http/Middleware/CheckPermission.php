@@ -31,11 +31,14 @@ class CheckPermission
 
         
         if ($ownershipField && str_contains($permission, 'own')) {
-            $resourceId = $request->route($ownershipField);
-            $model = $this->getModelFromRoute($request);
+            $allPermission = str_replace('own', 'all', $permission);
+
+            if (!$user->can($allPermission)) {
+                $model = $this->getModelFromRoute($request);
             
-            if ($model && $model->github_id !== $user->github_id) {
-                return response()->json(['error' => 'Forbidden - Not your resource'], 403);
+                if ($model && $model->github_id !== $user->github_id) {
+                    return response()->json(['error' => 'Forbidden - Not your resource'], 403);
+                }
             }
         }
 
