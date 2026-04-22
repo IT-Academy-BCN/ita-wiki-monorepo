@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import ProjectListUI from "../ProjectListUI";
+import { describe, expect, it } from "vitest";
 import { UserProvider } from "../../../../context/UserContext";
+import ProjectListUI from "../ProjectListUI";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <UserProvider>
@@ -13,13 +13,18 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 const mockProject = {
   id: 1,
   title: "Test Project",
+  duration: "1 mes",
+  startDate: new Date().toISOString(),
+  endDate: new Date().toISOString(),
   frontend: {
     tech: "React",
+    logo: "../assets/technologies/react-logo.svg",
     positions: 2,
     participants: [],
   },
   backend: {
     tech: "Node",
+    logo: "../assets/technologies/node-logo.svg",
     positions: 2,
     participants: [],
   },

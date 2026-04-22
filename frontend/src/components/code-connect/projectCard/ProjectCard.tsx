@@ -1,18 +1,23 @@
-import ProjectButton from "./ProjectButton";
-import ProgressBar from "./ProgressBar";
+import { Link } from "react-router";
+import avatarPlaceholder from "../../../assets/project-avatar3.jpg";
+import { useUserContext } from "../../../context/UserContext";
+import type { ProjectCardProps } from "../../../types/codeConnectTypes";
 import { resolveAsset } from "../../../utils/resolveAsset";
 import GenericModal from "../../ui/Modal/GenericModal";
-import avatarPlaceholder from "../../../assets/project-avatar3.jpg";
-import type { ProjectCardProps } from "../../../types/codeConnectTypes";
-export type { ProjectParticipant } from "../../../types/codeConnectTypes";
-import { Link } from "react-router";
 import { useProjectJoin } from "./hooks/useProjectJoin";
-import { useUserContext } from "../../../context/UserContext";
+import ProgressBar from "./ProgressBar";
+import ProjectButton from "./ProjectButton";
+export type { ProjectParticipant } from "../../../types/codeConnectTypes";
 
 function ProjectCard({ project }: ProjectCardProps) {
   const { slots, joinModal, decisionModal } = useProjectJoin(project.id);
   const { user } = useUserContext();
   const userAvatar = user?.photoURL ?? avatarPlaceholder;
+
+  const resolveAvatar = (avatar: string) => {
+    if (!avatar) return avatarPlaceholder;
+    return resolveAsset(avatar);
+  };
 
   const availableFrontend =
     project.frontend.positions - project.frontend.participants.length;
@@ -54,7 +59,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <figure className="flex flex-col items-center" key={i}>
               <img
                 className="w-12 h-12"
-                src={resolveAsset(p.avatar)}
+                src={resolveAvatar(p.avatar)}
                 alt={p.name}
               />
               <figcaption className="text-xs mt-1 font-bold text-gray-500">
@@ -111,7 +116,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <figure className="flex flex-col items-center" key={i}>
               <img
                 className="w-12 h-12"
-                src={resolveAsset(p.avatar)}
+                src={resolveAvatar(p.avatar)}
                 alt={p.name}
               />
               <figcaption className="text-xs mt-1 font-bold text-gray-500">
