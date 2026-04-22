@@ -64,13 +64,13 @@ describe("useProjects", () => {
         endDate: expect.any(String),
         frontend: {
           tech: "react",
-          logo: "../assets/technologies/react-logo.svg",
+          logo: expect.any(String),
           positions: 2,
           participants: [],
         },
         backend: {
           tech: "java",
-          logo: "../assets/technologies/java-logo.svg",
+          logo: expect.any(String),
           positions: 2,
           participants: [],
         },
@@ -83,13 +83,13 @@ describe("useProjects", () => {
         endDate: expect.any(String),
         frontend: {
           tech: "react",
-          logo: "../assets/technologies/react-logo.svg",
+          logo: expect.any(String),
           positions: 2,
           participants: [],
         },
         backend: {
           tech: "java",
-          logo: "../assets/technologies/java-logo.svg",
+          logo: expect.any(String),
           positions: 2,
           participants: [],
         },

@@ -144,6 +144,16 @@ describe("fetchCodeConnectAllProjects", () => {
     expect(result).toEqual(mockData);
   });
 
+  it("should throw an error with ABORTED code when the request is aborted", async () => {
+    const abortError = new DOMException("Aborted", "AbortError");
+    mockFetch.mockRejectedValueOnce(abortError);
+
+    await expect(fetchCodeConnectAllProjects()).rejects.toMatchObject({
+      message: "Petició cancel·lada",
+      code: "ABORTED",
+    } as CodeConnectError);
+  });
+
   it("should throw an error on network failure", async () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
 

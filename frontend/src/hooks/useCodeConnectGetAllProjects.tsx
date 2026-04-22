@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { fetchCodeConnectAllProjects } from "../api/endPointCodeConnect";
 import { Project } from "../types/codeConnectTypes";
 
+const techLogos: Record<string, string> = import.meta.glob(
+  "../assets/technologies/*-logo.svg",
+  { eager: true, import: "default" },
+);
+
+const getLogo = (tech: string) =>
+  techLogos[`../assets/technologies/${tech.toLowerCase()}-logo.svg`];
+
 const isAbortLikeError = (value: unknown): boolean => {
   if (!value || typeof value !== "object") return false;
-
   const record = value as Record<string, unknown>;
-
-  // nou flux: el vostre endpoint converteix AbortError a CodeConnectError { code: "ABORTED" }
   if (record.code === "ABORTED") return true;
-
-  // fallback per si algun dia arriba el DOMException directament
   return record.name === "AbortError";
 };
 
@@ -44,7 +47,7 @@ export const useProjects = () => {
             endDate: new Date().toISOString(),
             frontend: {
               tech: p.language_frontend,
-              logo: `../assets/technologies/${p.language_frontend}-logo.svg`,
+              logo: getLogo(p.language_frontend),
               positions: 2,
               participants:
                 p.contributors
@@ -56,7 +59,7 @@ export const useProjects = () => {
             },
             backend: {
               tech: p.language_backend,
-              logo: `../assets/technologies/${p.language_backend}-logo.svg`,
+              logo: getLogo(p.language_backend),
               positions: 2,
               participants:
                 p.contributors
@@ -67,7 +70,6 @@ export const useProjects = () => {
                   })) ?? [],
             },
           }));
-
           setProjects(newProjects);
         }
       } catch (error: unknown) {
