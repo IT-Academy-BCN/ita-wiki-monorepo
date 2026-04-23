@@ -169,7 +169,7 @@ function ProjectCard({ project }: ProjectCardProps) {
           })}
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full mt-auto">
         <h2 className="text-sm mt-10 font-bold text-start mb-2">Inscripció</h2>
         <ProgressBar
           title="Progrés del projecte"
