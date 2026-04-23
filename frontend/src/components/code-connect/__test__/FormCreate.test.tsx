@@ -44,11 +44,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   }) as HTMLInputElement;
   await user.type(descriptionTextarea, "Test description");
 
-  const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
-  await user.click(reactCheckbox);
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
 
-  const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
-  await user.click(nodeCheckbox);
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
 
   const deadlineInput = screen.getByLabelText(
     /data límit d'inscripció/i,
@@ -108,6 +108,64 @@ describe("FormCreateCodeConnect", () => {
       });
     });
 
+    it("should show error if the time duration exceeds 6 months", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.tripleClick(timeInput);
+      await user.keyboard("7");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "month");
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
+    it("should show error if the time duration exceeds 26 weeks", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.tripleClick(timeInput);
+      await user.keyboard("27");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "week");
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
     it("should pass validation with all required fields filled correctly", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
@@ -130,19 +188,18 @@ describe("FormCreateCodeConnect", () => {
       mockCreateCodeConnect.mockResolvedValueOnce({
         id: "123",
         title: "Test Project",
-        techsFront: ["React"],
-        techsBack: ["Node"],
+        language_frontend: "React",
+        language_backend: "Node",
         description: "Test description",
         numberDevsFront: 2,
         numberDevsBack: 2,
         time: 2,
-        unitTime: "month",
+        unitTime: "week",
+        limit_date_inscription: "20/05/2026"
       });
 
       renderWithRouter(<FormCreateCodeConnect />);
-
       await fillCompleteForm(user);
-
       expect(toast.error).not.toHaveBeenCalled();
 
       const form = screen
@@ -154,6 +211,9 @@ describe("FormCreateCodeConnect", () => {
       await waitFor(
         () => {
           expect(mockCreateCodeConnect).toHaveBeenCalled();
+          expect(mockCreateCodeConnect).toHaveBeenCalledWith(expect.objectContaining({
+            time_duration: "2 mesos",
+          }))
         },
         { timeout: 3000 },
       );
@@ -262,8 +322,8 @@ describe("FormCreateCodeConnect", () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
-      await user.click(nodeCheckbox);
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
 
       const form = document.querySelector("form")!;
       fireEvent.submit(form);
@@ -279,8 +339,8 @@ describe("FormCreateCodeConnect", () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
-      await user.click(reactCheckbox);
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
 
       const form = document.querySelector("form")!;
       fireEvent.submit(form);

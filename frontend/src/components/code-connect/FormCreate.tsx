@@ -11,47 +11,23 @@ import {
 } from "./techsLabelsContent";
 
 const FormCreate = () => {
-  const [formData, setFormData] = useState<IntCodeConnect>({
+  const [formData, setFormData] = useState<Omit<IntCodeConnect, "time_duration">>({
     title: "",
-    techsFront: [],
-    techsBack: [],
+    language_frontend: "",
+    language_backend: "",
     description: "",
-    ownerRole: "",
+    programming_role: "",
     numberDevsFront: 0,
     numberDevsBack: 0,
     time: 0,
     unitTime: "",
-    deadline: "",
+    limit_date_inscription: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleTechsFrontToggle = (tech: string) => {
-    setFormData((prev) => {
-      const isSelected = prev.techsFront.includes(tech);
-      return {
-        ...prev,
-        techsFront: isSelected
-          ? prev.techsFront.filter((item) => item !== tech)
-          : [...prev.techsFront, tech],
-      };
-    });
-  };
-
-  const handleTechsBackToggle = (tech: string) => {
-    setFormData((prev) => {
-      const isSelected = prev.techsBack.includes(tech);
-      return {
-        ...prev,
-        techsBack: isSelected
-          ? prev.techsBack.filter((item) => item !== tech)
-          : [...prev.techsBack, tech],
-      };
-    });
-  };
-
   const handleInputText = (
-    field: keyof Pick<IntCodeConnect, "title" | "description" | "unitTime" | "ownerRole">,
+    field: keyof IntCodeConnect,
     value: string,
   ) => {
     setFormData((prev) => ({
@@ -78,7 +54,7 @@ const FormCreate = () => {
   };
 
   const handleDeadLine = (
-    field: keyof Pick<IntCodeConnect, "deadline">,
+    field: keyof Pick<IntCodeConnect, "limit_date_inscription">,
     value: string,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -87,40 +63,58 @@ const FormCreate = () => {
   const validateForm = (): boolean => {
     const {
       title,
-      techsFront,
-      techsBack,
+      language_frontend,
+      language_backend,
       description,
+      programming_role,
       numberDevsFront,
       numberDevsBack,
       time,
       unitTime,
-      deadline,
+      limit_date_inscription,
     } = formData;
 
-    if (techsFront.length === 0) {
+    console.log(formData)
+    if (!language_frontend) {
       toast.error("Selecciona almenys una tecnologia frontend.");
       return false;
     }
 
-    if (techsBack.length === 0) {
+    if (!language_backend) {
       toast.error("Selecciona almenys una tecnologia backend.");
       return false;
     }
 
+    if ((unitTime === "week" && time > 26) || (unitTime === "month" && time > 6)) {
+      toast.error("El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).");
+      return false;
+    }
     if (
       !title.trim() ||
       !description.trim() ||
+      !programming_role.trim() ||
       numberDevsFront <= 0 ||
       numberDevsBack <= 0 ||
-      time <= 0 ||
-      !unitTime.trim() ||
-      !deadline
+      !time ||
+      !unitTime ||
+      !limit_date_inscription
     ) {
       toast.error("Completa tots els camps obligatoris.");
       return false;
     }
 
     return true;
+  };
+
+  const getTimeDuration = (time: number, timeUnit: string): string => {
+    switch (timeUnit) {
+      case "week":
+        return time > 1 ? `${time} setmanes` : `${time} setmana`;
+      case "month":
+        return time > 1 ? `${time} mesos` : `${time} mes`;
+      default:
+        return "";
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -132,15 +126,14 @@ const FormCreate = () => {
 
     const formPayload = {
       title: formData.title,
-      techsFront: formData.techsFront,
-      techsBack: formData.techsBack,
+      language_frontend: formData.language_frontend,
+      language_backend: formData.language_backend,
       description: formData.description,
-      ownerRole: formData.ownerRole,
+      programming_role: formData.programming_role,
       numberDevsFront: formData.numberDevsFront,
       numberDevsBack: formData.numberDevsBack,
-      time: formData.time,
-      unitTime: formData.unitTime,
-      deadline: formData.deadline,
+      time_duration: getTimeDuration(formData.time, formData.unitTime),
+      limit_date_inscription: formData.limit_date_inscription,
     };
 
     try {
@@ -217,7 +210,7 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsFrontCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsFront.includes(item.label);
+            const isSelected = formData.language_frontend.includes(item.label);
 
             return (
               <label
@@ -228,11 +221,11 @@ const FormCreate = () => {
                   }`}
               >
                 <input
-                  type="checkbox"
-                  name="techsFront[]"
+                  type="radio"
+                  name="language_frontend[]"
                   value={item.label}
                   checked={isSelected}
-                  onChange={() => handleTechsFrontToggle(item.label)}
+                  onChange={() => handleInputText("language_frontend", item.label)}
                   className="sr-only"
                 />
                 <IconComponent className="w-5 h-5" />
@@ -248,7 +241,7 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsBackCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsBack.includes(item.label);
+            const isSelected = formData.language_backend.includes(item.label);
 
             return (
               <label
@@ -259,11 +252,11 @@ const FormCreate = () => {
                   }`}
               >
                 <input
-                  type="checkbox"
-                  name="techsBack[]"
+                  type="radio"
+                  name="language_backend[]"
                   value={item.label}
                   checked={isSelected}
-                  onChange={() => handleTechsBackToggle(item.label)}
+                  onChange={() => handleInputText("language_backend", item.label)}
                   className="sr-only"
                 />
                 <IconComponent className="w-5 h-5" />
@@ -305,17 +298,17 @@ const FormCreate = () => {
 
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
-          <label htmlFor="deadline" className="block font-medium">
+          <label htmlFor="limit_date_inscription" className="block font-medium">
             Data límit d'inscripció *
           </label>
           <input
-            id="deadline"
+            id="limit_date_inscription"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
-            value={formData.deadline || ""}
+            value={formData.limit_date_inscription || ""}
             required
             disabled={isSubmitting}
-            onChange={(e) => handleDeadLine("deadline", e.target.value)}
+            onChange={(e) => handleDeadLine("limit_date_inscription", e.target.value)}
             min="2023-01-01"
           />
         </div>
@@ -363,18 +356,18 @@ const FormCreate = () => {
       <div className="lg:w-2/3 my-8">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label
-            htmlFor="ownerRole"
+            htmlFor="programming_role"
             className="font-medium"
           >
             Selecciona el teu rol tècnic *
           </label>
           <select
-            id="ownerRole"
+            id="programming_role"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg h-10.5 px-4"
-            value={formData.ownerRole}
+            value={formData.programming_role}
             required
             disabled={isSubmitting}
-            onChange={(e) => handleInputText("ownerRole", e.target.value)}>
+            onChange={(e) => handleInputText("programming_role", e.target.value)}>
             <option value="" disabled>Selecciona</option>
             <option value="backend">Backend</option>
             <option value="frontend">Frontend</option>

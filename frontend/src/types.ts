@@ -42,18 +42,18 @@ export interface IntResource {
   comment_count?: number;
   tags?: string[] | Tag[];
 }
-
 export interface IntCodeConnect {
   title: string;
   description: string;
-  techsFront: string[];
-  techsBack: string[];
-  ownerRole: string;
+  language_frontend: string,
+  language_backend: string,
+  programming_role: string
   numberDevsFront: number;
   numberDevsBack: number;
   time: number;
   unitTime: string;
-  deadline: "" | string;
+  time_duration: string;
+  limit_date_inscription: string;
 }
 
 export type TypTechnologyResource =
