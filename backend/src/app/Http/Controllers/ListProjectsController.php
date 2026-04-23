@@ -55,12 +55,16 @@ class ListProjectsController extends Controller
         $projects = ListProjects::with('contributorListProject.user')->get()->map(function ($project) {
             return [
                 'id' => $project->id,
+                'user_id' => $project->user_id,
                 'title' => $project->title,
                 'time_duration' => $project->time_duration,
                 'language_backend' => $project->language_backend,
                 'language_frontend' => $project->language_frontend,
                 'description' => $project->description,
                 'roadmap' => $project->roadmap,
+                'limit_date_inscription' => $project->limit_date_inscription,
+                'dev_front_number' => $project->dev_front_number,
+                'dev_back_number' => $project->dev_back_number,
 
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
@@ -130,6 +134,8 @@ class ListProjectsController extends Controller
         }
 
         $project = [
+            'id' => $project->id,
+            'user_id' => $project->user_id,
 
             'title' => $project->title,
             'time_duration' => $project->time_duration,
@@ -137,6 +143,9 @@ class ListProjectsController extends Controller
             'language_frontend' => $project->language_frontend,
             'description' => $project->description,
             'roadmap' => $project->roadmap,
+            'limit_date_inscription' => $project->limit_date_inscription,
+            'dev_front_number' => $project->dev_front_number,
+            'dev_back_number' => $project->dev_back_number,
 
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
