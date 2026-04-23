@@ -1,14 +1,14 @@
-import { useState, FormEvent } from "react";
-import {
-  contentTechsFrontCodeConnect,
-  contentTechsBackCodeConnect,
-} from "./techsLabelsContent";
-import { IntCodeConnect } from "../../types";
-import { createCodeConnect } from "../../api/endPointCodeConnect";
-import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { ArrowLeftIcon } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { createCodeConnect } from "../../api/endPointCodeConnect";
+import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
+import { IntCodeConnect } from "../../types";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+} from "./techsLabelsContent";
 
 const FormCreate = () => {
   const [formData, setFormData] = useState<IntCodeConnect>({
@@ -16,6 +16,7 @@ const FormCreate = () => {
     techsFront: [],
     techsBack: [],
     description: "",
+    ownerRole: "",
     numberDevsFront: 0,
     numberDevsBack: 0,
     time: 0,
@@ -50,7 +51,7 @@ const FormCreate = () => {
   };
 
   const handleInputText = (
-    field: keyof Pick<IntCodeConnect, "title" | "description" | "unitTime">,
+    field: keyof Pick<IntCodeConnect, "title" | "description" | "unitTime" | "ownerRole">,
     value: string,
   ) => {
     setFormData((prev) => ({
@@ -134,6 +135,7 @@ const FormCreate = () => {
       techsFront: formData.techsFront,
       techsBack: formData.techsBack,
       description: formData.description,
+      ownerRole: formData.ownerRole,
       numberDevsFront: formData.numberDevsFront,
       numberDevsBack: formData.numberDevsBack,
       time: formData.time,
@@ -220,11 +222,10 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isSelected
-                    ? "border-3 border-[#B91879] bg-white text-black"
-                    : "border-gray-300 bg-white text-black"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
+                  ? "border-3 border-[#B91879] bg-white text-black"
+                  : "border-gray-300 bg-white text-black"
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -252,11 +253,10 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isSelected
-                    ? "border-3 border-[#B91879] bg-white text-black"
-                    : "border-gray-300 bg-white text-black"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
+                  ? "border-3 border-[#B91879] bg-white text-black"
+                  : "border-gray-300 bg-white text-black"
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -357,6 +357,29 @@ const FormCreate = () => {
               <option value="week">Setmana</option>
             </select>
           </div>
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-8">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label
+            htmlFor="ownerRole"
+            className="font-medium"
+          >
+            Selecciona el teu rol tècnic *
+          </label>
+          <select
+            id="ownerRole"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg h-10.5 px-4"
+            value={formData.ownerRole}
+            required
+            disabled={isSubmitting}
+            onChange={(e) => handleInputText("ownerRole", e.target.value)}>
+            <option value="" disabled>Selecciona</option>
+            <option value="backend">Backend</option>
+            <option value="frontend">Frontend</option>
+            <option value="fullstack">Full stack</option>
+          </select>
         </div>
       </div>
 

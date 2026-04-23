@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import FormCreateCodeConnect from "../FormCreate";
 import { toast } from "sonner";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import FormCreateCodeConnect from "../FormCreate";
 
 vi.mock("sonner", () => ({
   toast: {
@@ -64,6 +64,9 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
 
+  const ownerRoleSelect = screen.getByLabelText(/selecciona el teu rol tècnic/i);
+  await user.selectOptions(ownerRoleSelect, "Frontend");
+
   const devsFrontInput = screen.getByLabelText(
     /nombre de programadors frontend/i,
   ) as HTMLInputElement;
@@ -79,6 +82,7 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
+    expect((ownerRoleSelect as HTMLSelectElement).value).toBe("frontend");
     expect(devsFrontInput.value).toBe("2");
     expect(devsBackInput.value).toBe("2");
     expect(timeInput.value).toBe("2");

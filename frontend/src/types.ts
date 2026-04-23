@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
+import { FC, ReactNode, SVGProps } from "react";
 import { categories } from "./data/categories";
 import { resourceTypes } from "./data/resourceTypes";
-import { FC, SVGProps } from "react";
 
 export type Category = (typeof categories)[number];
 export type ResourceType = (typeof resourceTypes)[number];
@@ -49,6 +48,7 @@ export interface IntCodeConnect {
   description: string;
   techsFront: string[];
   techsBack: string[];
+  ownerRole: string;
   numberDevsFront: number;
   numberDevsBack: number;
   time: number;
