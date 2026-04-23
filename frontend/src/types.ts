@@ -45,9 +45,9 @@ export interface IntResource {
 export interface IntCodeConnect {
   title: string;
   description: string;
-  language_frontend: string,
-  language_backend: string,
-  programming_role: string
+  language_frontend: string;
+  language_backend: string;
+  programming_role: string;
   numberDevsFront: number;
   numberDevsBack: number;
   time: number;

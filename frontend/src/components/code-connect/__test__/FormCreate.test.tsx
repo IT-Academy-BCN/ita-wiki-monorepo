@@ -64,7 +64,9 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
 
-  const ownerRoleSelect = screen.getByLabelText(/selecciona el teu rol tècnic/i);
+  const ownerRoleSelect = screen.getByLabelText(
+    /selecciona el teu rol tècnic/i,
+  );
   await user.selectOptions(ownerRoleSelect, "Frontend");
 
   const devsFrontInput = screen.getByLabelText(
@@ -195,7 +197,7 @@ describe("FormCreateCodeConnect", () => {
         numberDevsBack: 2,
         time: 2,
         unitTime: "week",
-        limit_date_inscription: "20/05/2026"
+        limit_date_inscription: "20/05/2026",
       });
 
       renderWithRouter(<FormCreateCodeConnect />);
@@ -211,9 +213,11 @@ describe("FormCreateCodeConnect", () => {
       await waitFor(
         () => {
           expect(mockCreateCodeConnect).toHaveBeenCalled();
-          expect(mockCreateCodeConnect).toHaveBeenCalledWith(expect.objectContaining({
-            time_duration: "2 mesos",
-          }))
+          expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+            expect.objectContaining({
+              time_duration: "2 mesos",
+            }),
+          );
         },
         { timeout: 3000 },
       );

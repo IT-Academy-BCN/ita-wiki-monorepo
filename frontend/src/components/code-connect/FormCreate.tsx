@@ -11,7 +11,9 @@ import {
 } from "./techsLabelsContent";
 
 const FormCreate = () => {
-  const [formData, setFormData] = useState<Omit<IntCodeConnect, "time_duration">>({
+  const [formData, setFormData] = useState<
+    Omit<IntCodeConnect, "time_duration">
+  >({
     title: "",
     language_frontend: "",
     language_backend: "",
@@ -26,10 +28,7 @@ const FormCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleInputText = (
-    field: keyof IntCodeConnect,
-    value: string,
-  ) => {
+  const handleInputText = (field: keyof IntCodeConnect, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -74,7 +73,7 @@ const FormCreate = () => {
       limit_date_inscription,
     } = formData;
 
-    console.log(formData)
+    console.log(formData);
     if (!language_frontend) {
       toast.error("Selecciona almenys una tecnologia frontend.");
       return false;
@@ -85,8 +84,13 @@ const FormCreate = () => {
       return false;
     }
 
-    if ((unitTime === "week" && time > 26) || (unitTime === "month" && time > 6)) {
-      toast.error("El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).");
+    if (
+      (unitTime === "week" && time > 26) ||
+      (unitTime === "month" && time > 6)
+    ) {
+      toast.error(
+        "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+      );
       return false;
     }
     if (
@@ -215,17 +219,20 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
-                  ? "border-3 border-[#B91879] bg-white text-black"
-                  : "border-gray-300 bg-white text-black"
-                  }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isSelected
+                    ? "border-3 border-[#B91879] bg-white text-black"
+                    : "border-gray-300 bg-white text-black"
+                }`}
               >
                 <input
                   type="radio"
                   name="language_frontend[]"
                   value={item.label}
                   checked={isSelected}
-                  onChange={() => handleInputText("language_frontend", item.label)}
+                  onChange={() =>
+                    handleInputText("language_frontend", item.label)
+                  }
                   className="sr-only"
                 />
                 <IconComponent className="w-5 h-5" />
@@ -246,17 +253,20 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
-                  ? "border-3 border-[#B91879] bg-white text-black"
-                  : "border-gray-300 bg-white text-black"
-                  }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isSelected
+                    ? "border-3 border-[#B91879] bg-white text-black"
+                    : "border-gray-300 bg-white text-black"
+                }`}
               >
                 <input
                   type="radio"
                   name="language_backend[]"
                   value={item.label}
                   checked={isSelected}
-                  onChange={() => handleInputText("language_backend", item.label)}
+                  onChange={() =>
+                    handleInputText("language_backend", item.label)
+                  }
                   className="sr-only"
                 />
                 <IconComponent className="w-5 h-5" />
@@ -308,7 +318,9 @@ const FormCreate = () => {
             value={formData.limit_date_inscription || ""}
             required
             disabled={isSubmitting}
-            onChange={(e) => handleDeadLine("limit_date_inscription", e.target.value)}
+            onChange={(e) =>
+              handleDeadLine("limit_date_inscription", e.target.value)
+            }
             min="2023-01-01"
           />
         </div>
@@ -355,10 +367,7 @@ const FormCreate = () => {
 
       <div className="lg:w-2/3 my-8">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
-          <label
-            htmlFor="programming_role"
-            className="font-medium"
-          >
+          <label htmlFor="programming_role" className="font-medium">
             Selecciona el teu rol tècnic *
           </label>
           <select
@@ -367,8 +376,13 @@ const FormCreate = () => {
             value={formData.programming_role}
             required
             disabled={isSubmitting}
-            onChange={(e) => handleInputText("programming_role", e.target.value)}>
-            <option value="" disabled>Selecciona</option>
+            onChange={(e) =>
+              handleInputText("programming_role", e.target.value)
+            }
+          >
+            <option value="" disabled>
+              Selecciona
+            </option>
             <option value="backend">Backend</option>
             <option value="frontend">Frontend</option>
             <option value="fullstack">Full stack</option>
