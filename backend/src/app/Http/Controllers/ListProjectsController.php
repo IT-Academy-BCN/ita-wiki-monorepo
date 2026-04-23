@@ -34,6 +34,12 @@ class ListProjectsController extends Controller
      *               @OA\Property(property="language_frontend", type="string", example="JavaScript"),
      *               @OA\Property(property="description", type="string", nullable=true, example="Project description"),
      *               @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *               @OA\Property(property="user_id", type="integer", example=1),
+     *               @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *               @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *               @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
+     * 
+     * 
      *               @OA\Property(
      *                   property="contributors",
      *                   type="array",
@@ -104,6 +110,10 @@ class ListProjectsController extends Controller
      *           @OA\Property(property="language_frontend", type="string", example="JavaScript"),
      *           @OA\Property(property="description", type="string", nullable=true, example="Project description"),
      *           @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *           @OA\Property(property="user_id", type="integer", example=1),
+     *           @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *           @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *           @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
 
      *           @OA\Property(
      *               property="contributors",
