@@ -383,9 +383,9 @@ const FormCreate = () => {
             <option value="" disabled>
               Selecciona
             </option>
-            <option value="backend">Backend</option>
-            <option value="frontend">Frontend</option>
-            <option value="fullstack">Full stack</option>
+            <option value="Backend Developer">Backend</option>
+            <option value="Frontend Developer">Frontend</option>
+            <option value="Fullstack Developer">Full stack</option>
           </select>
         </div>
       </div>
