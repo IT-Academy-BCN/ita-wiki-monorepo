@@ -2,11 +2,10 @@ import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import React from 'react';
-import LeaderCard from './LeaderCard';
-import type { Player } from '../../types/league';
+import LeaderCard, { type LeaderCardPlayer } from './LeaderCard';
 
-const mockPlayer: Player = {
-  position: 1,
+const mockPlayer: LeaderCardPlayer = {
+  user_id: 101,
   username: 'Developer_134',
   avatarUrl: 'https://example.com/avatar.jpg',
   title: 'Expert Hacker',
@@ -34,13 +33,13 @@ describe('LeaderCard', () => {
   });
 
   it('renders silver cup icon', () => {
-    render(<LeaderCard player={{ ...mockPlayer, position: 2 }} cupType="silver" />);
+    render(<LeaderCard player={mockPlayer} cupType="silver" />);
 
     expect(screen.getByLabelText('silver cup')).toBeInTheDocument();
   });
 
   it('renders bronze cup icon', () => {
-    render(<LeaderCard player={{ ...mockPlayer, position: 3 }} cupType="bronze" />);
+    render(<LeaderCard player={mockPlayer} cupType="bronze" />);
 
     expect(screen.getByLabelText('bronze cup')).toBeInTheDocument();
   });

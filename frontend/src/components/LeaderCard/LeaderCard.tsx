@@ -1,11 +1,19 @@
 import { FC, useState } from 'react';
 import clsx from 'clsx';
-import type { Player } from '../../types/league';
 
-type CupType = 'gold' | 'silver' | 'bronze';
+export type CupType = 'gold' | 'silver' | 'bronze';
+
+// Temporary type — will be updated once backend confirms JOIN with users table
+export type LeaderCardPlayer = {
+  user_id: number;
+  username: string;
+  avatarUrl: string;
+  title: string;
+  points: number;
+};
 
 interface LeaderCardProps {
-  player: Player;
+  player: LeaderCardPlayer;
   cupType: CupType;
 }
 
