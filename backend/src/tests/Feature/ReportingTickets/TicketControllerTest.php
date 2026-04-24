@@ -649,6 +649,42 @@ class TicketControllerTest extends TestCase{
         $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'in_progress']);
     }
 
+    /** @test */
+    public function creator_can_close_own_ticket_via_status_update(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+    /** @test */
+    public function creator_can_close_own_ticket_via_closing_comment(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment'            => 'Closing the ticket.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+
 }
 
 ?>
