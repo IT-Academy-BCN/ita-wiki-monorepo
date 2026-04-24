@@ -98,7 +98,7 @@ class TicketController extends Controller
 
         if ($status === 'closed'
             && !$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
+            && (int) $ticket->code_connect_id !== (int) $user->id
         ) {
             return response()->json([
                 'success' => false,
