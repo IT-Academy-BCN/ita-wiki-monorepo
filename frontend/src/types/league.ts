@@ -1,6 +1,6 @@
 export type LeagueLanguage = 'Java' | 'PHP' | 'Javascript' | 'Data';
 
-export type LigaType = 'general' | 'oro' | 'plata' | 'bronce';
+export type LigaType = 'general';
 
 export type LeagueView = 'weekly' | 'global';
 
