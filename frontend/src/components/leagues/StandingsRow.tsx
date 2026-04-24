@@ -12,7 +12,11 @@ const isHighlightedLow = (position: number, totalRows: number) => {
   return position > totalRows - 3;
 };
 
-export const StandingsRow = ({ standing, position, totalRows }: StandingsRowProps) => {
+export const StandingsRow = ({
+  standing,
+  position,
+  totalRows,
+}: StandingsRowProps) => {
   const highlightedTop = isHighlightedTop(position);
   const highlightedLow = isHighlightedLow(position, totalRows);
 
