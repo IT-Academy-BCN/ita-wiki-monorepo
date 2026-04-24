@@ -25,15 +25,13 @@ class ListProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'limit_date_inscription' => 'nullable|date|after_or_equal:today',
-            'dev_front_number' => 'nullable|integer|min:1',
-            'dev_back_number' => 'nullable|integer|min:1',
+            'dev_front_number' => 'required|integer|min:1',
+            'dev_back_number' => 'required|integer|min:1',
             'time_duration' => 'required|string|max:255',
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
-
-            'programming_role' => 'nullable|string|in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
             'roadmap' => 'nullable|string',
 
             'programming_role' => [
@@ -48,7 +46,7 @@ class ListProjectRequest extends FormRequest
     {
         return [
             'title.required' => "The title field is required.",
-            'description.string' => "The description must be a string.",
+            'description.required' => "The description field is required.",
             'limit_date_inscription.date' => "The limit date of inscription must be a valid date.",
             'limit_date_inscription.after_or_equal' => "The limit date of inscription must be today or a future date.",
             'dev_front_number.integer' => "The number of frontend developers must be an integer",

@@ -43,10 +43,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Beta',
+            'description' => 'Descripció del projecte Beta',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer'
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertJsonFragment([
@@ -64,10 +67,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'project invalid',
+            'description' => 'project invalid',
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer'
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertJsonFragment([
@@ -115,10 +121,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Delta',
+            'description' => 'Descripció del projecte Delta',
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer'
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertStatus(201);
@@ -138,10 +147,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Zeta',
+            'description' => 'Descripció del projecte Zeta',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Fullstack Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertStatus(201);
@@ -158,10 +170,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Epsilon',
+            'description' => 'Descripció del projecte Epsilon',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer'
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertStatus(201);
@@ -219,10 +234,13 @@ class ListProjectsStoreTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'Proyecto Frontend',
+            'description' => 'Descripció del projecte Frontend',
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'programming_role' => 'Frontend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertStatus(201);
@@ -355,4 +373,56 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    public function test_description_is_required():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Project without description',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['description']);
+    }
+
+    public function test_dev_front_number_is_required():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Project without dev front',
+            'description' => 'Project description',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'dev_back_number' => 1,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['dev_front_number']);
+    }
+
+    public function test_dev_back_number_is_required():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', [
+            'title' => 'Project without dev back',
+            'description' => 'Project description',
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'dev_front_number' => 1,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['dev_back_number']);
+    }
+
 }
