@@ -13,7 +13,7 @@ const mockData: LigaResponse = [
   { id: 10, user_id: 110, points: 51, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
 ];
 
-// Mock version — replace with real API call when backend is ready
+
 export async function getLeagueRanking(): Promise<LigaResponse> {
   return Promise.resolve(mockData);
 }
