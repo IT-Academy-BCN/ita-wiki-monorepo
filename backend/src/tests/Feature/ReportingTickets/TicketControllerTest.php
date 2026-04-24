@@ -649,6 +649,26 @@ class TicketControllerTest extends TestCase{
         $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'in_progress']);
     }
 
+    /** @test */
+    public function assignee_can_see_assigned_ticket_in_index(): void
+    {
+        $assignee = $this->authenticateUserWithRole('mentor');
+        $creator  = User::factory()->create();
+
+        $assignedTicket = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => $assignee->id,
+        ]);
+
+        Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+
+        $ids = collect($response->json('data'))->pluck('id');
+        $this->assertContains($assignedTicket->id, $ids);
+    }
 }
 
 ?>
