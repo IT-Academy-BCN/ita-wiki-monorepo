@@ -1,31 +1,19 @@
-import type { LeagueResponse, LeagueView } from '../types/league';
+import type { LigaResponse } from '../types/league';
 
-const mockData: LeagueResponse = {
-  view: 'weekly',
-  week: '2026-W17',
-  leagues: [
-    {
-      id: 'general',
-      name: 'Liga General',
-      topPlayers: [
-        { position: 1, username: 'Developer_134', avatarUrl: '', title: 'Expert Hacker', points: 94 },
-        { position: 2, username: 'jstCoder',      avatarUrl: '', title: 'Expert Hacker', points: 93 },
-        { position: 3, username: 'Nagumi',         avatarUrl: '', title: 'Expert Hacker', points: 79 },
-      ],
-      standings: [
-        { position: 4,  username: 'Piluli', status: 'Skilled Developer', language: 'Java',       points: 75 },
-        { position: 5,  username: 'Koder',  status: 'Junior Coder',      language: 'PHP',        points: 73 },
-        { position: 6,  username: 'Paw3l',  status: 'Junior Coder',      language: 'Javascript', points: 75 },
-        { position: 7,  username: 'Vindra', status: 'Expert Hacker',     language: 'Data',       points: 64 },
-        { position: 8,  username: 'Koder',  status: 'Junior Coder',      language: 'PHP',        points: 60 },
-        { position: 9,  username: 'Paw3l',  status: 'Junior Coder',      language: 'Javascript', points: 52 },
-        { position: 10, username: 'Vindra', status: 'Expert Hacker',     language: 'Data',       points: 51 },
-      ],
-    },
-  ],
-};
+const mockData: LigaResponse = [
+  { id: 1, user_id: 101, points: 94, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 2, user_id: 102, points: 93, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 3, user_id: 103, points: 79, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 4, user_id: 104, points: 75, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 5, user_id: 105, points: 73, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 6, user_id: 106, points: 75, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 7, user_id: 107, points: 64, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 8, user_id: 108, points: 60, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 9, user_id: 109, points: 52, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+  { id: 10, user_id: 110, points: 51, created_at: '2026-04-24T00:00:00Z', updated_at: '2026-04-24T00:00:00Z' },
+];
 
-
-export async function getLeagueRanking(view: LeagueView = 'weekly'): Promise<LeagueResponse> {
-  return Promise.resolve({ ...mockData, view });
+// Mock version — replace with real API call when backend is ready
+export async function getLeagueRanking(): Promise<LigaResponse> {
+  return Promise.resolve(mockData);
 }

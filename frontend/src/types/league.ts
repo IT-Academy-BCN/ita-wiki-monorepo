@@ -1,34 +1,11 @@
-export type LeagueLanguage = 'Java' | 'PHP' | 'Javascript' | 'Data';
-
-export type LigaType = 'general' | 'oro' | 'plata' | 'bronce';
-
-export type LeagueView = 'weekly' | 'global';
-
-export type Player = {
-  position: number;
-  username: string;
-  avatarUrl: string;
-  title: string;
+// Matches the confirmed backend schema for this sprint
+// username, avatar_url, title etc. are pending JOIN with users table
+export type Liga = {
+  id: number;
+  user_id: number;
   points: number;
+  created_at: string;
+  updated_at: string;
 };
 
-export type Standing = {
-  position: number;
-  username: string;
-  status: string;
-  language: LeagueLanguage;
-  points: number;
-};
-
-export type League = {
-  id: LigaType;
-  name: string;
-  topPlayers: Player[];
-  standings: Standing[];
-};
-
-export type LeagueResponse = {
-  view: LeagueView;
-  week: string | null;
-  leagues: League[];
-};
+export type LigaResponse = Liga[];
