@@ -18,7 +18,10 @@ class TicketController extends Controller
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
         if (! auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
-            $query->where('code_connect_id', auth()->id());
+            $query->where(function ($q) {
+                $q->where('code_connect_id', auth()->id())
+                ->orWhere('assignee_id', auth()->id());
+            });
         }
 
         return response()->json([
