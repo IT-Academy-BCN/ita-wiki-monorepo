@@ -25,10 +25,10 @@ class ListProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => [$this->isMethod('post') ? 'required' : 'nullable', 'string'],
             'limit_date_inscription' => 'nullable|date|after_or_equal:today',
-            'dev_front_number' => 'required|integer|min:1',
-            'dev_back_number' => 'required|integer|min:1',
+            'dev_front_number' => [$this->isMethod('post') ? 'required' : 'nullable', 'integer', 'min:1'],
+            'dev_back_number' => [$this->isMethod('post') ? 'required' : 'nullable', 'integer', 'min:1'],
             'time_duration' => 'required|string|max:255',
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',

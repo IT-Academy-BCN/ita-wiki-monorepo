@@ -90,10 +90,13 @@ class ListProjectsUpdateTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'project invalid',
+            'description' => 'Invalid project',
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer'
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
         ]);
 
         $response->assertStatus(400);
