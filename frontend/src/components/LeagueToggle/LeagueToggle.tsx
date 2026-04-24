@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import clsx from 'clsx';
-import type { LeagueView } from '../../types/league';
+import { FC } from "react";
+import clsx from "clsx";
+
+export type LeagueView = "weekly" | "global";
 
 interface LeagueToggleProps {
   view: LeagueView;
@@ -8,8 +9,8 @@ interface LeagueToggleProps {
 }
 
 const options: { label: string; value: LeagueView }[] = [
-  { label: 'Liga semanal',    value: 'weekly' },
-  { label: 'Ranking general', value: 'global' },
+  { label: "Liga semanal", value: "weekly" },
+  { label: "Ranking general", value: "global" },
 ];
 
 const LeagueToggle: FC<LeagueToggleProps> = ({ view, onChange }) => {
@@ -24,10 +25,10 @@ const LeagueToggle: FC<LeagueToggleProps> = ({ view, onChange }) => {
             onClick={() => onChange(option.value)}
             aria-pressed={isActive}
             className={clsx(
-              'px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200',
+              "px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200",
               isActive
-                ? 'bg-[#B91879] text-white'
-                : 'border border-gray-300 text-gray-800 bg-white hover:bg-gray-100',
+                ? "bg-[#B91879] text-white"
+                : "border border-gray-300 text-gray-800 bg-white hover:bg-gray-100",
             )}
           >
             {option.label}
