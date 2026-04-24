@@ -84,7 +84,9 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
-    expect((ownerRoleSelect as HTMLSelectElement).value).toBe("frontend");
+    expect((ownerRoleSelect as HTMLSelectElement).value).toBe(
+      "Frontend Developer",
+    );
     expect(devsFrontInput.value).toBe("2");
     expect(devsBackInput.value).toBe("2");
     expect(timeInput.value).toBe("2");
