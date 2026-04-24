@@ -12,8 +12,13 @@ class LigaController extends Controller
     public function ranking()
     {
         return response()->json([
-            ['position' => 1, 'github_user_name' => 'stub_user', 'avatar' => null, 'points' => 99]
-
+            [
+            'id'=> 1,
+            'user_id'=> 1,
+            'points'=> 99,
+            'created_at' => null,
+            'updated_at' => null,
+            ]
         ]);
     }
 
