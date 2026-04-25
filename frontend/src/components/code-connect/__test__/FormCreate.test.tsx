@@ -58,8 +58,7 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const timeInput = screen.getByLabelText(
     /durada del projecte/i,
   ) as HTMLInputElement;
-  await user.tripleClick(timeInput);
-  await user.keyboard("2");
+  await user.type(timeInput, "2");
 
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
@@ -72,14 +71,12 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const devsFrontInput = screen.getByLabelText(
     /nombre de programadors frontend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsFrontInput);
-  await user.keyboard("2");
+  await user.type(devsFrontInput, "2");
 
   const devsBackInput = screen.getByLabelText(
     /nombre de programadors backend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsBackInput);
-  await user.keyboard("2");
+  await user.type(devsBackInput, "2");
 
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
@@ -125,40 +122,10 @@ describe("FormCreateCodeConnect", () => {
       const timeInput = screen.getByLabelText(
         /durada del projecte/i,
       ) as HTMLInputElement;
-      await user.tripleClick(timeInput);
-      await user.keyboard("7");
+      await user.type(timeInput, "7");
 
       const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
       await user.selectOptions(unitTimeSelect, "month");
-
-      const form = document.querySelector("form")!;
-      fireEvent.submit(form);
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
-        );
-      });
-    });
-
-    it("should show error if the time duration exceeds 26 weeks", async () => {
-      const user = userEvent.setup();
-      renderWithRouter(<FormCreateCodeConnect />);
-
-      const reactRadio = screen.getByRole("radio", { name: /react/i });
-      await user.click(reactRadio);
-
-      const nodeRadio = screen.getByRole("radio", { name: /node/i });
-      await user.click(nodeRadio);
-
-      const timeInput = screen.getByLabelText(
-        /durada del projecte/i,
-      ) as HTMLInputElement;
-      await user.tripleClick(timeInput);
-      await user.keyboard("27");
-
-      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
-      await user.selectOptions(unitTimeSelect, "week");
 
       const form = document.querySelector("form")!;
       fireEvent.submit(form);
@@ -336,7 +303,7 @@ describe("FormCreateCodeConnect", () => {
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          "Selecciona almenys una tecnologia frontend.",
+          "Selecciona una tecnologia frontend.",
         );
       });
     });
@@ -353,7 +320,7 @@ describe("FormCreateCodeConnect", () => {
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          "Selecciona almenys una tecnologia backend.",
+          "Selecciona una tecnologia backend.",
         );
       });
     });

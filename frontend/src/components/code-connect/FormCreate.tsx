@@ -75,12 +75,12 @@ const FormCreate = () => {
 
     console.log(formData);
     if (!language_frontend) {
-      toast.error("Selecciona almenys una tecnologia frontend.");
+      toast.error("Selecciona una tecnologia frontend.");
       return false;
     }
 
     if (!language_backend) {
-      toast.error("Selecciona almenys una tecnologia backend.");
+      toast.error("Selecciona una tecnologia backend.");
       return false;
     }
 
