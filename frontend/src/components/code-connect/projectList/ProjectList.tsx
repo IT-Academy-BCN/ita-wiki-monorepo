@@ -10,22 +10,19 @@ function ProjectList({
   filter,
 }: {
   onCardClick?: (id: number) => void;
-  filter?: string | null;
+  filter?: string[] | null;
 }) {
   const { projects, isLoading, errorMessage } = useProjects();
   const showLoader = useMinLoading(isLoading);
 
   const filteredProjects = useMemo(() => {
-    if (!filter) return projects;
-
-    const normalizedFilter = filter.toLowerCase();
-
-    return projects.filter((project) => {
-      return (
-        project.frontend.tech.toLowerCase() === normalizedFilter ||
-        project.backend.tech.toLowerCase() === normalizedFilter
-      );
-    });
+    if (!filter?.length) return projects;
+    const normalizedFilter = filter.map((tech) => tech.toLowerCase());
+    return projects.filter(
+      (project) =>
+        normalizedFilter.includes(project.frontend.tech.toLowerCase()) ||
+        normalizedFilter.includes(project.backend.tech.toLowerCase()),
+    );
   }, [projects, filter]);
 
   const hasError = Boolean(errorMessage);
