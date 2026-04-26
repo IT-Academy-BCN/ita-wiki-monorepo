@@ -1,4 +1,5 @@
 import { Standing } from "../../types/league";
+import { TOP_RANGE, DANGER_RANGE } from "../../config/rankingConfig";
 
 type StandingsRowProps = {
   standing: Standing;
@@ -6,35 +7,38 @@ type StandingsRowProps = {
   totalRows: number;
 };
 
-const isHighlightedTop = (position: number) => position <= 3;
-
-const isHighlightedLow = (position: number, totalRows: number) => {
-  return position > totalRows - 3;
-};
-
-export const StandingsRow = ({
-  standing,
-  position,
-  totalRows,
-}: StandingsRowProps) => {
-  const highlightedTop = isHighlightedTop(position);
-  const highlightedLow = isHighlightedLow(position, totalRows);
-
-  let rowClassName = "standings-row";
-
-  if (highlightedTop) {
-    rowClassName = "standings-row standings-row--top";
-  } else if (highlightedLow) {
-    rowClassName = "standings-row standings-row--danger";
-  }
+export const StandingsRow = ({ standing, position }: StandingsRowProps) => {
+  const rowClass = getRowClass(position);
 
   return (
-    <tr className={rowClassName}>
-      <td>{position}</td>
-      <td>{standing.username}</td>
-      <td>{standing.status}</td>
-      <td>{standing.language}</td>
-      <td>{standing.points}</td>
+    <tr className={rowClass}>
+      <td className="py-3 px-4 text-center text-[14px] text-black border-b border-[color:#e5e7eb]">
+        {position}
+      </td>
+
+      <td className="py-3 px-4 text-left text-[14px] text-black border-b border-[color:#e5e7eb]">
+        {standing.username}
+      </td>
+
+      <td className="py-3 px-4 text-center text-[14px] text-black border-b border-[color:#e5e7eb]">
+        {standing.language}
+      </td>
+
+      <td className="py-3 px-4 text-right text-[14px] font-semibold text-black border-b border-[color:#e5e7eb]">
+        {standing.points}
+      </td>
     </tr>
   );
 };
+
+function getRowClass(position: number) {
+  if (position >= TOP_RANGE.min && position <= TOP_RANGE.max) {
+    return "bg-[var(--highlight-top)]";
+  }
+
+  if (position >= DANGER_RANGE.min && position <= DANGER_RANGE.max) {
+    return "bg-[var(--highlight-danger)]";
+  }
+
+  return "bg-white";
+}
