@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 
 import TicketingPage from "../TicketingPage";
 
-describe("TiketingPage", () => {
+describe("TicketingPage", () => {
   test("renders without errors", () => {
     expect(() => {
       render(
