@@ -32,6 +32,9 @@ class ListProjectsIndexTest extends TestCase
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'description' => 'Project description text',
+            'roadmap' => 'Project roadmap text',
+
         ]);
 
         $this->projectTwo = ListProjects::factory()->create([
@@ -76,6 +79,9 @@ class ListProjectsIndexTest extends TestCase
             'time_duration' => $this->projectOne->time_duration,
             'language_backend' => $this->projectOne->language_backend,
             'language_frontend' => $this->projectOne->language_frontend,
+            'description' => $this->projectOne->description,
+            'roadmap' => $this->projectOne->roadmap,
+
             'contributors' => [
                 [
                     'name' => $this->contributorOne->user->name,
@@ -94,4 +100,15 @@ class ListProjectsIndexTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_index_returns_description_and_roadmap(): void
+    {
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'description' => $this->projectOne->description,
+            'roadmap' => $this->projectOne->roadmap,
+        ]);
+    }
+
 }

@@ -13,12 +13,14 @@ export const createCodeConnect = async (
   signal?: AbortSignal,
 ) => {
   const url = `${API_URL}${END_POINTS.codeconnect.post}`;
-
+  const token = localStorage.getItem("auth_token");
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(formData),
       signal,
@@ -37,7 +39,7 @@ export const createCodeConnect = async (
         errorMessage = errorData.message || errorMessage;
         errorCode = errorData.code;
       } catch {
-        // Ignorem errors de parseig i mantenim el missatge per defecte.
+        // Ignore the parsing error and use the default values that have already been set.
       }
 
       throw {
@@ -111,6 +113,60 @@ export const fetchCodeConnectProject = async (
     }
 
     console.error("Error en obtenir el detall de Code Connect:", error);
+    throw error;
+  }
+};
+
+export const fetchCodeConnectAllProjects = async (
+  signal?: AbortSignal,
+): Promise<ApiProjectResponse> => {
+  const url = `${API_URL}${END_POINTS.codeconnect.get}`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal,
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      let errorCode: string | undefined;
+
+      try {
+        const errorData = (await response.json()) as {
+          message?: string;
+          code?: string;
+        };
+
+        errorMessage = errorData.message || errorMessage;
+        errorCode = errorData.code;
+      } catch {
+        // ignore
+      }
+
+      throw {
+        message: errorMessage,
+        status: response.status,
+        code: errorCode,
+      } as CodeConnectError;
+    }
+
+    return (await response.json()) as ApiProjectResponse;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw {
+        message: "Petició cancel·lada",
+        code: "ABORTED",
+      } as CodeConnectError;
+    }
+
+    if (error instanceof TypeError) {
+      throw {
+        message: "Error de connexió. Verifica la teva connexió a internet.",
+        code: "NETWORK_ERROR",
+      } as CodeConnectError;
+    }
+
     throw error;
   }
 };

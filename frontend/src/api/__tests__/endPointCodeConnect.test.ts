@@ -1,7 +1,9 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { IntCodeConnect } from "../../types";
 import {
+  CodeConnectError,
   createCodeConnect,
-  type CodeConnectError,
+  fetchCodeConnectAllProjects,
   fetchCodeConnectProject,
 } from "../endPointCodeConnect";
 
@@ -15,10 +17,10 @@ vi.mock("../../config", () => ({
   },
 }));
 
-describe("createCodeConnect", () => {
-  let mockFetch: ReturnType<typeof vi.fn>;
+let mockFetch: ReturnType<typeof vi.fn>;
 
-  const mockNewCodeConnect = {
+describe("createCodeConnect", () => {
+  const mockNewCodeConnect: IntCodeConnect = {
     title: "Lorem ipsum",
     techsFront: ["React", "Angular"],
     techsBack: ["Spring", "Node", "Express"],
@@ -39,7 +41,7 @@ describe("createCodeConnect", () => {
     vi.clearAllMocks();
   });
 
-  test("should create and return on successful request", async () => {
+  it("should create and return on successful request", async () => {
     const mockResponseData = {
       id: "123",
       message: "Code connect created successfully",
@@ -59,16 +61,18 @@ describe("createCodeConnect", () => {
       "http://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Authorization: expect.stringContaining("Bearer "),
+        }),
         body: JSON.stringify(mockNewCodeConnect),
-        signal: undefined,
       }),
     );
 
     expect(result).toEqual(mockResponseData);
   });
 
-  test("should throw an error on failed request", async () => {
+  it("should throw an error on failed request", async () => {
     const mockErrorData = {
       message: "Invalid code format",
       code: "INVALID_FORMAT",
@@ -90,7 +94,17 @@ describe("createCodeConnect", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
-  test("should throw an error on network failure", async () => {
+  it("should throw an error on network failure", async () => {
+    const abortError = new DOMException("Aborted", "AbortError");
+    mockFetch.mockRejectedValueOnce(abortError);
+
+    await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
+      message: "Petició cancel·lada.",
+      code: "ABORTED",
+    } as CodeConnectError);
+  });
+
+  it("should throw an error on network failure", async () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
@@ -107,7 +121,7 @@ describe("fetchCodeConnectProject", () => {
     vi.restoreAllMocks();
   });
 
-  test("crida a l'endpoint correcte i retorna les dades", async () => {
+  it("calls the correct endpoint and returns the data", async () => {
     const mockData = {
       success: true,
       message: "Project retrieved successfully",
@@ -133,5 +147,46 @@ describe("fetchCodeConnectProject", () => {
     expect(global.fetch).toHaveBeenCalledWith(
       "http://localhost:8000/codeconnect/1",
     );
+  });
+});
+
+describe("fetchCodeConnectAllProjects", () => {
+  beforeEach(() => {
+    global.fetch = mockFetch;
+    mockFetch.mockClear();
+  });
+
+  it("should return all the projects from the backend", async () => {
+    const mockData = [
+      { id: 1, title: "Projecte Test" },
+      { id: 2, title: "Projecte Test 2" },
+    ];
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockData,
+    });
+
+    const result = await fetchCodeConnectAllProjects();
+    expect(result).toEqual(mockData);
+  });
+
+  it("should throw an error with ABORTED code when the request is aborted", async () => {
+    const abortError = new DOMException("Aborted", "AbortError");
+    mockFetch.mockRejectedValueOnce(abortError);
+
+    await expect(fetchCodeConnectAllProjects()).rejects.toMatchObject({
+      message: "Petició cancel·lada",
+      code: "ABORTED",
+    } as CodeConnectError);
+  });
+
+  it("should throw an error on network failure", async () => {
+    mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+
+    await expect(fetchCodeConnectAllProjects()).rejects.toMatchObject({
+      message: "Error de connexió. Verifica la teva connexió a internet.",
+      code: "NETWORK_ERROR",
+    } as CodeConnectError);
   });
 });

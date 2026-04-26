@@ -1,12 +1,12 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { describe, expect, test, vi, type Mock } from "vitest";
+import { describe, expect, it, vi, type Mock } from "vitest";
 import useCodeConnectDetails from "../useCodeConnectDetails";
 import { fetchCodeConnectProject } from "../../api/endPointCodeConnect";
 
 vi.mock("../../api/endPointCodeConnect");
 
 describe("useCodeConnectDetails Hook", () => {
-  test("retorna les dades del projecte i gestiona el loading", async () => {
+  it("returns project data and manages loading", async () => {
     const mockData = {
       success: true,
       message: "Project retrieved successfully",
@@ -35,7 +35,7 @@ describe("useCodeConnectDetails Hook", () => {
     expect(fetchCodeConnectProject).toHaveBeenCalledWith(1);
   });
 
-  test("retorna estat buit quan projectId és null", async () => {
+  it("return empty state when projectId is null", async () => {
     const { result } = renderHook(() => useCodeConnectDetails(null));
 
     await waitFor(() => {
@@ -47,7 +47,7 @@ describe("useCodeConnectDetails Hook", () => {
     expect(fetchCodeConnectProject).not.toHaveBeenCalled();
   });
 
-  test("retorna error quan projectId no és numèric", async () => {
+  it("returns error when projectId is not numeric", async () => {
     const { result } = renderHook(() => useCodeConnectDetails("abc"));
 
     await waitFor(() => {
@@ -59,7 +59,7 @@ describe("useCodeConnectDetails Hook", () => {
     expect(fetchCodeConnectProject).not.toHaveBeenCalled();
   });
 
-  test("retorna error quan falla el fetch", async () => {
+  it("return error when fetch fail", async () => {
     (fetchCodeConnectProject as Mock).mockRejectedValue(
       new Error("Error de connexió. Verifica la teva connexió a internet."),
     );
