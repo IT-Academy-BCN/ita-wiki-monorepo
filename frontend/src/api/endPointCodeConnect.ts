@@ -1,6 +1,9 @@
 import { API_URL, END_POINTS } from "../config";
 import type { IntCodeConnect } from "../types";
-import type { ApiProjectResponse } from "../types/codeConnectTypes";
+import type {
+  ApiProjectResponse,
+  ApiProjectsResponse,
+} from "../types/codeConnectTypes";
 
 export type CodeConnectError = {
   message: string;
@@ -119,7 +122,7 @@ export const fetchCodeConnectProject = async (
 
 export const fetchCodeConnectAllProjects = async (
   signal?: AbortSignal,
-): Promise<ApiProjectResponse> => {
+): Promise<ApiProjectsResponse> => {
   const url = `${API_URL}${END_POINTS.codeconnect.get}`;
   try {
     const response = await fetch(url, {
@@ -151,7 +154,7 @@ export const fetchCodeConnectAllProjects = async (
       } as CodeConnectError;
     }
 
-    return (await response.json()) as ApiProjectResponse;
+    return (await response.json()) as ApiProjectsResponse;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw {
