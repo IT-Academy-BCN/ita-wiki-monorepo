@@ -60,9 +60,11 @@ describe("createCodeConnect", () => {
       "https://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Authorization: expect.stringContaining("Bearer "),
+        }),
         body: JSON.stringify(mockNewCodeConnect),
-        signal: undefined,
       }),
     );
 
@@ -89,6 +91,16 @@ describe("createCodeConnect", () => {
     } as CodeConnectError);
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("should throw an error with ABORTED code when the request is aborted", async () => {
+    const abortError = new DOMException("Aborted", "AbortError");
+    mockFetch.mockRejectedValueOnce(abortError);
+
+    await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
+      message: "Petició cancel·lada",
+      code: "ABORTED",
+    } as CodeConnectError);
   });
 
   it("should throw an error on network failure", async () => {
