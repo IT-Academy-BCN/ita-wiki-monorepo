@@ -41,7 +41,7 @@ export interface IntResource {
   bookmark_count?: number;
   comment_count?: number;
   tags?: string[] | Tag[];
-};
+}
 
 export interface Task {
   task: string;

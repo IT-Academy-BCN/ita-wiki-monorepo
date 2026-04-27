@@ -224,10 +224,11 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
-                  ? "border-3 border-[#B91879] bg-white text-black"
-                  : "border-gray-300 bg-white text-black"
-                  }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isSelected
+                    ? "border-3 border-[#B91879] bg-white text-black"
+                    : "border-gray-300 bg-white text-black"
+                }`}
               >
                 <input
                   type="checkbox"
@@ -255,10 +256,11 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
-                  ? "border-3 border-[#B91879] bg-white text-black"
-                  : "border-gray-300 bg-white text-black"
-                  }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isSelected
+                    ? "border-3 border-[#B91879] bg-white text-black"
+                    : "border-gray-300 bg-white text-black"
+                }`}
               >
                 <input
                   type="checkbox"
