@@ -33,6 +33,26 @@ const renderWithRouter = (ui: React.ReactElement) => {
   return render(<MemoryRouter>{ui}</MemoryRouter>);
 };
 
+const createATooLongProject = async (
+  user: ReturnType<typeof userEvent.setup>,
+  time: string,
+  unitTime: string,
+) => {
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
+
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
+
+  const timeInput = screen.getByLabelText(
+    /durada del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(timeInput, time);
+
+  const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+  await user.selectOptions(unitTimeSelect, unitTime);
+};
+
 const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const titleInput = screen.getByRole("textbox", {
     name: /títol/i,
@@ -112,24 +132,22 @@ describe("FormCreateCodeConnect", () => {
     it("should show error if the time duration exceeds 6 months", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
-
-      const reactRadio = screen.getByRole("radio", { name: /react/i });
-      await user.click(reactRadio);
-
-      const nodeRadio = screen.getByRole("radio", { name: /node/i });
-      await user.click(nodeRadio);
-
-      const timeInput = screen.getByLabelText(
-        /durada del projecte/i,
-      ) as HTMLInputElement;
-      await user.type(timeInput, "7");
-
-      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
-      await user.selectOptions(unitTimeSelect, "month");
-
+      await createATooLongProject(user, "7", "month");
       const form = document.querySelector("form")!;
       fireEvent.submit(form);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
 
+    it("should show error if the time duration exceeds 26 weeks", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      await createATooLongProject(user, "27", "week");
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
