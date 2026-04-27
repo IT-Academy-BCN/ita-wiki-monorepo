@@ -144,7 +144,7 @@ const FormCreate = () => {
       unitTime: formData.unitTime,
       deadline: formData.deadline,
     };
-    console.log(formPayload);
+
     try {
       await createCodeConnect(formPayload);
       toast.success("Code Connect publicat amb exit");

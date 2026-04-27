@@ -30,11 +30,11 @@ export function RoadmapField({ onChange }: { onChange: React.Dispatch<React.SetS
                             onChange={(e) => editTask(i, e.target.value)}
                             className="p-2 w-full border border-gray-600 rounded-lg"
                         />
-                        <button type="button" className="text-xl cursor-pointer" onClick={() => removeTask(i)}>×</button>
+                        <button tabIndex={0} type="button" className="text-xl cursor-pointer" onClick={() => removeTask(i)}>×</button>
                     </div>
                 ))}
 
-                <button type="button" className="px-4 py-2 mb-4 border border-gray-400 rounded-lg hover:shadow-md cursor-pointer lg:w-1/2 lg:mb-0"
+                <button tabIndex={0} type="button" className="px-4 py-2 mb-4 border border-gray-400 rounded-lg hover:shadow-md cursor-pointer lg:w-1/2 lg:mb-0"
                     onClick={addTask}>+ Afegir una etapa</button>
             </div>
         </div>
