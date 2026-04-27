@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import FormCreateCodeConnect from "../FormCreate";
 import { toast } from "sonner";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import FormCreateCodeConnect from "../FormCreate";
 
 vi.mock("sonner", () => ({
   toast: {

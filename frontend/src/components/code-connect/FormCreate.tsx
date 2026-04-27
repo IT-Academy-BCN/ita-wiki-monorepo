@@ -1,14 +1,15 @@
-import { useState, FormEvent } from "react";
-import {
-  contentTechsFrontCodeConnect,
-  contentTechsBackCodeConnect,
-} from "./techsLabelsContent";
-import { IntCodeConnect } from "../../types";
-import { createCodeConnect } from "../../api/endPointCodeConnect";
-import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { ArrowLeftIcon } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { createCodeConnect } from "../../api/endPointCodeConnect";
+import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
+import { IntCodeConnect, Task } from "../../types";
+import { RoadmapField } from "../forms/RoadmapField";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+} from "./techsLabelsContent";
 
 const FormCreate = () => {
   const [formData, setFormData] = useState<IntCodeConnect>({
@@ -16,6 +17,7 @@ const FormCreate = () => {
     techsFront: [],
     techsBack: [],
     description: "",
+    roadmap: [],
     numberDevsFront: 0,
     numberDevsBack: 0,
     time: 0,
@@ -23,6 +25,7 @@ const FormCreate = () => {
     deadline: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmap, setRoadmap] = useState<Task[]>([]);
   const navigate = useNavigate();
 
   const handleTechsFrontToggle = (tech: string) => {
@@ -134,13 +137,14 @@ const FormCreate = () => {
       techsFront: formData.techsFront,
       techsBack: formData.techsBack,
       description: formData.description,
+      roadmap: roadmap,
       numberDevsFront: formData.numberDevsFront,
       numberDevsBack: formData.numberDevsBack,
       time: formData.time,
       unitTime: formData.unitTime,
       deadline: formData.deadline,
     };
-
+    console.log(formPayload);
     try {
       await createCodeConnect(formPayload);
       toast.success("Code Connect publicat amb exit");
@@ -220,11 +224,10 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isSelected
-                    ? "border-3 border-[#B91879] bg-white text-black"
-                    : "border-gray-300 bg-white text-black"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
+                  ? "border-3 border-[#B91879] bg-white text-black"
+                  : "border-gray-300 bg-white text-black"
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -252,11 +255,10 @@ const FormCreate = () => {
             return (
               <label
                 key={item.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isSelected
-                    ? "border-3 border-[#B91879] bg-white text-black"
-                    : "border-gray-300 bg-white text-black"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isSelected
+                  ? "border-3 border-[#B91879] bg-white text-black"
+                  : "border-gray-300 bg-white text-black"
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -302,7 +304,9 @@ const FormCreate = () => {
           </div>
         </div>
       </div>
-
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+      <RoadmapField onChange={setRoadmap} />
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label htmlFor="deadline" className="block font-medium">

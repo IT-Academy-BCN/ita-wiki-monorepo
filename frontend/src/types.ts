@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
+import { FC, ReactNode, SVGProps } from "react";
 import { categories } from "./data/categories";
 import { resourceTypes } from "./data/resourceTypes";
-import { FC, SVGProps } from "react";
 
 export type Category = (typeof categories)[number];
 export type ResourceType = (typeof resourceTypes)[number];
@@ -42,11 +41,17 @@ export interface IntResource {
   bookmark_count?: number;
   comment_count?: number;
   tags?: string[] | Tag[];
+};
+
+export interface Task {
+  task: string;
+  done: boolean;
 }
 
 export interface IntCodeConnect {
   title: string;
   description: string;
+  roadmap: Task[];
   techsFront: string[];
   techsBack: string[];
   numberDevsFront: number;
