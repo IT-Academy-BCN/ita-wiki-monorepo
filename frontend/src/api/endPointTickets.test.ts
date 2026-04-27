@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { fetchTickets } from "./endPointTickets";
-import { API_URL, END_POINTS } from "../config";
 
 vi.mock("../config", () => ({
   API_URL: "http://localhost:3000",
