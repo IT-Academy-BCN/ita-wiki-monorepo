@@ -41,18 +41,6 @@ describe("createCodeConnect", () => {
     vi.clearAllMocks();
   });
 
-  const mockNewCodeConnect = {
-    title: "Lorem ipsum",
-    techsFront: ["React", "Angular"],
-    techsBack: ["Spring", "Node", "Express"],
-    description: "Some random text to describe lorem ipsum",
-    numberDevsFront: 3,
-    numberDevsBack: 10,
-    time: 3,
-    unitTime: "month",
-    deadline: "2026-12-31",
-  };
-
   it("should create and return on successful request", async () => {
     const mockResponseData = {
       id: "123",
