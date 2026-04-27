@@ -52,6 +52,11 @@ class ListProjectsShowTest extends TestCase
         $response->assertJsonFragment([
             'success' => true,
             'data' => [
+                'id' => $this->projectOne->id,
+                'user_id' => $this->projectOne->user_id,
+                'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+                'dev_front_number' => $this->projectOne->dev_front_number,
+                'dev_back_number' => $this->projectOne->dev_back_number,    
                 'title' => $this->projectOne->title,
                 'time_duration' => $this->projectOne->time_duration,
                 'language_backend' => $this->projectOne->language_backend,
@@ -87,6 +92,17 @@ class ListProjectsShowTest extends TestCase
         $response->assertJsonFragment([
             'description' => $this->projectOne->description,
             'roadmap' => $this->projectOne->roadmap,
+        ]);
+    }
+
+    public function test_show_returns_new_fields():void{
+        $response = $this->get("/api/codeconnect/{$this->projectOne->id}");
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'user_id' => $this->projectOne->user_id,
+            'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'dev_front_number' => $this->projectOne->dev_front_number,
+            'dev_back_number' => $this->projectOne->dev_back_number,
         ]);
     }
 
