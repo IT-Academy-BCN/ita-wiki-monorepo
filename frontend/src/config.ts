@@ -14,7 +14,8 @@ type EndPoints =
   | "tags/by-category"
   | "technical-tests"
   | "codeconnect"
-  | "auth";
+  | "auth"
+  | "tickets";
 
 const END_POINTS = {
   resources: {
@@ -57,6 +58,10 @@ const END_POINTS = {
     getAuthUser: "auth/github/user" as EndPoints,
     getCurrentUser: "auth/me" as EndPoints,
     logout: "auth/logout" as EndPoints,
+  },
+  tickets: {
+    get: "tickets" as EndPoints,
+    post: "tickets" as EndPoints,
   },
 };
 
