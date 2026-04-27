@@ -158,7 +158,7 @@ export const fetchCodeConnectAllProjects = async (
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw {
-        message: "Petició cancel·lada",
+        message: "Petició cancel·lada.",
         code: "ABORTED",
       } as CodeConnectError;
     }
