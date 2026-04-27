@@ -55,7 +55,7 @@ export const createCodeConnect = async (
     return await response.json();
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      console.warn("Petició cancel·lada per l'usuari o per timeout.");
+      console.warn("Code Connect creation request was aborted.");
       throw {
         message: "Petició cancel·lada.",
         code: "ABORTED",
@@ -63,14 +63,14 @@ export const createCodeConnect = async (
     }
 
     if (error instanceof TypeError) {
-      console.error("Error de xarxa en crear Code Connect:", error);
+      console.error("Network error while creating Code Connect:", error);
       throw {
         message: "Error de connexió. Verifica la teva connexió a internet.",
         code: "NETWORK_ERROR",
       } as CodeConnectError;
     }
 
-    console.error("Error en crear Code Connect:", error);
+    console.error("Error while creating Code Connect:", error);
     throw error;
   }
 };
@@ -90,7 +90,7 @@ export const fetchCodeConnectProject = async (
         const errorData = (await response.json()) as { message?: string };
         errorMessage = errorData.message || errorMessage;
       } catch {
-        // Si el backend no envia JSON usable, mantenim el missatge per defecte.
+        // Keep the default message when the backend does not return usable JSON.
       }
 
       throw {
@@ -106,7 +106,7 @@ export const fetchCodeConnectProject = async (
   } catch (error) {
     if (error instanceof TypeError) {
       console.error(
-        "Error de xarxa en obtenir el detall de Code Connect:",
+        "Network error while fetching Code Connect project details:",
         error,
       );
       throw {
@@ -115,7 +115,7 @@ export const fetchCodeConnectProject = async (
       } as CodeConnectError;
     }
 
-    console.error("Error en obtenir el detall de Code Connect:", error);
+    console.error("Error while fetching Code Connect project details:", error);
     throw error;
   }
 };
@@ -144,7 +144,7 @@ export const fetchCodeConnectAllProjects = async (
         errorMessage = errorData.message || errorMessage;
         errorCode = errorData.code;
       } catch {
-        // ignore
+        // Ignore the parsing error and use the default values that have already been set.
       }
 
       throw {

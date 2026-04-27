@@ -35,7 +35,7 @@ describe("useCodeConnectDetails Hook", () => {
     expect(fetchCodeConnectProject).toHaveBeenCalledWith(1);
   });
 
-  it("return empty state when projectId is null", async () => {
+  it("returns empty state when projectId is null", async () => {
     const { result } = renderHook(() => useCodeConnectDetails(null));
 
     await waitFor(() => {
@@ -59,7 +59,7 @@ describe("useCodeConnectDetails Hook", () => {
     expect(fetchCodeConnectProject).not.toHaveBeenCalled();
   });
 
-  it("return error when fetch fail", async () => {
+  it("returns error when fetch fails", async () => {
     (fetchCodeConnectProject as Mock).mockRejectedValue(
       new Error("Error de connexió. Verifica la teva connexió a internet."),
     );

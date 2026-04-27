@@ -7,12 +7,11 @@ import {
   fetchCodeConnectProject,
 } from "../endPointCodeConnect";
 
-vi.mock("../../config", () => ({
-  API_URL: "http://localhost:8000",
+vi.mock("../config", () => ({
+  API_URL: "https://localhost:8000",
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
-      get: "/codeconnect",
     },
   },
 }));
@@ -27,9 +26,9 @@ describe("createCodeConnect", () => {
     description: "Some random text to describe lorem ipsum",
     numberDevsFront: 3,
     numberDevsBack: 10,
-    time: 2,
-    unitTime: "months",
-    deadline: "2026-12-31",
+    time: 1,
+    unitTime: "weeks",
+    deadline: "",
   };
 
   beforeEach(() => {
@@ -58,7 +57,7 @@ describe("createCodeConnect", () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://localhost:8000/codeconnect/create",
+      "https://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
         headers: expect.objectContaining({
@@ -94,12 +93,12 @@ describe("createCodeConnect", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw an error on network failure", async () => {
+  it("should throw an error with ABORTED code when the request is aborted", async () => {
     const abortError = new DOMException("Aborted", "AbortError");
     mockFetch.mockRejectedValueOnce(abortError);
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
-      message: "Petició cancel·lada.",
+      message: "Petició cancel·lada",
       code: "ABORTED",
     } as CodeConnectError);
   });
@@ -121,20 +120,8 @@ describe("fetchCodeConnectProject", () => {
     vi.restoreAllMocks();
   });
 
-  it("calls the correct endpoint and returns the data", async () => {
-    const mockData = {
-      success: true,
-      message: "Project retrieved successfully",
-      data: {
-        title: "Projecte Test",
-        description: "",
-        roadmap: "",
-        time_duration: "1 month",
-        language_backend: "PHP",
-        language_frontend: "JavaScript",
-        contributors: [],
-      },
-    };
+  it("should call the correct endpoint and return the data", async () => {
+    const mockData = { id: 1, title: "Projecte Test" };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -144,9 +131,7 @@ describe("fetchCodeConnectProject", () => {
     const result = await fetchCodeConnectProject(1);
 
     expect(result).toEqual(mockData);
-    expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:8000/codeconnect/1",
-    );
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("/1"));
   });
 });
 

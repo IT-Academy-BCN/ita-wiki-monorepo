@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test, vi, type Mock } from "vitest";
+import { describe, expect, it, vi, type Mock } from "vitest";
 import CodeConnectDetails from "../CodeConnectDetails";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 
@@ -20,7 +20,7 @@ vi.mock("../../utils/iconUtils", () => ({
 }));
 
 describe("CodeConnectDetails Page", () => {
-  test("renderitza el títol del projecte, la descripció, el roadmap i l'equip quan arriben les dades", () => {
+  it("renders the project title and team when data arrives", () => {
     const mockProjectData = {
       data: {
         title: "Super Projecte de Prova",
@@ -49,7 +49,7 @@ describe("CodeConnectDetails Page", () => {
     expect(screen.getByText("Descripció:")).toBeTruthy();
   });
 
-  test("renderitza el missatge fallback quan description i roadmap venen buits", () => {
+  it("renders the fallback message when description and roadmap are empty", () => {
     const mockProjectData = {
       data: {
         title: "Projecte Antic",
@@ -79,7 +79,7 @@ describe("CodeConnectDetails Page", () => {
     expect(fallbackMessages).toHaveLength(2);
   });
 
-  test("renderitza el missatge d'error quan el hook retorna error", () => {
+  it("renders the error message when the hook returns an error", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
       codeConnectProject: null,
       isLoading: false,
@@ -95,7 +95,7 @@ describe("CodeConnectDetails Page", () => {
     ).toBeTruthy();
   });
 
-  test("renderitza l'estat de càrrega quan isLoading és true", () => {
+  it("renders the loading state when isLoading is true", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
       codeConnectProject: null,
       isLoading: true,
