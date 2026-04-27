@@ -31,6 +31,10 @@ class ListProjectsFactory extends Factory
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
             'language_frontend' => $this->faker->randomElement($languages),
+            'roadmap'=> $this->faker->optional()->passthrough(json_encode([
+                ['task' => $this->faker->sentence(3), 'done' => false],
+                ['task' => $this->faker->sentence(3), 'done' => false],
+            ]))
         ];
     }
 }

@@ -28,6 +28,10 @@ class ListProjectsSeeder extends Seeder
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'roadmap' => json_encode([
+                ['task' => 'Project structure', 'done' => true],
+                ['task' => 'Implement authentication', 'done' => false],
+            ])
         ]);
         $Project2 = ListProjects::firstOrCreate([
             'user_id' => $owner->id,
@@ -39,6 +43,10 @@ class ListProjectsSeeder extends Seeder
             'time_duration' => '2 months',
             'language_backend' => LanguageEnum::Python->value,
             'language_frontend' => LanguageEnum::React->value,
+            'roadmap' => json_encode([
+                ['task' => 'Project structure', 'done' => true],
+                ['task' => 'Implement authentication', 'done' => false],
+            ])
         ]);
         $project3 = ListProjects::firstOrCreate([
             'user_id' => $owner->id,
@@ -50,6 +58,10 @@ class ListProjectsSeeder extends Seeder
             'time_duration' => '3 weeks',
             'language_backend' => LanguageEnum::Java->value,
             'language_frontend' => LanguageEnum::TypeScript->value,
+            'roadmap' => json_encode([
+                ['task' => 'Project structure', 'done' => true],
+                ['task' => 'Implement authentication', 'done' => false],
+            ])
         ]);
     }
 }
