@@ -32,6 +32,8 @@ class ListProjectsController extends Controller
      *               @OA\Property(property="time_duration", type="string", example="2 months"),
      *               @OA\Property(property="language_backend", type="string", example="PHP"),
      *               @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *               @OA\Property(property="description", type="string", nullable=true, example="Project description"),
+     *               @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
      *               @OA\Property(
      *                   property="contributors",
      *                   type="array",
@@ -57,6 +59,9 @@ class ListProjectsController extends Controller
                 'time_duration' => $project->time_duration,
                 'language_backend' => $project->language_backend,
                 'language_frontend' => $project->language_frontend,
+                'description' => $project->description,
+                'roadmap' => $project->roadmap,
+
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
                         'name' => $contributor->user->name,
@@ -93,6 +98,9 @@ class ListProjectsController extends Controller
      *           @OA\Property(property="time_duration", type="string", example="1 month"),
      *           @OA\Property(property="language_backend", type="string", example="PHP"),
      *           @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *           @OA\Property(property="description", type="string", nullable=true, example="Project description"),
+     *           @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+
      *           @OA\Property(
      *               property="contributors",
      *               type="array",
@@ -127,6 +135,9 @@ class ListProjectsController extends Controller
             'time_duration' => $project->time_duration,
             'language_backend' => $project->language_backend,
             'language_frontend' => $project->language_frontend,
+            'description' => $project->description,
+            'roadmap' => $project->roadmap,
+
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
                     'name' => $contributor->user->name,
