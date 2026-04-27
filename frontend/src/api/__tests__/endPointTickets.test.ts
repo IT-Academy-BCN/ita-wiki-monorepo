@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { fetchTickets } from "./endPointTickets";
+import { fetchAllTickets } from "../endPointTickets";
 
-vi.mock("../config", () => ({
+vi.mock("../../config", () => ({
   API_URL: "http://localhost:3000",
   END_POINTS: {
     tickets: {
@@ -14,7 +14,7 @@ vi.mock("../config", () => ({
 const fetchMock = vi.fn();
 vi.stubGlobal("fetch", fetchMock);
 
-describe("fetchTickets", () => {
+describe("fetchAllTickets", () => {
   const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe("fetchTickets", () => {
       json: async () => mockData,
     });
 
-    const result = await fetchTickets();
+    const result = await fetchAllTickets();
     expect(result).toEqual(mockData);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
@@ -44,7 +44,7 @@ describe("fetchTickets", () => {
       json: async () => ({ data: mockInnerData }),
     });
 
-    const result = await fetchTickets();
+    const result = await fetchAllTickets();
     expect(result).toEqual(mockInnerData);
   });
 
@@ -55,7 +55,7 @@ describe("fetchTickets", () => {
       statusText: "Server Error",
     });
 
-    const result = await fetchTickets();
+    const result = await fetchAllTickets();
     expect(result).toBeUndefined();
     expect(consoleSpy).toHaveBeenCalled();
   });
@@ -64,7 +64,7 @@ describe("fetchTickets", () => {
     const networkError = new Error("Network Error");
     fetchMock.mockRejectedValue(networkError);
 
-    await fetchTickets();
+    await fetchAllTickets();
     expect(consoleSpy).toHaveBeenCalledWith(networkError);
   });
 });

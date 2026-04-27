@@ -1,7 +1,7 @@
 // src/api/endPointTickets.ts
 import { API_URL, END_POINTS } from "../config";
 
-export const fetchTickets = async () => {
+export const fetchAllTickets = async () => {
   const url = `${API_URL}${END_POINTS.tickets.get}`;
   try {
     const response = await fetch(url);
