@@ -1,4 +1,4 @@
-import { Standing } from "../../types/league";
+import type { Standing } from "../../types/league";
 import { TOP_RANGE, DANGER_RANGE } from "../../config/rankingConfig";
 
 type StandingsRowProps = {
@@ -11,20 +11,17 @@ export const StandingsRow = ({ standing, position }: StandingsRowProps) => {
   const rowClass = getRowClass(position);
 
   return (
-    <tr className={rowClass}>
-      <td className="py-3 px-4 text-center text-[14px] text-black border-b border-[color:#e5e7eb]">
+    <tr className={`${rowClass} border-b border-gray-400`}>
+      <td className="py-3 px-4 text-center text-[14px] text-black">
         {position}
       </td>
-
-      <td className="py-3 px-4 text-left text-[14px] text-black border-b border-[color:#e5e7eb]">
+      <td className="py-3 px-4 text-center text-[14px] text-black">
         {standing.username}
       </td>
-
-      <td className="py-3 px-4 text-center text-[14px] text-black border-b border-[color:#e5e7eb]">
+      <td className="py-3 px-4 text-center text-[14px] text-black">
         {standing.language}
       </td>
-
-      <td className="py-3 px-4 text-right text-[14px] font-semibold text-black border-b border-[color:#e5e7eb]">
+      <td className="py-3 px-4 text-center text-[14px] text-black font-semibold">
         {standing.points}
       </td>
     </tr>

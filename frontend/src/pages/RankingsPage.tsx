@@ -16,13 +16,18 @@ const RankingsPage = () => {
       setIsLoading(false);
     });
   }, []);
+ return (
+  <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
+    <h1 className="text-2xl font-bold mb-6">Lliga General</h1>
 
-  return (
-    <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
-      <h1 className="text-2xl font-bold mb-6">Lliga General</h1>
-      <StandingsTable standings={standings} isLoading={isLoading} />
-    </Container>
-  );
+    {isLoading && <p>Carregant...</p>}
+
+    {!isLoading && standings && (
+      <StandingsTable standings={standings} />
+    )}
+  </Container>
+);
+
 };
 
 export default RankingsPage;

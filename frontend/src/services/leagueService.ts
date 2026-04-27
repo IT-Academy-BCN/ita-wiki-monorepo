@@ -7,12 +7,10 @@ const mockData: LeagueResponse = {
     {
       id: 'general',
       name: 'Liga General',
-      topPlayers: [
-        { position: 1, username: 'Developer_134', avatarUrl: '', title: 'Expert Hacker', points: 94 },
-        { position: 2, username: 'jstCoder',      avatarUrl: '', title: 'Expert Hacker', points: 93 },
-        { position: 3, username: 'Nagumi',         avatarUrl: '', title: 'Expert Hacker', points: 79 },
-      ],
       standings: [
+        { position: 1,  username: 'Dev_14', status: 'Skilled Developer', language: 'Java',       points: 94 },
+        { position: 2,  username: 'jsCoder',status: 'Junior Coder',      language: 'PHP',        points: 93 },
+        { position: 3,  username: 'Nagumi', status: 'Junior Coder',      language: 'Javascript', points: 79 },
         { position: 4,  username: 'Piluli', status: 'Skilled Developer', language: 'Java',       points: 75 },
         { position: 5,  username: 'Koder',  status: 'Junior Coder',      language: 'PHP',        points: 73 },
         { position: 6,  username: 'Paw3l',  status: 'Junior Coder',      language: 'Javascript', points: 75 },
