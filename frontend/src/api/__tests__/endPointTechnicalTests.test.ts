@@ -173,7 +173,7 @@ describe("createTechnicalTest", () => {
       "Network Error",
     );
     expect(consoleSpy).toHaveBeenCalledWith(
-      "Error al crear prueba técnica:",
+      "Error creating technical test:",
       networkError,
     );
   });

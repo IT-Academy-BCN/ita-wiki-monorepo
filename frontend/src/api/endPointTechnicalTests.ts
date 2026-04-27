@@ -24,9 +24,9 @@ export const createTechnicalTest = async (formData: FormData) => {
     return await response.json();
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      console.warn("Petición cancelada.");
+      console.warn("Request cancelled.");
     } else {
-      console.error("Error al crear prueba técnica:", error);
+      console.error("Error creating technical test:", error);
     }
     throw error;
   }
