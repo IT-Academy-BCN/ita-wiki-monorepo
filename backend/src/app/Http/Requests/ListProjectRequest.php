@@ -34,7 +34,7 @@ class ListProjectRequest extends FormRequest
             'language_frontend' => 'required|string|max:255',
 
             'programming_role' => 'nullable|string|in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
-            'roadmap' => 'nullable|string',
+            'roadmap' => 'nullable|array',
 
             'programming_role' => [
                 $this->isMethod('post') ? 'required' : 'nullable',
