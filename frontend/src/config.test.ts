@@ -26,8 +26,9 @@ describe("Configuración de la API", () => {
     expect(END_POINTS.resources.lists).toBe("resources");
   });
 
-  it("should have tickets endpoints", () => {
-    expect(END_POINTS.tickets.get).toBe("tickets");
-    expect(END_POINTS.tickets.post).toBe("tickets");
-});
+  it("should have tickets endpoints", async () => {
+      const { END_POINTS } = await import("./config");
+      expect(END_POINTS.tickets.get).toBe("tickets");
+      expect(END_POINTS.tickets.post).toBe("tickets");
+  });
 });
