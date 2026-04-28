@@ -1,8 +1,8 @@
-export type LeagueLanguage = 'Java' | 'PHP' | 'Javascript' | 'Data';
+export type LeagueLanguage = "Java" | "PHP" | "Javascript" | "Data";
 
-export type LigaType = 'general';
+export type LigaType = "general";
 
-export type LeagueView = 'weekly' | 'global';
+export type LeagueView = "weekly" | "global";
 
 export type Player = {
   position: number;
@@ -15,8 +15,8 @@ export type Player = {
 export type Standing = {
   position: number;
   username: string;
-  status: string;
-  language: LeagueLanguage;
+  status?: string;
+  language?: string;
   points: number;
 };
 

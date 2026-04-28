@@ -11,9 +11,17 @@ const RankingsPage = () => {
   useEffect(() => {
     getLeagueRanking()
       .then((data) => {
-        const league = data.leagues[0];
-        setStandings(league.standings);
-      })
+        const sorted = [...data].sort((a, b) => b.points - a.points);
+
+      const standings: Standing[] = sorted.map((item, index) => ({
+        position: index + 1,
+        username: `User_${item.user_id}`, // placeholder fins que backend enviï noms
+        language: "Unknown", // placeholder
+        points: item.points,
+      }));
+
+      setStandings(standings);
+    })
       .catch((error) => {
         console.error("Error loading ranking:", error);
         setStandings(null);
