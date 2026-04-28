@@ -12,7 +12,7 @@ class LigaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'user_id' => 'required|integer|exists:user,id',
+        'user_id' => 'required|integer|exists:users,id',
         ]);
 
         if (Liga::where('user_id', $validated['user_id'])->exists()) {
