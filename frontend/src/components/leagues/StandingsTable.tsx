@@ -25,11 +25,11 @@ export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
         <div className="border-2 border-gray-400 rounded-lg overflow-hidden">
           <table className="w-full table-fixed">
             <tbody>
-              {standings.map((standing, index) => (
+              {standings.map((standing) => (
                 <StandingsRow
-                  key={index}
+                  key={standing.position}
                   standing={standing}
-                  position={index + 1}
+                  position={standing.position}
                   totalRows={standings.length}
                 />
               ))}

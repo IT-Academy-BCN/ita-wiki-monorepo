@@ -1,7 +1,8 @@
-// Matches the confirmed backend schema for this sprint
-// username, avatar_url, title etc. are pending JOIN with users table
+// Matches the confirmed backend response for GET /api/ligas/ranking
+// id is intentionally not exposed — user_id uniquely identifies the entry
+// username, avatar_url pending JOIN with users table (future sprint)
 export type Liga = {
-  id: number;
+  position: number;
   user_id: number;
   points: number;
   created_at: string;
@@ -10,9 +11,10 @@ export type Liga = {
 
 export type LigaResponse = Liga[];
 
-// UI type for StandingsTable — matches confirmed backend fields
+// UI type for StandingsTable
 // username will be added when backend confirms JOIN with users table
 export type Standing = {
+  position: number;
   user_id: number;
   points: number;
 };

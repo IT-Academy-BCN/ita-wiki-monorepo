@@ -11,6 +11,7 @@ import { getLeagueRanking } from "../services/leagueService";
 import type { Liga, Standing } from "../types/league";
 
 const toStanding = (liga: Liga): Standing => ({
+  position: liga.position,
   user_id: liga.user_id,
   points: liga.points,
 });
