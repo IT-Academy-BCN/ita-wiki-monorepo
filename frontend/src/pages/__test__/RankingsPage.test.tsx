@@ -115,7 +115,9 @@ describe("RankingsPage Component", () => {
       ).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole("button", { name: "Torna-ho a intentar" }));
+    await user.click(
+      screen.getByRole("button", { name: "Torna-ho a intentar" }),
+    );
 
     await waitFor(() => {
       expect(getLeagueRanking).toHaveBeenCalledTimes(2);
