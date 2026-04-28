@@ -1,17 +1,14 @@
 import PageTitle from "../components/ui/PageTitle";
 import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
-import moockData from "../moock/projectDetails.json";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
 import { useParams } from "react-router";
 import { displayLanguageIcon } from "../utils/iconUtils";
 
 const CodeConnectDetails = () => {
-  const { description, roadmap } = moockData.details[0];
-
   const { projectId } = useParams<{ projectId: string }>();
 
-  const { codeConnectProject, isLoading } = useCodeConnectDetails(
+  const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
     projectId || null,
   );
 
@@ -25,35 +22,40 @@ const CodeConnectDetails = () => {
 
       <Container className="px-4 py-6 lg:pl-8 xl:pl-6">
         {isLoading && <p>Carregant...</p>}
-        {codeConnectProject && (
+
+        {!isLoading && errorMessage && <p>{errorMessage}</p>}
+
+        {!isLoading && !errorMessage && codeConnectProject?.data && (
           <div className="flex flex-col lg:flex-row gap-8 w-full">
             <div className="lg:w-2/3">
               <h2 className="text-[26px] font-extrabold text-left mb-10">
-                {codeConnectProject.data?.title ||
-                  "unable to load project title"}
+                {codeConnectProject.data.title ||
+                  "No s'ha pogut carregar el títol del projecte."}
               </h2>
-              <p className="text-[16px] mb-20 whitespace-pre-line">
-                {description}
-              </p>{" "}
-              <h3 className="text-[22px] font-extrabold mb-5">Roadmap</h3>
-              <ol className="list-decimal list-inside">
-                {(roadmap || []).map((item, index) => (
-                  <li key={index} className="text-[16px] mb-2">
-                    {item}
-                  </li>
-                ))}
-              </ol>
+
+              <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
+              <p className="text-[16px] mb-10">
+                {codeConnectProject.data?.description ||
+                  "Aquesta informació no està disponible a la base de dades."}
+              </p>
+
+              <h3 className="text-[22px] font-extrabold mb-5">Roadmap:</h3>
+              <p className="text-[16px]">
+                {codeConnectProject.data?.roadmap ||
+                  "Aquesta informació no està disponible a la base de dades."}
+              </p>
             </div>
+
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
               <ProjectTeam
                 logoFront={displayLanguageIcon(
-                  codeConnectProject.data?.language_frontend,
+                  codeConnectProject.data.language_frontend,
                 )}
                 logoBack={displayLanguageIcon(
-                  codeConnectProject.data?.language_backend,
+                  codeConnectProject.data.language_backend,
                 )}
-                contributors={codeConnectProject.data?.contributors}
-                timeDuration={codeConnectProject.data?.time_duration}
+                contributors={codeConnectProject.data.contributors}
+                timeDuration={codeConnectProject.data.time_duration}
               />
             </div>
           </div>
