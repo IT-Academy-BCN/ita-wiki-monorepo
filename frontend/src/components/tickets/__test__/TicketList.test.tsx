@@ -43,11 +43,7 @@ describe("TicketList", () => {
 
   it("renders custom error message", () => {
     render(
-      <TicketList
-        tickets={[]}
-        isLoading={false}
-        error="Error personalitzat"
-      />
+      <TicketList tickets={[]} isLoading={false} error="Error personalitzat" />,
     );
     expect(screen.getByText("Error personalitzat")).toBeInTheDocument();
   });
@@ -55,14 +51,12 @@ describe("TicketList", () => {
   it("renders empty state when tickets array is empty", () => {
     render(<TicketList tickets={[]} isLoading={false} error={null} />);
     expect(
-      screen.getByText("No hi ha tickets disponibles")
+      screen.getByText("No hi ha tickets disponibles"),
     ).toBeInTheDocument();
   });
 
   it("renders tickets when data is available", () => {
-    render(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />
-    );
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
     expect(screen.getByText("000001")).toBeInTheDocument();
     expect(screen.getByText("Error en el login")).toBeInTheDocument();
@@ -70,19 +64,15 @@ describe("TicketList", () => {
   });
 
   it("renders one action button per ticket", () => {
-    render(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />
-    );
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
-    expect(
-      screen.getAllByRole("button", { name: /accions/i })
-    ).toHaveLength(mockTickets.length);
+    expect(screen.getAllByRole("button", { name: /accions/i })).toHaveLength(
+      mockTickets.length,
+    );
   });
 
   it("applies the correct color depending on the priority", () => {
-    render(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />
-    );
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
     expect(screen.getByText("Alta")).toHaveClass("text-orange-600");
     expect(screen.getByText("Baixa")).toHaveClass("text-emerald-600");
@@ -104,7 +94,7 @@ describe("TicketList", () => {
         ]}
         isLoading={false}
         error={null}
-      />
+      />,
     );
 
     expect(screen.getByText("invalid-date")).toBeInTheDocument();

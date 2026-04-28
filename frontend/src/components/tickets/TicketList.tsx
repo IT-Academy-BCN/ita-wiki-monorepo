@@ -45,8 +45,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   if (isLoading)
     return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
 
-if (error)
-  return <p className="text-destructive p-6">{error}</p>;
+  if (error) return <p className="text-destructive p-6">{error}</p>;
 
   if (!tickets || tickets.length === 0)
     return (
