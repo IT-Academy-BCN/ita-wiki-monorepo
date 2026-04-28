@@ -12,27 +12,26 @@ const formatDate = (date: string) => {
 };
 
 const priorityColors: Record<string, string> = {
-  baja: "text-emerald-600",
-  media: "text-amber-600",
-  alta: "text-orange-600",
-  critica: "text-red-600",
+  low: "text-emerald-600",
+  medium: "text-amber-600",
+  high: "text-orange-600",
+  critical: "text-red-600",
 };
 
 const getPriorityColor = (priority: string) =>
   priorityColors[priority?.toLowerCase()] ?? "text-foreground";
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
-
-  if (isLoading) return <p className="text-muted-foreground p-6">Cargando tickets...</p>;
-  if (error) return <p className="text-destructive p-6">Error al cargar los tickets</p>;
-  if (!tickets || tickets.length === 0) return <p className="text-muted-foreground p-6">No hay tickets</p>;
+  if (isLoading) return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
+  if (error) return <p className="text-destructive p-6">Error en carregar els tickets</p>;
+  if (!tickets || tickets.length === 0) return <p className="text-muted-foreground p-6">No hi ha tickets disponibles</p>;
 
   return (
     <div className="w-full bg-muted/40 rounded-lg p-6 sm:p-8">
       <div className="mb-6">
         <h2 className="text-2xl font-bold tracking-wide text-foreground">TICKETING</h2>
         <p className="mt-4 text-sm font-medium text-foreground underline underline-offset-4">
-          Listado de tickets
+          Llistat de tickets
         </p>
       </div>
 
@@ -42,11 +41,11 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
           className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
         >
           <div role="columnheader">ID</div>
-          <div role="columnheader">Descripción</div>
-          <div role="columnheader">Estado</div>
-          <div role="columnheader">Fecha</div>
-          <div role="columnheader">Prioridad</div>
-          <div role="columnheader" className="sr-only">Acciones</div>
+          <div role="columnheader">Descripció</div>
+          <div role="columnheader">Estat</div>
+          <div role="columnheader">Data</div>
+          <div role="columnheader">Prioritat</div>
+          <div role="columnheader" className="sr-only">Accions</div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">
@@ -66,7 +65,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
                 {ticket.priority}
               </div>
               <div role="cell">
-                <button className="text-sm text-primary hover:underline">Acciones</button>
+                <button className="text-sm text-primary hover:underline">Accions</button>
               </div>
             </div>
           ))}
