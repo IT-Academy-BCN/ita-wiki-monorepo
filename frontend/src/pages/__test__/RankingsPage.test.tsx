@@ -1,13 +1,13 @@
-import "@testing-library/jest-dom";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import userEvent from "@testing-library/user-event";
 import RankingsPage from "../RankingsPage";
+import { getLeagueRanking } from "../../services/leagueService";
 
 vi.mock("../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
 }));
-
-import { getLeagueRanking } from "../../services/leagueService";
 
 const mockRanking = [
   {
@@ -26,7 +26,7 @@ const mockRanking = [
   },
 ];
 
-describe("RankingsPage", () => {
+describe("RankingsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -105,6 +105,8 @@ describe("RankingsPage", () => {
       .mockRejectedValueOnce(new Error("network error"))
       .mockResolvedValueOnce(mockRanking);
 
+    const user = userEvent.setup();
+
     render(<RankingsPage />);
 
     await waitFor(() => {
@@ -113,7 +115,7 @@ describe("RankingsPage", () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Torna-ho a intentar" }));
+    await user.click(screen.getByRole("button", { name: "Torna-ho a intentar" }));
 
     await waitFor(() => {
       expect(getLeagueRanking).toHaveBeenCalledTimes(2);
