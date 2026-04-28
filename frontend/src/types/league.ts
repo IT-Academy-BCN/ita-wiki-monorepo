@@ -1,5 +1,5 @@
 export type Liga = {
-  id: number;
+  position: number;
   user_id: number;
   points: number;
   created_at: string;

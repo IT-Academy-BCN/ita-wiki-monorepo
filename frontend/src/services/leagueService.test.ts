@@ -9,11 +9,11 @@ describe("leagueService (mock version)", () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  test("each item should have id, user_id and points", async () => {
+  test("each item should have position, user_id and points", async () => {
     const result = await getLeagueRanking();
 
     result.forEach((liga) => {
-      expect(liga).toHaveProperty("id");
+      expect(liga).toHaveProperty("position");
       expect(liga).toHaveProperty("user_id");
       expect(liga).toHaveProperty("points");
     });
