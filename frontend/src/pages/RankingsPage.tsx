@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  LeagueToggle,
+import LeagueToggle, {
   LeagueView,
 } from "../components/LeagueToggle/LeagueToggle";
 import { StandingsEmptyState } from "../components/leagues/StandingsEmptyState";
