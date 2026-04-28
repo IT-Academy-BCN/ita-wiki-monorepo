@@ -111,4 +111,15 @@ class ListProjectsIndexTest extends TestCase
         ]);
     }
 
+    public function test_index_returns_new_fields():void{
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'user_id' => $this->projectOne->user_id,
+            'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'dev_front_number' => $this->projectOne->dev_front_number,
+            'dev_back_number' => $this->projectOne->dev_back_number,
+        ]);
+    }
+
 }

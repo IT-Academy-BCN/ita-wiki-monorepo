@@ -34,6 +34,12 @@ class ListProjectsController extends Controller
      *               @OA\Property(property="language_frontend", type="string", example="JavaScript"),
      *               @OA\Property(property="description", type="string", nullable=true, example="Project description"),
      *               @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *               @OA\Property(property="user_id", type="integer", example=1),
+     *               @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *               @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *               @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
+     * 
+     * 
      *               @OA\Property(
      *                   property="contributors",
      *                   type="array",
@@ -55,12 +61,16 @@ class ListProjectsController extends Controller
         $projects = ListProjects::with('contributorListProject.user')->get()->map(function ($project) {
             return [
                 'id' => $project->id,
+                'user_id' => $project->user_id,
                 'title' => $project->title,
                 'time_duration' => $project->time_duration,
                 'language_backend' => $project->language_backend,
                 'language_frontend' => $project->language_frontend,
                 'description' => $project->description,
                 'roadmap' => $project->roadmap,
+                'limit_date_inscription' => $project->limit_date_inscription,
+                'dev_front_number' => $project->dev_front_number,
+                'dev_back_number' => $project->dev_back_number,
 
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
@@ -100,6 +110,10 @@ class ListProjectsController extends Controller
      *           @OA\Property(property="language_frontend", type="string", example="JavaScript"),
      *           @OA\Property(property="description", type="string", nullable=true, example="Project description"),
      *           @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *           @OA\Property(property="user_id", type="integer", example=1),
+     *           @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *           @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *           @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
 
      *           @OA\Property(
      *               property="contributors",
@@ -130,6 +144,8 @@ class ListProjectsController extends Controller
         }
 
         $project = [
+            'id' => $project->id,
+            'user_id' => $project->user_id,
 
             'title' => $project->title,
             'time_duration' => $project->time_duration,
@@ -137,6 +153,9 @@ class ListProjectsController extends Controller
             'language_frontend' => $project->language_frontend,
             'description' => $project->description,
             'roadmap' => $project->roadmap,
+            'limit_date_inscription' => $project->limit_date_inscription,
+            'dev_front_number' => $project->dev_front_number,
+            'dev_back_number' => $project->dev_back_number,
 
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
