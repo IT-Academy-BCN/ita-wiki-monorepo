@@ -316,7 +316,7 @@ const FormCreate = () => {
           </label>
           <input
             id="deadline"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
             value={formData.deadline || ""}
             required
@@ -350,7 +350,7 @@ const FormCreate = () => {
             </label>
             <select
               id="unitTime"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
+              className="bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
               value={formData.unitTime}
               required
               disabled={isSubmitting}
@@ -359,8 +359,12 @@ const FormCreate = () => {
               <option value="" disabled>
                 Selecciona
               </option>
-              <option value="month">Mes</option>
-              <option value="week">Setmana</option>
+              <option value="month">
+                {formData.time <= 1 ? "Mes" : "Mesos"}
+              </option>
+              <option value="week">
+                {formData.time <= 1 ? "Setmana" : "Setmanes"}
+              </option>
             </select>
           </div>
         </div>
