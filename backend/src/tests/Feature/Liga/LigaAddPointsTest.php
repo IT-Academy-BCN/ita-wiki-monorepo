@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Liga;
+
+use App\Models\Liga;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
+
+class LigaAddPointsTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected User $user;
+    protected Liga $ligaEntry;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+
+        $this->ligaEntry = Liga::create([
+            'user_id' => $this->user->id,
+            'points'  => 0,
+        ]);
+    }
+
+     public function test_put_without_token_returns_401(): void
+    {
+        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
+
+        $response->assertStatus(401);
+    }
+
+    public function test_put_increments_points_by_5(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'user_id' => $this->user->id,
+            'points'  => 5,
+        ]);
+    }
+
+     public function test_put_three_times_gives_15_points(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $this->putJson('/api/ligas/' . $this->user->id . '/points');
+        $this->putJson('/api/ligas/' . $this->user->id . '/points');
+        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'user_id' => $this->user->id,
+            'points'  => 15,
+        ]);
+    }
+
+     public function test_put_returns_404_when_no_liga_entry(): void
+    {
+        $userWithoutEntry = User::factory()->create();
+        Sanctum::actingAs($userWithoutEntry);
+
+        $response = $this->putJson('/api/ligas/' . $userWithoutEntry->id . '/points');
+
+        $response->assertStatus(404);
+    }
+
+     public function test_put_returns_404_for_unknown_user(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/ligas/99999/points');
+
+        $response->assertStatus(404);
+    }
+}
+
