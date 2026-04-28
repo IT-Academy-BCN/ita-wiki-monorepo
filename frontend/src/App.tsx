@@ -35,6 +35,7 @@ const App: FC = () => {
               element={<CodeConnectDetails />}
             />
             <Route path="/ranking" element={<RankingsPage />} />
+            <Route path="/ligas" element={<RankingsPage />} />
 
             {/* Protected routes */}
             <Route element={<RequireAuth />}>
