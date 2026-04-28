@@ -38,7 +38,7 @@ class LigaGetRankingTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                '*' => ['position', 'github_user_name', 'avatar', 'points'],
+                '*' => ['position', 'user_id', 'points', 'created_at', 'updated_at'],
             ]);
     }
 

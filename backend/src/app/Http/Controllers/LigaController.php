@@ -13,15 +13,15 @@ class LigaController extends Controller
 {
     public function ranking(): JsonResponse
     {
-        $entries = Liga::with('user:id,github_user_name,avatar')
-            ->orderBy('points', 'desc')
+        $entries = Liga::orderBy('points', 'desc')
             ->get()
             ->values()
             ->map(fn ($entry, $index) => [
-                'position'         => $index + 1,
-                'github_user_name' => $entry->user->github_user_name,
-                'avatar'           => $entry->user->avatar,
-                'points'           => $entry->points,
+                'position'   => $index + 1,
+                'user_id'    => $entry->user_id,
+                'points'     => $entry->points,
+                'created_at' => $entry->created_at,
+                'updated_at' => $entry->updated_at,
             ]);
 
         return response()->json($entries);
