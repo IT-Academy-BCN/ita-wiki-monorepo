@@ -1,3 +1,5 @@
+// Matches the confirmed backend schema for this sprint
+// username, avatar_url, title etc. are pending JOIN with users table
 export type Liga = {
   id: number;
   user_id: number;
