@@ -30,12 +30,12 @@ const priorityLabels: Record<TicketPriority, string> = {
 };
 
 const statusLabels: Record<TicketStatus, string> = {
-  low: "Baixa",
-  medium: "Mitjana",
-  high: "Alta",
-  critical: "Crítica",
+  pending: "Pendent",
+  in_progress: "En progrés",
+  blocked: "Bloquejat",
+  ready: "Preparat",
+  closed: "Tancat",
 };
-
 const getPriorityColor = (priority: TicketPriority) =>
   priorityColors[priority] ?? "text-foreground";
 
@@ -45,10 +45,8 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   if (isLoading)
     return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
 
-  if (error)
-    return (
-      <p className="text-destructive p-6">Error en carregar els tickets</p>
-    );
+if (error)
+  return <p className="text-destructive p-6">{error}</p>;
 
   if (!tickets || tickets.length === 0)
     return (
