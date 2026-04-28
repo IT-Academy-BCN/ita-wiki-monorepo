@@ -1,6 +1,6 @@
 export type LeagueLanguage = 'Java' | 'PHP' | 'Javascript' | 'Data';
 
-export type LigaType = 'general' | 'oro' | 'plata' | 'bronce';
+export type LigaType = 'general';
 
 export type LeagueView = 'weekly' | 'global';
 
@@ -20,12 +20,13 @@ export type Standing = {
   points: number;
 };
 
-export type League = {
-  id: LigaType;
-  name: string;
-  topPlayers: Player[];
-  standings: Standing[];
-};
+export interface League {
+  id: number;
+  user_id: number;
+  points: number;
+  created_at: string;
+  updated_at: string;
+}
 
 export type LeagueResponse = {
   view: LeagueView;
