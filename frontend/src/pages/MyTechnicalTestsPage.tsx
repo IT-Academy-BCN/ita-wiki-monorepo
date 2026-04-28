@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router";
 import { toast } from "sonner";
 
 import TechnicalTestsHeader from "../components/technical-test/TechnicalTestsHeader";
+import ButtonComponent from "../components/atoms/ButtonComponent";
 import TechnicalTestList from "../components/technical-test/TechnicalTestList";
 import { FiltersValue } from "../components/technical-test/FiltersButton";
 
@@ -30,7 +31,14 @@ function MyTechnicalTestsPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 h-[calc(100vh-90px)] flex flex-col">
-      <h1 className="text-2xl font-bold mb-6 shrink-0">Proves tècniques</h1>
+      <div className="flex justify-between items-center mb-6 shrink-0">
+        <h1 className="text-2xl font-bold">Proves tècniques</h1>
+        <ButtonComponent
+          onClick={() => navigate("/resources/technical-test/create")}
+        >
+          Nova prova tècnica
+        </ButtonComponent>
+      </div>
       <TechnicalTestsHeader
         onCategoryChange={setLanguageFilter}
         onSortByLikes={setSortByLikes}
