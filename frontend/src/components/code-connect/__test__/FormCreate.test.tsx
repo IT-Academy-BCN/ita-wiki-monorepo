@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
@@ -110,15 +111,15 @@ describe("FormCreateCodeConnect", () => {
       ) as HTMLInputElement;
 
       await user.type(deadlineInput, "2025-01-01");
-      expect(deadlineInput.checkValidity()).toBe(false);
+      expect(deadlineInput).toBeInvalid();
       const now = new Date();
       const today = now.toISOString().split("T")[0];
       await user.clear(deadlineInput);
       await user.type(deadlineInput, today);
-      expect(deadlineInput.checkValidity()).toBe(false);
+      expect(deadlineInput).toBeInvalid();
       await user.clear(deadlineInput);
       await user.type(deadlineInput, "2030-01-01");
-      expect(deadlineInput.checkValidity()).toBe(true);
+      expect(deadlineInput).toBeValid();
     });
   });
 
@@ -268,6 +269,20 @@ describe("Navigation and UI", () => {
     await user.click(backLink);
 
     expect(mockNavigate).toHaveBeenCalledWith("/codeconnect");
+  });
+  it("should display the time unit value options for the project duration in plural or singular depending on the time value entered previously by the user", async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<FormCreateCodeConnect />);
+    const timeInput = screen.getByLabelText(
+      /durada del projecte/i,
+    ) as HTMLInputElement;
+    const monthOption = screen.getByRole("option", { name: /mes/i });
+    const weekOption = screen.getByRole("option", { name: /setmana/i });
+    expect(monthOption).toHaveTextContent("Mes");
+    await user.clear(timeInput);
+    await user.type(timeInput, "2");
+    expect(monthOption).toHaveTextContent("Mesos");
+    expect(weekOption).toHaveTextContent("Setmanes");
   });
 });
 
