@@ -1,4 +1,4 @@
-import type { TicketListProps } from "../../types/ticketingTypes";
+import type {TicketListProps, TicketPriority, TicketStatus,} from "../../types/ticketingTypes";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -11,25 +11,61 @@ const formatDate = (date: string) => {
   return `${day}/${month}/${year}`;
 };
 
-const priorityColors: Record<string, string> = {
+const priorityColors: Record<TicketPriority, string> = {
   low: "text-emerald-600",
   medium: "text-amber-600",
   high: "text-orange-600",
   critical: "text-red-600",
 };
 
-const getPriorityColor = (priority: string) =>
-  priorityColors[priority?.toLowerCase()] ?? "text-foreground";
+const priorityLabels: Record<TicketPriority, string> = {
+  low: "Baixa",
+  medium: "Mitjana",
+  high: "Alta",
+  critical: "Crítica",
+};
+
+const statusLabels: Record<TicketStatus, string> = {
+  low: "Baixa",
+  medium: "Mitjana",
+  high: "Alta",
+  critical: "Crítica",
+};
+
+const getPriorityColor = (priority: TicketPriority) =>
+  priorityColors[priority] ?? "text-foreground";
+
+const getStatusLabel = (status: TicketStatus) =>
+  statusLabels[status] ?? status;
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
-  if (isLoading) return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
-  if (error) return <p className="text-destructive p-6">Error en carregar els tickets</p>;
-  if (!tickets || tickets.length === 0) return <p className="text-muted-foreground p-6">No hi ha tickets disponibles</p>;
+  if (isLoading)
+    return (
+      <p className="text-muted-foreground p-6">
+        Carregant tickets...
+      </p>
+    );
+
+  if (error)
+    return (
+      <p className="text-destructive p-6">
+        Error en carregar els tickets
+      </p>
+    );
+
+  if (!tickets || tickets.length === 0)
+    return (
+      <p className="text-muted-foreground p-6">
+        No hi ha tickets disponibles
+      </p>
+    );
 
   return (
     <div className="w-full bg-muted/40 rounded-lg p-6 sm:p-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold tracking-wide text-foreground">TICKETING</h2>
+        <h2 className="text-2xl font-bold tracking-wide text-foreground">
+          TICKETING
+        </h2>
         <p className="mt-4 text-sm font-medium text-foreground underline underline-offset-4">
           Llistat de tickets
         </p>
@@ -45,7 +81,9 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
-          <div role="columnheader" className="sr-only">Accions</div>
+          <div role="columnheader" className="sr-only">
+            Accions
+          </div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">
@@ -58,14 +96,32 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
               <div role="cell" className="font-semibold">
                 {String(ticket.id).padStart(6, "0")}
               </div>
-              <div role="cell" className="truncate">{ticket.description}</div>
-              <div role="cell" className="capitalize">{ticket.status}</div>
-              <div role="cell">{formatDate(ticket.incident_date)}</div>
-              <div role="cell" className={`font-bold ${getPriorityColor(ticket.priority)}`}>
-                {ticket.priority}
+
+              <div role="cell" className="truncate">
+                {ticket.description}
               </div>
+
               <div role="cell">
-                <button className="text-sm text-primary hover:underline">Accions</button>
+                {getStatusLabel(ticket.status)}
+              </div>
+
+              <div role="cell">
+                {formatDate(ticket.incident_date)}
+              </div>
+
+              <div
+                role="cell"
+                className={`font-bold ${getPriorityColor(
+                  ticket.priority
+                )}`}
+              >
+                {priorityLabels[ticket.priority]}
+              </div>
+
+              <div role="cell">
+                <button className="text-sm text-primary hover:underline">
+                  Accions
+                </button>
               </div>
             </div>
           ))}
