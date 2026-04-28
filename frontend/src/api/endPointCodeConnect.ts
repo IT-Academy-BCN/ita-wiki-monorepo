@@ -12,7 +12,7 @@ export type CodeConnectError = {
 };
 
 export const createCodeConnect = async (
-  formData: IntCodeConnect,
+  formData: Omit<IntCodeConnect, "time" | "unitTime">,
   signal?: AbortSignal,
 ) => {
   const url = `${API_URL}${END_POINTS.codeconnect.post}`;
