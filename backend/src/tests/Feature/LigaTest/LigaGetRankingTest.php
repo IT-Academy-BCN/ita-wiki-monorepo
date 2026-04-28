@@ -80,4 +80,42 @@ class LigaGetRankingTest extends TestCase
         }
     }
 
+    public function test_users_with_zero_points_appear_in_ranking(): void
+    {
+        $user = User::factory()->create();
+        Liga::factory()->create(['user_id' => $user->id, 'points' => 0]);
+
+
+        $response = $this->getJson('/api/ligas/ranking');
+
+
+        $response->assertStatus(200);
+        $this->assertCount(1, $response->json());
+        $this->assertEquals(0, $response->json()[0]['points']);
+    }
+
+
+    public function test_users_with_equal_points_get_sequential_positions(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create();
+
+
+        Liga::factory()->create(['user_id' => $userA->id, 'points' => 50]);
+        Liga::factory()->create(['user_id' => $userB->id, 'points' => 50]);
+
+
+        $response = $this->getJson('/api/ligas/ranking');
+
+
+        $response->assertStatus(200);
+
+
+        $data = $response->json();
+        $this->assertEquals(1, $data[0]['position']);
+        $this->assertEquals(2, $data[1]['position']);
+        $this->assertEquals(50, $data[0]['points']);
+        $this->assertEquals(50, $data[1]['points']);
+    }
+
 }
