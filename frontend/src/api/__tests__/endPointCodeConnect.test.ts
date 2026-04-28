@@ -1,17 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { IntCodeConnect } from "../types";
+import { IntCodeConnect } from "../../types";
 import {
   CodeConnectError,
   createCodeConnect,
   fetchCodeConnectAllProjects,
   fetchCodeConnectProject,
-} from "./endPointCodeConnect";
+} from "../endPointCodeConnect";
 
-vi.mock("../config", () => ({
-  API_URL: "https://localhost:8000",
+vi.mock("../../config", () => ({
+  API_URL: "http://localhost:8000",
   END_POINTS: {
     codeconnect: {
       post: "/codeconnect/create",
+      get: "/codeconnect",
     },
   },
 }));
@@ -26,9 +27,9 @@ describe("createCodeConnect", () => {
     description: "Some random text to describe lorem ipsum",
     numberDevsFront: 3,
     numberDevsBack: 10,
-    time: 1,
-    unitTime: "weeks",
-    deadline: "",
+    time: 2,
+    unitTime: "months",
+    deadline: "2026-12-31",
   };
 
   beforeEach(() => {
@@ -57,7 +58,7 @@ describe("createCodeConnect", () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://localhost:8000/codeconnect/create",
+      "http://localhost:8000/codeconnect/create",
       expect.objectContaining({
         method: "POST",
         headers: expect.objectContaining({
@@ -98,7 +99,7 @@ describe("createCodeConnect", () => {
     mockFetch.mockRejectedValueOnce(abortError);
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
-      message: "Petició cancel·lada",
+      message: "Petició cancel·lada.",
       code: "ABORTED",
     } as CodeConnectError);
   });
@@ -107,7 +108,7 @@ describe("createCodeConnect", () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
 
     await expect(createCodeConnect(mockNewCodeConnect)).rejects.toMatchObject({
-      message: "Error de conexión. Verifica tu conexión a internet.",
+      message: "Error de connexió. Verifica la teva connexió a internet.",
       code: "NETWORK_ERROR",
     } as CodeConnectError);
 
@@ -120,7 +121,7 @@ describe("fetchCodeConnectProject", () => {
     vi.restoreAllMocks();
   });
 
-  it("crida a l'endpoint correcte i retorna les dades", async () => {
+  it("should call the correct endpoint and return the data", async () => {
     const mockData = { id: 1, title: "Projecte Test" };
 
     global.fetch = vi.fn().mockResolvedValue({
@@ -161,7 +162,7 @@ describe("fetchCodeConnectAllProjects", () => {
     mockFetch.mockRejectedValueOnce(abortError);
 
     await expect(fetchCodeConnectAllProjects()).rejects.toMatchObject({
-      message: "Petició cancel·lada",
+      message: "Petició cancel·lada.",
       code: "ABORTED",
     } as CodeConnectError);
   });
