@@ -5,11 +5,7 @@ export type TicketStatus =
   | "ready"
   | "closed";
 
-export type TicketPriority =
-  | "low"
-  | "medium"
-  | "high"
-  | "critical";
+export type TicketPriority = "low" | "medium" | "high" | "critical";
 
 export type Ticket = {
   id: number;

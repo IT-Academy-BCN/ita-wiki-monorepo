@@ -1,4 +1,8 @@
-import type {TicketListProps, TicketPriority, TicketStatus,} from "../../types/ticketingTypes";
+import type {
+  TicketListProps,
+  TicketPriority,
+  TicketStatus,
+} from "../../types/ticketingTypes";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -35,29 +39,20 @@ const statusLabels: Record<TicketStatus, string> = {
 const getPriorityColor = (priority: TicketPriority) =>
   priorityColors[priority] ?? "text-foreground";
 
-const getStatusLabel = (status: TicketStatus) =>
-  statusLabels[status] ?? status;
+const getStatusLabel = (status: TicketStatus) => statusLabels[status] ?? status;
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   if (isLoading)
-    return (
-      <p className="text-muted-foreground p-6">
-        Carregant tickets...
-      </p>
-    );
+    return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
 
   if (error)
     return (
-      <p className="text-destructive p-6">
-        Error en carregar els tickets
-      </p>
+      <p className="text-destructive p-6">Error en carregar els tickets</p>
     );
 
   if (!tickets || tickets.length === 0)
     return (
-      <p className="text-muted-foreground p-6">
-        No hi ha tickets disponibles
-      </p>
+      <p className="text-muted-foreground p-6">No hi ha tickets disponibles</p>
     );
 
   return (
@@ -101,19 +96,13 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
                 {ticket.description}
               </div>
 
-              <div role="cell">
-                {getStatusLabel(ticket.status)}
-              </div>
+              <div role="cell">{getStatusLabel(ticket.status)}</div>
 
-              <div role="cell">
-                {formatDate(ticket.incident_date)}
-              </div>
+              <div role="cell">{formatDate(ticket.incident_date)}</div>
 
               <div
                 role="cell"
-                className={`font-bold ${getPriorityColor(
-                  ticket.priority
-                )}`}
+                className={`font-bold ${getPriorityColor(ticket.priority)}`}
               >
                 {priorityLabels[ticket.priority]}
               </div>
