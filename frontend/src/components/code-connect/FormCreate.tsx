@@ -145,7 +145,6 @@ const FormCreate = () => {
       limit_date_inscription: formData.limit_date_inscription,
     };
 
-    console.log(formPayload);
     try {
       await createCodeConnect(formPayload);
       toast.success("Code Connect publicat amb exit");
