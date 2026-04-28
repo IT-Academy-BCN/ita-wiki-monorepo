@@ -10,10 +10,9 @@ export type Liga = {
 
 export type LigaResponse = Liga[];
 
-// UI type for StandingsTable — adapter between Liga (backend) and display layer
-// username and language are placeholders until backend confirms JOIN with users table
+// UI type for StandingsTable — matches confirmed backend fields
+// username will be added when backend confirms JOIN with users table
 export type Standing = {
-  username: string;
-  language: string;
+  user_id: number;
   points: number;
 };

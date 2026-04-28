@@ -9,16 +9,13 @@ export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
       <table className="w-full table-fixed">
         <thead>
           <tr>
-            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
+            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/3">
               Posició
             </th>
-            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
-              Nom
+            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/3">
+              Usuari
             </th>
-            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
-              Llenguatge
-            </th>
-            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
+            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/3">
               Punts
             </th>
           </tr>

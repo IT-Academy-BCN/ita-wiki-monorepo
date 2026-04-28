@@ -16,8 +16,7 @@ import type { Liga, Standing } from "../types/league";
 const cupOrder: CupType[] = ["gold", "silver", "bronze"];
 
 const toStanding = (liga: Liga): Standing => ({
-  username: `User ${liga.user_id}`,
-  language: "—",
+  user_id: liga.user_id,
   points: liga.points,
 });
 
