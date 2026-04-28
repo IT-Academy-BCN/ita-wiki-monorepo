@@ -79,7 +79,6 @@ const FormCreate = () => {
       limit_date_inscription,
     } = formData;
 
-    console.log(formData);
     if (!language_frontend) {
       toast.error("Selecciona una tecnologia frontend.");
       return false;
@@ -146,6 +145,7 @@ const FormCreate = () => {
       limit_date_inscription: formData.limit_date_inscription,
     };
 
+    console.log(formPayload);
     try {
       await createCodeConnect(formPayload);
       toast.success("Code Connect publicat amb exit");
@@ -318,7 +318,7 @@ const FormCreate = () => {
             Data límit d'inscripció *
           </label>
           <input
-            id="deadline"
+            id="limit_date_inscription"
             className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
             value={formData.limit_date_inscription || ""}
@@ -327,7 +327,7 @@ const FormCreate = () => {
             onChange={(e) =>
               handleDeadLine("limit_date_inscription", e.target.value)
             }
-            min="2023-01-01"
+            min={getMinDeadline()}
           />
         </div>
       </div>
