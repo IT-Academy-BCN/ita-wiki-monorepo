@@ -165,6 +165,32 @@ describe("MyTechnicalTestsPage", () => {
     expect(screen.queryByText("High Likes Test")).not.toBeInTheDocument();
   });
 
+  it("renders the 'Nova prova tècnica' button", () => {
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Nova prova tècnica" }),
+    ).toBeInTheDocument();
+  });
+
+  it("navigates to create page when 'Nova prova tècnica' button is clicked", () => {
+    render(
+      <MemoryRouter>
+        <MyTechnicalTestsPage />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Nova prova tècnica" }));
+
+    expect(mockedNavigate).toHaveBeenCalledWith(
+      "/resources/technical-test/create",
+    );
+  });
+
   it("sorts cards by likes descending when Likes button is clicked", () => {
     mockedUseTechnicalTestList.mockReturnValue({
       technicalTests: mockTechnicalTests,
