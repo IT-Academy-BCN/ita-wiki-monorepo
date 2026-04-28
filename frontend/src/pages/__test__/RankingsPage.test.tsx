@@ -31,7 +31,7 @@ describe("RankingsPage", () => {
     vi.clearAllMocks();
   });
 
-  it("mostra o skeleton durante o carregamento", () => {
+  it("shows the skeleton while loading", () => {
     vi.mocked(getLeagueRanking).mockReturnValue(new Promise(() => {}));
 
     render(<RankingsPage />);
@@ -39,7 +39,7 @@ describe("RankingsPage", () => {
     expect(screen.getByText("Carregant...")).toBeInTheDocument();
   });
 
-  it("mostra o toggle após carregar os dados", async () => {
+  it("shows the toggle after data is loaded", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
     render(<RankingsPage />);
@@ -50,7 +50,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("mostra a tabela com dados após carregamento com sucesso", async () => {
+  it("shows the standings table after a successful fetch", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
     render(<RankingsPage />);
@@ -62,7 +62,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("mostra o estado vazio quando a API retorna array vazio", async () => {
+  it("shows the empty state when the API returns an empty array", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue([]);
 
     render(<RankingsPage />);
@@ -74,7 +74,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("mostra a mensagem de erro quando a API falha", async () => {
+  it("shows an error message when the API fails", async () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("network error"));
 
     render(<RankingsPage />);
@@ -88,7 +88,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("mostra o botão de retry quando há erro", async () => {
+  it("shows the retry button when there is an error", async () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("network error"));
 
     render(<RankingsPage />);
@@ -100,7 +100,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("o botão de retry chama a API novamente", async () => {
+  it("clicking the retry button calls the API again", async () => {
     vi.mocked(getLeagueRanking)
       .mockRejectedValueOnce(new Error("network error"))
       .mockResolvedValueOnce(mockRanking);
@@ -121,7 +121,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("não mostra o skeleton após o carregamento", async () => {
+  it("does not show the skeleton after loading completes", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
     render(<RankingsPage />);
@@ -131,7 +131,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("não mostra erro quando os dados carregam com sucesso", async () => {
+  it("does not show an error when data loads successfully", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
     render(<RankingsPage />);
@@ -145,7 +145,7 @@ describe("RankingsPage", () => {
     });
   });
 
-  it("o estado de erro tem role alert para acessibilidade", async () => {
+  it("the error state has role alert for accessibility", async () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("network error"));
 
     render(<RankingsPage />);
