@@ -17,7 +17,6 @@ const FormCreate = () => {
     techsFront: [],
     techsBack: [],
     description: "",
-    roadmap: [],
     numberDevsFront: 0,
     numberDevsBack: 0,
     time: 0,
@@ -307,7 +306,7 @@ const FormCreate = () => {
         </div>
       </div>
       <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
-      <RoadmapField onChange={setRoadmap} />
+      <RoadmapField setRoadmap={setRoadmap} />
       <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">

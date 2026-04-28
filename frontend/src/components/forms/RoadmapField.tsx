@@ -2,26 +2,38 @@ import { useState } from "react";
 import { Task } from "../../types";
 
 export function RoadmapField({
-  onChange,
+  setRoadmap,
 }: {
-  onChange: React.Dispatch<React.SetStateAction<Task[]>>;
+  setRoadmap: (tasks: Task[]) => void;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const update = (updated: Task[]) => {
     setTasks(updated);
-    onChange(updated);
+    setRoadmap(updated);
   };
 
   const addTask = () => {
     if (tasks.some((t) => !t.task.length)) return;
-    onChange(tasks);
     setTasks([...tasks, { task: "", done: false }]);
   };
-  const removeTask = (index: number) =>
+
+  const removeTask = (index: number) => {
     update(tasks.filter((_t, i) => i !== index));
-  const editTask = (index: number, value: string) =>
-    update(tasks.map((t, i) => (i === index ? { ...t, task: value } : t)));
+  };
+
+  const editTask = (index: number, value: string) => {
+    const updatedTask = { ...tasks[index], task: value };
+    const updatedTasks = tasks.map((t, i) => (i === index ? updatedTask : t));
+
+    setTasks(updatedTasks);
+
+    setRoadmap(
+      updatedTask.task.length > 0
+        ? updatedTasks
+        : updatedTasks.filter((_, i) => i !== index),
+    );
+  };
 
   return (
     <div className="lg:w-2/3 mb-8 font-medium">
@@ -38,6 +50,7 @@ export function RoadmapField({
             />
             <button
               tabIndex={0}
+              aria-label="Eliminar etapa"
               type="button"
               className="text-xl cursor-pointer"
               onClick={() => removeTask(i)}

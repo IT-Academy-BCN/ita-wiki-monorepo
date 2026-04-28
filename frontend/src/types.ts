@@ -51,7 +51,6 @@ export interface Task {
 export interface IntCodeConnect {
   title: string;
   description: string;
-  roadmap: Task[];
   techsFront: string[];
   techsBack: string[];
   numberDevsFront: number;
