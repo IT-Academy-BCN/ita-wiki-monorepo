@@ -32,7 +32,7 @@ class ListProjectsShowTest extends TestCase
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'description' => 'Project description text',
-            'roadmap' => 'Project roadmap text',
+            'roadmap' => [['task' => 'Setup project', 'done' => true]],
 
         ]);
 
