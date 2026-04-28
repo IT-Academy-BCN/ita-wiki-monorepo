@@ -31,11 +31,13 @@ export interface ApiProjectContributor {
 
 export interface ApiProjectData {
   id: number;
-  title: string;
-  time_duration: string;
+  contributors: ApiProjectContributor[];
+  description?: string;
   language_backend: string;
   language_frontend: string;
-  contributors: ApiProjectContributor[];
+  roadmap?: string;
+  time_duration: string;
+  title: string;
 }
 
 export interface ApiProjectsResponse {
