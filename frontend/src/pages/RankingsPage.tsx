@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import LeaderCard, {
-  CupType,
-} from "../components/LeaderCard/LeaderCard";
 import {
   LeagueToggle,
   LeagueView,
@@ -12,8 +9,6 @@ import { StandingsTableSkeleton } from "../components/leagues/StandingsTableSkel
 import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga, Standing } from "../types/league";
-
-const cupOrder: CupType[] = ["gold", "silver", "bronze"];
 
 const toStanding = (liga: Liga): Standing => ({
   user_id: liga.user_id,
@@ -43,9 +38,7 @@ const RankingsPage = () => {
     fetchData();
   }, [view]);
 
-  const top3 = data.slice(0, 3);
-  const rest = data.slice(3);
-  const standings: Standing[] = rest.map(toStanding);
+  const standings: Standing[] = data.map(toStanding);
 
   return (
     <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
@@ -71,29 +64,7 @@ const RankingsPage = () => {
         {!isLoading && !error && data.length === 0 && <StandingsEmptyState />}
 
         {!isLoading && !error && data.length > 0 && (
-          <>
-            <div className="flex justify-center gap-6 flex-wrap">
-              {top3.map((liga, index) => (
-                <LeaderCard
-                  key={liga.id}
-                  cupType={cupOrder[index]}
-                  player={{
-                    user_id: liga.user_id,
-                    username: `User ${liga.user_id}`,
-                    avatarUrl: "",
-                    title: "—",
-                    points: liga.points,
-                  }}
-                />
-              ))}
-            </div>
-
-            {standings.length > 0 ? (
-              <StandingsTable standings={standings} />
-            ) : (
-              <StandingsEmptyState />
-            )}
-          </>
+          <StandingsTable standings={standings} />
         )}
       </div>
     </Container>
