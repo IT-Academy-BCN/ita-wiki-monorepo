@@ -33,7 +33,6 @@ export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
                   key={index}
                   standing={standing}
                   position={index + 1}
-                  totalRows={standings.length}
                 />
               ))}
             </tbody>

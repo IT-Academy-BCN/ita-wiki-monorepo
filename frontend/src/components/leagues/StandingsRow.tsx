@@ -4,7 +4,6 @@ import { TOP_RANGE, DANGER_RANGE } from "../../config/rankingConfig";
 type StandingsRowProps = {
   standing: Standing;
   position: number;
-  totalRows: number;
 };
 
 export const StandingsRow = ({ standing, position }: StandingsRowProps) => {
