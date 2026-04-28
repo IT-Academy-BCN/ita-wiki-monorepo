@@ -1,14 +1,20 @@
-import { useState, FormEvent } from "react";
-import {
-  contentTechsFrontCodeConnect,
-  contentTechsBackCodeConnect,
-} from "./techsLabelsContent";
-import { IntCodeConnect } from "../../types";
-import { createCodeConnect } from "../../api/endPointCodeConnect";
-import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { ArrowLeftIcon } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { createCodeConnect } from "../../api/endPointCodeConnect";
+import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
+import { IntCodeConnect } from "../../types";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+} from "./techsLabelsContent";
+
+const getMinDeadline = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split("T")[0];
+};
 
 const FormCreate = () => {
   const [formData, setFormData] = useState<IntCodeConnect>({
@@ -316,7 +322,7 @@ const FormCreate = () => {
             required
             disabled={isSubmitting}
             onChange={(e) => handleDeadLine("deadline", e.target.value)}
-            min="2023-01-01"
+            min={getMinDeadline()}
           />
         </div>
       </div>
