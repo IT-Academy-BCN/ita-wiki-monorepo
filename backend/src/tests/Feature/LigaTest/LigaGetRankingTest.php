@@ -13,12 +13,71 @@ class LigaGetRankingTest extends TestCase
 {
     use RefreshDatabase;
 
+
+    public function test_endpoint_is_public_and_requires_no_auth_token(): void
+    {
+        $response = $this->getJson('/api/ligas/ranking');
+
+        $response->assertStatus(200);
+    }
+
     public function test_returns_empty_array_when_no_entries_exist(): void
     {
         $response = $this->getJson('/api/ligas/ranking');
 
         $response->assertStatus(200)
             ->assertExactJson([]);
+    }
+
+    public function test_response_shape_matches_expected_contract(): void
+    {
+        $user = User::factory()->create();
+        Liga::factory()->create(['user_id' => $user->id, 'points' => 50]);
+
+        $response = $this->getJson('/api/ligas/ranking');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                '*' => ['position', 'github_user_name', 'avatar', 'points'],
+            ]);
+    }
+
+    public function test_returns_entries_sorted_by_points_descending(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create();
+        $userC = User::factory()->create();
+
+        Liga::factory()->create(['user_id' => $userA->id, 'points' => 10]);
+        Liga::factory()->create(['user_id' => $userB->id, 'points' => 30]);
+        Liga::factory()->create(['user_id' => $userC->id, 'points' => 20]);
+
+        $response = $this->getJson('/api/ligas/ranking');
+
+        $response->assertStatus(200);
+
+        $data = $response->json();
+        $this->assertEquals(30, $data[0]['points']);
+        $this->assertEquals(20, $data[1]['points']);
+        $this->assertEquals(10, $data[2]['points']);
+    }
+
+    public function test_positions_are_sequential_starting_at_one(): void
+    {
+        $users = User::factory(3)->create();
+
+        foreach ($users as $i => $user) {
+            Liga::factory()->create(['user_id' => $user->id, 'points' => ($i + 1) * 10]);
+        }
+
+        $response = $this->getJson('/api/ligas/ranking');
+
+        $response->assertStatus(200);
+
+        $data = $response->json();
+        foreach ($data as $index => $entry) {
+            $this->assertEquals($index + 1, $entry['position']);
+        }
     }
 
 }
