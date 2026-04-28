@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Enums\LanguageEnum;
 use App\Http\Requests\ListProjectRequest;
 use App\Enums\ContributorStatusEnum;
+use App\Models\User;
 
 class ListProjectsController extends Controller
 {
@@ -61,6 +62,11 @@ class ListProjectsController extends Controller
      * )
      */
 
+    private function formatOwner(?User $user): ?array{
+
+        return $user ? ['id' => $user->id, 'name' => $user->name,] : null;
+    }
+
     public function index(Request $request)
     {
 
@@ -77,11 +83,7 @@ class ListProjectsController extends Controller
                 'limit_date_inscription' => $project->limit_date_inscription,
                 'dev_front_number' => $project->dev_front_number,
                 'dev_back_number' => $project->dev_back_number,
-                'owner' => [
-                    'id' => $project->user->id,
-                    'name' => $project->user->name,
-                ],
-
+                'owner' => $this->formatOwner($project->user),
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
                         'name' => $contributor->user->name,
@@ -173,11 +175,7 @@ class ListProjectsController extends Controller
             'limit_date_inscription' => $project->limit_date_inscription,
             'dev_front_number' => $project->dev_front_number,
             'dev_back_number' => $project->dev_back_number,
-            'owner' => [
-                'id' => $project->user->id,
-                'name' => $project->user->name,
-            ],
-
+            'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
                     'name' => $contributor->user->name,
