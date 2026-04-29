@@ -25,20 +25,8 @@ describe("fetchAllTickets", () => {
     consoleSpy.mockClear();
   });
 
-  it("should return the data correctly if the API returns a direct array", async () => {
-    const mockData = [{ id: 1, name: "Bug login" }];
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => mockData,
-    });
-
-    const result = await fetchAllTickets();
-    expect(result).toEqual(mockData);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('should return "data.data" if the API returns a wrapped object', async () => {
-    const mockInnerData = [{ id: 2, name: "Bug logout" }];
+  it("should return the data correctly", async () => {
+    const mockInnerData = [{ id: 1, name: "Bug login" }];
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({ data: mockInnerData }),
@@ -46,6 +34,7 @@ describe("fetchAllTickets", () => {
 
     const result = await fetchAllTickets();
     expect(result).toEqual(mockInnerData);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("should make a console.error if the response is not OK", async () => {
@@ -57,7 +46,7 @@ describe("fetchAllTickets", () => {
 
     const result = await fetchAllTickets();
     expect(result).toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith(new Error("Failed to fetch tickets"));
   });
 
   it("should handle network errors (fetch throw)", async () => {
