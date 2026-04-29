@@ -31,15 +31,20 @@ class TicketCommentController extends Controller
 
         $isClosingComment = $request->validated()['is_closing_comment'] ?? false;
 
+        $isCreator  = (int) $ticket->code_connect_id === (int) $user->id;
+        $isAssignee = (int) $ticket->assignee_id     === (int) $user->id;
+
         if ($isClosingComment
             && !$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
+            && !$isCreator
+            && !$isAssignee
         ) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to close this ticket',
             ], 403);
         }
+
 
         $comment = $ticket->comments()->create([
             'user_id' => $request->user()->id,
