@@ -1,17 +1,11 @@
-import type {
-  TicketListProps,
-  TicketPriority,
-  TicketStatus,
-} from "../../types/ticketingTypes";
+import type { TicketListProps, TicketPriority, TicketStatus, TicketType,} from "../../types/ticketingTypes";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
   if (isNaN(d.getTime())) return date;
-
   const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
-
   return `${day}/${month}/${year}`;
 };
 
@@ -36,10 +30,16 @@ const statusLabels: Record<TicketStatus, string> = {
   ready: "Preparat",
   closed: "Tancat",
 };
-const getPriorityColor = (priority: TicketPriority) =>
-  priorityColors[priority] ?? "text-foreground";
 
-const getStatusLabel = (status: TicketStatus) => statusLabels[status] ?? status;
+const typeLabels: Record<TicketType, string> = {
+  error: "Error",
+  suggestion: "Suggeriment",
+};
+
+const typeColors: Record<TicketType, string> = {
+  error: "text-red-600",
+  suggestion: "text-blue-600",
+};
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   if (isLoading)
@@ -66,16 +66,15 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
       <div role="table" className="w-full">
         <div
           role="row"
-          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
+          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
         >
           <div role="columnheader">ID</div>
-          <div role="columnheader">Descripció</div>
+          <div role="columnheader">Nom</div>
+          <div role="columnheader">Tipus</div>
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
-          <div role="columnheader" className="sr-only">
-            Accions
-          </div>
+          <div role="columnheader" className="sr-only">Accions</div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">
@@ -83,23 +82,32 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
             <div
               key={ticket.id}
               role="row"
-              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
             >
               <div role="cell" className="font-semibold">
                 {String(ticket.id).padStart(6, "0")}
               </div>
 
               <div role="cell" className="truncate">
-                {ticket.description}
+                {ticket.name}
               </div>
 
-              <div role="cell">{getStatusLabel(ticket.status)}</div>
+              <div
+                role="cell"
+                className={`font-medium ${typeColors[ticket.type]}`}
+              >
+                {typeLabels[ticket.type]}
+              </div>
+
+              <div role="cell">
+                {statusLabels[ticket.status] ?? ticket.status}
+              </div>
 
               <div role="cell">{formatDate(ticket.incident_date)}</div>
 
               <div
                 role="cell"
-                className={`font-bold ${getPriorityColor(ticket.priority)}`}
+                className={`font-bold ${priorityColors[ticket.priority] ?? "text-foreground"}`}
               >
                 {priorityLabels[ticket.priority]}
               </div>

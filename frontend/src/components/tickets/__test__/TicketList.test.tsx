@@ -7,28 +7,36 @@ import type { Ticket } from "../../../types/ticketingTypes";
 const mockTickets: Ticket[] = [
   {
     id: 1,
-    description: "Error en el login",
+    name: "Login no funciona",          
+    description: "Error en el login",   
+    type: "error",
     status: "pending",
     priority: "high",
     incident_date: "2026-04-23",
   },
   {
     id: 2,
+    name: "Formulari de registre",
     description: "Problema amb el formulari",
+    type: "suggestion",
     status: "closed",
     priority: "low",
     incident_date: "2026-04-20",
   },
   {
     id: 3,
+    name: "Problema de navegació",
     description: "Altre problema",
+    type: "suggestion",
     status: "ready",
     priority: "medium",
     incident_date: "2026-04-21",
   },
   {
     id: 4,
+    name: "Error crític de sistema",
     description: "Error crític",
+    type: "error",
     status: "blocked",
     priority: "critical",
     incident_date: "2026-04-22",
@@ -59,8 +67,15 @@ describe("TicketList", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
     expect(screen.getByText("000001")).toBeInTheDocument();
-    expect(screen.getByText("Error en el login")).toBeInTheDocument();
+    expect(screen.getByText("Login no funciona")).toBeInTheDocument();
     expect(screen.getByText("23/04/2026")).toBeInTheDocument();
+  });
+
+  it("renders the ticket type label", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+
+    expect(screen.getAllByText("Error")).toHaveLength(2);
+    expect(screen.getAllByText("Suggeriment")).toHaveLength(2);
   });
 
   it("renders one action button per ticket", () => {
@@ -80,13 +95,25 @@ describe("TicketList", () => {
     expect(screen.getByText("Crítica")).toHaveClass("text-red-600");
   });
 
+  it("applies the correct color depending on the type", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+
+    const errorBadges = screen.getAllByText("Error");
+    errorBadges.forEach((el) => expect(el).toHaveClass("text-red-600"));
+
+    const suggestionBadges = screen.getAllByText("Suggeriment");
+    suggestionBadges.forEach((el) => expect(el).toHaveClass("text-blue-600"));
+  });
+
   it("renders original date if invalid date is provided", () => {
     render(
       <TicketList
         tickets={[
           {
             id: 99,
+            name: "Ticket de prova",     // ← camp obligatori
             description: "Test",
+            type: "error",               // ← camp obligatori
             status: "pending",
             priority: "low",
             incident_date: "invalid-date",
