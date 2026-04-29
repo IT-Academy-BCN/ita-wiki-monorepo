@@ -45,9 +45,6 @@ const App: FC = () => {
               />
             </Route>
 
-            {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-
             <Route
               path="/resources/technical-test/create"
               element={<TechnicalTestCreatePage />}
@@ -65,6 +62,9 @@ const App: FC = () => {
               path="/codeconnect/create"
               element={<CodeConnectCreatePage />}
             />
+
+            {/* Fallback route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </div>
