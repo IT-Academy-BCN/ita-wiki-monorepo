@@ -660,14 +660,18 @@ class TicketControllerTest extends TestCase{
             'assignee_id'     => $assignee->id,
         ]);
 
-        Ticket::factory()->create(['code_connect_id' => $creator->id]);
+        $unrelatedTicket = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => null,
+        ]);
 
         $response = $this->getJson('/api/tickets');
 
         $response->assertStatus(200);
 
-        $ids = collect($response->json('data'))->pluck('id');
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
         $this->assertContains($assignedTicket->id, $ids);
+        $this->assertNotContains($unrelatedTicket->id, $ids);
     }
 }
 
