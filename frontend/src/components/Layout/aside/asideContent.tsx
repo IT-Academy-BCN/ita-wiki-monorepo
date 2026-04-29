@@ -55,6 +55,11 @@ export const AsideNavbarData: {
     ref: "/codeconnect",
     icon: <CodeConnectIcon className="w-full h-full" />,
   },
+  {
+    label: "Ligas",
+    ref: "/ligas",
+    icon: <CircleIcon className="w-full h-full" />,
+  },
 ];
 
 export const AsideConfigData: {
