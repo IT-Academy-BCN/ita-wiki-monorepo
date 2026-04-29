@@ -5,6 +5,7 @@ import HomeIcon from "../../../assets/homeIcon.svg?react";
 import ResourcesIcon from "../../../assets/resourcesIcon.svg?react";
 import TechTestsIcon from "../../../assets/techTestsIcon.svg?react";
 import CodeConnectIcon from "../../../assets/codeConnectIcon.svg?react";
+import LigasIcon from "../../../assets/ligasIcon.svg?react";
 import SettingsIcon from "../../../assets/settingsIcon.svg?react";
 import QuestionIcon from "../../../assets/questionIcon.svg?react";
 import InfoIcon from "../../../assets/infoIcon.svg?react";
@@ -58,7 +59,7 @@ export const AsideNavbarData: {
   {
     label: "Ligas",
     ref: "/ligas",
-    icon: <CircleIcon className="w-full h-full" />,
+    icon: <LigasIcon className="w-full h-full" />,
   },
 ];
 
