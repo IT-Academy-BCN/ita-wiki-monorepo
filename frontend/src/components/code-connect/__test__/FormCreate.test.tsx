@@ -33,6 +33,26 @@ const renderWithRouter = (ui: React.ReactElement) => {
   return render(<MemoryRouter>{ui}</MemoryRouter>);
 };
 
+const createATooLongProject = async (
+  user: ReturnType<typeof userEvent.setup>,
+  time: string,
+  unitTime: string,
+) => {
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
+
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
+
+  const timeInput = screen.getByLabelText(
+    /durada del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(timeInput, time);
+
+  const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+  await user.selectOptions(unitTimeSelect, unitTime);
+};
+
 const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const titleInput = screen.getByRole("textbox", {
     name: /títol/i,
@@ -44,11 +64,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   }) as HTMLInputElement;
   await user.type(descriptionTextarea, "Test description");
 
-  const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
-  await user.click(reactCheckbox);
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
 
-  const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
-  await user.click(nodeCheckbox);
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
 
   const deadlineInput = screen.getByLabelText(
     /data límit d'inscripció/i,
@@ -58,27 +78,32 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const timeInput = screen.getByLabelText(
     /durada del projecte/i,
   ) as HTMLInputElement;
-  await user.tripleClick(timeInput);
-  await user.keyboard("2");
+  await user.type(timeInput, "2");
 
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
 
+  const ownerRoleSelect = screen.getByLabelText(
+    /selecciona el teu rol tècnic/i,
+  );
+  await user.selectOptions(ownerRoleSelect, "Frontend");
+
   const devsFrontInput = screen.getByLabelText(
     /nombre de programadors frontend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsFrontInput);
-  await user.keyboard("2");
+  await user.type(devsFrontInput, "2");
 
   const devsBackInput = screen.getByLabelText(
     /nombre de programadors backend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsBackInput);
-  await user.keyboard("2");
+  await user.type(devsBackInput, "2");
 
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
+    expect((ownerRoleSelect as HTMLSelectElement).value).toBe(
+      "Frontend Developer",
+    );
     expect(devsFrontInput.value).toBe("2");
     expect(devsBackInput.value).toBe("2");
     expect(timeInput.value).toBe("2");
@@ -104,6 +129,32 @@ describe("FormCreateCodeConnect", () => {
       });
     });
 
+    it("should show error if the time duration exceeds 6 months", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      await createATooLongProject(user, "7", "month");
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
+    it("should show error if the time duration exceeds 26 weeks", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      await createATooLongProject(user, "27", "week");
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
     it("should pass validation with all required fields filled correctly", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
@@ -126,19 +177,18 @@ describe("FormCreateCodeConnect", () => {
       mockCreateCodeConnect.mockResolvedValueOnce({
         id: "123",
         title: "Test Project",
-        techsFront: ["React"],
-        techsBack: ["Node"],
+        language_frontend: "React",
+        language_backend: "Node",
         description: "Test description",
         numberDevsFront: 2,
         numberDevsBack: 2,
         time: 2,
-        unitTime: "month",
+        unitTime: "week",
+        limit_date_inscription: "20/05/2026",
       });
 
       renderWithRouter(<FormCreateCodeConnect />);
-
       await fillCompleteForm(user);
-
       expect(toast.error).not.toHaveBeenCalled();
 
       const form = screen
@@ -150,6 +200,11 @@ describe("FormCreateCodeConnect", () => {
       await waitFor(
         () => {
           expect(mockCreateCodeConnect).toHaveBeenCalled();
+          expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+            expect.objectContaining({
+              time_duration: "2 mesos",
+            }),
+          );
         },
         { timeout: 3000 },
       );
@@ -258,15 +313,15 @@ describe("FormCreateCodeConnect", () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
-      await user.click(nodeCheckbox);
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
 
       const form = document.querySelector("form")!;
       fireEvent.submit(form);
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          "Selecciona almenys una tecnologia frontend.",
+          "Selecciona una tecnologia frontend.",
         );
       });
     });
@@ -275,15 +330,15 @@ describe("FormCreateCodeConnect", () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
-      await user.click(reactCheckbox);
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
 
       const form = document.querySelector("form")!;
       fireEvent.submit(form);
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          "Selecciona almenys una tecnologia backend.",
+          "Selecciona una tecnologia backend.",
         );
       });
     });
