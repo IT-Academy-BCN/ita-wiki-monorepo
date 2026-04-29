@@ -14,7 +14,7 @@ return new class extends Migration
     {
             DB::statement("ALTER TABLE list_projects MODIFY COLUMN language_backend ENUM('PHP','JavaScript','Java','React','TypeScript','Python','SQL','Other','Angular','Svelte','Vue','Node') NULL");
             DB::statement("ALTER TABLE list_projects MODIFY COLUMN language_frontend ENUM('PHP','JavaScript','Java','React','TypeScript','Python','SQL','Other','Angular','Svelte','Vue','Node') NULL");
-            DB::statement("ALTER TABLE technical_tests MODIFY COLUMN language ENUM('PHP','JavaScript','Java','React','TypeScript','Python','SQL','Other')");
+            DB::statement("ALTER TABLE technical_tests MODIFY COLUMN language ENUM('PHP','JavaScript','Java','React','TypeScript','Python','SQL','Other','Angular','Svelte','Vue','Node')");
     }
 
     /**
