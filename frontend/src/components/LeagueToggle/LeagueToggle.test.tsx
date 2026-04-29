@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 import React from 'react';
 import LeagueToggle from './LeagueToggle';
 
@@ -42,5 +43,12 @@ describe('LeagueToggle', () => {
     fireEvent.click(screen.getByText('Ranking general'));
 
     expect(onChange).toHaveBeenCalledWith('global');
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(<LeagueToggle view="weekly" onChange={vi.fn()} />);
+    const results = await axe(container);
+
+    expect(results.violations).toHaveLength(0);
   });
 });
