@@ -13,7 +13,7 @@ import vue_logo from "../../assets/technologies/vue-logo.svg?react";
 
 type SvgIcon = FC<SVGProps<SVGSVGElement>>;
 
-type TechnologyItem = {
+export type TechnologyItem = {
   icon?: SvgIcon;
   label: string;
 };
