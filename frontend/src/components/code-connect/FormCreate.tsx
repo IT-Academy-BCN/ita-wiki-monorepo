@@ -227,7 +227,7 @@ const FormCreate = () => {
               >
                 <input
                   type="radio"
-                  name="language_frontend[]"
+                  name="language_frontend"
                   value={item.label}
                   checked={isSelected}
                   onChange={() =>
@@ -235,7 +235,7 @@ const FormCreate = () => {
                   }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );
@@ -261,7 +261,7 @@ const FormCreate = () => {
               >
                 <input
                   type="radio"
-                  name="language_backend[]"
+                  name="language_backend"
                   value={item.label}
                   checked={isSelected}
                   onChange={() =>
@@ -269,7 +269,7 @@ const FormCreate = () => {
                   }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );

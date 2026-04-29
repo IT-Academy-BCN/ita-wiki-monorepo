@@ -1,9 +1,14 @@
+import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FormCreateCodeConnect from "../FormCreate";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+} from "../techsLabelsContent";
 
 vi.mock("sonner", () => ({
   toast: {
@@ -340,6 +345,30 @@ describe("FormCreateCodeConnect", () => {
         expect(toast.error).toHaveBeenCalledWith(
           "Selecciona una tecnologia backend.",
         );
+      });
+    });
+
+    it("should show all the technologies with their icons when available", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      const frontInputs = screen
+        .getAllByRole("radio")
+        .filter((radio) => radio.getAttribute("name") === "language_frontend");
+      expect(frontInputs).toHaveLength(contentTechsFrontCodeConnect.length);
+      const backInputs = screen
+        .getAllByRole("radio")
+        .filter((radio) => radio.getAttribute("name") === "language_backend");
+      expect(backInputs).toHaveLength(contentTechsBackCodeConnect.length);
+      contentTechsFrontCodeConnect.forEach((tech) => {
+        if (tech.icon) {
+          const label = screen.getByDisplayValue(tech.label).closest("label")!;
+          expect(label.querySelector("svg")).toBeInTheDocument();
+        }
+      });
+      contentTechsBackCodeConnect.forEach((tech) => {
+        if (tech.icon) {
+          const label = screen.getByDisplayValue(tech.label).closest("label")!;
+          expect(label.querySelector("svg")).toBeInTheDocument();
+        }
       });
     });
 
