@@ -21,7 +21,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\FeatureFlagController;
 use App\Http\Controllers\LigaController;
 
-
 // GitHub Auth System Endpoints (PUBLIC)
 Route::get('/auth/github/redirect', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
 Route::get('/auth/github/callback', [GitHubAuthController::class, 'callback'])->name('github.callback');
@@ -172,7 +171,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // ========== LIGA ENDPOINTS ==========
-
+Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
 Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
+Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
+
+
+
 
 
