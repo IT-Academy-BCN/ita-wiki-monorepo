@@ -312,6 +312,28 @@ class ListProjectsStoreTest extends TestCase
         $response->assertJsonValidationErrors(['dev_back_number']);
     }
 
+    public function test_store_accepts_new_frontend_languages():void{
+        Sanctum::actingAs($this->userOne);
+
+        foreach([LanguageEnum::Angular, LanguageEnum::Svelte, LanguageEnum::Vue] as $language){
+            $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+                'language_frontend' => $language->value,
+            ]));
+
+            $response->assertStatus(201);
+        }
+    }
+
+    public function test_store_accept_node_as_backend_language():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+            'language_backend' => LanguageEnum::Node->value,
+        ]));
+
+        $response->assertStatus(201);
+    }
+
     private function validProjectPayload(array $overrides =[]):array{
         return array_merge([
             'title' => 'Projecte Epsilon',
