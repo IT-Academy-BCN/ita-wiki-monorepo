@@ -19,6 +19,8 @@ use App\Http\Controllers\Tickets\TicketController;
 use App\Http\Controllers\Tickets\TicketCommentController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FeatureFlagController;
+use App\Http\Controllers\LigaController;
+
 
 // GitHub Auth System Endpoints (PUBLIC)
 Route::get('/auth/github/redirect', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
@@ -169,5 +171,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])->name('tickets.comments.destroy');
 });
 
+// ========== LIGA ENDPOINTS ==========
+
+Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
 
 
