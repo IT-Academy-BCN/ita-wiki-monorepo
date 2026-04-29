@@ -691,6 +691,24 @@ class TicketControllerTest extends TestCase{
             'status' => 'closed',
         ]);
     }
+
+    /** @test */
+    public function non_assignee_non_creator_cannot_close_ticket(): void
+    {
+        $this->authenticateUserWithRole('student');
+        $creator  = User::factory()->create();
+        $assignee = User::factory()->create();
+        $ticket   = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => $assignee->id,
+        ]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed'
+        ]);
+
+        $response->assertStatus(403);
+    }
 }
 
 ?>
