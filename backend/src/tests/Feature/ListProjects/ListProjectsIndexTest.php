@@ -28,6 +28,7 @@ class ListProjectsIndexTest extends TestCase
 
         $this->projectOne = ListProjects::factory()->create([
             'id' => 1,
+            'user_id' => $this->userOne->id,
             'title' => 'Project Alpha',
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
@@ -119,6 +120,17 @@ class ListProjectsIndexTest extends TestCase
             'limit_date_inscription' => $this->projectOne->limit_date_inscription,
             'dev_front_number' => $this->projectOne->dev_front_number,
             'dev_back_number' => $this->projectOne->dev_back_number,
+        ]);
+    }
+
+     public function test_index_returns_owner():void{
+        $response = $this->Get("/api/codeconnect");
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'owner' => [
+                'id' => $this->projectOne->user->id,
+                'name'=> $this->projectOne->user->name,
+            ]
         ]);
     }
 
