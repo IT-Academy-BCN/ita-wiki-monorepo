@@ -170,10 +170,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])->name('tickets.comments.destroy');
 });
 
-
 // ========== LIGA ENDPOINTS ==========
+Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
+Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
+Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::put('ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
-});
+
+
+
+
+
 

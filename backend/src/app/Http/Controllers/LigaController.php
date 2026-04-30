@@ -4,20 +4,31 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+=======
+use App\Models\User;
+>>>>>>> 625830ae637dc3e62762701610f05f51027d3cf4
 
 class LigaController extends Controller
 {
-    public function addPoints(Request $request, User $user): JsonResponse
+<<<<<<< HEAD
+    public function addPoints(User $user): JsonResponse
     {
-        if (!$request->user()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        public function ranking()
+        {
+        return response()->json([
+            [
+            'id'=> 1,
+            'user_id'=> 1,
+            'points'=> 99,
+            'created_at' => null,
+            'updated_at' => null,
+            ]
+        ]);
         }
-
-        $entry = Liga::where('user_id', $user->id)->first();
 
         if (!$entry) {
             return response()->json(['error' => 'No liga entry found for this user'], 404);
@@ -31,5 +42,35 @@ class LigaController extends Controller
         ]);
 
     }
+    public function store(Request $request)
+    {
+        return response()->json(['message' => 'created'], 201);
+    }
+
 
 }
+=======
+    public function ranking()
+    {
+        return response()->json([
+            [
+            'id'=> 1,
+            'user_id'=> 1,
+            'points'=> 99,
+            'created_at' => null,
+            'updated_at' => null,
+            ]
+        ]);
+    }
+
+    public function addPoints(User $user)
+    {
+        return response()->json(['user_id' => $user->id, 'points' => 99]);
+    }
+
+    public function store(Request $request)
+    {
+        return response()->json(['message' => 'created'], 201);
+    }
+}
+>>>>>>> 625830ae637dc3e62762701610f05f51027d3cf4

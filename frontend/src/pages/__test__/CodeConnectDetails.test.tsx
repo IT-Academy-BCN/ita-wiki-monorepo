@@ -1,6 +1,5 @@
-// @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi, type Mock } from "vitest";
+import { describe, expect, it, vi, type Mock } from "vitest";
 import CodeConnectDetails from "../CodeConnectDetails";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 
@@ -21,10 +20,12 @@ vi.mock("../../utils/iconUtils", () => ({
 }));
 
 describe("CodeConnectDetails Page", () => {
-  it("renderitza el títol del projecte i l'equip quan arriben les dades", () => {
+  it("renders the project title and team when data arrives", () => {
     const mockProjectData = {
       data: {
-        title: "Súper Projecte de Prova",
+        title: "Super Projecte de Prova",
+        description: "Descripció de prova del projecte",
+        roadmap: "Roadmap de prova del projecte",
         contributors: [],
         time_duration: "2 setmanes",
         language_frontend: "react",
@@ -35,14 +36,74 @@ describe("CodeConnectDetails Page", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
       codeConnectProject: mockProjectData,
       isLoading: false,
+      errorMessage: null,
     });
 
     render(<CodeConnectDetails />);
 
-    expect(screen.getByText("Súper Projecte de Prova")).toBeTruthy();
-
+    expect(screen.getByText("Super Projecte de Prova")).toBeTruthy();
+    expect(screen.getByText("Descripció de prova del projecte")).toBeTruthy();
+    expect(screen.getByText("Roadmap de prova del projecte")).toBeTruthy();
     expect(screen.getByTestId("mock-project-team")).toBeTruthy();
+    expect(screen.getByText("Roadmap:")).toBeTruthy();
+    expect(screen.getByText("Descripció:")).toBeTruthy();
+  });
 
-    expect(screen.getByText("Roadmap")).toBeTruthy();
+  it("renders the fallback message when description and roadmap are empty", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Antic",
+        description: "",
+        roadmap: "",
+        contributors: [],
+        time_duration: "1 mes",
+        language_frontend: "javascript",
+        language_backend: "php",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Projecte Antic")).toBeTruthy();
+
+    const fallbackMessages = screen.getAllByText(
+      "Aquesta informació no està disponible a la base de dades.",
+    );
+
+    expect(fallbackMessages).toHaveLength(2);
+  });
+
+  it("renders the error message when the hook returns an error", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: null,
+      isLoading: false,
+      errorMessage: "Error de connexió. Verifica la teva connexió a internet.",
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(
+      screen.getByText(
+        "Error de connexió. Verifica la teva connexió a internet.",
+      ),
+    ).toBeTruthy();
+  });
+
+  it("renders the loading state when isLoading is true", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: null,
+      isLoading: true,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Carregant...")).toBeTruthy();
   });
 });

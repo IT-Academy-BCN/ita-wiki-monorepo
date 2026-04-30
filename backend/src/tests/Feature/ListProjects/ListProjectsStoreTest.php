@@ -355,4 +355,46 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    private function validProjectPayload(array $overrides = []): array
+    {
+        return array_merge([
+            'title' => 'Project with roadmap',
+            'description' => 'Project with roadmap',
+            'limit_date_inscription' => '2026-12-31',
+            'dev_front_number' => 2,
+            'dev_back_number' => 2,
+            'time_duration' => '1 month',
+            'language_backend' => LanguageEnum::PHP->value,
+            'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
+        ], $overrides);
+    }
+
+    public function test_store_saves_roadmap_as_array():void{
+
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+                'roadmap' => [
+                    ['task' => 'Setup project', 'done' => false],
+                ],
+        ]));
+
+        $response->assertStatus(201);
+        $project = ListProjects::where('title', 'Project with roadmap')->firstOrFail();
+        $this->assertIsArray($project->roadmap);
+        $this->assertEquals('Setup project', $project->roadmap[0]['task']);
+    }
+
+    public function test_roadmap_must_be_an_array():void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+            'roadmap' => 'not-an-array',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['roadmap']);
+    }
 }

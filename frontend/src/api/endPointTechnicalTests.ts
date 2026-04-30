@@ -3,9 +3,14 @@ import { API_URL, END_POINTS } from "../config";
 export const createTechnicalTest = async (formData: FormData) => {
   const url = `${API_URL}${END_POINTS.technicaltests.create}`;
 
+  const token = localStorage.getItem("auth_token");
+
   try {
     const response = await fetch(url, {
       method: "POST",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: formData,
     });
 
@@ -19,9 +24,9 @@ export const createTechnicalTest = async (formData: FormData) => {
     return await response.json();
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      console.warn("Petición cancelada.");
+      console.warn("Request cancelled.");
     } else {
-      console.error("Error al crear prueba técnica:", error);
+      console.error("Error creating technical test:", error);
     }
     throw error;
   }
