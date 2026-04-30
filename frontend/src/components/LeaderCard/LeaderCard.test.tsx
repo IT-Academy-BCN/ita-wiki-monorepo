@@ -25,4 +25,6 @@ describe("LeaderCard", () => {
     fireEvent.error(screen.getByAltText("Developer_134 avatar"));
     expect(screen.getByText("DE")).toBeInTheDocument();
   });
+
+
 });
