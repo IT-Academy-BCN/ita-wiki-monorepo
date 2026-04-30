@@ -19,8 +19,8 @@ const FormCreate = () => {
     language_backend: "",
     description: "",
     programming_role: "",
-    numberDevsFront: 0,
-    numberDevsBack: 0,
+    dev_front_number: 0,
+    dev_back_number: 0,
     time: 0,
     unitTime: "",
     limit_date_inscription: "",
@@ -38,7 +38,7 @@ const FormCreate = () => {
   const handleInputsNumber = (
     field: keyof Pick<
       IntCodeConnect,
-      "numberDevsFront" | "numberDevsBack" | "time"
+      "dev_front_number" | "dev_back_number" | "time"
     >,
     rawValue: string,
   ) => {
@@ -66,8 +66,8 @@ const FormCreate = () => {
       language_backend,
       description,
       programming_role,
-      numberDevsFront,
-      numberDevsBack,
+      dev_front_number,
+      dev_back_number,
       time,
       unitTime,
       limit_date_inscription,
@@ -97,8 +97,8 @@ const FormCreate = () => {
       !title.trim() ||
       !description.trim() ||
       !programming_role.trim() ||
-      numberDevsFront <= 0 ||
-      numberDevsBack <= 0 ||
+      dev_front_number <= 0 ||
+      dev_back_number <= 0 ||
       !time ||
       !unitTime ||
       !limit_date_inscription
@@ -134,8 +134,8 @@ const FormCreate = () => {
       language_backend: formData.language_backend,
       description: formData.description,
       programming_role: formData.programming_role,
-      numberDevsFront: formData.numberDevsFront,
-      numberDevsBack: formData.numberDevsBack,
+      dev_front_number: formData.dev_front_number,
+      dev_back_number: formData.dev_front_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
     };
@@ -400,12 +400,12 @@ const FormCreate = () => {
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
             value={
-              formData.numberDevsFront === 0 ? "" : formData.numberDevsFront
+              formData.dev_front_number === 0 ? "" : formData.dev_front_number
             }
             placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsFront", e.target.value)
+              handleInputsNumber("dev_front_number", e.target.value)
             }
           />
         </div>
@@ -420,11 +420,13 @@ const FormCreate = () => {
             id="devs-back"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsBack === 0 ? "" : formData.numberDevsBack}
+            value={
+              formData.dev_back_number === 0 ? "" : formData.dev_back_number
+            }
             placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsBack", e.target.value)
+              handleInputsNumber("dev_back_number", e.target.value)
             }
           />
         </div>
