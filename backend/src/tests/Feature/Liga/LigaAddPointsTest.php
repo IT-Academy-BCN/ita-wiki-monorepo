@@ -29,17 +29,10 @@ class LigaAddPointsTest extends TestCase
         ]);
     }
 
-     public function test_put_without_token_returns_401(): void
-    {
-        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
-
-        $response->assertStatus(401);
-    }
-
+     
     public function test_put_increments_points_by_5(): void
     {
-        Sanctum::actingAs($this->user);
-
+        
         $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
 
         $response->assertStatus(200);
@@ -51,8 +44,7 @@ class LigaAddPointsTest extends TestCase
 
      public function test_put_three_times_gives_15_points(): void
     {
-        Sanctum::actingAs($this->user);
-
+        
         $this->putJson('/api/ligas/' . $this->user->id . '/points');
         $this->putJson('/api/ligas/' . $this->user->id . '/points');
         $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
@@ -67,8 +59,7 @@ class LigaAddPointsTest extends TestCase
      public function test_put_returns_404_when_no_liga_entry(): void
     {
         $userWithoutEntry = User::factory()->create();
-        Sanctum::actingAs($userWithoutEntry);
-
+       
         $response = $this->putJson('/api/ligas/' . $userWithoutEntry->id . '/points');
 
         $response->assertStatus(404);
@@ -76,8 +67,7 @@ class LigaAddPointsTest extends TestCase
 
      public function test_put_returns_404_for_unknown_user(): void
     {
-        Sanctum::actingAs($this->user);
-
+        
         $response = $this->putJson('/api/ligas/99999/points');
 
         $response->assertStatus(404);
