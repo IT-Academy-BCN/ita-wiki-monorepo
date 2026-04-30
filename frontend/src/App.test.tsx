@@ -6,14 +6,24 @@ import App from "./App";
 vi.mock("./components/Layout/HeaderComponent", () => ({ default: () => null }));
 vi.mock("./components/Layout/AsideComponent", () => ({ default: () => null }));
 vi.mock("./components/RequireAuth", () => ({ default: () => null }));
-vi.mock("./context/UserContext", () => ({ useUserContext: () => ({ user: null }) }));
-vi.mock("./pages/RankingsPage", () => ({ default: () => <div data-testid="rankings-page" /> }));
+vi.mock("./context/UserContext", () => ({
+  useUserContext: () => ({ user: null }),
+}));
+vi.mock("./pages/RankingsPage", () => ({
+  default: () => <div data-testid="rankings-page" />,
+}));
 
 describe("App", () => {
-  it("is defined", () => { expect(App).toBeDefined(); });
+  it("is defined", () => {
+    expect(App).toBeDefined();
+  });
 
   it("renders RankingsPage at /ligas", () => {
-    render(<MemoryRouter initialEntries={["/ligas"]}><App /></MemoryRouter>);
+    render(
+      <MemoryRouter initialEntries={["/ligas"]}>
+        <App />
+      </MemoryRouter>,
+    );
     expect(screen.getByTestId("rankings-page")).toBeInTheDocument();
   });
 });

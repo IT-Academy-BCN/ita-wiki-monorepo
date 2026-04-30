@@ -6,7 +6,15 @@ import { getLeagueRanking } from "../../services/leagueService";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
 vi.mock("../../components/leagues/StandingsTable", () => ({
-  StandingsTable: () => <table><thead><tr><th>Posició</th></tr></thead></table>,
+  StandingsTable: () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Posició</th>
+        </tr>
+      </thead>
+    </table>
+  ),
 }));
 
 const mockRanking = [
@@ -17,7 +25,9 @@ describe("RankingsPage", () => {
   it("renders the standings table after fetch", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
     render(<RankingsPage />);
-    await waitFor(() => expect(screen.getByText("Posició")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText("Posició")).toBeInTheDocument(),
+    );
   });
 
   it("renders without crashing on fetch error", () => {

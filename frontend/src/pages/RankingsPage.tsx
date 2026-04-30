@@ -7,7 +7,9 @@ const RankingsPage = () => {
   const [data, setData] = useState<Liga[]>([]);
 
   useEffect(() => {
-    getLeagueRanking().then(setData).catch(() => {});
+    getLeagueRanking()
+      .then(setData)
+      .catch(() => {});
   }, []);
 
   return <StandingsTable standings={data} />;

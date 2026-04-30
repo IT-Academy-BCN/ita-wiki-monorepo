@@ -24,6 +24,8 @@ const mockData: LigaResponse = [
   },
 ];
 
-export async function getLeagueRanking(_view: 'weekly' | 'global' = 'global'): Promise<LigaResponse> {
+export async function getLeagueRanking(
+  _view: "weekly" | "global" = "global",
+): Promise<LigaResponse> {
   return Promise.resolve(mockData);
 }
