@@ -41,7 +41,7 @@ describe("useCreateTicketing", () => {
     mockCreateTicket.mockResolvedValue(mockTicketResponse);
     const { result } = renderHook(() => useCreateTicketing());
 
-    expect(result.current.ticketing).toBeNull();
+    expect(result.current.ticketing).toEqual([]);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
 
@@ -51,7 +51,7 @@ describe("useCreateTicketing", () => {
     });
 
     expect(mockCreateTicket).toHaveBeenCalledWith(mockTicketData);
-    expect(result.current.ticketing).toEqual(mockTicketResponse);
+    expect(result.current.ticketing).toEqual([mockTicketResponse]);
     expect(returned).toEqual(mockTicketResponse);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
@@ -95,7 +95,7 @@ describe("useCreateTicketing", () => {
       );
     });
 
-    expect(result.current.ticketing).toBeNull();
+    expect(result.current.ticketing).toEqual([]);
     expect(result.current.isLoading).toBe(false);
 
     mockCreateTicket.mockResolvedValueOnce(mockTicketResponse);
@@ -105,6 +105,6 @@ describe("useCreateTicketing", () => {
     });
 
     expect(result.current.error).toBeNull();
-    expect(result.current.ticketing).toEqual(mockTicketResponse);
+    expect(result.current.ticketing).toEqual([mockTicketResponse]);
   });
 });

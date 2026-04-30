@@ -5,7 +5,7 @@ import { IntCreateTicket, IntTicket } from "../types/ticketingTypes";
 export const useCreateTicketing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [ticketing, setTicketing] = useState<IntTicket | null>(null);
+  const [ticketing, setTicketing] = useState<IntTicket[]>([]);
 
   const submitTicketing = async (
     ticketData: IntCreateTicket,
@@ -15,7 +15,7 @@ export const useCreateTicketing = () => {
 
     try {
       const newTicketing = await createTicket(ticketData);
-      setTicketing(newTicketing);
+      setTicketing((prev) => [...prev, newTicketing]);
       return newTicketing;
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
