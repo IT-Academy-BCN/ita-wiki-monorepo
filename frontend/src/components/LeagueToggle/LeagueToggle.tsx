@@ -1,3 +1,4 @@
 export type LeagueView = 'weekly' | 'global';
-const LeagueToggle = () => null;
+type Props = { view: LeagueView; onChange: (v: LeagueView) => void };
+const LeagueToggle = (_props: Props) => null;
 export default LeagueToggle;
