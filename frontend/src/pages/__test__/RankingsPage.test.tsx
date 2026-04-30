@@ -9,6 +9,31 @@ vi.mock("../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
 }));
 
+vi.mock("../../components/LeagueToggle/LeagueToggle", () => ({
+  default: ({ view, onChange }: { view: string; onChange: (v: string) => void }) => (
+    <div>
+      <button onClick={() => onChange("weekly")} aria-pressed={view === "weekly"}>Liga semanal</button>
+      <button onClick={() => onChange("global")} aria-pressed={view === "global"}>Ranking general</button>
+    </div>
+  ),
+}));
+
+vi.mock("../../components/leagues/StandingsTable", () => ({
+  StandingsTable: () => (
+    <table>
+      <thead><tr><th>Posició</th><th>Usuari</th><th>Punts</th></tr></thead>
+    </table>
+  ),
+}));
+
+vi.mock("../../components/leagues/StandingsEmptyState", () => ({
+  StandingsEmptyState: () => <p>No hi han dades disponibles</p>,
+}));
+
+vi.mock("../../components/leagues/StandingsTableSkeleton", () => ({
+  StandingsTableSkeleton: () => <p>Carregant...</p>,
+}));
+
 const mockRanking = [
   {
     position: 1,

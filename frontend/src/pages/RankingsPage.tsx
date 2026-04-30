@@ -7,7 +7,9 @@ import { StandingsTable } from "../components/leagues/StandingsTable";
 import { StandingsTableSkeleton } from "../components/leagues/StandingsTableSkeleton";
 import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
-import type { Liga, Standing } from "../types/league";
+import type { Liga } from "../types/league";
+
+type Standing = { position: number; user_id: number; points: number };
 
 const toStanding = (liga: Liga): Standing => ({
   position: liga.position,
