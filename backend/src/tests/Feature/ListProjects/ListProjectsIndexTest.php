@@ -28,12 +28,13 @@ class ListProjectsIndexTest extends TestCase
 
         $this->projectOne = ListProjects::factory()->create([
             'id' => 1,
+            'user_id' => $this->userOne->id,
             'title' => 'Project Alpha',
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
             'description' => 'Project description text',
-            'roadmap' => 'Project roadmap text',
+            'roadmap' => [['task' => 'Setup project', 'done' => true]],
 
         ]);
 
@@ -108,6 +109,28 @@ class ListProjectsIndexTest extends TestCase
         $response->assertJsonFragment([
             'description' => $this->projectOne->description,
             'roadmap' => $this->projectOne->roadmap,
+        ]);
+    }
+
+    public function test_index_returns_new_fields():void{
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'user_id' => $this->projectOne->user_id,
+            'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'dev_front_number' => $this->projectOne->dev_front_number,
+            'dev_back_number' => $this->projectOne->dev_back_number,
+        ]);
+    }
+
+     public function test_index_returns_owner():void{
+        $response = $this->Get("/api/codeconnect");
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'owner' => [
+                'id' => $this->projectOne->user->id,
+                'name'=> $this->projectOne->user->name,
+            ]
         ]);
     }
 
