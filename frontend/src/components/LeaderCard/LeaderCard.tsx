@@ -1,50 +1,35 @@
 import { FC, useState } from 'react';
 import clsx from 'clsx';
-import type { Player } from '../../types/league';
 
-type CupType = 'gold' | 'silver' | 'bronze';
+export type CupType = 'gold' | 'silver' | 'bronze';
 
-interface LeaderCardProps {
-  player: Player;
-  cupType: CupType;
-}
-
-const cupStyles: Record<CupType, string> = {
-  gold:   'text-yellow-400',
-  silver: 'text-gray-400',
-  bronze: 'text-amber-600',
+export type LeaderCardPlayer = {
+  user_id: number;
+  username: string;
+  avatarUrl: string;
+  title: string;
+  points: number;
 };
 
-const cupIcons: Record<CupType, string> = {
-  gold:   '🏆',
-  silver: '🥈',
-  bronze: '🥉',
+const cupConfig: Record<CupType, { icon: string; text: string; border: string }> = {
+  gold:   { icon: '🏆', text: 'text-yellow-400', border: 'border-yellow-400' },
+  silver: { icon: '🥈', text: 'text-gray-400',   border: 'border-gray-400'   },
+  bronze: { icon: '🥉', text: 'text-amber-600',  border: 'border-amber-600'  },
 };
 
-const borderStyles: Record<CupType, string> = {
-  gold:   'border-yellow-400',
-  silver: 'border-gray-400',
-  bronze: 'border-amber-600',
-};
+const getInitials = (username: string) => username.slice(0, 2).toUpperCase();
 
-const getInitials = (username: string) =>
-  username.slice(0, 2).toUpperCase();
-
-const LeaderCard: FC<LeaderCardProps> = ({ player, cupType }) => {
+const LeaderCard: FC<{ player: LeaderCardPlayer; cupType: CupType }> = ({ player, cupType }) => {
   const [avatarError, setAvatarError] = useState(false);
+  const { icon, text, border } = cupConfig[cupType];
 
   return (
     <div className="flex flex-col items-center gap-2 bg-white rounded-xl border border-gray-200 px-6 py-4 shadow-sm min-w-[180px]">
-      <span className={clsx('text-2xl', cupStyles[cupType])} aria-label={`${cupType} cup`}>
-        {cupIcons[cupType]}
+      <span className={clsx('text-2xl', text)} aria-label={`${cupType} cup`}>
+        {icon}
       </span>
 
-      <div
-        className={clsx(
-          'w-14 h-14 rounded-full border-2 flex items-center justify-center overflow-hidden',
-          borderStyles[cupType],
-        )}
-      >
+      <div className={clsx('w-14 h-14 rounded-full border-2 flex items-center justify-center overflow-hidden', border)}>
         {!avatarError && player.avatarUrl ? (
           <img
             src={player.avatarUrl}
@@ -53,16 +38,14 @@ const LeaderCard: FC<LeaderCardProps> = ({ player, cupType }) => {
             onError={() => setAvatarError(true)}
           />
         ) : (
-          <span className="text-sm font-bold text-gray-600">
-            {getInitials(player.username)}
-          </span>
+          <span className="text-sm font-bold text-gray-600">{getInitials(player.username)}</span>
         )}
       </div>
 
       <p className="text-xs text-gray-500">{player.title}</p>
       <p className="font-bold text-sm">{player.username}</p>
       <p className="text-xs text-gray-500">
-        Puntos ganados: <span className="font-bold text-gray-800">{player.points}</span>
+        Punts guanyats: <span className="font-bold text-gray-800">{player.points}</span>
       </p>
     </div>
   );
