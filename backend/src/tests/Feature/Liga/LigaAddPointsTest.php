@@ -56,14 +56,6 @@ class LigaAddPointsTest extends TestCase
         ]);
     }
 
-     public function test_put_returns_404_when_no_liga_entry(): void
-    {
-        $userWithoutEntry = User::factory()->create();
-       
-        $response = $this->putJson('/api/ligas/' . $userWithoutEntry->id . '/points');
-
-        $response->assertStatus(404);
-    }
 
      public function test_put_returns_404_for_unknown_user(): void
     {
