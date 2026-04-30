@@ -13,6 +13,9 @@ class ListProjects extends Model
 {
     use HasFactory;
     protected $table = 'list_projects';
+    protected $casts = [
+        'roadmap' => 'array',
+    ];
     protected $fillable = [
         'user_id',
         'title',
