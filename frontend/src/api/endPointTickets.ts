@@ -1,7 +1,7 @@
 import { IntCreateTicket, IntTicket } from "../types/ticketingTypes";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createTicket = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _data: IntCreateTicket,
 ): Promise<IntTicket> => {
   throw new Error("Not implemented");
