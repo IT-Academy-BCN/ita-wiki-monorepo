@@ -1,3 +1,3 @@
-type Standing = { position: number; user_id: number; points: number };
-type Props = { standings: Standing[] };
+import type { Liga } from "../../types/league";
+type Props = { standings: Liga[] };
 export const StandingsTable = (_props: Props) => null;

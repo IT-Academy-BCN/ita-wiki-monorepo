@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LeagueToggle, {
   LeagueView,
 } from "../components/LeagueToggle/LeagueToggle";
@@ -9,21 +9,13 @@ import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga } from "../types/league";
 
-type Standing = { position: number; user_id: number; points: number };
-
-const toStanding = (liga: Liga): Standing => ({
-  position: liga.position,
-  user_id: liga.user_id,
-  points: liga.points,
-});
-
 const RankingsPage = () => {
   const [view, setView] = useState<LeagueView>("global");
   const [data, setData] = useState<Liga[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -34,13 +26,12 @@ const RankingsPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [view]);
+  };
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
-
-  const standings: Standing[] = data.map(toStanding);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
 
   return (
     <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
@@ -66,7 +57,7 @@ const RankingsPage = () => {
         {!isLoading && !error && data.length === 0 && <StandingsEmptyState />}
 
         {!isLoading && !error && data.length > 0 && (
-          <StandingsTable standings={standings} />
+          <StandingsTable standings={data} />
         )}
       </div>
     </Container>
