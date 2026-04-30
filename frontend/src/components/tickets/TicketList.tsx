@@ -1,4 +1,9 @@
-import type { TicketListProps, TicketPriority, TicketStatus, TicketType,} from "../../types/ticketingTypes";
+import type {
+  TicketListProps,
+  TicketPriority,
+  TicketStatus,
+  TicketType,
+} from "../../types/ticketingTypes";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -74,7 +79,9 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
-          <div role="columnheader" className="sr-only">Accions</div>
+          <div role="columnheader" className="sr-only">
+            Accions
+          </div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">

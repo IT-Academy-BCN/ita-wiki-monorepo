@@ -18,16 +18,16 @@ export type TicketUser = {
 
 export type Ticket = {
   id: number;
-  name: string;           
-  description: string;    
+  name: string;
+  description: string;
   status: TicketStatus;
   priority: TicketPriority;
-  type: TicketType;       
+  type: TicketType;
   incident_date: string;
   affected_app?: string;
   affected_function?: string;
   assignee?: TicketUser | null;
-  codeConnect?: TicketUser | null;  
+  codeConnect?: TicketUser | null;
   closed_at?: string | null;
   created_at?: string;
   updated_at?: string;

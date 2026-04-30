@@ -12,7 +12,7 @@ const mockTickets: Ticket[] = [
     status: "pending",
     priority: "high",
     type: "error",
-    incident_date: "2026-04-23",  
+    incident_date: "2026-04-23",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const mockTickets: Ticket[] = [
     status: "in_progress",
     priority: "medium",
     type: "suggestion",
-    incident_date: "2026-04-20",  
+    incident_date: "2026-04-20",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const mockTickets: Ticket[] = [
     status: "blocked",
     priority: "critical",
     type: "error",
-    incident_date: "2026-04-21",  
+    incident_date: "2026-04-21",
   },
   {
     id: 4,
@@ -39,15 +39,16 @@ const mockTickets: Ticket[] = [
     status: "ready",
     priority: "low",
     type: "suggestion",
-    incident_date: "2026-04-22", 
+    incident_date: "2026-04-22",
   },
 ];
 
 describe("TicketList", () => {
-
   it("renders empty state", () => {
     render(<TicketList tickets={[]} isLoading={false} error={null} />);
-    expect(screen.getByText("No hi ha tickets disponibles")).toBeInTheDocument();
+    expect(
+      screen.getByText("No hi ha tickets disponibles"),
+    ).toBeInTheDocument();
   });
 
   it("renders all ticket names", () => {
