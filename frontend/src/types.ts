@@ -54,8 +54,8 @@ export interface IntCodeConnect {
   language_frontend: string;
   language_backend: string;
   programming_role: string;
-  numberDevsFront: number;
-  numberDevsBack: number;
+  dev_front_number: number;
+  dev_back_number: number;
   time: number;
   unitTime: string;
   time_duration: string;
