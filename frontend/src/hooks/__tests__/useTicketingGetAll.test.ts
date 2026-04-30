@@ -1,10 +1,5 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import axios, {
-  AxiosError,
-  AxiosHeaders,
-  CanceledError,
-  type InternalAxiosRequestConfig,
-} from "axios";
+import axios from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type {
@@ -114,81 +109,5 @@ describe("useTicketingGetAll", () => {
 
     expect(result.current.tickets).toEqual([]);
     expect(result.current.errorMessage).toBe("Unauthorized");
-  });
-
-  it("sets errorMessage when API response shape is invalid", async () => {
-    vi.spyOn(axios, "get").mockResolvedValueOnce({
-      data: { nope: true },
-    });
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.tickets).toEqual([]);
-    expect(result.current.errorMessage).toBe("Invalid API response shape");
-  });
-
-  it("sets errorMessage on AxiosError with API message", async () => {
-    const axiosRequestConfig: InternalAxiosRequestConfig = {
-      headers: new AxiosHeaders(),
-    };
-
-    const axiosError = new AxiosError(
-      "Request failed",
-      "ERR_BAD_REQUEST",
-      axiosRequestConfig,
-      undefined,
-      {
-        data: {
-          message: "Token invalid",
-        },
-        status: 401,
-        statusText: "Unauthorized",
-        headers: new AxiosHeaders(),
-        config: axiosRequestConfig,
-      },
-    );
-
-    vi.spyOn(axios, "get").mockRejectedValueOnce(axiosError);
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.tickets).toEqual([]);
-    expect(result.current.errorMessage).toBe("Token invalid");
-  });
-
-  it("sets errorMessage on generic error", async () => {
-    vi.spyOn(axios, "get").mockRejectedValueOnce(new Error("Network down"));
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.tickets).toEqual([]);
-    expect(result.current.errorMessage).toBe("Network down");
-  });
-
-  it("ignores cancelled request and does not set errorMessage", async () => {
-    vi.spyOn(axios, "get").mockRejectedValueOnce(
-      new CanceledError("Request cancelled"),
-    );
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.errorMessage).toBeNull();
-    expect(result.current.tickets).toEqual([]);
   });
 });

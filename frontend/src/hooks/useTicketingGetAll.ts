@@ -41,16 +41,6 @@ export const useTicketingGetAll = () => {
 
         const responseData = response.data;
 
-        if (
-          !responseData ||
-          typeof responseData.success !== "boolean" ||
-          !Array.isArray(responseData.data)
-        ) {
-          throw {
-            message: "Invalid API response shape",
-          } as TicketingError;
-        }
-
         if (!responseData.success) {
           throw {
             message: responseData.message || "Invalid API response shape",
