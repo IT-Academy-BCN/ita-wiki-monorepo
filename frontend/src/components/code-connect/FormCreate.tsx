@@ -4,11 +4,18 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { createCodeConnect } from "../../api/endPointCodeConnect";
 import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
-import { IntCodeConnect } from "../../types";
+import { IntCodeConnect, Task } from "../../types";
+import { RoadmapField } from "../forms/RoadmapField";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
 } from "./techsLabelsContent";
+
+const getMinDeadline = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split("T")[0];
+};
 
 const FormCreate = () => {
   const [formData, setFormData] = useState<
@@ -25,7 +32,8 @@ const FormCreate = () => {
     unitTime: "",
     limit_date_inscription: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmap, setRoadmap] = useState<Task[]>([]);
   const navigate = useNavigate();
 
   const handleInputText = (field: keyof IntCodeConnect, value: string) => {
@@ -73,7 +81,6 @@ const FormCreate = () => {
       limit_date_inscription,
     } = formData;
 
-    console.log(formData);
     if (!language_frontend) {
       toast.error("Selecciona una tecnologia frontend.");
       return false;
@@ -133,6 +140,7 @@ const FormCreate = () => {
       language_frontend: formData.language_frontend,
       language_backend: formData.language_backend,
       description: formData.description,
+      roadmap: roadmap,
       programming_role: formData.programming_role,
       dev_front_number: formData.dev_front_number,
       dev_back_number: formData.dev_back_number,
@@ -305,7 +313,9 @@ const FormCreate = () => {
           </div>
         </div>
       </div>
-
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+      <RoadmapField setRoadmap={setRoadmap} />
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label htmlFor="limit_date_inscription" className="block font-medium">
@@ -313,7 +323,7 @@ const FormCreate = () => {
           </label>
           <input
             id="limit_date_inscription"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
             value={formData.limit_date_inscription || ""}
             required
@@ -321,7 +331,7 @@ const FormCreate = () => {
             onChange={(e) =>
               handleDeadLine("limit_date_inscription", e.target.value)
             }
-            min="2023-01-01"
+            min={getMinDeadline()}
           />
         </div>
       </div>
@@ -349,7 +359,7 @@ const FormCreate = () => {
             </label>
             <select
               id="unitTime"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
+              className="bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
               value={formData.unitTime}
               required
               disabled={isSubmitting}
@@ -358,8 +368,12 @@ const FormCreate = () => {
               <option value="" disabled>
                 Selecciona
               </option>
-              <option value="month">Mes</option>
-              <option value="week">Setmana</option>
+              <option value="month">
+                {formData.time <= 1 ? "Mes" : "Mesos"}
+              </option>
+              <option value="week">
+                {formData.time <= 1 ? "Setmana" : "Setmanes"}
+              </option>
             </select>
           </div>
         </div>
