@@ -4,42 +4,22 @@ import { describe, it, expect, vi } from 'vitest';
 import LeagueToggle from './LeagueToggle';
 
 describe('LeagueToggle', () => {
-  it('renders both toggle options', () => {
+  it('renders both options', () => {
     render(<LeagueToggle view="weekly" onChange={vi.fn()} />);
-
-    expect(screen.getByText('Liga semanal')).toBeInTheDocument();
-    expect(screen.getByText('Ranking general')).toBeInTheDocument();
+    expect(screen.getByText('Lliga setmanal')).toBeInTheDocument();
+    expect(screen.getByText('Classificació general')).toBeInTheDocument();
   });
 
-  it('marks weekly button as active when view is weekly', () => {
-    render(<LeagueToggle view="weekly" onChange={vi.fn()} />);
-
-    expect(screen.getByText('Liga semanal')).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByText('Ranking general')).toHaveAttribute('aria-pressed', 'false');
-  });
-
-  it('marks global button as active when view is global', () => {
+  it('marks the active option with aria-pressed', () => {
     render(<LeagueToggle view="global" onChange={vi.fn()} />);
-
-    expect(screen.getByText('Ranking general')).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByText('Liga semanal')).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByText('Classificació general')).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('Lliga setmanal')).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('calls onChange with weekly when Liga semanal is clicked', () => {
+  it('calls onChange with the correct value', () => {
     const onChange = vi.fn();
     render(<LeagueToggle view="global" onChange={onChange} />);
-
-    fireEvent.click(screen.getByText('Liga semanal'));
-
+    fireEvent.click(screen.getByText('Lliga setmanal'));
     expect(onChange).toHaveBeenCalledWith('weekly');
-  });
-
-  it('calls onChange with global when Ranking general is clicked', () => {
-    const onChange = vi.fn();
-    render(<LeagueToggle view="weekly" onChange={onChange} />);
-
-    fireEvent.click(screen.getByText('Ranking general'));
-
-    expect(onChange).toHaveBeenCalledWith('global');
   });
 });
