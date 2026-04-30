@@ -1,4 +1,9 @@
-export type TicketStatus = "pending" | "in_progress" | "blocked" | "ready" | "closed";
+export type TicketStatus =
+  | "pending"
+  | "in_progress"
+  | "blocked"
+  | "ready"
+  | "closed";
 export type TicketPriority = "low" | "medium" | "high" | "critical";
 export type TicketType = "error" | "suggestion";
 
