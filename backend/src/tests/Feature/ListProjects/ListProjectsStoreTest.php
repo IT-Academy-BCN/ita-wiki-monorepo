@@ -348,21 +348,6 @@ class ListProjectsStoreTest extends TestCase
         ], $overrides);
     }
 
-    private function validProjectPayload(array $overrides = []): array
-    {
-        return array_merge([
-            'title' => 'Project with roadmap',
-            'description' => 'Project with roadmap',
-            'limit_date_inscription' => '2026-12-31',
-            'dev_front_number' => 2,
-            'dev_back_number' => 2,
-            'time_duration' => '1 month',
-            'language_backend' => LanguageEnum::PHP->value,
-            'language_frontend' => LanguageEnum::JavaScript->value,
-            'programming_role' => 'Backend Developer',
-        ], $overrides);
-    }
-
     public function test_store_saves_roadmap_as_array():void{
 
         Sanctum::actingAs($this->userOne);
@@ -374,7 +359,7 @@ class ListProjectsStoreTest extends TestCase
         ]));
 
         $response->assertStatus(201);
-        $project = ListProjects::where('title', 'Project with roadmap')->firstOrFail();
+        $project = ListProjects::where('title', 'Projecte Epsilon')->firstOrFail();
         $this->assertIsArray($project->roadmap);
         $this->assertEquals('Setup project', $project->roadmap[0]['task']);
     }
