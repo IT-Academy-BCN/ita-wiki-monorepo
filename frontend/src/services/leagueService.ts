@@ -39,7 +39,7 @@ const mockData: LigaResponse = [
   {
     position: 6,
     user_id: 106,
-    points: 75,
+    points: 70,
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -73,6 +73,6 @@ const mockData: LigaResponse = [
   },
 ];
 
-export async function getLeagueRanking(): Promise<LigaResponse> {
+export async function getLeagueRanking(_view: 'weekly' | 'global' = 'global'): Promise<LigaResponse> {
   return Promise.resolve(mockData);
 }

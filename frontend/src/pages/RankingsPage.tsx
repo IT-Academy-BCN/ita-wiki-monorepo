@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LeagueToggle, {
   LeagueView,
 } from "../components/LeagueToggle/LeagueToggle";
@@ -23,22 +23,22 @@ const RankingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await getLeagueRanking();
+      const result = await getLeagueRanking(view);
       setData(result);
     } catch {
       setError("No s'han pogut carregar les dades. Torna-ho a intentar.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [view]);
 
   useEffect(() => {
     fetchData();
-  }, [view]);
+  }, [fetchData]);
 
   const standings: Standing[] = data.map(toStanding);
 
