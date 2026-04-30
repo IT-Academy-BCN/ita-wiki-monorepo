@@ -135,7 +135,7 @@ const FormCreate = () => {
       description: formData.description,
       programming_role: formData.programming_role,
       dev_front_number: formData.dev_front_number,
-      dev_back_number: formData.dev_front_number,
+      dev_back_number: formData.dev_back_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
     };
