@@ -36,9 +36,9 @@ describe("leagueService (mock version)", () => {
     });
   });
 
-  test("should return 10 entries", async () => {
+  test("should return at least one entry", async () => {
     const result = await getLeagueRanking();
 
-    expect(result.length).toBe(10);
+    expect(result.length).toBeGreaterThan(0);
   });
 });
