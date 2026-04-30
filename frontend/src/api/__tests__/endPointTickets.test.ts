@@ -46,7 +46,9 @@ describe("fetchAllTickets", () => {
 
     const result = await fetchAllTickets();
     expect(result).toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalledWith(new Error("Failed to fetch tickets"));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      new Error("Failed to fetch tickets"),
+    );
   });
 
   it("should handle network errors (fetch throw)", async () => {
