@@ -9,8 +9,8 @@ interface ButtonProps {
 }
 
 interface FiltersProps {
-  selected: string | null;
-  onChange: (label: string | null) => void;
+  selected: string[];
+  onChange: (selected: string[]) => void;
 }
 
 const Button = ({
@@ -34,13 +34,17 @@ const Button = ({
 
 const CodeConnectFiltersComponent = ({ selected, onChange }: FiltersProps) => {
   const handleSelect = (label: string) => {
-    onChange(selected === label ? null : label);
+    const nextSelected = selected.includes(label)
+      ? selected.filter((prev) => prev !== label)
+      : [...selected, label];
+
+    onChange(nextSelected);
   };
 
   return (
     <div className="flex flex-wrap gap-3 mb-4">
       {filtersContent.map(({ icon, label }) => {
-        const isSelected = selected === label;
+        const isSelected = selected.includes(label);
         return (
           <Button
             key={label}
