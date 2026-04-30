@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../config";
 
 import type {
-  ApiTicketsResponse,
   ApiTicketData,
+  ApiTicketsResponse,
   TicketingError,
 } from "../types/ticketingTypes";
 
@@ -42,9 +42,10 @@ export const useTicketingGetAll = () => {
         const responseData = response.data;
 
         if (!responseData.success) {
-          throw {
-            message: responseData.message || "Invalid API response shape",
-          } as TicketingError;
+          setTickets([]);
+          setErrorMessage(responseData.message || "Invalid API response shape");
+
+          return;
         }
 
         setTickets(responseData.data);

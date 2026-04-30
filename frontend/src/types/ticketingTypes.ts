@@ -43,7 +43,7 @@ export interface ApiTicketData {
   affected_function: AffectedFunction;
   description: string;
   status: TicketStatus;
-  priority: TicketPriority;
+  priority: TicketPriority | null;
   assignee_id: number | null;
   closed_by: number | null;
   closed_at: string | null;

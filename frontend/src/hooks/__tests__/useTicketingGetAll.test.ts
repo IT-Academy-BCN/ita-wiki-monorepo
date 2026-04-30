@@ -6,7 +6,6 @@ import type {
   ApiTicketData,
   ApiTicketsResponse,
 } from "../../types/ticketingTypes";
-
 import { useTicketingGetAll } from "../useTicketingGetAll";
 
 const makeTicket = (overrides: Partial<ApiTicketData> = {}): ApiTicketData => {
@@ -34,6 +33,22 @@ const makeTicket = (overrides: Partial<ApiTicketData> = {}): ApiTicketData => {
   };
 };
 
+const renderUseTicketingGetAllWithResponse = async (
+  response: ApiTicketsResponse,
+) => {
+  vi.spyOn(axios, "get").mockResolvedValueOnce({
+    data: response,
+  });
+
+  const renderedHook = renderHook(() => useTicketingGetAll());
+
+  await waitFor(() => {
+    expect(renderedHook.result.current.isLoading).toBe(false);
+  });
+
+  return renderedHook.result;
+};
+
 describe("useTicketingGetAll", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -44,7 +59,7 @@ describe("useTicketingGetAll", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns tickets when API success=true", async () => {
+  it("stores tickets when the API returns a successful response with data", async () => {
     const apiTickets: ApiTicketData[] = [
       makeTicket(),
       makeTicket({ id: 2, name: "Error recursos" }),
@@ -55,57 +70,33 @@ describe("useTicketingGetAll", () => {
       data: apiTickets,
     };
 
-    vi.spyOn(axios, "get").mockResolvedValueOnce({
-      data: response,
-    });
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+    const result = await renderUseTicketingGetAllWithResponse(response);
 
     expect(axios.get).toHaveBeenCalledTimes(1);
     expect(result.current.errorMessage).toBeNull();
     expect(result.current.tickets).toEqual(apiTickets);
   });
 
-  it("returns empty tickets when API success=true and data is empty", async () => {
+  it("stores an empty ticket list when the API returns a successful response without data", async () => {
     const response: ApiTicketsResponse = {
       success: true,
       data: [],
     };
 
-    vi.spyOn(axios, "get").mockResolvedValueOnce({
-      data: response,
-    });
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+    const result = await renderUseTicketingGetAllWithResponse(response);
 
     expect(result.current.errorMessage).toBeNull();
     expect(result.current.tickets).toEqual([]);
   });
 
-  it("sets errorMessage when API success=false", async () => {
+  it("sets an error message when the API returns an unsuccessful response", async () => {
     const response: ApiTicketsResponse = {
       success: false,
       message: "Unauthorized",
       data: [],
     };
 
-    vi.spyOn(axios, "get").mockResolvedValueOnce({
-      data: response,
-    });
-
-    const { result } = renderHook(() => useTicketingGetAll());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+    const result = await renderUseTicketingGetAllWithResponse(response);
 
     expect(result.current.tickets).toEqual([]);
     expect(result.current.errorMessage).toBe("Unauthorized");
