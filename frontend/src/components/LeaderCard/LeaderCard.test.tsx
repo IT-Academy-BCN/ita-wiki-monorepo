@@ -65,6 +65,4 @@ describe("LeaderCard", () => {
 
     expect(screen.getByText("DE")).toBeInTheDocument();
   });
-
-
 });
