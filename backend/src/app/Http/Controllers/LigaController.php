@@ -44,10 +44,5 @@ class LigaController extends Controller
     {
         return response()->json(['user_id' => $user->id, 'points' => 99]);
     }
-
-    public function store(Request $request)
-    {
-        return response()->json(['message' => 'created'], 201);
-    }
 }
 
