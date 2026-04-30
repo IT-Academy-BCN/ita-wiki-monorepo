@@ -1,12 +1,5 @@
-export type TicketStatus =
-  | "pending"
-  | "in_progress"
-  | "blocked"
-  | "ready"
-  | "closed";
-
+export type TicketStatus = "pending" | "in_progress" | "blocked" | "ready" | "closed";
 export type TicketPriority = "low" | "medium" | "high" | "critical";
-
 export type TicketType = "error" | "suggestion";
 
 export type TicketUser = {
@@ -32,6 +25,17 @@ export type Ticket = {
   created_at?: string;
   updated_at?: string;
 };
+
+export type IntCreateTicket = {
+  name: string;
+  incident_date: string;
+  affected_app?: string;
+  type: TicketType;
+  affected_function?: string;
+  description: string;
+};
+
+export type IntTicket = Ticket;
 
 export type TicketListProps = {
   tickets: Ticket[];
