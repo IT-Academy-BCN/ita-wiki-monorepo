@@ -12,8 +12,8 @@ vi.mock("../../services/leagueService", () => ({
 vi.mock("../../components/LeagueToggle/LeagueToggle", () => ({
   default: ({ view, onChange }: { view: string; onChange: (v: string) => void }) => (
     <div>
-      <button onClick={() => onChange("weekly")} aria-pressed={view === "weekly"}>Liga semanal</button>
-      <button onClick={() => onChange("global")} aria-pressed={view === "global"}>Ranking general</button>
+      <button onClick={() => onChange("weekly")} aria-pressed={view === "weekly"}>Lliga setmanal</button>
+      <button onClick={() => onChange("global")} aria-pressed={view === "global"}>Classificació general</button>
     </div>
   ),
 }));
@@ -64,14 +64,14 @@ describe("RankingsPage Component", () => {
     expect(screen.getByText("Carregant...")).toBeInTheDocument();
   });
 
-  it("shows the toggle after data is loaded", async () => {
+  it("shows the toggle", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
     render(<RankingsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Ranking general")).toBeInTheDocument();
-      expect(screen.getByText("Liga semanal")).toBeInTheDocument();
+      expect(screen.getByText("Classificació general")).toBeInTheDocument();
+      expect(screen.getByText("Lliga setmanal")).toBeInTheDocument();
     });
   });
 
