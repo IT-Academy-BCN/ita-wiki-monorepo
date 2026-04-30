@@ -42,6 +42,12 @@ export interface IntResource {
   comment_count?: number;
   tags?: string[] | Tag[];
 }
+
+export interface Task {
+  task: string;
+  done: boolean;
+}
+
 export interface IntCodeConnect {
   title: string;
   description: string;
