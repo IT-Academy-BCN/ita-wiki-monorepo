@@ -4,8 +4,11 @@ import { describe, it, expect } from "vitest";
 import LeaderCard, { type LeaderCardPlayer } from "./LeaderCard";
 
 const mockPlayer: LeaderCardPlayer = {
-  user_id: 101, username: "Developer_134", avatarUrl: "https://example.com/avatar.jpg",
-  title: "Expert Hacker", points: 94,
+  user_id: 101,
+  username: "Developer_134",
+  avatarUrl: "https://example.com/avatar.jpg",
+  title: "Expert Hacker",
+  points: 94,
 };
 
 describe("LeaderCard", () => {
@@ -25,6 +28,4 @@ describe("LeaderCard", () => {
     fireEvent.error(screen.getByAltText("Developer_134 avatar"));
     expect(screen.getByText("DE")).toBeInTheDocument();
   });
-
-
 });
