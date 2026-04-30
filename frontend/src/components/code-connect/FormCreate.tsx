@@ -4,7 +4,8 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { createCodeConnect } from "../../api/endPointCodeConnect";
 import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
-import { IntCodeConnect } from "../../types";
+import { IntCodeConnect, Task } from "../../types";
+import { RoadmapField } from "../forms/RoadmapField";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
@@ -25,7 +26,8 @@ const FormCreate = () => {
     unitTime: "",
     limit_date_inscription: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmap, setRoadmap] = useState<Task[]>([]);
   const navigate = useNavigate();
 
   const handleInputText = (field: keyof IntCodeConnect, value: string) => {
@@ -133,6 +135,7 @@ const FormCreate = () => {
       language_frontend: formData.language_frontend,
       language_backend: formData.language_backend,
       description: formData.description,
+      roadmap: roadmap,
       programming_role: formData.programming_role,
       numberDevsFront: formData.numberDevsFront,
       numberDevsBack: formData.numberDevsBack,
@@ -305,7 +308,9 @@ const FormCreate = () => {
           </div>
         </div>
       </div>
-
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+      <RoadmapField setRoadmap={setRoadmap} />
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label htmlFor="limit_date_inscription" className="block font-medium">
