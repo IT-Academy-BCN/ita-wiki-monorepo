@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\LigaTest;
+namespace Tests\Feature\LigaTests;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -34,5 +34,10 @@ class LigaStubTest extends TestCase
         $response = $this->putJson("/api/ligas/{$user->id}/points");
 
         $response->assertStatus(200);
+
+        $response->assertJson([
+            'user_id' => $user->id,
+            'points'  => 99,
+        ]);
     }
 }
