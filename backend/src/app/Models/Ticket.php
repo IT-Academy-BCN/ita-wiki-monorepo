@@ -14,6 +14,7 @@ use App\Enums\TicketPriorityEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
 use App\Models\ForumAnswer;
+
 class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
@@ -64,9 +65,9 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketComment::class);
     }
+
     public function forumAnswer(): BelongsTo
     {
         return $this->belongsTo(ForumAnswer::class, 'forum_answer_id');
     }
-    
 }
