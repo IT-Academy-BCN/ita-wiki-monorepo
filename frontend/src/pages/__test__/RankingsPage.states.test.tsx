@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import userEvent from "@testing-library/user-event";
 import RankingsPage from "../RankingsPage";
 import { getLeagueRanking } from "../../services/leagueService";
 
@@ -51,7 +50,7 @@ const mockRanking = [
   },
 ];
 
-describe("RankingsPage Component", () => {
+describe("RankingsPage — UI states", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -110,77 +109,6 @@ describe("RankingsPage Component", () => {
           "No s'han pogut carregar les dades. Torna-ho a intentar.",
         ),
       ).toBeInTheDocument();
-    });
-  });
-
-  it("shows the retry button when there is an error", async () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("network error"));
-
-    render(<RankingsPage />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: "Torna-ho a intentar" }),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("clicking the retry button calls the API again", async () => {
-    vi.mocked(getLeagueRanking)
-      .mockRejectedValueOnce(new Error("network error"))
-      .mockResolvedValueOnce(mockRanking);
-
-    const user = userEvent.setup();
-
-    render(<RankingsPage />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: "Torna-ho a intentar" }),
-      ).toBeInTheDocument();
-    });
-
-    await user.click(
-      screen.getByRole("button", { name: "Torna-ho a intentar" }),
-    );
-
-    await waitFor(() => {
-      expect(getLeagueRanking).toHaveBeenCalledTimes(2);
-      expect(screen.getByText("Posició")).toBeInTheDocument();
-    });
-  });
-
-  it("does not show the skeleton after loading completes", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
-
-    render(<RankingsPage />);
-
-    await waitFor(() => {
-      expect(screen.queryByText("Carregant...")).not.toBeInTheDocument();
-    });
-  });
-
-  it("does not show an error when data loads successfully", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
-
-    render(<RankingsPage />);
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText(
-          "No s'han pogut carregar les dades. Torna-ho a intentar.",
-        ),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it("the error state has role alert for accessibility", async () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("network error"));
-
-    render(<RankingsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
     });
   });
 });
