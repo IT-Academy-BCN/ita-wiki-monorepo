@@ -2,13 +2,14 @@ import { useState } from "react";
 import { createTicket } from "../api/endPointTickets";
 import { IntCreateTicket, IntTicket } from "../types/ticketingTypes";
 
-
 export const useCreateTicketing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [ticketing, setTicketing] = useState<IntTicket | null>(null);
 
-  const submitTicketing = async (ticketData: IntCreateTicket): Promise<IntTicket | null> => {
+  const submitTicketing = async (
+    ticketData: IntCreateTicket,
+  ): Promise<IntTicket | null> => {
     setIsLoading(true);
     setError(null);
 

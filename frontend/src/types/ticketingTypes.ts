@@ -1,7 +1,16 @@
 export type TicketType = "error" | "suggestion";
-export type TicketStatus = "pending" | "in_progress" | "blocked" | "ready" | "closed";
+export type TicketStatus =
+  | "pending"
+  | "in_progress"
+  | "blocked"
+  | "ready"
+  | "closed";
 export type TicketPriority = "low" | "medium" | "high" | "critical";
-export type AffectedApp = "wiki_frontend" | "wiki_backend" | "code_connect" | "other";
+export type AffectedApp =
+  | "wiki_frontend"
+  | "wiki_backend"
+  | "code_connect"
+  | "other";
 export type AffectedFunction =
   | "login"
   | "challenges"

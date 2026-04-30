@@ -60,7 +60,10 @@ describe("useCreateTicketing", () => {
   it("should set isLoading to true during the request", async () => {
     let resolvePromise!: (value: IntTicket) => void;
     mockCreateTicket.mockImplementation(
-      () => new Promise((res) => { resolvePromise = res; }),
+      () =>
+        new Promise((res) => {
+          resolvePromise = res;
+        }),
     );
 
     const { result } = renderHook(() => useCreateTicketing());
@@ -79,13 +82,17 @@ describe("useCreateTicketing", () => {
   });
 
   it("should set error on failure and reset it on next success", async () => {
-    mockCreateTicket.mockRejectedValueOnce(new Error("Error 500: Internal Server Error"));
+    mockCreateTicket.mockRejectedValueOnce(
+      new Error("Error 500: Internal Server Error"),
+    );
     const { result } = renderHook(() => useCreateTicketing());
 
     void result.current.submitTicketing(mockTicketData);
 
     await waitFor(() => {
-      expect(result.current.error?.message).toBe("Error 500: Internal Server Error");
+      expect(result.current.error?.message).toBe(
+        "Error 500: Internal Server Error",
+      );
     });
 
     expect(result.current.ticketing).toBeNull();
