@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import clsx from 'clsx';
-import type { LeagueView } from '../../types/league';
+
+export type LeagueView = 'weekly' | 'global';
 
 interface LeagueToggleProps {
   view: LeagueView;
