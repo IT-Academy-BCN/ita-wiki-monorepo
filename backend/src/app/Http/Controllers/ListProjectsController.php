@@ -273,8 +273,8 @@ class ListProjectsController extends Controller
      *      @OA\JsonContent(
      *          @OA\Property(property="title", type="string", example="Updated Project"),
      *          @OA\Property(property="time_duration", type="string", example="2 months"),
-     *          @OA\Property(property="language_backend", type="string", example="PHP"),
-     *          @OA\Property(property="language_frontend", type="string", example="TypeScript")
+     *          @OA\Property(property="language_backend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="PHP"),
+     *          @OA\Property(property="language_frontend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="TypeScript")
      *      )
      *   ),
      *   @OA\Response(

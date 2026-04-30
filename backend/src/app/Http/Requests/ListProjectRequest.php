@@ -32,7 +32,7 @@ class ListProjectRequest extends FormRequest
             'time_duration' => 'required|string|max:255',
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
-            'roadmap' => 'nullable|string',
+            'roadmap' => 'nullable|array',
 
             'programming_role' => [
                 $this->isMethod('post') ? 'required' : 'nullable',

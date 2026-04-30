@@ -133,4 +133,18 @@ class ListProjectsUpdateTest extends TestCase
             'message' => 'Unauthenticated.',
         ]);
     }
+
+    public function test_update_accepts_new_languages(): void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->putJson("/api/codeconnect/{$this->projectOne->id}", [
+            'title' => 'Project updated',
+            'time_duration' => '2 months',
+            'language_backend' => LanguageEnum::Node->value,
+            'language_frontend' => LanguageEnum::Vue->value,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(200);
+    }
 }
