@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
 import { MemoryRouter } from "react-router";
 import { describe, it, expect, vi } from "vitest";
 import App from "./App";
