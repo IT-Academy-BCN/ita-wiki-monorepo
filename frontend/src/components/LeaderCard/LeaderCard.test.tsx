@@ -18,9 +18,17 @@ describe("LeaderCard", () => {
     expect(screen.getByText("94")).toBeInTheDocument();
   });
 
-  it("renders the correct cup icon", () => {
-    render(<LeaderCard player={mockPlayer} cupType="silver" />);
+  it("renders the correct cup icon for each variant", () => {
+    const { rerender } = render(
+      <LeaderCard player={mockPlayer} cupType="gold" />,
+    );
+    expect(screen.getByLabelText("gold cup")).toBeInTheDocument();
+
+    rerender(<LeaderCard player={mockPlayer} cupType="silver" />);
     expect(screen.getByLabelText("silver cup")).toBeInTheDocument();
+
+    rerender(<LeaderCard player={mockPlayer} cupType="bronze" />);
+    expect(screen.getByLabelText("bronze cup")).toBeInTheDocument();
   });
 
   it("shows initials when avatar fails to load", () => {
