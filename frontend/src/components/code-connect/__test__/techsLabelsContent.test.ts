@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
-  TechnologyItem,
+  type TechnologyItem,
 } from "../techsLabelsContent";
 
 const frontIconLabelMap = [
