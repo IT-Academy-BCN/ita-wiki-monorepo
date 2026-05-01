@@ -34,6 +34,7 @@ class LigaStoreLigaTest extends TestCase
         $response = $this->postJson('/api/ligas', ['user_id' => $user->id]);
 
         $response->assertStatus(409);
+        $response->assertJson(['error' => 'Entry already exists for this user']);
     }
 
     public function test_store_returns_422_when_user_id_is_missing(): void
