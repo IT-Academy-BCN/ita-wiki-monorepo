@@ -15,8 +15,7 @@ const RankingsPage = () => {
 
       const standings: Standing[] = sorted.map((item, index) => ({
         position: index + 1,
-        username: `User_${item.user_id}`, // placeholder fins que backend enviï noms
-        language: "Unknown", // placeholder
+        username: `User_${item.user_id}`, 
         points: item.points,
       }));
 

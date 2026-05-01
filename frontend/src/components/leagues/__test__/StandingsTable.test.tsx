@@ -7,10 +7,10 @@ import { StandingsTable } from "../StandingsTable";
 import { StandingsRow } from "../StandingsRow";
 
 const mockStandings = [
-  { position: 1, username: "Tom", language: "JS", points: 100 },
-  { position: 2, username: "Lois", language: "TS", points: 90 },
-  { position: 3, username: "Jon", language: "Java", points: 80 },
-  { position: 9, username: "Anne", language: "Python", points: 70 },
+  { position: 1, username: "Tom", points: 100 },
+  { position: 2, username: "Lois", points: 90 },
+  { position: 3, username: "Jon", points: 80 },
+  { position: 9, username: "Anne", points: 70 },
 ];
 
 describe("StandingsTable", () => {
@@ -31,7 +31,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[0]} position={1} />
         </tbody>
-      </table>
+      </table>,
     );
 
     const row = screen.getByRole("row");
@@ -44,7 +44,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[3]} position={9} />
         </tbody>
-      </table>
+      </table>,
     );
 
     const row = screen.getByRole("row");

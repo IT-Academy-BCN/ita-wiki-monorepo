@@ -20,9 +20,6 @@ export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
               Nom
             </th>
             <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
-              Llenguatge
-            </th>
-            <th className="text-center font-semibold text-[14px] text-black pb-2 w-1/4">
               Punts
             </th>
           </tr>

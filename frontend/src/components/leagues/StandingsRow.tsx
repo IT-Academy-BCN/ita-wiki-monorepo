@@ -17,9 +17,6 @@ export const StandingsRow = ({ standing, position }: StandingsRowProps) => {
       <td className="py-3 px-4 text-center text-[14px] text-black">
         {standing.username}
       </td>
-      <td className="py-3 px-4 text-center text-[14px] text-black">
-        {standing.language}
-      </td>
       <td className="py-3 px-4 text-center text-[14px] text-black font-semibold">
         {standing.points}
       </td>
