@@ -1,3 +1,12 @@
+export type TicketStatus =
+  | "pending"
+  | "in_progress"
+  | "blocked"
+  | "ready"
+  | "closed";
+
+export type TicketPriority = "low" | "medium" | "high" | "critical";
+
 export type TicketType = "error" | "suggestion";
 
 export type AffectedApp =
@@ -15,6 +24,14 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
+export interface TicketUserData {
+  id: number;
+  github_id?: string | null;
+  github_user_name?: string | null;
+  name?: string | null;
+  email?: string | null;
+}
+
 export interface ApiTicketData {
   id: number;
   code_connect_id: number;
@@ -25,6 +42,16 @@ export interface ApiTicketData {
   type: TicketType;
   affected_function: AffectedFunction;
   description: string;
+  status: TicketStatus;
+  priority: TicketPriority | null;
+  assignee_id: number | null;
+  closed_by: number | null;
+  closed_at: string | null;
+  created_at: string;
+  updated_at: string;
+  code_connect?: TicketUserData | null;
+  assignee?: TicketUserData | null;
+  closed_by_user?: TicketUserData | null;
 }
 
 export interface ApiTicketsResponse {
@@ -35,6 +62,8 @@ export interface ApiTicketsResponse {
 
 export interface TicketingError {
   message: string;
+  status?: number;
+  code?: string;
 }
 
 export interface UseTicketingGetAllState {
