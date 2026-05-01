@@ -16,7 +16,7 @@ class LigaSeeder extends Seeder
             if(! Liga::where('user_id', $user->id)->exists()) {
                 Liga::create([
                     'user_id' => $user->id,
-                    'points' => rand(0, 100),
+                    'points' => fake()->numberBetween(0, 100),
                 ]);
             }
         });
