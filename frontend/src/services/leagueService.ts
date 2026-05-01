@@ -1,6 +1,6 @@
-import type { League } from "../types/league";
+import type { Liga } from "../types/league";
 
-const mockData: League[] = [
+const mockData: Liga[] = [
   {
     id: 1,
     user_id: 10,
@@ -24,6 +24,6 @@ const mockData: League[] = [
   },
 ];
 
-export async function getLeagueRanking(): Promise<League[]> {
+export async function getLeagueRanking(): Promise<Liga[]> {
   return Promise.resolve(mockData);
 }

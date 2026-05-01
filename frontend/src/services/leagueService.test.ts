@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { getLeagueRanking } from "./leagueService";
-import type { League } from "../types/league";
+import type { Liga } from "../types/league";
 
 describe("getLeagueRanking (mock version)", () => {
-  it("returns an array of leagues", async () => {
+  it("returns an array of ligass", async () => {
     const result = await getLeagueRanking();
 
     expect(Array.isArray(result)).toBe(true);
@@ -12,7 +12,7 @@ describe("getLeagueRanking (mock version)", () => {
 
   it("each league has the required fields", async () => {
     const result = await getLeagueRanking();
-    const league: League = result[0];
+    const league: Liga = result[0];
 
     expect(league).toHaveProperty("id");
     expect(league).toHaveProperty("user_id");
