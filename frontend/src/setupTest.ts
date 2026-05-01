@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
+import "vitest-axe/extend-expect";
 
-// Mock localStorage for jsdom environment
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
@@ -20,3 +20,4 @@ const localStorageMock = (() => {
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 });
+HTMLCanvasElement.prototype.getContext = () => null;

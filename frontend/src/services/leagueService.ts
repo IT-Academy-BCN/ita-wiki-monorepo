@@ -1,29 +1,29 @@
-import type { LigaResponse } from "../types/league";
+import type { League } from "../types/league";
 
-const mockData: LigaResponse = [
+const mockData: League[] = [
   {
-    position: 1,
-    user_id: 101,
-    points: 94,
-    created_at: "2026-04-24T00:00:00Z",
-    updated_at: "2026-04-24T00:00:00Z",
+    id: 1,
+    user_id: 10,
+    points: 120,
+    created_at: "2026-04-27T10:00:00.000Z",
+    updated_at: "2026-04-27T10:00:00.000Z",
   },
   {
-    position: 2,
-    user_id: 102,
-    points: 88,
-    created_at: "2026-04-24T00:00:00Z",
-    updated_at: "2026-04-24T00:00:00Z",
+    id: 2,
+    user_id: 11,
+    points: 95,
+    created_at: "2026-04-27T10:00:00.000Z",
+    updated_at: "2026-04-27T10:00:00.000Z",
   },
   {
-    position: 3,
-    user_id: 103,
-    points: 75,
-    created_at: "2026-04-24T00:00:00Z",
-    updated_at: "2026-04-24T00:00:00Z",
+    id: 3,
+    user_id: 12,
+    points: 80,
+    created_at: "2026-04-27T10:00:00.000Z",
+    updated_at: "2026-04-27T10:00:00.000Z",
   },
 ];
 
-export async function getLeagueRanking(): Promise<LigaResponse> {
+export async function getLeagueRanking(): Promise<League[]> {
   return Promise.resolve(mockData);
 }
