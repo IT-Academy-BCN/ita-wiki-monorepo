@@ -16,6 +16,7 @@ import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
 import CodeConnectDetails from "./pages/CodeConnectDetails";
 import TechnicalPage from "./pages/TechnicalPage";
 import RankingsPage from "./pages/RankingsPage";
+import TicketingPage from "./pages/TicketingPage";
 
 const App: FC = () => {
   return (
@@ -35,6 +36,7 @@ const App: FC = () => {
               element={<CodeConnectDetails />}
             />
             <Route path="/ranking" element={<RankingsPage />} />
+            <Route path="/ticketing" element={<TicketingPage />} />
 
             {/* Protected routes */}
             <Route element={<RequireAuth />}>
@@ -44,9 +46,6 @@ const App: FC = () => {
                 element={<MyResourcesPage />}
               />
             </Route>
-
-            {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
 
             <Route
               path="/resources/technical-test/create"
@@ -65,6 +64,9 @@ const App: FC = () => {
               path="/codeconnect/create"
               element={<CodeConnectCreatePage />}
             />
+
+            {/* Fallback route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </div>
