@@ -31,10 +31,7 @@ class TicketCommentController extends Controller
 
         $isClosingComment = $request->validated()['is_closing_comment'] ?? false;
 
-        if ($isClosingComment
-            && !$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
-        ) {
+        if ($isClosingComment && !$ticket->canClose($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to close this ticket',
