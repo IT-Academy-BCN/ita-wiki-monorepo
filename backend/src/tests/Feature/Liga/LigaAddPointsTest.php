@@ -7,7 +7,6 @@ namespace Tests\Feature\Liga;
 use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class LigaAddPointsTest extends TestCase
