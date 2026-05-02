@@ -65,7 +65,7 @@ describe("createTicket", () => {
     await createTicket(mockTicketData);
 
     const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain("/tickets");
+    expect(calledUrl).toContain("/api/tickets");
   });
 
   it("uses POST method", async () => {

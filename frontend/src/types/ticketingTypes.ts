@@ -24,13 +24,6 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
-export type TicketUser = {
-  id: number;
-  name: string;
-  github_user_name?: string;
-  email?: string;
-};
-
 export type Ticket = {
   id: number;
   name: string;
@@ -39,10 +32,10 @@ export type Ticket = {
   priority: TicketPriority;
   type: TicketType;
   incident_date: string;
-  affected_app?: string;
-  affected_function?: string;
-  assignee?: TicketUser | null;
-  codeConnect?: TicketUser | null;
+  affected_app?: AffectedApp;
+  affected_function?: AffectedFunction;
+  assignee?: TicketUserData | null;
+  codeConnect?: TicketUserData | null;
   closed_at?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -51,9 +44,9 @@ export type Ticket = {
 export type IntCreateTicket = {
   name: string;
   incident_date: string;
-  affected_app?: string;
+  affected_app?: AffectedApp;
   type: TicketType;
-  affected_function?: string;
+  affected_function?: AffectedFunction;
   description: string;
 };
 

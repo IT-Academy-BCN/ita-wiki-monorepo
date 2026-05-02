@@ -5,7 +5,7 @@ export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
   try {
     const token = localStorage.getItem("auth_token");
 
-    const response = await fetch(`${API_URL}/tickets`, {
+    const response = await fetch(`${API_URL}${END_POINTS.tickets.post}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
