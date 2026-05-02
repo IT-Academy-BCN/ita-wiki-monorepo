@@ -4,8 +4,25 @@ export type TicketStatus =
   | "blocked"
   | "ready"
   | "closed";
+
 export type TicketPriority = "low" | "medium" | "high" | "critical";
+
 export type TicketType = "error" | "suggestion";
+
+export type AffectedApp =
+  | "wiki_frontend"
+  | "wiki_backend"
+  | "code_connect"
+  | "other";
+
+export type AffectedFunction =
+  | "login"
+  | "challenges"
+  | "resources"
+  | "profile"
+  | "technical_tests"
+  | "code_connect"
+  | "other";
 
 export type TicketUser = {
   id: number;
@@ -45,25 +62,6 @@ export type TicketListProps = {
   isLoading?: boolean;
   error?: string | null;
 };
-
-export type TicketPriority = "low" | "medium" | "high" | "critical";
-
-export type TicketType = "error" | "suggestion";
-
-export type AffectedApp =
-  | "wiki_frontend"
-  | "wiki_backend"
-  | "code_connect"
-  | "other";
-
-export type AffectedFunction =
-  | "login"
-  | "challenges"
-  | "resources"
-  | "profile"
-  | "technical_tests"
-  | "code_connect"
-  | "other";
 
 export interface TicketUserData {
   id: number;

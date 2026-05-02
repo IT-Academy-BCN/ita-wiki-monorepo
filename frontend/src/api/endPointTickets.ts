@@ -1,6 +1,5 @@
 import { IntCreateTicket, Ticket } from "../types/ticketingTypes";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL, END_POINTS } from "../config";
 
 export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
   try {
@@ -30,7 +29,8 @@ export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
       throw new Error("Request was aborted");
     }
     throw error;
-import { API_URL, END_POINTS } from "../config";
+  }
+};
 
 export const fetchAllTickets = async () => {
   const url = `${API_URL}${END_POINTS.tickets.get}`;
