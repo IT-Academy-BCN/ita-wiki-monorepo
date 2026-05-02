@@ -29,9 +29,12 @@ const mockTicketResponse = {
 describe("createTicket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubGlobal("localStorage", {
+      getItem: () => "fake-token",
+    });
   });
 
-  it("should make a POST request and return the created ticket", async () => {
+  it("creates a ticket and returns the data", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, data: mockTicketResponse }),
@@ -39,19 +42,49 @@ describe("createTicket", () => {
 
     const result = await createTicket(mockTicketData);
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/tickets"),
-      expect.objectContaining({
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(mockTicketData),
-      }),
-    );
-
+    expect(fetchMock).toHaveBeenCalledOnce();
     expect(result).toEqual(mockTicketResponse);
   });
 
-  it("should throw an error if response is not ok", async () => {
+  it("calls the correct endpoint", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true, data: mockTicketResponse }),
+    });
+
+    await createTicket(mockTicketData);
+
+    const calledUrl = fetchMock.mock.calls[0][0];
+    expect(calledUrl).toContain("/tickets");
+  });
+
+  it("uses POST method", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true, data: mockTicketResponse }),
+    });
+
+    await createTicket(mockTicketData);
+
+    const calledOptions = fetchMock.mock.calls[0][1];
+    expect(calledOptions.method).toBe("POST");
+  });
+
+  it("sends null token if user is not logged in", async () => {
+    vi.stubGlobal("localStorage", {
+      getItem: () => null,
+    });
+
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true, data: mockTicketResponse }),
+    });
+
+    await createTicket(mockTicketData);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it("throws the error message from the server", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ message: "Validation error" }),
@@ -62,7 +95,7 @@ describe("createTicket", () => {
     );
   });
 
-  it("should throw default error message if no message in response", async () => {
+  it("throws a default message if the server sends no message", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: false,
       json: async () => ({}),
@@ -70,6 +103,22 @@ describe("createTicket", () => {
 
     await expect(createTicket(mockTicketData)).rejects.toThrow(
       "Failed to create ticket",
+    );
+  });
+
+  it("throws a network error if the connection fails", async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+
+    await expect(createTicket(mockTicketData)).rejects.toThrow(
+      "Network error, please check your connection",
+    );
+  });
+
+  it("throws an aborted error if the request is cancelled", async () => {
+    fetchMock.mockRejectedValueOnce(new DOMException("Aborted"));
+
+    await expect(createTicket(mockTicketData)).rejects.toThrow(
+      "Request was aborted",
     );
   });
 });

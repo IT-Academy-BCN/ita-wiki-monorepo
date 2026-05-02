@@ -40,8 +40,6 @@ export type IntCreateTicket = {
   description: string;
 };
 
-export type IntTicket = Ticket;
-
 export type TicketListProps = {
   tickets: Ticket[];
   isLoading?: boolean;
