@@ -14,7 +14,7 @@ class LigaFactory extends Factory
 {
     public function definition(): array
     {
-        return[
+        return [
             'user_id' => User::factory(),
             'points' => fake()->numberBetween(0, 100),
         ];
