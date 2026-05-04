@@ -650,6 +650,23 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
+    public function creator_can_close_own_ticket_via_status_update(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+    /** @test */
     public function assignee_can_close_assigned_ticket_via_status_update(): void
     {
         $assignee = $this->authenticateUserWithRole('mentor');
@@ -664,6 +681,24 @@ class TicketControllerTest extends TestCase{
         ]);
 
         $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+    /** @test */
+    public function creator_can_close_own_ticket_via_closing_comment(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment'            => 'Closing the ticket.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(201);
         $this->assertDatabaseHas('tickets', [
             'id'     => $ticket->id,
             'status' => 'closed',
@@ -708,6 +743,18 @@ class TicketControllerTest extends TestCase{
         ]);
 
         $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function creator_can_close_ticket_when_id_is_returned_as_string(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        // Simula el driver devolviendo el ID como string en lugar de integer
+        $ticket->code_connect_id = (string) $creator->id;
+
+        $this->assertTrue($ticket->canClose($creator));
     }
 }
 
