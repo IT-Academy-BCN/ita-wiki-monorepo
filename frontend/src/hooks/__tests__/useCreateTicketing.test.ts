@@ -37,13 +37,17 @@ describe("useCreateTicketing", () => {
     mockCreateTicket.mockClear();
   });
 
-  it("should initialize with empty state and resolve successfully", async () => {
-    mockCreateTicket.mockResolvedValue(mockTicketResponse);
+  it("should initialize with empty state", () => {
     const { result } = renderHook(() => useCreateTicketing());
 
     expect(result.current.ticketing).toEqual([]);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it("should resolve successfully", async () => {
+    mockCreateTicket.mockResolvedValue(mockTicketResponse);
+    const { result } = renderHook(() => useCreateTicketing());
 
     let returned: IntTicket | null = null;
     await act(async () => {
@@ -81,7 +85,7 @@ describe("useCreateTicketing", () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-  it("should set error on failure and reset it on next success", async () => {
+  it("should set error on failure", async () => {
     mockCreateTicket.mockRejectedValueOnce(
       new Error("Error 500: Internal Server Error"),
     );
@@ -97,6 +101,19 @@ describe("useCreateTicketing", () => {
 
     expect(result.current.ticketing).toEqual([]);
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it("should reset error on next success", async () => {
+    mockCreateTicket.mockRejectedValueOnce(
+      new Error("Error 500: Internal Server Error"),
+    );
+    const { result } = renderHook(() => useCreateTicketing());
+
+    void result.current.submitTicketing(mockTicketData);
+
+    await waitFor(() => {
+      expect(result.current.error).not.toBeNull();
+    });
 
     mockCreateTicket.mockResolvedValueOnce(mockTicketResponse);
 
