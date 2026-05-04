@@ -14,6 +14,7 @@ use App\Enums\TicketPriorityEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
 use App\Models\ForumAnswer;
+
 class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
@@ -64,11 +65,12 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketComment::class);
     }
+
     public function forumAnswer(): BelongsTo
     {
         return $this->belongsTo(ForumAnswer::class, 'forum_answer_id');
     }
-    
+
     public function canClose(User $user): bool
     {
         if ($user->hasAnyRole(['admin', 'superadmin'])) return true;
@@ -76,5 +78,4 @@ class Ticket extends Model
         if ($this->assignee_id !== null && (int) $this->assignee_id === (int) $user->id) return true;
         return false;
     }
-
 }
