@@ -99,10 +99,7 @@ class TicketController extends Controller
         $user = auth()->user();
         $status = $request->validated()['status'];
 
-        if ($status === 'closed'
-            && !$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
-        ) {
+        if ($status === 'closed' && !$ticket->canClose($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to close this ticket',
@@ -124,6 +121,7 @@ class TicketController extends Controller
             'data' => $ticket->fresh(['codeConnect', 'assignee', 'closedBy'])
         ], 200);
     }
+
 
     public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
 

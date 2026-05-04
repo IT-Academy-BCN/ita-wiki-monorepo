@@ -649,7 +649,7 @@ class TicketControllerTest extends TestCase{
         $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'in_progress']);
     }
 
-    /** @test */
+        /** @test */
     public function assignee_can_see_assigned_ticket_in_index(): void
     {
         $assignee = $this->authenticateUserWithRole('mentor');
@@ -672,6 +672,67 @@ class TicketControllerTest extends TestCase{
         $ids = collect($response->json('data'))->pluck('id')->toArray();
         $this->assertContains($assignedTicket->id, $ids);
         $this->assertNotContains($unrelatedTicket->id, $ids);
+    }
+
+    /** @test */
+    public function assignee_can_close_assigned_ticket_via_status_update(): void
+    {
+        $assignee = $this->authenticateUserWithRole('mentor');
+        $creator  = User::factory()->create();
+        $ticket   = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => $assignee->id,
+        ]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+    /** @test */
+    public function assignee_can_close_assigned_ticket_via_closing_comment(): void
+    {
+        $assignee = $this->authenticateUserWithRole('mentor');
+        $creator  = User::factory()->create();
+        $ticket   = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => $assignee->id,
+        ]);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/comments", [
+            'comment'            => 'Closing the ticket.',
+            'is_closing_comment' => true,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('tickets', [
+            'id'     => $ticket->id,
+            'status' => 'closed',
+        ]);
+    }
+
+    /** @test */
+    public function non_assignee_non_creator_cannot_close_ticket(): void
+    {
+        $this->authenticateUserWithRole('student');
+        $creator  = User::factory()->create();
+        $assignee = User::factory()->create();
+        $ticket   = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'assignee_id'     => $assignee->id,
+        ]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed'
+        ]);
+
+        $response->assertStatus(403);
     }
 }
 
