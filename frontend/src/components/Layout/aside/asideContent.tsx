@@ -5,6 +5,7 @@ import HomeIcon from "../../../assets/homeIcon.svg?react";
 import ResourcesIcon from "../../../assets/resourcesIcon.svg?react";
 import TechTestsIcon from "../../../assets/techTestsIcon.svg?react";
 import CodeConnectIcon from "../../../assets/codeConnectIcon.svg?react";
+import LigasIcon from "../../../assets/ligasIcon.svg?react";
 import SettingsIcon from "../../../assets/settingsIcon.svg?react";
 import FlagIcon from "../../../assets/infoIcon.svg?react";
 import QuestionIcon from "../../../assets/questionIcon.svg?react";
@@ -55,6 +56,11 @@ export const AsideNavbarData: {
     label: "Codeconnect",
     ref: "/codeconnect",
     icon: <CodeConnectIcon className="w-full h-full" />,
+  },
+  {
+    label: "Lligues",
+    ref: "/ligas",
+    icon: <LigasIcon className="w-full h-full" />,
   },
 ];
 
