@@ -31,7 +31,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[0]} position={1} />
         </tbody>
-      </table>,
+      </table>
     );
 
     const row = screen.getByRole("row");
@@ -44,10 +44,23 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[3]} position={9} />
         </tbody>
-      </table>,
+      </table>
     );
 
     const row = screen.getByRole("row");
     expect(row).toHaveClass("bg-[var(--highlight-danger)]");
+  });
+
+  it("applies white background for positions outside both ranges", () => {
+    render(
+      <table>
+        <tbody>
+          <StandingsRow standing={mockStandings[1]} position={5} />
+        </tbody>
+      </table>
+    );
+
+    const row = screen.getByRole("row");
+    expect(row).toHaveClass("bg-white");
   });
 });
