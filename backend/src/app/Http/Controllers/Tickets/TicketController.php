@@ -18,7 +18,10 @@ class TicketController extends Controller
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
         if (! auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
-            $query->where('code_connect_id', auth()->id());
+            $query->where(function ($q) {
+                $q->where('code_connect_id', auth()->id())
+                ->orWhere('assignee_id', auth()->id());
+            });
         }
 
         return response()->json([
@@ -96,10 +99,7 @@ class TicketController extends Controller
         $user = auth()->user();
         $status = $request->validated()['status'];
 
-        if ($status === 'closed'
-            && !$user->hasAnyRole(['admin', 'superadmin'])
-            && $ticket->code_connect_id !== $user->id
-        ) {
+        if ($status === 'closed' && !$ticket->canClose($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to close this ticket',

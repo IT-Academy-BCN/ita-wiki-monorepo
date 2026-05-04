@@ -24,6 +24,38 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
+export type Ticket = {
+  id: number;
+  name: string;
+  description: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  type: TicketType;
+  incident_date: string;
+  affected_app?: AffectedApp;
+  affected_function?: AffectedFunction;
+  assignee?: TicketUserData | null;
+  codeConnect?: TicketUserData | null;
+  closed_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type IntCreateTicket = {
+  name: string;
+  incident_date: string;
+  affected_app?: AffectedApp;
+  type: TicketType;
+  affected_function?: AffectedFunction;
+  description: string;
+};
+
+export type TicketListProps = {
+  tickets: Ticket[];
+  isLoading?: boolean;
+  error?: string | null;
+};
+
 export interface TicketUserData {
   id: number;
   github_id?: string | null;
