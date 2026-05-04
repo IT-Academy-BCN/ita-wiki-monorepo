@@ -1,23 +1,44 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, test } from "vitest";
 import { getLeagueRanking } from "./leagueService";
-import type { Liga } from "../types/league";
 
-describe("getLeagueRanking (mock version)", () => {
-  it("returns an array of ligass", async () => {
+describe("leagueService (mock version)", () => {
+  test("should return an array", async () => {
     const result = await getLeagueRanking();
 
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);
   });
 
-  it("each league has the required fields", async () => {
+  test("each item should have position, user_id and points", async () => {
     const result = await getLeagueRanking();
-    const league: Liga = result[0];
 
-    expect(league).toHaveProperty("id");
-    expect(league).toHaveProperty("user_id");
-    expect(league).toHaveProperty("points");
-    expect(league).toHaveProperty("created_at");
-    expect(league).toHaveProperty("updated_at");
+    result.forEach((liga) => {
+      expect(liga).toHaveProperty("position");
+      expect(liga).toHaveProperty("user_id");
+      expect(liga).toHaveProperty("points");
+    });
+  });
+
+  test("each item should have created_at and updated_at", async () => {
+    const result = await getLeagueRanking();
+
+    result.forEach((liga) => {
+      expect(liga).toHaveProperty("created_at");
+      expect(liga).toHaveProperty("updated_at");
+    });
+  });
+
+  test("points should be a number", async () => {
+    const result = await getLeagueRanking();
+
+    result.forEach((liga) => {
+      expect(typeof liga.points).toBe("number");
+    });
+  });
+
+  test("should return at least one entry", async () => {
+    const result = await getLeagueRanking();
+
+    expect(result.length).toBeGreaterThan(0);
   });
 });
