@@ -31,7 +31,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[0]} position={1} />
         </tbody>
-      </table>
+      </table>,
     );
 
     const row = screen.getByRole("row");
@@ -44,7 +44,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[3]} position={9} />
         </tbody>
-      </table>
+      </table>,
     );
 
     const row = screen.getByRole("row");
@@ -57,7 +57,7 @@ describe("StandingsRow", () => {
         <tbody>
           <StandingsRow standing={mockStandings[1]} position={5} />
         </tbody>
-      </table>
+      </table>,
     );
 
     const row = screen.getByRole("row");
