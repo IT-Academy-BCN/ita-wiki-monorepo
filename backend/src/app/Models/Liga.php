@@ -17,21 +17,12 @@ class Liga extends Model
         'points',
     ];
 
-<<<<<<< 302-model-creation
     protected $casts = [
         'points' => 'integer',
     ];
 
-=======
->>>>>>> develop
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-<<<<<<< 302-model-creation
-
 }
-
-=======
-}
->>>>>>> develop
