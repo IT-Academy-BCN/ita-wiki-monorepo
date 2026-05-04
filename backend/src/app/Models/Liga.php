@@ -17,6 +17,10 @@ class Liga extends Model
         'points',
     ];
 
+    protected $casts = [
+        'points' => 'integer',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
