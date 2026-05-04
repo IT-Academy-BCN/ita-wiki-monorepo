@@ -7,20 +7,24 @@ namespace App\Http\Controllers;
 use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 class LigaController extends Controller
 {
-
-   public function ranking(): JsonResponse
+    public function ranking(): JsonResponse
     {
-        return response()->json([
-            [
-                'id'         => 1,
-                'user_id'    => 1,
-                'points'     => 99,
-                'created_at' => null,
-                'updated_at' => null,
-            ]
-        ]);
+        $entries = Liga::orderBy('points', 'desc')
+            ->get()
+            ->values()
+            ->map(fn ($entry, $index) => [
+                'position'   => $index + 1,
+                'user_id'    => $entry->user_id,
+                'points'     => $entry->points,
+                'created_at' => $entry->created_at,
+                'updated_at' => $entry->updated_at,
+            ]);
+
+        return response()->json($entries);
     }
 
     public function addPoints(User $user): JsonResponse
@@ -35,8 +39,7 @@ class LigaController extends Controller
         ]);
     }
 
-
-    public function store(): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         return response()->json(['message' => 'created'], 201);
     }
