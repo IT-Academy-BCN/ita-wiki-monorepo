@@ -8,6 +8,7 @@ import FormCreateCodeConnect from "../FormCreate";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
+  TechnologyItem,
 } from "../techsLabelsContent";
 
 vi.mock("sonner", () => ({
@@ -114,6 +115,19 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
     expect(timeInput.value).toBe("2");
     expect((unitTimeSelect as HTMLSelectElement).value).toBe("month");
     expect(deadlineInput.value).toBe("2025-11-20");
+  });
+};
+
+const checkTechOptionsRender = (language: string, list: TechnologyItem[]) => {
+  const inputs = screen
+    .getAllByRole("radio")
+    .filter((radio) => radio.getAttribute("name") === language);
+  expect(inputs).toHaveLength(list.length);
+  list.forEach((tech) => {
+    if (tech.icon) {
+      const label = screen.getByDisplayValue(tech.label).closest("label")!;
+      expect(label.querySelector("svg")).toBeInTheDocument();
+    }
   });
 };
 
@@ -387,31 +401,23 @@ describe("FormCreateCodeConnect", () => {
 
     it("should show all the technologies with their icons when available", () => {
       renderWithRouter(<FormCreateCodeConnect />);
-      const frontInputs = screen
-        .getAllByRole("radio")
-        .filter((radio) => radio.getAttribute("name") === "language_frontend");
-      expect(frontInputs).toHaveLength(contentTechsFrontCodeConnect.length);
-      const backInputs = screen
-        .getAllByRole("radio")
-        .filter((radio) => radio.getAttribute("name") === "language_backend");
-      expect(backInputs).toHaveLength(contentTechsBackCodeConnect.length);
-      contentTechsFrontCodeConnect.forEach((tech) => {
-        if (tech.icon) {
-          const label = screen.getByDisplayValue(tech.label).closest("label")!;
-          expect(label.querySelector("svg")).toBeInTheDocument();
-        }
-      });
-      contentTechsBackCodeConnect.forEach((tech) => {
-        if (tech.icon) {
-          const label = screen.getByDisplayValue(tech.label).closest("label")!;
-          expect(label.querySelector("svg")).toBeInTheDocument();
-        }
-      });
+      checkTechOptionsRender("language_frontend", contentTechsFrontCodeConnect);
+      checkTechOptionsRender("language_backend", contentTechsBackCodeConnect);
+    });
+
+    it("should select the correct technology onclick", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+      expect(reactRadio).toBeChecked();
+      expect(reactRadio).toHaveAttribute("value", "React");
+      const form = reactRadio.closest("form");
+      expect(form).toHaveFormValues({ language_frontend: "React" });
     });
 
     it("should show placeholder '0' and empty value when number inputs are at default", () => {
       renderWithRouter(<FormCreateCodeConnect />);
-
       const timeInput = document.getElementById("time") as HTMLInputElement;
       const devsFrontInput = document.getElementById(
         "devs-front",
