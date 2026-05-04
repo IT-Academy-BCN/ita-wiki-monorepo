@@ -54,9 +54,8 @@ body {
 
 :root {
   --highlight-top: #d1fae5; /* verd suau */
-  --highlight-danger: #ffe4e6; 
+  --highlight-danger: #ffe4e6;
 }
-
 
 /* @media (prefers-color-scheme: light) {
   :root {
