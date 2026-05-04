@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
 import { StandingsTable } from "../components/leagues/StandingsTable";
-import type { Standing } from "../types/league";
 
 const RankingsPage = () => {
-  const [standings, setStandings] = useState<Standing[] | null>(null);
+  const [standings, setStandings] = useState<
+    { position: number; username: string; points: number }[]
+  >([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -13,18 +15,19 @@ const RankingsPage = () => {
       .then((data) => {
         const sorted = [...data].sort((a, b) => b.points - a.points);
 
-      const standings: Standing[] = sorted.map((item, index) => ({
-        position: index + 1,
-        username: `User_${item.user_id}`, 
-        points: item.points,
-      }));
+        const mappedStandings = sorted.map((item, index) => ({
+          position: index + 1,
+          username: `User_${item.user_id}`,
+          points: item.points,
+        }));
 
-      setStandings(standings);
-    })
+        setStandings(mappedStandings);
+      })
       .catch((error) => {
         console.error("Error loading ranking:", error);
-        setStandings(null);
+        setStandings([]);
       })
+
       .finally(() => {
         setIsLoading(false);
       });
@@ -36,7 +39,7 @@ const RankingsPage = () => {
 
       {isLoading && <p>Carregant...</p>}
 
-      {!isLoading && !standings && (
+      {!isLoading && standings.length === 0 && (
         <p className="text-red-600">
           No s'ha pogut carregar el rànquing. Torna-ho a provar més tard.
         </p>
