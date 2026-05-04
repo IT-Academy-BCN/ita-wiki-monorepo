@@ -744,6 +744,18 @@ class TicketControllerTest extends TestCase{
 
         $response->assertStatus(403);
     }
+
+    /** @test */
+    public function creator_can_close_ticket_when_id_is_returned_as_string(): void
+    {
+        $creator = $this->authenticateUserWithRole('student');
+        $ticket  = Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        // Simula el driver devolviendo el ID como string en lugar de integer
+        $ticket->code_connect_id = (string) $creator->id;
+
+        $this->assertTrue($ticket->canClose($creator));
+    }
 }
 
 ?>
