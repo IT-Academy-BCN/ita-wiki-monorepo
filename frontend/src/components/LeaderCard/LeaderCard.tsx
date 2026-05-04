@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import clsx from "clsx";
+
 export type CupType = "gold" | "silver" | "bronze";
 export type LeaderCardPlayer = {
   user_id: number;
@@ -8,20 +9,25 @@ export type LeaderCardPlayer = {
   title: string;
   points: number;
 };
-const cups = {
+
+const cups: Record<CupType, { icon: string; text: string; border: string }> = {
   gold: { icon: "🏆", text: "text-yellow-400", border: "border-yellow-400" },
   silver: { icon: "🥈", text: "text-gray-400", border: "border-gray-400" },
   bronze: { icon: "🥉", text: "text-amber-600", border: "border-amber-600" },
 };
+
 const LeaderCard: FC<{ player: LeaderCardPlayer; cupType: CupType }> = ({
   player,
   cupType,
 }) => {
   const [imgError, setImgError] = useState(false);
   const { icon, text, border } = cups[cupType];
+
   return (
-    <div className="flex flex-col items-center gap-2 bg-white rounded-xl border border-gray-200 px-6 py-4 shadow-sm flex-1">
-      <span className={clsx("text-2xl", text)}>{icon}</span>
+    <div className="flex flex-col items-center gap-2 bg-white rounded-xl border border-gray-200 px-6 py-4 shadow-sm flex-1 min-w-[180px]">
+      <span className={clsx("text-2xl", text)} aria-label={`${cupType} cup`}>
+        {icon}
+      </span>
       <div
         className={clsx(
           "w-14 h-14 rounded-full border-2 flex items-center justify-center overflow-hidden",
@@ -31,7 +37,7 @@ const LeaderCard: FC<{ player: LeaderCardPlayer; cupType: CupType }> = ({
         {!imgError && player.avatarUrl ? (
           <img
             src={player.avatarUrl}
-            alt=""
+            alt={`${player.username} avatar`}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
@@ -50,4 +56,5 @@ const LeaderCard: FC<{ player: LeaderCardPlayer; cupType: CupType }> = ({
     </div>
   );
 };
+
 export default LeaderCard;
