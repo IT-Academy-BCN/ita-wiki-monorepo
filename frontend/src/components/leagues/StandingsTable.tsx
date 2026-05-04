@@ -1,13 +1,21 @@
-import type { Standing } from "../../types/league";
 import { StandingsRow } from "./StandingsRow";
 import { StandingsEmptyState } from "./StandingsEmptyState";
 
-export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
+export const StandingsTable = ({
+  standings,
+}: {
+  standings: {
+    position: number;
+    username: string;
+    points: number;
+  }[];
+}) => {
   if (!standings) return null;
 
   if (standings.length === 0) {
     return <StandingsEmptyState />;
   }
+
   return (
     <div className="w-full">
       <table className="w-full table-fixed">
@@ -25,6 +33,7 @@ export const StandingsTable = ({ standings }: { standings: Standing[] }) => {
           </tr>
         </thead>
       </table>
+
       <div className="overflow-x-auto">
         <div className="border-2 border-gray-400 rounded-lg overflow-hidden">
           <table className="w-full table-fixed">
