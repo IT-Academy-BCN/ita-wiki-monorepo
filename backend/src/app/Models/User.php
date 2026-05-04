@@ -9,6 +9,9 @@ use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+
 
 class User extends Authenticatable
 {
@@ -107,5 +110,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(TicketComment::class);
     }
+
+    public function ligaEntry(): HasOne
+    {
+      return $this->hasOne(Liga::class);
+    }
+
 
 }
