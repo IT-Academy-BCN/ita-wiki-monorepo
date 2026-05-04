@@ -13,6 +13,11 @@ enum LanguageEnum: string
     case TypeScript = 'TypeScript';
     case Python = 'Python';
     case SQL = 'SQL';
+    case Other = 'Other';
+    case Angular = 'Angular';
+    case Svelte = 'Svelte';
+    case Vue = 'Vue';
+    case Node = 'Node';
 
     public static function values(): array
     {
