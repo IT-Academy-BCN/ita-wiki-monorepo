@@ -1,5 +1,6 @@
 import type { Liga } from "../../types/league";
-const rc = (p: number) => p <= 3 ? "bg-[#d1fae5]" : p >= 8 ? "bg-[#ffe4e6]" : "bg-white";
+const rc = (p: number) =>
+  p <= 3 ? "bg-[#d1fae5]" : p >= 8 ? "bg-[#ffe4e6]" : "bg-white";
 const td = "py-3 px-4 text-center text-[14px]";
 export const StandingsRow = ({ liga }: { liga: Liga }) => (
   <tr className={`${rc(liga.position)} border-b border-gray-200`}>
