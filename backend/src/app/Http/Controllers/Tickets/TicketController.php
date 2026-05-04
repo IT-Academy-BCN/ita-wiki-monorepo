@@ -96,10 +96,7 @@ class TicketController extends Controller
         $user = auth()->user();
         $status = $request->validated()['status'];
 
-        if ($status === 'closed'
-            && !$user->hasAnyRole(['admin', 'superadmin'])
-            && (int) $ticket->code_connect_id !== (int) $user->id
-        ) {
+        if ($status === 'closed' && !$ticket->canClose($user)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized to close this ticket',
