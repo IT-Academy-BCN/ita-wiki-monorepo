@@ -20,6 +20,8 @@ use Database\Seeders\ForumSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RolePermissionSeeder;
+use Database\Seeders\LigaSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,7 +32,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,              
             PermissionSeeder::class,       
             RolePermissionSeeder::class,    
-            UserSeeder::class,              
+            UserSeeder::class, 
+            LigaSeeder::class,             
             TagSeeder::class,               
             ResourceSeeder::class,         
             //BookmarkSeeder::class,         
