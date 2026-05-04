@@ -35,6 +35,6 @@ describe("App", () => {
 describe("App routes", () => {
   it("renders RankingsPage at /ligas", () => {
     renderAt("/ligas");
-    expect(screen.getByText("En construcció...")).toBeTruthy();
+    expect(screen.getByText("Carregant...")).toBeTruthy();
   });
 });
