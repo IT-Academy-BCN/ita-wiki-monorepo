@@ -1,8 +1,10 @@
-import type { Standing } from "../../types/league";
 import { TOP_RANGE, DANGER_RANGE } from "../../config/rankingConfig";
 
 type StandingsRowProps = {
-  standing: Standing;
+  standing: {
+    username: string;
+    points: number;
+  };
   position: number;
 };
 
