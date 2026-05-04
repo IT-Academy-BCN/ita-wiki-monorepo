@@ -9,7 +9,7 @@ export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
       body: JSON.stringify(data),
     });
