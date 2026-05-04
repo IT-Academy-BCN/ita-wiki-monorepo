@@ -36,7 +36,6 @@ export type Ticket = {
   affected_function?: AffectedFunction;
   assignee?: TicketUserData | null;
   codeConnect?: TicketUserData | null;
-  closed_by?: number | null;
   closed_at?: string | null;
   created_at?: string;
   updated_at?: string;
