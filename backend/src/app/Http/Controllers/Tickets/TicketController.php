@@ -119,7 +119,6 @@ class TicketController extends Controller
         ], 200);
     }
 
-
     public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
 
         $user = auth()->user();
