@@ -52,6 +52,12 @@ body {
   stroke: rgb(39, 174, 96);
 }
 
+:root {
+  --highlight-top: #d1fae5; /* verd suau */
+  --highlight-danger: #ffe4e6; 
+}
+
+
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
