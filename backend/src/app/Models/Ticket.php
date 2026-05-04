@@ -70,4 +70,12 @@ class Ticket extends Model
     {
         return $this->belongsTo(ForumAnswer::class, 'forum_answer_id');
     }
+
+    public function canClose(User $user): bool
+    {
+        if ($user->hasAnyRole(['admin', 'superadmin'])) return true;
+        if ((int) $this->code_connect_id === (int) $user->id) return true;
+        if ($this->assignee_id !== null && (int) $this->assignee_id === (int) $user->id) return true;
+        return false;
+    }
 }
