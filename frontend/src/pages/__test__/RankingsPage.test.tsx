@@ -6,19 +6,17 @@ import { getLeagueRanking } from "../../services/leagueService";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
 vi.mock("../../components/leagues/StandingsTable", () => ({
-  StandingsTable: () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Posició</th>
-        </tr>
-      </thead>
-    </table>
-  ),
+  StandingsTable: () => <div data-testid="standings-table">StandingsTable</div>,
+}));
+vi.mock("../../components/LeaderCard/LeaderCard", () => ({
+  default: () => <div data-testid="leader-card" />,
+}));
+vi.mock("../../components/LeagueToggle/LeagueToggle", () => ({
+  default: () => <div data-testid="league-toggle" />,
 }));
 
 const mockRanking = [
-  { position: 1, user_id: 101, points: 94, created_at: "", updated_at: "" },
+  { id: 1, user_id: 101, points: 94, created_at: "", updated_at: "" },
 ];
 
 describe("RankingsPage", () => {
@@ -26,7 +24,7 @@ describe("RankingsPage", () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
     render(<RankingsPage />);
     await waitFor(() =>
-      expect(screen.getByText("Posició")).toBeInTheDocument(),
+      expect(screen.getAllByTestId("standings-table")).toHaveLength(2),
     );
   });
 
