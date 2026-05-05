@@ -49,34 +49,4 @@ describe("TicketingCreateForm", () => {
       description: "Error login",
     });
   });
-
-  it("shows an error when the ticket name is empty", async () => {
-    const user = userEvent.setup();
-    const onSubmit = vi.fn();
-
-    render(<TicketingCreateForm onSubmit={onSubmit} />);
-
-    await user.click(screen.getByRole("button", { name: "Crear ticket" }));
-
-    expect(onSubmit).not.toHaveBeenCalled();
-    expect(mocks.toastErrorMock).toHaveBeenCalledWith(
-      "Escriu el nom del ticket.",
-    );
-  });
-
-  it("disables the input and submit button while submitting", () => {
-    const onSubmit = vi.fn();
-
-    render(<TicketingCreateForm isSubmitting={true} onSubmit={onSubmit} />);
-
-    expect(
-      screen.getByLabelText("Nom del ticket").hasAttribute("disabled"),
-    ).toBe(true);
-
-    expect(
-      screen
-        .getByRole("button", { name: "Creant..." })
-        .hasAttribute("disabled"),
-    ).toBe(true);
-  });
 });

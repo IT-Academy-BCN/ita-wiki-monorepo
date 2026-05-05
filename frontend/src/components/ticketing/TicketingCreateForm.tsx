@@ -1,5 +1,4 @@
 import { FormEvent, JSX, useState } from "react";
-import { toast } from "sonner";
 
 import type {
   AffectedApp,
@@ -19,7 +18,6 @@ interface TicketingCreatePayload {
 }
 
 type TicketingCreateFormProps = {
-  isSubmitting?: boolean;
   onSubmit: (payload: TicketingCreatePayload) => void | Promise<void>;
 };
 
@@ -28,7 +26,6 @@ const createCurrentDate = (): string => {
 };
 
 export const TicketingCreateForm = ({
-  isSubmitting = false,
   onSubmit,
 }: TicketingCreateFormProps): JSX.Element => {
   const [name, setName] = useState<string>("");
@@ -37,11 +34,6 @@ export const TicketingCreateForm = ({
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-
-    if (!name.trim()) {
-      toast.error("Escriu el nom del ticket.");
-      return;
-    }
 
     await onSubmit({
       forum_answer_id: null,
@@ -68,7 +60,6 @@ export const TicketingCreateForm = ({
 
         <input
           className="min-h-[52px] border border-gray-600 px-4 py-3 text-sm focus:border-[#B91879] focus:outline-none focus:ring-1 focus:ring-[#B91879]"
-          disabled={isSubmitting}
           id="ticket-name"
           name="ticket-name"
           onChange={(event) => setName(event.target.value)}
@@ -79,10 +70,9 @@ export const TicketingCreateForm = ({
 
         <button
           className="w-fit bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? "Creant..." : "Crear ticket"}
+          Crear ticket
         </button>
       </div>
     </form>
