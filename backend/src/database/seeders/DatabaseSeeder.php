@@ -21,27 +21,29 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Database\Seeders\LigaSeeder;
+use Database\Seeders\TicketSeeder;
 
 
 class DatabaseSeeder extends Seeder
 {
-    
+
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,              
-            PermissionSeeder::class,       
-            RolePermissionSeeder::class,    
-            UserSeeder::class, 
-            LigaSeeder::class,             
-            TagSeeder::class,               
-            ResourceSeeder::class,         
-            //BookmarkSeeder::class,         
-            //LikeSeeder::class,              
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+            LigaSeeder::class,
+            TagSeeder::class,
+            ResourceSeeder::class,
+            //BookmarkSeeder::class,
+            //LikeSeeder::class,
             TechnicalTestSeeder::class,
             ListProjectsSeeder::class,
             ContributorListProjectSeeder::class,
             ForumSeeder::class,
+            TicketSeeder::class,
         ]);
     }
 }
