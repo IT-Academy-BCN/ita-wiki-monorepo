@@ -1,11 +1,24 @@
 import { JSX } from "react";
+
+import type { IntCreateTicket } from "../types/ticketingTypes";
+
+import { useCreateTicketing } from "../hooks/useCreateTicketing";
+import { useTicketingGetAll } from "../hooks/useTicketingGetAll";
+
 import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
+import { TicketingCreateForm } from "../components/ticketing/TicketingCreateForm";
 import TicketList from "../components/tickets/TicketList";
-import { useTicketingGetAll } from "../hooks/useTicketingGetAll";
 
 const TicketingPage = (): JSX.Element => {
   const { tickets, isLoading, errorMessage } = useTicketingGetAll();
+  const { submitTicketing } = useCreateTicketing();
+
+  const handleCreateTicket = async (
+    ticketData: IntCreateTicket,
+  ): Promise<void> => {
+    await submitTicketing(ticketData);
+  };
 
   return (
     <>
@@ -16,10 +29,11 @@ const TicketingPage = (): JSX.Element => {
         </h2>
 
         <TicketList
-          tickets={tickets}
-          isLoading={isLoading}
           error={errorMessage}
+          isLoading={isLoading}
+          tickets={tickets}
         />
+        <TicketingCreateForm onSubmit={handleCreateTicket} />
       </Container>
     </>
   );

@@ -24,4 +24,14 @@ describe("TicketingPage", () => {
 
     expect(screen.getByText("Llistat de tickets")).toBeTruthy();
   });
+
+  it("renders ticketing create form", () => {
+    render(
+      <BrowserRouter>
+        <TicketingPage />
+      </BrowserRouter>,
+    );
+
+    expect(screen.getByRole("button", { name: "Crear ticket" })).toBeTruthy();
+  });
 });
