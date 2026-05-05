@@ -1,3 +1,5 @@
+export type TicketType = "error" | "suggestion";
+
 export type TicketStatus =
   | "pending"
   | "in_progress"
@@ -6,8 +8,6 @@ export type TicketStatus =
   | "closed";
 
 export type TicketPriority = "low" | "medium" | "high" | "critical";
-
-export type TicketType = "error" | "suggestion";
 
 export type AffectedApp =
   | "wiki_frontend"
@@ -49,6 +49,17 @@ export type IntCreateTicket = {
   affected_function?: AffectedFunction;
   description: string;
 };
+
+export interface IntTicket extends IntCreateTicket {
+  id: number;
+  code_connect_id: number;
+  status: TicketStatus;
+  priority: TicketPriority;
+  closed_by?: number | null;
+  closed_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 export type TicketListProps = {
   tickets: Ticket[];
