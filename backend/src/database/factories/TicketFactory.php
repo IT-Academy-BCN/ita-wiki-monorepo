@@ -30,9 +30,49 @@ class TicketFactory extends Factory
             'type' => fake()->randomElement(['error', 'suggestion']),
             'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
             'description' => fake()->paragraph(),
-            'status' => 'pending',
+            'status' => TicketStatusEnum::Pending->value,
             'priority' => fake()->randomElement(TicketPriorityEnum::values()),
         ];
-        
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatusEnum::Pending->value,
+        ]);
+    }
+
+    public function inProgress(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatusEnum::InProgress->value,
+            'assignee_id' => User::factory(),
+        ]);
+    }
+
+    public function blocked(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatusEnum::Blocked->value,
+            'assignee_id' => User::factory(),
+        ]);
+    }
+
+    public function ready(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatusEnum::Ready->value,
+            'assignee_id' => User::factory(),
+        ]);
+    }
+
+    public function closed(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatusEnum::Closed->value,
+            'assignee_id' => User::factory(),
+            'closed_by' => User::factory(),
+            'closed_at' => now(),
+        ]);
     }
 }
