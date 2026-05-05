@@ -15,7 +15,7 @@ describe("TicketingPage", () => {
     }).not.toThrow();
   });
 
-  it("renders ticketing create form", () => {
+  it("renders ticketing list component", () => {
     render(
       <BrowserRouter>
         <TicketingPage />

@@ -1,7 +1,7 @@
 import axios, { AxiosError, CanceledError } from "axios";
 import { useEffect, useState } from "react";
 
-import { API_URL } from "../config";
+import { ticketsEndpoint } from "../api/endPointTickets";
 
 import type {
   Ticket,
@@ -28,16 +28,13 @@ export const useTicketingGetAll = () => {
       try {
         const token = localStorage.getItem("auth_token");
 
-        const response = await axios.get<ApiTicketsResponse>(
-          `${API_URL}tickets`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            signal: abortController.signal,
+        const response = await axios.get<ApiTicketsResponse>(ticketsEndpoint, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+          signal: abortController.signal,
+        });
 
         const responseData = response.data;
 
