@@ -4,11 +4,18 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { createCodeConnect } from "../../api/endPointCodeConnect";
 import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
-import { IntCodeConnect } from "../../types";
+import { IntCodeConnect, Task } from "../../types";
+import { RoadmapField } from "../forms/RoadmapField";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
 } from "./techsLabelsContent";
+
+const getMinDeadline = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split("T")[0];
+};
 
 const FormCreate = () => {
   const [formData, setFormData] = useState<
@@ -19,13 +26,14 @@ const FormCreate = () => {
     language_backend: "",
     description: "",
     programming_role: "",
-    numberDevsFront: 0,
-    numberDevsBack: 0,
+    dev_front_number: 0,
+    dev_back_number: 0,
     time: 0,
     unitTime: "",
     limit_date_inscription: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmap, setRoadmap] = useState<Task[]>([]);
   const navigate = useNavigate();
 
   const handleInputText = (field: keyof IntCodeConnect, value: string) => {
@@ -38,7 +46,7 @@ const FormCreate = () => {
   const handleInputsNumber = (
     field: keyof Pick<
       IntCodeConnect,
-      "numberDevsFront" | "numberDevsBack" | "time"
+      "dev_front_number" | "dev_back_number" | "time"
     >,
     rawValue: string,
   ) => {
@@ -66,14 +74,13 @@ const FormCreate = () => {
       language_backend,
       description,
       programming_role,
-      numberDevsFront,
-      numberDevsBack,
+      dev_front_number,
+      dev_back_number,
       time,
       unitTime,
       limit_date_inscription,
     } = formData;
 
-    console.log(formData);
     if (!language_frontend) {
       toast.error("Selecciona una tecnologia frontend.");
       return false;
@@ -97,8 +104,8 @@ const FormCreate = () => {
       !title.trim() ||
       !description.trim() ||
       !programming_role.trim() ||
-      numberDevsFront <= 0 ||
-      numberDevsBack <= 0 ||
+      dev_front_number <= 0 ||
+      dev_back_number <= 0 ||
       !time ||
       !unitTime ||
       !limit_date_inscription
@@ -133,9 +140,10 @@ const FormCreate = () => {
       language_frontend: formData.language_frontend,
       language_backend: formData.language_backend,
       description: formData.description,
+      roadmap: roadmap,
       programming_role: formData.programming_role,
-      numberDevsFront: formData.numberDevsFront,
-      numberDevsBack: formData.numberDevsBack,
+      dev_front_number: formData.dev_front_number,
+      dev_back_number: formData.dev_back_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
     };
@@ -227,7 +235,7 @@ const FormCreate = () => {
               >
                 <input
                   type="radio"
-                  name="language_frontend[]"
+                  name="language_frontend"
                   value={item.label}
                   checked={isSelected}
                   onChange={() =>
@@ -235,7 +243,7 @@ const FormCreate = () => {
                   }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );
@@ -261,7 +269,7 @@ const FormCreate = () => {
               >
                 <input
                   type="radio"
-                  name="language_backend[]"
+                  name="language_backend"
                   value={item.label}
                   checked={isSelected}
                   onChange={() =>
@@ -269,7 +277,7 @@ const FormCreate = () => {
                   }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );
@@ -305,7 +313,9 @@ const FormCreate = () => {
           </div>
         </div>
       </div>
-
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+      <RoadmapField setRoadmap={setRoadmap} />
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label htmlFor="limit_date_inscription" className="block font-medium">
@@ -313,7 +323,7 @@ const FormCreate = () => {
           </label>
           <input
             id="limit_date_inscription"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
             value={formData.limit_date_inscription || ""}
             required
@@ -321,7 +331,7 @@ const FormCreate = () => {
             onChange={(e) =>
               handleDeadLine("limit_date_inscription", e.target.value)
             }
-            min="2023-01-01"
+            min={getMinDeadline()}
           />
         </div>
       </div>
@@ -349,7 +359,7 @@ const FormCreate = () => {
             </label>
             <select
               id="unitTime"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
+              className="bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
               value={formData.unitTime}
               required
               disabled={isSubmitting}
@@ -358,8 +368,12 @@ const FormCreate = () => {
               <option value="" disabled>
                 Selecciona
               </option>
-              <option value="month">Mes</option>
-              <option value="week">Setmana</option>
+              <option value="month">
+                {formData.time <= 1 ? "Mes" : "Mesos"}
+              </option>
+              <option value="week">
+                {formData.time <= 1 ? "Setmana" : "Setmanes"}
+              </option>
             </select>
           </div>
         </div>
@@ -400,12 +414,12 @@ const FormCreate = () => {
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
             value={
-              formData.numberDevsFront === 0 ? "" : formData.numberDevsFront
+              formData.dev_front_number === 0 ? "" : formData.dev_front_number
             }
             placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsFront", e.target.value)
+              handleInputsNumber("dev_front_number", e.target.value)
             }
           />
         </div>
@@ -420,11 +434,13 @@ const FormCreate = () => {
             id="devs-back"
             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsBack === 0 ? "" : formData.numberDevsBack}
+            value={
+              formData.dev_back_number === 0 ? "" : formData.dev_back_number
+            }
             placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsBack", e.target.value)
+              handleInputsNumber("dev_back_number", e.target.value)
             }
           />
         </div>

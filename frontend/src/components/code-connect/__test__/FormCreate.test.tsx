@@ -1,9 +1,15 @@
+import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FormCreateCodeConnect from "../FormCreate";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+  TechnologyItem,
+} from "../techsLabelsContent";
 
 vi.mock("sonner", () => ({
   toast: {
@@ -112,6 +118,19 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   });
 };
 
+const checkTechOptionsRender = (language: string, list: TechnologyItem[]) => {
+  const inputs = screen
+    .getAllByRole("radio")
+    .filter((radio) => radio.getAttribute("name") === language);
+  expect(inputs).toHaveLength(list.length);
+  list.forEach((tech) => {
+    if (tech.icon) {
+      const label = screen.getByDisplayValue(tech.label).closest("label")!;
+      expect(label.querySelector("svg")).toBeInTheDocument();
+    }
+  });
+};
+
 describe("FormCreateCodeConnect", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -155,6 +174,26 @@ describe("FormCreateCodeConnect", () => {
       });
     });
 
+    it("should only allow to set a future inscription deadline", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const deadlineInput = screen.getByLabelText(
+        /data límit d'inscripció/i,
+      ) as HTMLInputElement;
+
+      await user.type(deadlineInput, "2025-01-01");
+      expect(deadlineInput).toBeInvalid();
+      const now = new Date();
+      const today = now.toISOString().split("T")[0];
+      await user.clear(deadlineInput);
+      await user.type(deadlineInput, today);
+      expect(deadlineInput).toBeInvalid();
+      await user.clear(deadlineInput);
+      await user.type(deadlineInput, "2030-01-01");
+      expect(deadlineInput).toBeValid();
+    });
+
     it("should pass validation with all required fields filled correctly", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
@@ -180,8 +219,9 @@ describe("FormCreateCodeConnect", () => {
         language_frontend: "React",
         language_backend: "Node",
         description: "Test description",
-        numberDevsFront: 2,
-        numberDevsBack: 2,
+        programming_role: "Frontend",
+        dev_front_number: 2,
+        dev_back_number: 2,
         time: 2,
         unitTime: "week",
         limit_date_inscription: "20/05/2026",
@@ -300,11 +340,27 @@ describe("FormCreateCodeConnect", () => {
     it("should navigate back to code connect when clicking back link", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
 
       const backLink = screen.getByText(/tornar a code connect/i);
       await user.click(backLink);
 
       expect(mockNavigate).toHaveBeenCalledWith("/codeconnect");
+    });
+    it("should display the time unit value options for the project duration in plural or singular depending on the time value entered previously by the user", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      const monthOption = screen.getByRole("option", { name: /mes/i });
+      const weekOption = screen.getByRole("option", { name: /setmana/i });
+      expect(monthOption).toHaveTextContent("Mes");
+      await user.clear(timeInput);
+      await user.type(timeInput, "2");
+      expect(monthOption).toHaveTextContent("Mesos");
+      expect(weekOption).toHaveTextContent("Setmanes");
     });
   });
 
@@ -343,9 +399,25 @@ describe("FormCreateCodeConnect", () => {
       });
     });
 
+    it("should show all the technologies with their icons when available", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      checkTechOptionsRender("language_frontend", contentTechsFrontCodeConnect);
+      checkTechOptionsRender("language_backend", contentTechsBackCodeConnect);
+    });
+
+    it("should select the correct technology onclick", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+      expect(reactRadio).toBeChecked();
+      expect(reactRadio).toHaveAttribute("value", "React");
+      const form = reactRadio.closest("form");
+      expect(form).toHaveFormValues({ language_frontend: "React" });
+    });
+
     it("should show placeholder '0' and empty value when number inputs are at default", () => {
       renderWithRouter(<FormCreateCodeConnect />);
-
       const timeInput = document.getElementById("time") as HTMLInputElement;
       const devsFrontInput = document.getElementById(
         "devs-front",

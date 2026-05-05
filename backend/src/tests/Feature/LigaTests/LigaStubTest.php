@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\LigaTests;
 
 use Tests\TestCase;
+use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 
 class LigaStubTest extends TestCase
 {
@@ -30,6 +32,12 @@ class LigaStubTest extends TestCase
     public function test_add_points_updates_user_points(): void
     {
         $user = User::factory()->create();
+
+        // addPoints uses firstOrFail(), so a liga entry must exist before calling the endpoint
+        Liga::create([
+            'user_id' => $user->id,
+            'points' => 0,
+        ]);
 
         $response = $this->putJson("/api/ligas/{$user->id}/points");
 
