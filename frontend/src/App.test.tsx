@@ -19,6 +19,10 @@ vi.mock("./context/UserContext", () => ({
   useUserContext: () => ({ user: null }),
 }));
 
+vi.mock("./pages/RankingsPage", () => ({
+  default: () => <div data-testid="rankings-page" />,
+}));
+
 const renderAt = (path: string) =>
   render(
     <MemoryRouter initialEntries={[path]}>
@@ -35,6 +39,6 @@ describe("App", () => {
 describe("App routes", () => {
   it("renders RankingsPage at /ligas", () => {
     renderAt("/ligas");
-    expect(screen.getByText("En construcció...")).toBeTruthy();
+    expect(screen.getByTestId("rankings-page")).toBeInTheDocument();
   });
 });
