@@ -80,7 +80,7 @@ describe("createTicket", () => {
     expect(calledOptions.method).toBe("POST");
   });
 
-  it("sends null token if user is not logged in", async () => {
+  it("does not send Authorization header if user is not logged in", async () => {
     vi.stubGlobal("localStorage", {
       getItem: () => null,
     });
@@ -91,7 +91,9 @@ describe("createTicket", () => {
     });
 
     await createTicket(mockTicketData);
-    expect(fetchMock).toHaveBeenCalledOnce();
+
+    const calledOptions = fetchMock.mock.calls[0][1];
+    expect(calledOptions.headers).not.toHaveProperty("Authorization");
   });
 
   it("throws the error message from the server", async () => {
