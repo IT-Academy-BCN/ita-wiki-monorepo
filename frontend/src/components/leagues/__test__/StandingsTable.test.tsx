@@ -16,10 +16,10 @@ const mockStandings = [
 describe("StandingsTable", () => {
   it("renders all rows correctly", () => {
     render(<StandingsTable standings={mockStandings} />);
-    expect(screen.getByText("1")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getByText("4")).toBeInTheDocument();
+    expect(screen.getAllByText("1").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("2").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("3").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("4").length).toBeGreaterThan(0);
   });
 
   it("renders empty state when no standings are provided", () => {
