@@ -3,8 +3,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import { StandingsTable } from "../StandingsTable";
-import { StandingsRow } from "../StandingsRow";
+import { RankingsTable } from "../RankingsTable";
+import { RankingsRow } from "../RankingsRow";
 
 const mockStandings = [
   { position: 1, username: "Tom", points: 100 },
@@ -13,9 +13,9 @@ const mockStandings = [
   { position: 9, username: "Anne", points: 70 },
 ];
 
-describe("StandingsTable", () => {
+describe("RankingsTable", () => {
   it("renders all rows correctly", () => {
-    render(<StandingsTable standings={mockStandings} />);
+    render(<RankingsTable standings={mockStandings} />);
     expect(screen.getByText("Tom")).toBeInTheDocument();
     expect(screen.getByText("Lois")).toBeInTheDocument();
     expect(screen.getByText("Jon")).toBeInTheDocument();
@@ -23,17 +23,17 @@ describe("StandingsTable", () => {
   });
 
   it("renders empty state when no standings are provided", () => {
-    render(<StandingsTable standings={[]} />);
+    render(<RankingsTable standings={[]} />);
     expect(screen.getByText("No hi han dades disponibles")).toBeInTheDocument();
   });
 });
 
-describe("StandingsRow", () => {
+describe("RankingsRow", () => {
   it("applies green highlight to top 3", () => {
     render(
       <table>
         <tbody>
-          <StandingsRow standing={mockStandings[0]} position={1} />
+          <RankingsRow standing={mockStandings[0]} position={1} />
         </tbody>
       </table>,
     );
@@ -45,7 +45,7 @@ describe("StandingsRow", () => {
     render(
       <table>
         <tbody>
-          <StandingsRow standing={mockStandings[3]} position={9} />
+          <RankingsRow standing={mockStandings[3]} position={9} />
         </tbody>
       </table>,
     );
@@ -57,7 +57,7 @@ describe("StandingsRow", () => {
     render(
       <table>
         <tbody>
-          <StandingsRow standing={mockStandings[1]} position={5} />
+          <RankingsRow standing={mockStandings[1]} position={5} />
         </tbody>
       </table>,
     );

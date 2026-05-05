@@ -1,7 +1,7 @@
-import { StandingsRow } from "./StandingsRow";
-import { StandingsEmptyState } from "./StandingsEmptyState";
+import { RankingsRow } from "./RankingsRow";
+import { RankingsEmptyState } from "./RankingsEmptyState";
 
-export const StandingsTable = ({
+export const RankingsTable = ({
   standings,
 }: {
   standings: {
@@ -11,7 +11,7 @@ export const StandingsTable = ({
   }[];
 }) => {
   if (standings.length === 0) {
-    return <StandingsEmptyState />;
+    return <RankingsEmptyState />;
   }
 
   return (
@@ -33,7 +33,7 @@ export const StandingsTable = ({
           </thead>
           <tbody>
             {standings.map((standing) => (
-              <StandingsRow
+              <RankingsRow
                 key={standing.position}
                 standing={standing}
                 position={standing.position}

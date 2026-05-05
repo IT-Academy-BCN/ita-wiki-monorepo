@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
-import { StandingsTable } from "../components/leagues/StandingsTable";
-import { StandingsTableSkeleton } from "../components/leagues/StandingsTableSkeleton";
+import { RankingsTable } from "../components/leagues/RankingsTable";
+import { RankingsTableSkeleton } from "../components/leagues/RankingsTableSkeleton";
 
 type Standing = {
   position: number;
@@ -38,7 +38,7 @@ const RankingsPage = () => {
     <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6 !bg-transparent">
       <h1 className="text-2xl font-bold mb-6">Lliga General</h1>
 
-      {isLoading && <StandingsTableSkeleton />}
+      {isLoading && <RankingsTableSkeleton />}
 
       {!isLoading && hasError && (
         <p className="text-red-600">
@@ -46,7 +46,7 @@ const RankingsPage = () => {
         </p>
       )}
 
-      {!isLoading && !hasError && <StandingsTable standings={standings} />}
+      {!isLoading && !hasError && <RankingsTable standings={standings} />}
     </Container>
   );
 };
