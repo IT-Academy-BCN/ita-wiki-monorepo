@@ -4,31 +4,48 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Liga;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LigaController extends Controller
 {
-    public function ranking()
-    {
-        return response()->json([
-            [
-            'id'=> 1,
-            'user_id'=> 1,
-            'points'=> 99,
-            'created_at' => null,
-            'updated_at' => null,
-            ]
-        ]);
-    }
-
-    public function addPoints(User $user)
-    {
-        return response()->json(['user_id' => $user->id, 'points' => 99]);
-    }
 
     public function store(Request $request)
     {
-        return response()->json(['message' => 'created'], 201);
+        $validated = $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if (Liga::where('user_id', $validated['user_id'])->exists()) {
+            return response()->json(['error' => 'Entry already exists for this user'], 409);
+        }
+
+        $entry = Liga::create(['user_id' => $validated['user_id'], 'points' => 0]);
+
+        return response()->json($entry, 201);
+    }
+
+    public function ranking()
+    {
+        $entries = Liga::orderBy('points', 'desc')
+            ->get()
+            ->values()
+            ->map(fn ($entry, $index) => [
+                'position'   => $index + 1,
+                'user_id'    => $entry->user_id,
+                'points'     => $entry->points,
+                'created_at' => $entry->created_at,
+                'updated_at' => $entry->updated_at,
+            ]);
+
+        return response()->json($entries);
+    }
+
+    public function addPoints(User $user): JsonResponse
+    {
+        return response()->json(['user_id' => $user->id, 'points' => 99]);
     }
 }
+

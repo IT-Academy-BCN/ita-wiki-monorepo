@@ -20,16 +20,14 @@ vi.mock("../../config", () => ({
 let mockFetch: ReturnType<typeof vi.fn>;
 
 describe("createCodeConnect", () => {
-  const mockNewCodeConnect: IntCodeConnect = {
+  const mockNewCodeConnect: Omit<IntCodeConnect, "time" | "unitTime"> = {
     title: "Lorem ipsum",
     description: "Some random text to describe lorem ipsum",
     language_frontend: "React",
     language_backend: "Node",
-    programming_role: "frontend",
-    numberDevsFront: 3,
-    numberDevsBack: 10,
-    time: 2,
-    unitTime: "months",
+    programming_role: "Frontend",
+    dev_front_number: 3,
+    dev_back_number: 10,
     time_duration: "2 months",
     limit_date_inscription: "2026-12-31",
   };
