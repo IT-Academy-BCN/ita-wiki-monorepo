@@ -7,19 +7,19 @@ import { StandingsTable } from "../StandingsTable";
 import { StandingsRow } from "../StandingsRow";
 
 const mockStandings = [
-  { position: 1, username: "Tom", points: 100 },
-  { position: 2, username: "Lois", points: 90 },
-  { position: 3, username: "Jon", points: 80 },
-  { position: 9, username: "Anne", points: 70 },
+  { position: 1, user_id: 1, points: 100 },
+  { position: 2, user_id: 2, points: 90 },
+  { position: 3, user_id: 3, points: 80 },
+  { position: 9, user_id: 4, points: 70 },
 ];
 
 describe("StandingsTable", () => {
   it("renders all rows correctly", () => {
     render(<StandingsTable standings={mockStandings} />);
-    expect(screen.getByText("Tom")).toBeInTheDocument();
-    expect(screen.getByText("Lois")).toBeInTheDocument();
-    expect(screen.getByText("Jon")).toBeInTheDocument();
-    expect(screen.getByText("Anne")).toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("4")).toBeInTheDocument();
   });
 
   it("renders empty state when no standings are provided", () => {

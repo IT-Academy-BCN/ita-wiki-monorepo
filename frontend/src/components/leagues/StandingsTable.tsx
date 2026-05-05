@@ -6,7 +6,7 @@ export const StandingsTable = ({
 }: {
   standings: {
     position: number;
-    username: string;
+    user_id: number;
     points: number;
   }[];
 }) => {

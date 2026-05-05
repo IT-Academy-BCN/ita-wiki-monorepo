@@ -2,7 +2,7 @@ import { TOP_RANGE, DANGER_RANGE } from "../../config/rankingConfig";
 
 type StandingsRowProps = {
   standing: {
-    username: string;
+    user_id: number;
     points: number;
   };
   position: number;
@@ -17,7 +17,7 @@ export const StandingsRow = ({ standing, position }: StandingsRowProps) => {
         {position}
       </td>
       <td className="py-3 px-4 text-center text-[14px] text-black">
-        {standing.username}
+        {standing.user_id}
       </td>
       <td className="py-3 px-4 text-center text-[14px] text-black font-semibold">
         {standing.points}
