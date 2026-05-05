@@ -175,11 +175,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
 Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
 Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
-<<<<<<< HEAD
 
-
-
-
-
-=======
->>>>>>> 235fdfc37509649fa4040162b24dd15e6377b6a0

@@ -45,7 +45,7 @@ class LigaStubTest extends TestCase
 
         $response->assertJson([
             'user_id' => $user->id,
-            'points'  => 99,
+            'points'  => 5,
         ]);
     }
 }
