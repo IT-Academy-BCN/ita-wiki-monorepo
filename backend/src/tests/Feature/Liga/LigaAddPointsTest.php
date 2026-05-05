@@ -63,17 +63,5 @@ class LigaAddPointsTest extends TestCase
 
         $response->assertStatus(404);
     }
-
-    public function test_put_creates_liga_and_increments_by_5_when_user_has_no_liga(): void
-    {
-    $userWithoutLiga = User::factory()->create();
-
-    $response = $this->putJson('/api/ligas/' . $userWithoutLiga->id . '/points');
-
-    $response->assertStatus(200);
-    $response->assertJson([
-        'user_id' => $userWithoutLiga->id,
-        'points'  => 5,
-    ]);
-    }
 }
+

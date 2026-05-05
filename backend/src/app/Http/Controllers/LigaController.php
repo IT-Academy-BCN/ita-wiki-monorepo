@@ -29,11 +29,7 @@ class LigaController extends Controller
 
     public function addPoints(User $user): JsonResponse
     {
-        $entry = Liga::firstOrCreate(
-            ['user_id' => $user->id],
-            ['points' => 0]
-        );
-
+        $entry = Liga::where('user_id', $user->id)->firstOrFail();
 
         $entry->increment('points', 5);
 
