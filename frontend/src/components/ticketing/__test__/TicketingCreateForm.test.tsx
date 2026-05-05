@@ -4,18 +4,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { TicketingCreateForm } from "../TicketingCreateForm";
 
-const mocks = vi.hoisted(() => {
-  return {
-    toastErrorMock: vi.fn(),
-  };
-});
-
-vi.mock("sonner", () => ({
-  toast: {
-    error: mocks.toastErrorMock,
-  },
-}));
-
 const createCurrentDate = (): string => {
   return new Date().toISOString().split("T")[0];
 };
