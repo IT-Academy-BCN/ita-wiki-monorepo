@@ -21,9 +21,7 @@ const RankingsPage = () => {
   }, []);
   return (
     <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6 !bg-transparent">
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <LeagueToggle view={view} onChange={setView} />
-      </div>
+      <LeagueToggle view={view} onChange={setView} />
       {isLoading && <p>Carregant...</p>}
       {!isLoading && !ligas && (
         <p className="text-red-600">No s'ha pogut carregar el rànquing.</p>
