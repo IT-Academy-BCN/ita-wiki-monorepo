@@ -2,9 +2,18 @@ import { JSX } from "react";
 import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
 import { TicketingCreateForm } from "../components/ticketing/TicketingCreateForm";
+import { useCreateTicketing } from "../hooks/useCreateTicketing";
+import type { IntCreateTicket } from "../types/ticketingTypes";
 
 const TicketingPage = (): JSX.Element => {
-  const handleCreateTicket = (): void => {};
+  const { submitTicketing } = useCreateTicketing();
+
+  const handleCreateTicket = async (
+    ticketData: IntCreateTicket,
+  ): Promise<void> => {
+    await submitTicketing(ticketData);
+  };
+
   return (
     <>
       <PageTitle title="Ticketing" />
