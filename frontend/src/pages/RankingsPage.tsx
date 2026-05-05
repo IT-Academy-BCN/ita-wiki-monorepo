@@ -1,11 +1,18 @@
-import Container from "../components/ui/Container";
+import { useEffect, useState } from "react";
+import { StandingsTable } from "../components/leagues/StandingsTable";
+import { getLeagueRanking } from "../services/leagueService";
+import type { Liga } from "../types/league";
 
 const RankingsPage = () => {
-  return (
-    <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
-      <div>En construcció...</div>
-    </Container>
-  );
+  const [data, setData] = useState<Liga[]>([]);
+
+  useEffect(() => {
+    getLeagueRanking()
+      .then(setData)
+      .catch(() => {});
+  }, []);
+
+  return <StandingsTable standings={data} />;
 };
 
 export default RankingsPage;

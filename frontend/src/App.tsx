@@ -35,7 +35,6 @@ const App: FC = () => {
               path="/codeconnect/:projectId"
               element={<CodeConnectDetails />}
             />
-            <Route path="/ranking" element={<RankingsPage />} />
             <Route path="/ligas" element={<RankingsPage />} />
             <Route path="/ticketing" element={<TicketingPage />} />
 
