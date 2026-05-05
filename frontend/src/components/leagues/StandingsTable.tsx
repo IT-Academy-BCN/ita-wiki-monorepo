@@ -10,8 +10,6 @@ export const StandingsTable = ({
     points: number;
   }[];
 }) => {
-  if (!standings) return null;
-
   if (standings.length === 0) {
     return <StandingsEmptyState />;
   }
@@ -33,7 +31,6 @@ export const StandingsTable = ({
               </th>
             </tr>
           </thead>
-
           <tbody>
             {standings.map((standing) => (
               <StandingsRow
