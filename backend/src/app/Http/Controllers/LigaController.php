@@ -29,7 +29,11 @@ class LigaController extends Controller
 
     public function addPoints(User $user): JsonResponse
     {
-        $entry = Liga::where('user_id', $user->id)->firstOrFail();
+        $entry = Liga::where('user_id', $user->id)->first();
+
+        if (!$entry) {
+            return response()->json(['message' => 'User has not opted in to the liga'], 403);
+        }
 
         $entry->increment('points', 5);
 
