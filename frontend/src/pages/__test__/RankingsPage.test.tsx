@@ -5,9 +5,9 @@ import RankingsPage from "../RankingsPage";
 import { getLeagueRanking } from "../../services/leagueService";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
-vi.mock("../../components/leagues/StandingsTable", () => ({
-  StandingsTable: ({ standings }: { standings: unknown[] }) => (
-    <div data-testid="standings-table">{standings.length} rows</div>
+vi.mock("../../components/leagues/RankingsTable", () => ({
+  RankingsTable: ({ rankings }: { rankings: unknown[] }) => (
+    <div data-testid="rankings-table">{rankings.length} rows</div>
   ),
 }));
 vi.mock("../../components/LeaderCard/LeaderCard", () => ({
@@ -31,13 +31,13 @@ describe("RankingsPage", () => {
     expect(screen.getByText("Carregant...")).toBeInTheDocument();
   });
 
-  it("renders LeagueToggle, LeaderCards and StandingsTables after fetch", async () => {
+  it("renders LeagueToggle, LeaderCards and RankingsTables after fetch", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockData);
     render(<RankingsPage />);
     await waitFor(() => {
       expect(screen.getByTestId("league-toggle")).toBeInTheDocument();
       expect(screen.getAllByTestId("leader-card")).toHaveLength(3);
-      expect(screen.getAllByTestId("standings-table")).toHaveLength(2);
+      expect(screen.getAllByTestId("rankings-table")).toHaveLength(2);
     });
   });
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import { getLeagueRanking } from "../services/leagueService";
-import { StandingsTable } from "../components/leagues/StandingsTable";
+import { RankingsTable } from "../components/leagues/RankingsTable";
 import LeaderCard, { type CupType } from "../components/LeaderCard/LeaderCard";
 import LeagueToggle, {
   type LeagueView,
@@ -44,10 +44,10 @@ const RankingsPage = () => {
               />
             ))}
           </div>
-          <StandingsTable standings={ligas.slice(3)} />
+          <RankingsTable rankings={ligas.slice(3)} />
           <h2 className="text-base font-semibold mt-6 mb-3">Liga Plata</h2>
           <div className="border-2 border-blue-400 rounded-lg overflow-hidden">
-            <StandingsTable standings={ligas} />
+            <RankingsTable rankings={ligas} />
           </div>
         </>
       )}
