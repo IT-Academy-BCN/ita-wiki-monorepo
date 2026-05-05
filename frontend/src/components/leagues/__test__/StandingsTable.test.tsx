@@ -16,11 +16,15 @@ const mockStandings = [
 describe("StandingsTable", () => {
   it("renders all rows correctly", () => {
     render(<StandingsTable standings={mockStandings} />);
-
     expect(screen.getByText("Tom")).toBeInTheDocument();
     expect(screen.getByText("Lois")).toBeInTheDocument();
     expect(screen.getByText("Jon")).toBeInTheDocument();
     expect(screen.getByText("Anne")).toBeInTheDocument();
+  });
+
+  it("renders empty state when no standings are provided", () => {
+    render(<StandingsTable standings={[]} />);
+    expect(screen.getByText("No hi han dades disponibles")).toBeInTheDocument();
   });
 });
 
@@ -33,7 +37,6 @@ describe("StandingsRow", () => {
         </tbody>
       </table>,
     );
-
     const row = screen.getByRole("row");
     expect(row).toHaveClass("bg-[var(--highlight-top)]");
   });
@@ -46,7 +49,6 @@ describe("StandingsRow", () => {
         </tbody>
       </table>,
     );
-
     const row = screen.getByRole("row");
     expect(row).toHaveClass("bg-[var(--highlight-danger)]");
   });
@@ -59,7 +61,6 @@ describe("StandingsRow", () => {
         </tbody>
       </table>,
     );
-
     const row = screen.getByRole("row");
     expect(row).toHaveClass("bg-white");
   });
