@@ -60,9 +60,6 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   return (
     <div className="w-full bg-muted/40 rounded-lg p-6 sm:p-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold tracking-wide text-foreground">
-          TICKETING
-        </h2>
         <p className="mt-4 text-sm font-medium text-foreground underline underline-offset-4">
           Llistat de tickets
         </p>

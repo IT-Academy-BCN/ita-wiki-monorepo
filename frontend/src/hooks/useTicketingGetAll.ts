@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../config";
 
 import type {
-  ApiTicketData,
+  Ticket,
   ApiTicketsResponse,
   TicketingError,
 } from "../types/ticketingTypes";
@@ -16,7 +16,7 @@ const isAbortLikeError = (value: unknown): boolean => {
 export const useTicketingGetAll = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [tickets, setTickets] = useState<ApiTicketData[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();

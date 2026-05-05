@@ -1,11 +1,11 @@
-import { render } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { BrowserRouter } from "react-router";
 
 import TicketingPage from "../TicketingPage";
 
 describe("TicketingPage", () => {
-  test("renders without errors", () => {
+  it("renders without errors", () => {
     expect(() => {
       render(
         <BrowserRouter>
@@ -13,5 +13,17 @@ describe("TicketingPage", () => {
         </BrowserRouter>,
       );
     }).not.toThrow();
+  });
+
+  it("renders ticketing create form", () => {
+    render(
+      <BrowserRouter>
+        <TicketingPage />
+      </BrowserRouter>,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Llistat de tickets" }),
+    ).toBeTruthy();
   });
 });

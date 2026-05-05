@@ -35,7 +35,7 @@ export type Ticket = {
   affected_app?: AffectedApp;
   affected_function?: AffectedFunction;
   assignee?: TicketUserData | null;
-  codeConnect?: TicketUserData | null;
+  code_connect?: TicketUserData | null;
   closed_at?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -75,7 +75,7 @@ export interface ApiTicketData {
   affected_function: AffectedFunction;
   description: string;
   status: TicketStatus;
-  priority: TicketPriority | null;
+  priority: TicketPriority;
   assignee_id: number | null;
   closed_by: number | null;
   closed_at: string | null;
