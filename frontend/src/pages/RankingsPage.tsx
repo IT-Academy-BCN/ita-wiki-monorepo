@@ -44,9 +44,11 @@ const RankingsPage = () => {
               />
             ))}
           </div>
-          <StandingsTable ligas={ligas.slice(3)} />
+          <StandingsTable standings={ligas.slice(3)} />
           <h2 className="text-base font-semibold mt-6 mb-3">Liga Plata</h2>
-          <StandingsTable ligas={ligas} highlighted />
+          <div className="border-2 border-blue-400 rounded-lg overflow-hidden">
+            <StandingsTable standings={ligas} />
+          </div>
         </>
       )}
     </Container>

@@ -6,8 +6,8 @@ import { getLeagueRanking } from "../../services/leagueService";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
 vi.mock("../../components/leagues/StandingsTable", () => ({
-  StandingsTable: ({ ligas }: { ligas: unknown[] }) => (
-    <div data-testid="standings-table">{ligas.length} rows</div>
+  StandingsTable: ({ standings }: { standings: unknown[] }) => (
+    <div data-testid="standings-table">{standings.length} rows</div>
   ),
 }));
 vi.mock("../../components/LeaderCard/LeaderCard", () => ({
@@ -45,7 +45,9 @@ describe("RankingsPage", () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
     render(<RankingsPage />);
     await waitFor(() => {
-      expect(screen.getByText("No s'ha pogut carregar el rànquing.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No s'ha pogut carregar el rànquing."),
+      ).toBeInTheDocument();
     });
   });
 });
