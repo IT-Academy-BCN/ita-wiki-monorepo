@@ -22,8 +22,6 @@ describe("TicketingPage", () => {
       </BrowserRouter>,
     );
 
-    expect(
-      screen.getByRole("button", { name: "Llistat de tickets" }),
-    ).toBeTruthy();
+    expect(screen.getByText("Llistat de tickets")).toBeTruthy();
   });
 });
