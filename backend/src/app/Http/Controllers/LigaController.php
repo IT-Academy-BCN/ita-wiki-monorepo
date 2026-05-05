@@ -11,7 +11,23 @@ use Illuminate\Http\Request;
 
 class LigaController extends Controller
 {
-    public function ranking(): JsonResponse
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if (Liga::where('user_id', $validated['user_id'])->exists()) {
+            return response()->json(['error' => 'Entry already exists for this user'], 409);
+        }
+
+        $entry = Liga::create(['user_id' => $validated['user_id'], 'points' => 0]);
+
+        return response()->json($entry, 201);
+    }
+
+    public function ranking()
     {
         $entries = Liga::orderBy('points', 'desc')
             ->get()
@@ -29,11 +45,18 @@ class LigaController extends Controller
 
     public function addPoints(User $user): JsonResponse
     {
-        return response()->json(['user_id' => $user->id, 'points' => 99]);
-    }
+        $entry = Liga::where('user_id', $user->id)->first();
 
-    public function store(Request $request): JsonResponse
-    {
-        return response()->json(['message' => 'created'], 201);
+        if (!$entry) {
+            return response()->json(['message' => 'User has not opted in to the liga'], 403);
+        }
+
+        $entry->increment('points', 5);
+
+        return response()->json([
+            'user_id' => $user->id,
+            'points'  => $entry->points,
+        ]);
     }
 }
+
