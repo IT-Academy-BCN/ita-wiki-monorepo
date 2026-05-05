@@ -1,7 +1,9 @@
-import { IntCreateTicket, Ticket } from "../types/ticketingTypes";
+import { IntCreateTicket, IntTicket } from "../types/ticketingTypes";
 import { API_URL, END_POINTS } from "../config";
 
-export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
+export const createTicket = async (
+  data: IntCreateTicket,
+): Promise<IntTicket> => {
   try {
     const token = localStorage.getItem("auth_token");
 
@@ -20,7 +22,7 @@ export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
       throw new Error(result.message || "Failed to create ticket");
     }
 
-    return result.data;
+    return result.data as IntTicket;
   } catch (error) {
     if (error instanceof TypeError) {
       throw new Error("Network error, please check your connection");
@@ -32,13 +34,14 @@ export const createTicket = async (data: IntCreateTicket): Promise<Ticket> => {
   }
 };
 
-export const fetchAllTickets = async () => {
+export const fetchAllTickets = async (): Promise<IntTicket[] | undefined> => {
   const url = `${API_URL}${END_POINTS.tickets.get}`;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch tickets");
     const data = await response.json();
-    return data.data;
+
+    return data.data as IntTicket[];
   } catch (error: unknown) {
     console.error(error);
   }
