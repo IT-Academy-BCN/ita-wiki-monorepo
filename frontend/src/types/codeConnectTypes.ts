@@ -35,7 +35,7 @@ export interface ApiProjectData {
   description?: string;
   language_backend: string;
   language_frontend: string;
-  roadmap?: string;
+  roadmap?: { task: string, done: boolean }[];
   time_duration: string;
   title: string;
 }
