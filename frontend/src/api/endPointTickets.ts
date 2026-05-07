@@ -2,10 +2,24 @@ import { IntCreateTicket, IntTicket } from "../types/ticketingTypes";
 import { API_URL, END_POINTS } from "../config";
 
 export const createTicket = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _data: IntCreateTicket,
+  data: IntCreateTicket,
 ): Promise<IntTicket> => {
-  throw new Error("Not implemented");
+  const url = `${API_URL}${END_POINTS.tickets.post}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create ticket");
+  }
+
+  const result = await response.json();
+  return result.data;
 };
 
 export const fetchAllTickets = async () => {
