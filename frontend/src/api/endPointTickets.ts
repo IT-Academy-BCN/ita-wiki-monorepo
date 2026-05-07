@@ -27,8 +27,6 @@ export const createTicket = async (
   }
 };
 
-
-
 export const fetchAllTickets = async () => {
   const url = `${API_URL}${END_POINTS.tickets.get}`;
   try {
