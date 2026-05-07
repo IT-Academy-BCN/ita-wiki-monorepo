@@ -23,12 +23,10 @@ export const useCreateTicketing = () => {
 
       setTicketing((prev) => [...prev, newTicketing]);
       return newTicketing;
-
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
       return null;
-
     } finally {
       setIsLoading(false);
     }
