@@ -47,7 +47,9 @@ const CodeConnectDetails = () => {
                     ))}
                   </ul>
                 </>
-              ) : "Aquesta informació no està disponible a la base de dades."}
+              ) : (
+                "Aquesta informació no està disponible a la base de dades."
+              )}
             </div>
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">

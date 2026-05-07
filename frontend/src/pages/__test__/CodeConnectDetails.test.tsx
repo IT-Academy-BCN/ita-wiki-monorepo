@@ -25,7 +25,10 @@ describe("CodeConnectDetails Page", () => {
       data: {
         title: "Super Projecte de Prova",
         description: "Descripció de prova del projecte",
-        roadmap: [{ task: "Tarea 1", done: false }, { task: "Tarea 2", done: false }],
+        roadmap: [
+          { task: "Tarea 1", done: false },
+          { task: "Tarea 2", done: false },
+        ],
         contributors: [],
         time_duration: "2 setmanes",
         language_frontend: "react",
