@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     {
         // Superadmin
         $superadmin = User::firstOrCreate(
-            ['email' => 'superadmin@test.com'],
+            ['email' => 'superadmin@itawiki.test'],
             [
                 'github_id'        => '11111111',
                 'github_user_name' => 'superadmin_test',
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
 
         // Admin
         $admin = User::firstOrCreate(
-            ['email' => 'admin@test.com'],
+            ['email' => 'admin@itawiki.test'],
             [
                 'github_id'        => '22222222',
                 'github_user_name' => 'admin_test',
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
 
         // Mentor
         $mentor = User::firstOrCreate(
-            ['email' => 'mentor@test.com'],
+            ['email' => 'mentor@itawiki.test'],
             [
                 'github_id'        => '33333333',
                 'github_user_name' => 'mentor_test',
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
 
         // Student 1
         $student1 = User::firstOrCreate(
-            ['email' => 'student1@test.com'],
+            ['email' => 'student@itawiki.test'],
             [
                 'github_id'        => '44444444',
                 'github_user_name' => 'student_test_1',
@@ -62,7 +62,7 @@ class UserSeeder extends Seeder
 
         // Student 2
         $student2 = User::firstOrCreate(
-            ['email' => 'student2@test.com'],
+            ['email' => 'student2@itawiki.test'],
             [
                 'github_id'        => '55555555',
                 'github_user_name' => 'student_test_2',
@@ -73,10 +73,10 @@ class UserSeeder extends Seeder
         $student2->syncRoles(['student']);
 
         $this->command->info('Users created with roles:');
-        $this->command->info('superadmin@test.com / password → superadmin');
-        $this->command->info('admin@test.com / password → admin');
-        $this->command->info('mentor@test.com / password → mentor');
-        $this->command->info('student1@test.com / password → student');
-        $this->command->info('student2@test.com / password → student');
+        $this->command->info('superadmin@itawiki.test / password → superadmin');
+        $this->command->info('admin@itawiki.test / password → admin');
+        $this->command->info('mentor@itawiki.test / password → mentor');
+        $this->command->info('student@itawiki.test / password → student');
+        $this->command->info('student2@itawiki.test / password → student');
     }
 }
