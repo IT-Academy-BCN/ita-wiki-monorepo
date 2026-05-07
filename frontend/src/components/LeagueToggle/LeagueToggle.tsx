@@ -1,5 +1,5 @@
-import { FC } from "react";
 import clsx from "clsx";
+import { FC } from "react";
 
 export type LeagueView = "weekly" | "global";
 
@@ -11,7 +11,7 @@ const options = [
 ];
 
 const LeagueToggle: FC<Props> = ({ view, onChange }) => (
-  <div className="flex gap-2" role="group" aria-label="League view selector">
+  <div className="flex gap-2 w-max p-1 border border-gray-300 rounded-md bg-white" role="group" aria-label="League view selector">
     {options.map(({ label, value }) => (
       <button
         key={value}
@@ -19,10 +19,10 @@ const LeagueToggle: FC<Props> = ({ view, onChange }) => (
         onClick={() => onChange(value)}
         aria-pressed={view === value}
         className={clsx(
-          "px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200",
+          "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200",
           view === value
             ? "bg-[#B91879] text-white"
-            : "border border-gray-300 text-gray-800 bg-white hover:bg-gray-100",
+            : "text-gray-800 hover:bg-gray-100",
         )}
       >
         {label}

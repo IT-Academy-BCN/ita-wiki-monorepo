@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
-import { StandingsTable } from "../components/leagues/StandingsTable";
-import { getLeagueRanking } from "../services/leagueService";
-import type { Liga } from "../types/league";
+import { useState } from "react";
+import { GlobalRanking } from "../components/GlobalRanking/GlobalRanking";
+import LeagueToggle, { LeagueView } from "../components/LeagueToggle/LeagueToggle";
+import { WeeklyRanking } from "../components/WeeklyRanking/WeeklyRanking";
 
 const RankingsPage = () => {
-  const [data, setData] = useState<Liga[]>([]);
+  const [view, setView] = useState<LeagueView>("weekly");
 
-  useEffect(() => {
-    getLeagueRanking()
-      .then(setData)
-      .catch(() => {});
-  }, []);
-
-  return <StandingsTable standings={data} />;
+  return (
+    <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
+      <LeagueToggle view={view} onChange={setView} />
+      {view === "weekly"
+        ? <WeeklyRanking />
+        : <GlobalRanking />}
+    </div>
+  );
 };
 
 export default RankingsPage;
