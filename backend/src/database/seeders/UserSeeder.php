@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    /*
+     * Credentials for local development and automated tests:
+     *
+     * | Role       | Email                      | Password |
+     * |------------|----------------------------|----------|
+     * | superadmin | superadmin@itawiki.test    | password |
+     * | admin      | admin@itawiki.test         | password |
+     * | mentor     | mentor@itawiki.test        | password |
+     * | student    | student@itawiki.test       | password |
+     * | student    | student2@itawiki.test      | password |
+     */
     public function run(): void
     {
         // Superadmin
