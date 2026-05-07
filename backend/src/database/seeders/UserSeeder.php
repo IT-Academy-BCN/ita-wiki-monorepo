@@ -83,11 +83,11 @@ class UserSeeder extends Seeder
         );
         $student2->syncRoles(['student']);
 
-        $this->command->info('Users created with roles:');
-        $this->command->info('superadmin@itawiki.test / password → superadmin');
-        $this->command->info('admin@itawiki.test / password → admin');
-        $this->command->info('mentor@itawiki.test / password → mentor');
-        $this->command->info('student@itawiki.test / password → student');
-        $this->command->info('student2@itawiki.test / password → student');
+        $this->command?->info('Users created with roles:');
+        $this->command?->info('superadmin@itawiki.test / password → superadmin');
+        $this->command?->info('admin@itawiki.test / password → admin');
+        $this->command?->info('mentor@itawiki.test / password → mentor');
+        $this->command?->info('student@itawiki.test / password → student');
+        $this->command?->info('student2@itawiki.test / password → student');
     }
 }
