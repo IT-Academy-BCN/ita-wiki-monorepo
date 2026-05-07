@@ -722,6 +722,61 @@ class ListProjectsController extends Controller
             ], 500);
         }
     }
+    public function joinProject(Request $request, int $listProjectId)
+    {
+        $user = auth()->user();
+
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
+        if (!$user->hasRole('student')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only students can join projects'
+            ], 403);
+        }
+
+        if ($project->user_id === $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project owner cannot join as contributor'
+            ], 400);
+        }
+
+        $existingContributor = ContributorListProject::where('list_project_id', $listProjectId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($existingContributor) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are already a member or have a pending request'
+            ], 400);
+        }
+
+        $validatedData = $request->validate([
+            'programming_role' => ['required', 'string', 'in:Frontend Developer,Backend Developer,Fullstack Developer,Other'],
+        ]);
+
+        $contributor = ContributorListProject::create([
+            'list_project_id' => $listProjectId,
+            'user_id' => $user->id,
+            'programming_role' => $validatedData['programming_role'],
+            'status' => ContributorStatusEnum::Pending->value,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Join request submitted successfully',
+            'data' => $contributor
+        ], 201);
+    }
 
     /**
      * @OA\Delete(
