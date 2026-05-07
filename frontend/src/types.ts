@@ -60,6 +60,8 @@ export interface IntCodeConnect {
   unitTime: string;
   time_duration: string;
   limit_date_inscription: string;
+  start_date?: string;
+  end_date?: string;
 }
 
 export type TypTechnologyResource =
