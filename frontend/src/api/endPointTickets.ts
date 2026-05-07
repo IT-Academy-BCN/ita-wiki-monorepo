@@ -3,24 +3,31 @@ import { API_URL, END_POINTS } from "../config";
 
 export const createTicket = async (
   data: IntCreateTicket,
-): Promise<IntTicket> => {
-  const url = `${API_URL}${END_POINTS.tickets.post}`;
+): Promise<IntTicket | null> => {
+  try {
+    const url = `${API_URL}${END_POINTS.tickets.post}`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to create ticket");
+    if (!response.ok) {
+      throw new Error("Failed to create ticket");
+    }
+
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-
-  const result = await response.json();
-  return result.data;
 };
+
+
 
 export const fetchAllTickets = async () => {
   const url = `${API_URL}${END_POINTS.tickets.get}`;
