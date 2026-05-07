@@ -114,9 +114,9 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
 
               <div
                 role="cell"
-                className={`font-bold ${priorityColors[ticket.priority] ?? "text-foreground"}`}
+                className={`font-bold ${priorityColors[ticket.priority ?? "low"] ?? "text-foreground"}`}
               >
-                {priorityLabels[ticket.priority]}
+                {priorityLabels[ticket.priority ?? "low"]}
               </div>
 
               <div role="cell">
