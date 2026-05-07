@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { StandingsTable } from "../components/rankings/leagues/StandingsTable";
+import { StandingsTable } from "../components/Leagues/StandingsTable/StandingsTable";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga } from "../types/league";
 
-const RankingsPage = () => {
+const LeaguesPage = () => {
   const [data, setData] = useState<Liga[]>([]);
 
   useEffect(() => {
@@ -15,4 +15,4 @@ const RankingsPage = () => {
   return <StandingsTable standings={data} />;
 };
 
-export default RankingsPage;
+export default LeaguesPage;
