@@ -22,7 +22,11 @@ const TicketingPage = (): JSX.Element => {
       <PageTitle title="Ticketing" />
       <Container className="xl:!px-16 md:!px-10 sm:!py-12 !px-6 !py-6">
         <TicketingCreateForm onSubmit={handleCreateTicket} />
-        <TicketList tickets={tickets} isLoading={isLoading} error={errorMessage} />
+        <TicketList
+          tickets={tickets}
+          isLoading={isLoading}
+          error={errorMessage}
+        />
         {/* TODO: <TicketStatusForm /> */}
       </Container>
     </>
