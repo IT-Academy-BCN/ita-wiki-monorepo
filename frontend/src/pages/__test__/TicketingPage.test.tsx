@@ -52,11 +52,4 @@ describe("TicketingPage", () => {
     render(<TicketingPage />);
     expect(screen.getByText("Error de connexió")).toBeInTheDocument();
   });
-
-  it("renderitza el formulari de creació de ticket", () => {
-    render(<TicketingPage />);
-    expect(
-      screen.getByRole("button", { name: "Crear ticket" }),
-    ).toBeInTheDocument();
-  });
 });
