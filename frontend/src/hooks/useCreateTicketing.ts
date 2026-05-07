@@ -15,12 +15,20 @@ export const useCreateTicketing = () => {
 
     try {
       const newTicketing = await createTicket(ticketData);
+
+      if (!newTicketing) {
+        setError(new Error("No s'ha pogut crear el ticket"));
+        return null;
+      }
+
       setTicketing((prev) => [...prev, newTicketing]);
       return newTicketing;
+
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
       return null;
+
     } finally {
       setIsLoading(false);
     }
