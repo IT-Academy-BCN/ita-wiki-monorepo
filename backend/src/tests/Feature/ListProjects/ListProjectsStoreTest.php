@@ -414,4 +414,27 @@ class ListProjectsStoreTest extends TestCase
         $response->assertJsonValidationErrors(['end_date']);
     }
 
+        public function test_start_date_must_be_a_valid_date(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+            'start_date' => 'not-a-date',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['start_date']);
+    }
+
+    public function test_end_date_must_be_a_valid_date(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->postJson('/api/codeconnect/', $this->validProjectPayload([
+            'end_date' => 'not-a-date',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['end_date']);
+    }
 }
