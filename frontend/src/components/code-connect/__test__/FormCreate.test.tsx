@@ -81,6 +81,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   ) as HTMLInputElement;
   await user.type(deadlineInput, "2025-11-20");
 
+  const startDateInput = screen.getByLabelText(
+    /data d'inici del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(startDateInput, "2025-12-01");
+
   const timeInput = screen.getByLabelText(
     /durada del projecte/i,
   ) as HTMLInputElement;
@@ -115,6 +120,7 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
     expect(timeInput.value).toBe("2");
     expect((unitTimeSelect as HTMLSelectElement).value).toBe("month");
     expect(deadlineInput.value).toBe("2025-11-20");
+    expect(startDateInput.value).toBe("2025-12-01");
   });
 };
 
@@ -194,6 +200,48 @@ describe("FormCreateCodeConnect", () => {
       expect(deadlineInput).toBeValid();
     });
 
+    it("should only allow to set a future start date", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+
+      await user.type(startDateInput, "2025-01-01");
+      expect(startDateInput).toBeInvalid();
+      const now = new Date();
+      const today = now.toISOString().split("T")[0];
+      await user.clear(startDateInput);
+      await user.type(startDateInput, today);
+      expect(startDateInput).toBeInvalid();
+      await user.clear(startDateInput);
+      await user.type(startDateInput, "2030-01-01");
+      expect(startDateInput).toBeValid();
+    });
+
+    it("should show error when submitting without start date", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const titleInput = screen.getByRole("textbox", { name: /títol/i });
+      await user.type(titleInput, "Test Project");
+
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Completa tots els camps obligatoris.",
+        );
+      });
+    });
+
     it("should pass validation with all required fields filled correctly", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
@@ -206,6 +254,129 @@ describe("FormCreateCodeConnect", () => {
       expect(toast.error).not.toHaveBeenCalledWith(
         "Completa tots els camps obligatoris.",
       );
+    });
+  });
+
+  describe("end_date auto-calculation", () => {
+    it("should calculate end_date automatically when start_date, time and unitTime are set", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(startDateInput, "2026-01-01");
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(timeInput, "2");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "month");
+
+      const endDateInput = document.getElementById(
+        "end_date",
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(endDateInput.value).toBe("2026-03-01");
+      });
+    });
+
+    it("should recalculate end_date when start_date changes", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(timeInput, "1");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "week");
+
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(startDateInput, "2026-06-01");
+
+      const endDateInput = document.getElementById(
+        "end_date",
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(endDateInput.value).toBe("2026-06-08");
+      });
+    });
+
+    it("should recalculate end_date when unitTime changes", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(startDateInput, "2026-01-01");
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(timeInput, "4");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "week");
+
+      const endDateInput = document.getElementById(
+        "end_date",
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(endDateInput.value).toBe("2026-01-29");
+      });
+
+      await user.selectOptions(unitTimeSelect, "month");
+
+      await waitFor(() => {
+        expect(endDateInput.value).toBe("2026-05-01");
+      });
+    });
+
+    it("should show empty end_date when time is cleared", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(startDateInput, "2026-01-01");
+
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      await user.type(timeInput, "2");
+
+      const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+      await user.selectOptions(unitTimeSelect, "month");
+
+      await user.clear(timeInput);
+
+      const endDateInput = document.getElementById(
+        "end_date",
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(endDateInput.value).toBe("");
+      });
+    });
+
+    it("should render end_date field as read-only and disabled", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      const endDateInput = document.getElementById(
+        "end_date",
+      ) as HTMLInputElement;
+      expect(endDateInput).toBeDisabled();
+      expect(endDateInput).toHaveAttribute("readOnly");
     });
   });
 
@@ -223,8 +394,10 @@ describe("FormCreateCodeConnect", () => {
         dev_front_number: 2,
         dev_back_number: 2,
         time: 2,
-        unitTime: "week",
-        limit_date_inscription: "20/05/2026",
+        unitTime: "month",
+        limit_date_inscription: "2025-11-20",
+        start_date: "2025-12-01",
+        end_date: "2026-02-01",
       });
 
       renderWithRouter(<FormCreateCodeConnect />);
@@ -243,6 +416,7 @@ describe("FormCreateCodeConnect", () => {
           expect(mockCreateCodeConnect).toHaveBeenCalledWith(
             expect.objectContaining({
               time_duration: "2 mesos",
+              start_date: "2025-12-01",
             }),
           );
         },
@@ -263,6 +437,30 @@ describe("FormCreateCodeConnect", () => {
       await user.click(submitButton);
 
       expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    it("should include end_date in payload when it is computed", async () => {
+      const user = userEvent.setup();
+      mockCreateCodeConnect.mockResolvedValueOnce({});
+      renderWithRouter(<FormCreateCodeConnect />);
+      await fillCompleteForm(user);
+
+      const form = screen
+        .getByRole("textbox", { name: /títol/i })
+        .closest("form");
+      if (!form) throw new Error("Form not found");
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+            expect.objectContaining({
+              end_date: expect.any(String),
+            }),
+          );
+        },
+        { timeout: 3000 },
+      );
     });
   });
 
@@ -348,6 +546,7 @@ describe("FormCreateCodeConnect", () => {
 
       expect(mockNavigate).toHaveBeenCalledWith("/codeconnect");
     });
+
     it("should display the time unit value options for the project duration in plural or singular depending on the time value entered previously by the user", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
@@ -361,6 +560,22 @@ describe("FormCreateCodeConnect", () => {
       await user.type(timeInput, "2");
       expect(monthOption).toHaveTextContent("Mesos");
       expect(weekOption).toHaveTextContent("Setmanes");
+    });
+
+    it("should render start_date field as required", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      const startDateInput = screen.getByLabelText(
+        /data d'inici del projecte/i,
+      ) as HTMLInputElement;
+      expect(startDateInput).toBeRequired();
+    });
+
+    it("should render end_date label without asterisk", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      const endDateLabel = screen.getByText(
+        /data de finalització del projecte/i,
+      );
+      expect(endDateLabel.textContent).not.toContain("*");
     });
   });
 
