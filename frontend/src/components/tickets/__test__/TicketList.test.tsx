@@ -87,7 +87,7 @@ describe("TicketList", () => {
     expect(screen.getByText("Nou")).toBeInTheDocument();
     expect(screen.getByText("En progrés")).toBeInTheDocument();
     expect(screen.getByText("Bloquejat")).toBeInTheDocument();
-    expect(screen.getByText("Preparat")).toBeInTheDocument();
+    expect(screen.getByText("Fet")).toBeInTheDocument();
   });
 
   it("applies correct color class depending on priority", () => {

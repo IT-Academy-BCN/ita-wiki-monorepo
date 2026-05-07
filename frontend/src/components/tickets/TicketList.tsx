@@ -31,7 +31,7 @@ const statusLabels: Record<TicketStatus, string> = {
   pending: "Nou",
   in_progress: "En progrés",
   blocked: "Bloquejat",
-  ready: "Preparat",
+  ready: "Fet",
   closed: "Tancat",
 };
 
