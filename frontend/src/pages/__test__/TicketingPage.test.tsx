@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { describe, it, expect, vi } from "vitest";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
 
@@ -9,13 +9,8 @@ vi.mock("../../hooks/useCreateTicketing", () => ({
   useCreateTicketing: () => ({ submitTicketing: vi.fn() }),
 }));
 vi.mock("../../components/tickets/TicketList", () => ({
-  default: ({
-    isLoading,
-    error,
-  }: {
-    isLoading?: boolean;
-    error?: string | null;
-  }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: ({ isLoading, error }: any) => {
     if (isLoading) return <p>Carregant tickets...</p>;
     if (error) return <p>{error}</p>;
     return <div data-testid="ticket-list" />;
@@ -25,12 +20,15 @@ vi.mock("../../components/tickets/TicketList", () => ({
 const mockHook = vi.mocked(useTicketingGetAll);
 
 describe("TicketingPage", () => {
-  it("renderitza la llista de tickets", () => {
+  beforeEach(() => {
     mockHook.mockReturnValue({
       tickets: [],
       isLoading: false,
       errorMessage: null,
     });
+  });
+
+  it("renderitza la llista de tickets", () => {
     render(<TicketingPage />);
     expect(screen.getByTestId("ticket-list")).toBeInTheDocument();
   });
@@ -56,11 +54,6 @@ describe("TicketingPage", () => {
   });
 
   it("renderitza el formulari de creació de ticket", () => {
-    mockHook.mockReturnValue({
-      tickets: [],
-      isLoading: false,
-      errorMessage: null,
-    });
     render(<TicketingPage />);
     expect(
       screen.getByRole("button", { name: "Crear ticket" }),
