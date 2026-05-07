@@ -1,11 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { describe, it, expect, vi } from "vitest";
-import RankingsPage from "../RankingsPage";
+import { render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { getLeagueRanking } from "../../services/leagueService";
+import RankingsPage from "../RankingsPage";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
-vi.mock("../../components/leagues/StandingsTable", () => ({
+vi.mock("../../components/rankings/leagues/StandingsTable", () => ({
   StandingsTable: () => (
     <table>
       <thead>
