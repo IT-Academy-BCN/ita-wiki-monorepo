@@ -62,7 +62,7 @@ export interface IntTicket extends IntCreateTicket {
 }
 
 export type TicketListProps = {
-  tickets: Ticket[];
+  tickets: ApiTicketData[];
   isLoading?: boolean;
   error?: string | null;
 };
