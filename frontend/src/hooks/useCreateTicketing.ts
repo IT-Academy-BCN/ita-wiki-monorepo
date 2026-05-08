@@ -9,24 +9,18 @@ export const useCreateTicketing = () => {
 
   const submitTicketing = async (
     ticketData: IntCreateTicket,
-  ): Promise<IntTicket | null> => {
+  ): Promise<IntTicket> => {
     setIsLoading(true);
     setError(null);
 
     try {
       const newTicketing = await createTicket(ticketData);
-
-      if (!newTicketing) {
-        setError(new Error("No s'ha pogut crear el ticket"));
-        return null;
-      }
-
       setTicketing((prev) => [...prev, newTicketing]);
       return newTicketing;
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
-      return null;
+      throw error;
     } finally {
       setIsLoading(false);
     }
