@@ -41,11 +41,11 @@ export interface ApiProjectData {
   title: string;
 }
 
-  export interface ApiContributor {
+export interface ApiContributor {
   id: number;
   user_id: number;
   programming_role: string;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: "pending" | "accepted" | "rejected";
   user: {
     id: number;
     name: string;
