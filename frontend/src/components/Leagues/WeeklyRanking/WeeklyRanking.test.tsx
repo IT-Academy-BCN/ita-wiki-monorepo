@@ -4,8 +4,10 @@ import { describe, expect, it, vi } from "vitest";
 import { getLeagueRanking } from "../../../services/leagueService";
 import { WeeklyRanking } from "./WeeklyRanking";
 
-vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
-vi.mock("../leagues/StandingsTable", () => ({
+vi.mock("../../../services/leagueService", () => ({
+  getLeagueRanking: vi.fn(),
+}));
+vi.mock("../StandingsTable/StandingsTable", () => ({
   StandingsTable: () => (
     <table>
       <thead>

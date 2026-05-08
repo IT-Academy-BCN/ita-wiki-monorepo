@@ -1,18 +1,18 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import RankingsPage from "../RankingsPage";
+import LeaguesPage from "../LeaguesPage";
 
-describe("RankingsPage", () => {
+describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
-    render(<RankingsPage />);
+    render(<LeaguesPage />);
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
   });
 
   it("switches to GlobalRanking on toggle", () => {
-    render(<RankingsPage />);
+    render(<LeaguesPage />);
     fireEvent.click(
       screen.getByRole("button", { name: /classificació general/i }),
     );
@@ -22,7 +22,7 @@ describe("RankingsPage", () => {
   });
 
   it("switches back to WeeklyRanking on toggle from Global", () => {
-    render(<RankingsPage />);
+    render(<LeaguesPage />);
     fireEvent.click(screen.getByRole("button", { name: /lliga setmanal/i }));
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
