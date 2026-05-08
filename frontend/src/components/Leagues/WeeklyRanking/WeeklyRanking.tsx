@@ -8,7 +8,7 @@ export const WeeklyRanking = () => {
   useEffect(() => {
     getLeagueRanking()
       .then(setData)
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   return (
