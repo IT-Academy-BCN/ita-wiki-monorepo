@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StandingsTable } from "../components/leagues/StandingsTable";
+import { LeagueList } from "../components/leagues/LeagueList";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga } from "../types/league";
 
@@ -12,7 +12,7 @@ const RankingsPage = () => {
       .catch(() => {});
   }, []);
 
-  return <StandingsTable standings={data} />;
+  return <LeagueList standings={data} />;
 };
 
 export default RankingsPage;
