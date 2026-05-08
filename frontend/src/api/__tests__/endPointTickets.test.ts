@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { fetchAllTickets } from "../endPointTickets";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import axios from "axios";
+import { createTicket } from "../endPointTickets";
+import { IntCreateTicket } from "../../types/ticketingTypes";
 
+vi.mock("axios");
 vi.mock("../../config", () => ({
   API_URL: "http://localhost:3000",
   END_POINTS: {
@@ -11,51 +14,48 @@ vi.mock("../../config", () => ({
   },
 }));
 
-const fetchMock = vi.fn();
-vi.stubGlobal("fetch", fetchMock);
+const mockPayload: IntCreateTicket = {
+  name: "Test ticket",
+  description: "Bug login",
+  incident_date: "2026-05-08",
+  type: "error",
+};
 
-describe("fetchAllTickets", () => {
-  const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
+describe("createTicket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    consoleSpy.mockClear();
+  it("should create a ticket and return data", async () => {
+    const mockTicket = { id: 1, description: "Bug login" };
+    vi.mocked(axios.post).mockResolvedValue({ data: { data: mockTicket } });
+
+    const result = await createTicket(mockPayload);
+
+    expect(result).toEqual(mockTicket);
+    expect(axios.post).toHaveBeenCalledTimes(1);
   });
 
-  it("should return the data correctly", async () => {
-    const mockInnerData = [{ id: 1, name: "Bug login" }];
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: mockInnerData }),
-    });
+  it("should include Authorization header", async () => {
+    localStorage.setItem("auth_token", "test-token");
+    vi.mocked(axios.post).mockResolvedValue({ data: { data: {} } });
 
-    const result = await fetchAllTickets();
-    expect(result).toEqual(mockInnerData);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-  });
+    await createTicket(mockPayload);
 
-  it("should make a console.error if the response is not OK", async () => {
-    fetchMock.mockResolvedValue({
-      ok: false,
-      status: 500,
-      statusText: "Server Error",
-    });
-
-    const result = await fetchAllTickets();
-    expect(result).toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalledWith(
-      new Error("Failed to fetch tickets"),
+    expect(axios.post).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(Object),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: "Bearer test-token",
+        }),
+      }),
     );
   });
 
-  it("should handle network errors (fetch throw)", async () => {
-    const networkError = new Error("Network Error");
-    fetchMock.mockRejectedValue(networkError);
+  it("should throw error if request fails", async () => {
+    vi.mocked(axios.post).mockRejectedValue(new Error("Network error"));
 
-    await fetchAllTickets();
-    expect(consoleSpy).toHaveBeenCalledWith(networkError);
+    await expect(createTicket(mockPayload)).rejects.toThrow("Network error");
   });
 });
