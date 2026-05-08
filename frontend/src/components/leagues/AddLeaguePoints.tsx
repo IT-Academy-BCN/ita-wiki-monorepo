@@ -36,7 +36,7 @@ export const AddLeaguePoints = ({
         </select>
 
         <button
-          className="w-fit bg-[#B91879] px-5 py-3 text-xs font-bold uppercase text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-fit bg-[#B91879] px-5 py-3 text-xs font-bold uppercase text-white hover:shadow-md disabled:cursor-not-allowed"
           disabled={!selectedUsername}
           type="submit"
         >
