@@ -56,6 +56,11 @@ class TicketController extends Controller
     {
         $data = $request->validated();
         $data['code_connect_id'] = auth()->id();
+        $data['name'] = $data['name'] ?? $data['description'];
+        $data['incident_date'] = $data['incident_date'] ?? now()->toDateString();
+        $data['affected_app'] = $data['affected_app'] ?? 'other';
+        $data['type'] = $data['type'] ?? 'error';
+        $data['affected_function'] = $data['affected_function'] ?? 'other';
 
         $ticket = Ticket::create($data);
 
