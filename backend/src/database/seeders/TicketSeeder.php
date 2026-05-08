@@ -8,7 +8,7 @@ use App\Enums\TicketPriorityEnum;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Hash;
 
 class TicketSeeder extends Seeder
 {
@@ -24,8 +24,8 @@ class TicketSeeder extends Seeder
         $priorities = TicketPriorityEnum::values();
 
         $statuses = [
-            ['status' => 'pending',     'assignee_id' => null],
-            ['status' => 'in_progress', 'assignee_id' => $mentor->id],
+            ['status' => 'pending',     'type' => 'error',      'assignee_id' => null],
+            ['status' => 'in_progress', 'type' => 'suggestion', 'assignee_id' => $mentor->id],
             ['status' => 'blocked',     'assignee_id' => $mentor->id],
             ['status' => 'ready',       'assignee_id' => $admin->id],
             ['status' => 'closed',      'assignee_id' => $mentor->id,     'closed_by' => $admin->id,      'closed_at' => now()->subDays(5)],
@@ -52,6 +52,7 @@ class TicketSeeder extends Seeder
                 'github_id'        => fake()->unique()->numerify('########'),
                 'github_user_name' => str_replace('@itawiki.test', '', $email),
                 'name'             => ucfirst($role) . ' User',
+                'password'         => Hash::make('password'),
             ]
         );
 
