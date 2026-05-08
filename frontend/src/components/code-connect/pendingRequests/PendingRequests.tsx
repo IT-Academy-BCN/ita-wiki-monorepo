@@ -1,123 +1,92 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi, type Mock } from "vitest";
-import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
-import CodeConnectDetails from "../CodeConnectDetails";
+import { useEffect, useState } from "react";
+import type { ApiContributor } from "../../../types/codeConnectTypes";
+import {
+  fetchProjectContributors,
+  updateContributorStatus,
+} from "../../../api/endPointCodeConnect";
 
-vi.mock("react-router", () => ({
-  useParams: () => ({ projectId: "1" }),
-}));
+interface PendingRequestsProps {
+  projectId: number;
+  ownerId: number;
+  currentUserId?: number;
+}
 
-vi.mock("../../hooks/useCodeConnectDetails");
+const PendingRequests = ({
+  projectId,
+  ownerId,
+  currentUserId,
+}: PendingRequestsProps) => {
+  const [contributors, setContributors] = useState<ApiContributor[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-vi.mock("../../context/UserContext", () => ({
-  useUserContext: () => ({ user: null }),
-}));
+  const loadContributors = async () => {
+    setIsLoading(true);
+    const data = await fetchProjectContributors(projectId);
+    setContributors(data);
+    setIsLoading(false);
+  };
 
-vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
-  default: () => (
-    <div data-testid="mock-project-team">Component ProjectTeam</div>
-  ),
-}));
+  useEffect(() => {
+    void loadContributors();
+  }, [projectId]);
 
-vi.mock(
-  "../../components/code-connect/pendingRequests/PendingRequests",
-  () => ({
-    default: () => null,
-  }),
-);
+  if (isLoading) return null;
 
-vi.mock("../../utils/iconUtils", () => ({
-  displayLanguageIcon: () => "fake-icon.svg",
-}));
+  const isOwner = currentUserId === ownerId;
+  const isAcceptedMember = contributors.some(
+    (c) => c.user_id === currentUserId && c.status === "accepted",
+  );
 
-describe("CodeConnectDetails Page", () => {
-  it("renders the project title and team when data arrives", () => {
-    const mockProjectData = {
-      data: {
-        title: "Super Projecte de Prova",
-        description: "Descripció de prova del projecte",
-        roadmap: [
-          { task: "Tarea 1", done: false },
-          { task: "Tarea 2", done: false },
-        ],
-        contributors: [],
-        time_duration: "2 setmanes",
-        language_frontend: "react",
-        language_backend: "node",
-      },
-    };
+  if (!currentUserId || (!isOwner && !isAcceptedMember)) return null;
 
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: mockProjectData,
-      isLoading: false,
-      errorMessage: null,
-    });
+  const pendingContributors = contributors.filter(
+    (c) => c.status === "pending",
+  );
 
-    render(<CodeConnectDetails />);
+  if (pendingContributors.length === 0) return null;
 
-    expect(screen.getByText("Super Projecte de Prova")).toBeTruthy();
-    expect(screen.getByText("Descripció de prova del projecte")).toBeTruthy();
-    expect(screen.getByText("Tarea 1")).toBeTruthy();
-    expect(screen.getByTestId("mock-project-team")).toBeTruthy();
-    expect(screen.getByText("Roadmap:")).toBeTruthy();
-    expect(screen.getByText("Descripció:")).toBeTruthy();
-  });
+  const handleAction = async (
+    contributorId: number,
+    status: "accepted" | "rejected",
+  ) => {
+    const ok = await updateContributorStatus(projectId, contributorId, status);
+    if (ok) await loadContributors();
+  };
 
-  it("renders the fallback message when description and roadmap are empty", () => {
-    const mockProjectData = {
-      data: {
-        title: "Projecte Antic",
-        description: "",
-        roadmap: [],
-        contributors: [],
-        time_duration: "1 mes",
-        language_frontend: "javascript",
-        language_backend: "php",
-      },
-    };
+  return (
+    <div className="mt-8 border-t pt-6">
+      <h3 className="text-[22px] font-extrabold mb-5">
+        Sol·licituds pendents:
+      </h3>
+      <ul className="flex flex-col gap-3">
+        {pendingContributors.map((contributor) => (
+          <li
+            key={contributor.id}
+            className="flex items-center justify-between gap-4 p-3 border rounded-lg"
+          >
+            <span className="font-semibold">[{contributor.user.name}]</span>
+            <span className="text-sm text-gray-500">
+              {contributor.programming_role}
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => void handleAction(contributor.id, "accepted")}
+                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+              >
+                Acceptar
+              </button>
+              <button
+                onClick={() => void handleAction(contributor.id, "rejected")}
+                className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+              >
+                Rebutjar
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: mockProjectData,
-      isLoading: false,
-      errorMessage: null,
-    });
-
-    render(<CodeConnectDetails />);
-
-    expect(screen.getByText("Projecte Antic")).toBeTruthy();
-
-    const fallbackMessages = screen.getAllByText(
-      "Aquesta informació no està disponible a la base de dades.",
-    );
-
-    expect(fallbackMessages).toHaveLength(2);
-  });
-
-  it("renders the error message when the hook returns an error", () => {
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: null,
-      isLoading: false,
-      errorMessage: "Error de connexió. Verifica la teva connexió a internet.",
-    });
-
-    render(<CodeConnectDetails />);
-
-    expect(
-      screen.getByText(
-        "Error de connexió. Verifica la teva connexió a internet.",
-      ),
-    ).toBeTruthy();
-  });
-
-  it("renders the loading state when isLoading is true", () => {
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: null,
-      isLoading: true,
-      errorMessage: null,
-    });
-
-    render(<CodeConnectDetails />);
-
-    expect(screen.getByText("Carregant...")).toBeTruthy();
-  });
-});
+export default PendingRequests;
