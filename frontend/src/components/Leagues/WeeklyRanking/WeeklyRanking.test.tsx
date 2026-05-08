@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { getLeagueRanking } from "../../services/leagueService";
+import { getLeagueRanking } from "../../../services/leagueService";
 import { WeeklyRanking } from "./WeeklyRanking";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
