@@ -9,11 +9,22 @@ vi.mock("react-router", () => ({
 
 vi.mock("../../hooks/useCodeConnectDetails");
 
+vi.mock("../../context/UserContext", () => ({
+  useUserContext: () => ({ user: null }),
+}));
+
 vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
   default: () => (
     <div data-testid="mock-project-team">Component ProjectTeam</div>
   ),
 }));
+
+vi.mock(
+  "../../components/code-connect/pendingRequests/PendingRequests",
+  () => ({
+    default: () => null,
+  }),
+);
 
 vi.mock("../../utils/iconUtils", () => ({
   displayLanguageIcon: () => "fake-icon.svg",
