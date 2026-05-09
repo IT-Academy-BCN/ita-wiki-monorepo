@@ -21,6 +21,7 @@ export const LeagueList = ({ standings }: LeagueListProps) => {
           <div
             key={standing.username}
             className="grid grid-cols-[1fr_2fr_1fr] border-b border-slate-300 px-4 py-4 text-sm text-slate-950"
+            data-testid={`league-position-${index + 1}`}
           >
             <div>{index + 1}</div>
             <div>{standing.username}</div>
