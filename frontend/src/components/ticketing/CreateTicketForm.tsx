@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useCreateTicketing } from "../../hooks/useCreateTicketing";
 import ButtonComponent from "../atoms/ButtonComponent";
+import { IntCreateTicket } from "../../types/ticketingTypes";
+
 export const CreateTicketForm = () => {
   const [description, setDescription] = useState("");
   const { submitTicketing, isLoading, error } = useCreateTicketing();
@@ -12,7 +14,7 @@ export const CreateTicketForm = () => {
 
     await submitTicketing({
       description: description.trim(),
-    });
+    } as IntCreateTicket);
 
     setDescription("");
   };
@@ -41,11 +43,7 @@ export const CreateTicketForm = () => {
         </ButtonComponent>
       </form>
 
-      {error && (
-        <p className="mt-1 text-xs text-red-600">
-          No s'ha pogut crear el ticket.
-        </p>
-      )}
+      {error && <p className="mt-1 text-xs text-red-600">{error.message}</p>}
     </div>
   );
 };
