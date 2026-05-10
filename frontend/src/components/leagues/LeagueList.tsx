@@ -1,11 +1,4 @@
-type LeagueStanding = {
-  username: string;
-  points: number;
-};
-
-type LeagueListProps = {
-  standings: LeagueStanding[];
-};
+import type { LeagueListProps } from "../../types/league";
 
 export const LeagueList = ({ standings }: LeagueListProps) => {
   return (
