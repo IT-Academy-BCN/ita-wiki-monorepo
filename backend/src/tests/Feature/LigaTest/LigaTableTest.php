@@ -17,7 +17,6 @@ class LigaTableTest extends TestCase
     public function test_ligas_table_has_new_fields(): void
     {
         $this->assertTrue(Schema::hasColumn('ligas', 'points_weekly'));
-        $this->assertTrue(Schema::hasColumn('ligas', 'user_name'));
         $this->assertTrue(Schema::hasColumn('ligas', 'status'));
         $this->assertTrue(Schema::hasColumn('ligas', 'language'));
         $this->assertTrue(Schema::hasColumn('ligas', 'league_id'));
@@ -35,26 +34,24 @@ class LigaTableTest extends TestCase
         $this->assertEquals(0, $liga->points_weekly);
     }
 
+   
     public function test_liga_can_be_created_with_new_fields(): void
     {
         $user = User::factory()->create();
-
+    
         $liga = Liga::create([
             'user_id'       => $user->id,
             'points'        => 10,
             'points_weekly' => 5,
-            'user_name'     => 'vicenlu',
             'status'        => 'Junior Coder',
             'language'      => 'PHP',
             'league_id'     => 1,
         ]);
-
+    
         $this->assertEquals(5, $liga->points_weekly);
-        $this->assertEquals('vicenlu', $liga->user_name);
         $this->assertEquals('PHP', $liga->language);
         $this->assertEquals(1, $liga->league_id);
-
-        // Compatible con Enum y string
+    
         $statusValue = $liga->status instanceof \BackedEnum
             ? $liga->status->value
             : $liga->status;

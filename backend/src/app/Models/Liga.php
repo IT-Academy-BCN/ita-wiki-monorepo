@@ -16,7 +16,6 @@ class Liga extends Model
         'user_id',
         'points',
         'points_weekly',
-        'user_name',
         'status',
         'language',
         'league_id',

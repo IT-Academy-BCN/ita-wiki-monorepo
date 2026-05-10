@@ -12,9 +12,7 @@ return new class extends Migration
     {
         Schema::table('ligas', function (Blueprint $table): void {
             $table->unsignedInteger('points_weekly')->default(0)->after('points');
-            $table->string('user_name')->nullable()->after('points_weekly');
-            $table->enum('status', ['Junior Coder', 'Senior Coder', 'Skilled Developer','Expert Hacker'])->default('Junior Coder')->after('user_name');
-            $table->string('language')->nullable()->after('status');
+        $table->enum('status', ['Junior Coder', 'Senior Coder', 'Skilled Developer','Expert Hacker'])->default('Junior Coder')->after('points_weekly');            $table->string('language')->nullable()->after('status');
             $table->unsignedBigInteger('league_id')->nullable()->after('language');
         });
     }
@@ -22,7 +20,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ligas', function (Blueprint $table): void {
-            $table->dropColumn(['points_weekly', 'user_name', 'status', 'language', 'league_id']);
+            $table->dropColumn(['points_weekly', 'status', 'language', 'league_id']);
         });
     }
 };
