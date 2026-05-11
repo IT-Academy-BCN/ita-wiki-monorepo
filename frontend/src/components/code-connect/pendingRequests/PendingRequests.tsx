@@ -18,6 +18,8 @@ const PendingRequests = ({
 }: PendingRequestsProps) => {
   const [contributors, setContributors] = useState<ApiContributor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
+
 
   const loadContributors = async () => {
     setIsLoading(true);
@@ -43,18 +45,22 @@ const PendingRequests = ({
     (c) => c.status === "pending",
   );
 
-  if (pendingContributors.length === 0) return null;
-
-  const handleAction = async (
-    contributorId: number,
-    status: "accepted" | "rejected",
-  ) => {
+    const handleAction = async (
+      contributorId: number,
+      status: "accepted" | "rejected",
+    ) => {
+    setIsSubmitting(contributorId);
     const ok = await updateContributorStatus(projectId, contributorId, status);
-    if (ok) await loadContributors();
+    if (ok) {
+      await loadContributors();
+    } else {
+      alert("No s'ha pogut actualitzar l'estat. Torna-ho a intentar.");
+    }
+    setIsSubmitting(null);
   };
 
   return (
-    <div className="mt-8 border-t pt-6">
+    <div className="mb-8 p-4 bg-pink-50 rounded-lg">
       <h3 className="text-[22px] font-extrabold mb-5">
         Sol·licituds pendents:
       </h3>
@@ -71,16 +77,19 @@ const PendingRequests = ({
             <div className="flex gap-2">
               <button
                 onClick={() => void handleAction(contributor.id, "accepted")}
-                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                disabled={isSubmitting === contributor.id}
+                className="px-3 py-1 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Acceptar
+                {isSubmitting === contributor.id ? "..." : "Acceptar"}
               </button>
               <button
                 onClick={() => void handleAction(contributor.id, "rejected")}
-                className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                disabled={isSubmitting === contributor.id}
+                className="px-3 py-1 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Rebutjar
+                {isSubmitting === contributor.id ? "..." : "Rebutjar"}
               </button>
+
             </div>
           </li>
         ))}

@@ -36,7 +36,12 @@ const CodeConnectDetails = () => {
                   {codeConnectProject.data.title ||
                     "No s'ha pogut carregar el títol del projecte."}
                 </h2>
-
+                 <PendingRequests
+                  projectId={codeConnectProject.data.id}
+                  ownerId={codeConnectProject.data.user_id}
+                  currentUserId={user?.id}
+                />
+                
                 <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
                 <p className="text-[16px] mb-10">
                   {codeConnectProject.data?.description ||
@@ -67,12 +72,6 @@ const CodeConnectDetails = () => {
                 />
               </div>
             </div>
-
-            <PendingRequests
-              projectId={codeConnectProject.data.id}
-              ownerId={codeConnectProject.data.user_id}
-              currentUserId={user?.id}
-            />
           </>
         )}
       </Container>
