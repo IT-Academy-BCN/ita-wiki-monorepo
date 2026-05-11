@@ -7,9 +7,8 @@ import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
 const mockSubmitTicketing = vi.hoisted(() => vi.fn());
 
 vi.mock("../../hooks/useTicketingGetAll");
-vi.mock("../../hooks/useCreateTicketing", () => ({
-  useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
-}));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+vi.mock("../../hooks/useCreateTicketing", () => ({ useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }) }));
 vi.mock("../../components/tickets/TicketList", () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ isLoading, error }: any) => {
@@ -18,26 +17,15 @@ vi.mock("../../components/tickets/TicketList", () => ({
     return <div data-testid="ticket-list" />;
   },
 }));
-vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TicketingCreateForm: ({ onSubmit }: { onSubmit: (data: any) => void }) => (
-    <button onClick={() => onSubmit({ description: "test" })}>
-      Crear ticket
-    </button>
-  ),
-}));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+vi.mock("../../components/ticketing/TicketingCreateForm", () => ({ TicketingCreateForm: ({ onSubmit }: any) => <button onClick={() => onSubmit({})}>Crear ticket</button> }));
 
 const mockHook = vi.mocked(useTicketingGetAll);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const hookReturn = (o: any = {}) => ({ tickets: [], isLoading: false, errorMessage: null, refetch: vi.fn(), ...o });
 
 describe("TicketingPage", () => {
-  beforeEach(() => {
-    mockHook.mockReturnValue({
-      tickets: [],
-      isLoading: false,
-      errorMessage: null,
-      refetch: vi.fn(),
-    });
-  });
+  beforeEach(() => mockHook.mockReturnValue(hookReturn()));
 
   it("renderitza la llista de tickets", () => {
     render(<TicketingPage />);
@@ -45,23 +33,13 @@ describe("TicketingPage", () => {
   });
 
   it("mostra l'estat de càrrega", () => {
-    mockHook.mockReturnValue({
-      tickets: [],
-      isLoading: true,
-      errorMessage: null,
-      refetch: vi.fn(),
-    });
+    mockHook.mockReturnValue(hookReturn({ isLoading: true }));
     render(<TicketingPage />);
     expect(screen.getByText("Carregant tickets...")).toBeInTheDocument();
   });
 
   it("mostra el missatge d'error", () => {
-    mockHook.mockReturnValue({
-      tickets: [],
-      isLoading: false,
-      errorMessage: "Error de connexió",
-      refetch: vi.fn(),
-    });
+    mockHook.mockReturnValue(hookReturn({ errorMessage: "Error de connexió" }));
     render(<TicketingPage />);
     expect(screen.getByText("Error de connexió")).toBeInTheDocument();
   });
@@ -69,19 +47,9 @@ describe("TicketingPage", () => {
   it("crida refetch després de crear un ticket amb èxit", async () => {
     const mockRefetch = vi.fn();
     mockSubmitTicketing.mockResolvedValue(undefined);
-    mockHook.mockReturnValue({
-      tickets: [],
-      isLoading: false,
-      errorMessage: null,
-      refetch: mockRefetch,
-    });
-
+    mockHook.mockReturnValue(hookReturn({ refetch: mockRefetch }));
     render(<TicketingPage />);
-
-    await act(async () => {
-      fireEvent.click(screen.getByText("Crear ticket"));
-    });
-
+    await act(async () => fireEvent.click(screen.getByText("Crear ticket")));
     expect(mockRefetch).toHaveBeenCalledTimes(1);
   });
 });

@@ -14,8 +14,12 @@ const TicketingPage = (): JSX.Element => {
   const handleCreateTicket = async (
     ticketData: IntCreateTicket,
   ): Promise<void> => {
-    await submitTicketing(ticketData);
-    refetch();
+    try {
+      await submitTicketing(ticketData);
+      refetch();
+    } catch {
+      // error already handled by useCreateTicketing error state
+    }
   };
 
   return (
