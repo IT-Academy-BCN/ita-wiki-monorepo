@@ -14,7 +14,9 @@ class TicketSeeder extends Seeder
 {
     public function run(): void
     {
-        Ticket::query()->delete();
+         if (Ticket::count() > 0) {
+            return;
+        }
 
         $student    = $this->findOrCreateUser('student@itawiki.test', 'student');
         $mentor     = $this->findOrCreateUser('mentor@itawiki.test', 'mentor');
@@ -41,7 +43,7 @@ class TicketSeeder extends Seeder
 
         Ticket::factory()->count(4)->create(['code_connect_id' => $student->id]);
 
-        $this->command->info('TicketSeeder: ' . Ticket::count() . ' tickets created.');
+        $this->command?->info('TicketSeeder: ' . Ticket::count() . ' tickets created.');
     }
 
     private function findOrCreateUser(string $email, string $role): User

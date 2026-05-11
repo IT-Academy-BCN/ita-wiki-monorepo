@@ -8,9 +8,12 @@ use App\Models\Ticket;
 use App\Models\User;
 use Database\Seeders\TicketSeeder;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TicketSeederTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
