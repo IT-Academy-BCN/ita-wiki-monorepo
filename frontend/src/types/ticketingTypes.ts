@@ -42,10 +42,10 @@ export type Ticket = {
 };
 
 export type IntCreateTicket = {
-  name: string;
-  incident_date: string;
+  name?: string;
+  incident_date?: string;
   affected_app?: AffectedApp;
-  type: TicketType;
+  type?: TicketType;
   affected_function?: AffectedFunction;
   description: string;
 };

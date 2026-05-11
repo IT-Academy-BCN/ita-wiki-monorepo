@@ -19,7 +19,7 @@ export const TicketingCreateForm = ({
   ): Promise<void> => {
     event.preventDefault();
     if (!description.trim()) return;
-    await onSubmit({ description: description.trim() } as IntCreateTicket);
+    await onSubmit({ description: description.trim() });
     setDescription("");
   };
 
