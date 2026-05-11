@@ -1,5 +1,5 @@
 import axios, { AxiosError, CanceledError } from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { API_URL } from "../config";
 
@@ -19,7 +19,7 @@ export const useTicketingGetAll = () => {
   const [tickets, setTickets] = useState<ApiTicketData[]>([]);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  const refetch = () => setRefetchTrigger((n) => n + 1);
+  const refetch = useCallback(() => setRefetchTrigger((n) => n + 1), []);
 
   useEffect(() => {
     const abortController = new AbortController();

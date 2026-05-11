@@ -1,12 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
 
+const mockSubmitTicketing = vi.hoisted(() => vi.fn());
+
 vi.mock("../../hooks/useTicketingGetAll");
 vi.mock("../../hooks/useCreateTicketing", () => ({
-  useCreateTicketing: () => ({ submitTicketing: vi.fn() }),
+  useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
 }));
 vi.mock("../../components/tickets/TicketList", () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,6 +17,14 @@ vi.mock("../../components/tickets/TicketList", () => ({
     if (error) return <p>{error}</p>;
     return <div data-testid="ticket-list" />;
   },
+}));
+vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TicketingCreateForm: ({ onSubmit }: { onSubmit: (data: any) => void }) => (
+    <button onClick={() => onSubmit({ description: "test" })}>
+      Crear ticket
+    </button>
+  ),
 }));
 
 const mockHook = vi.mocked(useTicketingGetAll);
@@ -54,5 +64,24 @@ describe("TicketingPage", () => {
     });
     render(<TicketingPage />);
     expect(screen.getByText("Error de connexió")).toBeInTheDocument();
+  });
+
+  it("crida refetch després de crear un ticket amb èxit", async () => {
+    const mockRefetch = vi.fn();
+    mockSubmitTicketing.mockResolvedValue(undefined);
+    mockHook.mockReturnValue({
+      tickets: [],
+      isLoading: false,
+      errorMessage: null,
+      refetch: mockRefetch,
+    });
+
+    render(<TicketingPage />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByText("Crear ticket"));
+    });
+
+    expect(mockRefetch).toHaveBeenCalledTimes(1);
   });
 });

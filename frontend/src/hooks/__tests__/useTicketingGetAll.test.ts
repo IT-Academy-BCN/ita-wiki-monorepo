@@ -114,7 +114,7 @@ describe("useTicketingGetAll", () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.tickets).toEqual([]);
 
-    act(() => result.current.refetch());
+    await act(async () => result.current.refetch());
 
     await waitFor(() => expect(result.current.tickets).toEqual(apiTickets));
     expect(axios.get).toHaveBeenCalledTimes(2);
