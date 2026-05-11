@@ -20,7 +20,6 @@ const PendingRequests = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
 
-
   const loadContributors = async () => {
     setIsLoading(true);
     const data = await fetchProjectContributors(projectId);
@@ -45,10 +44,10 @@ const PendingRequests = ({
     (c) => c.status === "pending",
   );
 
-    const handleAction = async (
-      contributorId: number,
-      status: "accepted" | "rejected",
-    ) => {
+  const handleAction = async (
+    contributorId: number,
+    status: "accepted" | "rejected",
+  ) => {
     setIsSubmitting(contributorId);
     const ok = await updateContributorStatus(projectId, contributorId, status);
     if (ok) {
@@ -89,7 +88,6 @@ const PendingRequests = ({
               >
                 {isSubmitting === contributor.id ? "..." : "Rebutjar"}
               </button>
-
             </div>
           </li>
         ))}
