@@ -15,10 +15,21 @@ class Liga extends Model
     protected $fillable = [
         'user_id',
         'points',
+        'points_weekly',
+        'status',
+        'language',
+        'league_id',
+    ];
+
+    protected $attributes = [
+        'points_weekly' => 0,
+        'status'        => 'Junior Coder',
     ];
 
     protected $casts = [
-        'points' => 'integer',
+        'points'        => 'integer',
+        'points_weekly' => 'integer',
+        'league_id'     => 'integer',
     ];
 
     public function user(): BelongsTo
