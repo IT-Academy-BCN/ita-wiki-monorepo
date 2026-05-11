@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Tickets;
 
+use App\Enums\AffectedAppEnum;
+use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Http\Requests\Tickets\CreateTicketRequest;
@@ -58,9 +61,9 @@ class TicketController extends Controller
         $data['code_connect_id'] = auth()->id();
         $data['name'] = $data['name'] ?? $data['description'];
         $data['incident_date'] = $data['incident_date'] ?? now()->toDateString();
-        $data['affected_app'] = $data['affected_app'] ?? 'other';
-        $data['type'] = $data['type'] ?? 'error';
-        $data['affected_function'] = $data['affected_function'] ?? 'other';
+        $data['affected_app'] = $data['affected_app'] ?? AffectedAppEnum::Other->value;
+        $data['type'] = $data['type'] ?? TicketTypeEnum::Error->value;
+        $data['affected_function'] = $data['affected_function'] ?? AffectedFunctionEnum::Other->value;
 
         $ticket = Ticket::create($data);
 
