@@ -22,7 +22,7 @@ class LigaController extends Controller
             return response()->json(['error' => 'Entry already exists for this user'], 409);
         }
 
-        $entry = Liga::create(['user_id' => $validated['user_id'], 'points' => 0]);
+        $entry = Liga::create(['user_id' => $validated['user_id'],'league_id' => 1, 'points_weekly' => 0,'points' => 0]);
 
         return response()->json($entry, 201);
     }
