@@ -25,6 +25,7 @@ describe("TicketingPage", () => {
       tickets: [],
       isLoading: false,
       errorMessage: null,
+      refetch: vi.fn(),
     });
   });
 
@@ -38,6 +39,7 @@ describe("TicketingPage", () => {
       tickets: [],
       isLoading: true,
       errorMessage: null,
+      refetch: vi.fn(),
     });
     render(<TicketingPage />);
     expect(screen.getByText("Carregant tickets...")).toBeInTheDocument();
@@ -48,6 +50,7 @@ describe("TicketingPage", () => {
       tickets: [],
       isLoading: false,
       errorMessage: "Error de connexió",
+      refetch: vi.fn(),
     });
     render(<TicketingPage />);
     expect(screen.getByText("Error de connexió")).toBeInTheDocument();

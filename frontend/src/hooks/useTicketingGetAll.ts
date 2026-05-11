@@ -17,6 +17,9 @@ export const useTicketingGetAll = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [tickets, setTickets] = useState<ApiTicketData[]>([]);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
+
+  const refetch = () => setRefetchTrigger((n) => n + 1);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -80,7 +83,7 @@ export const useTicketingGetAll = () => {
     fetchTickets();
 
     return () => abortController.abort();
-  }, []);
+  }, [refetchTrigger]);
 
-  return { tickets, isLoading, errorMessage };
+  return { tickets, isLoading, errorMessage, refetch };
 };
