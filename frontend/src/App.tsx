@@ -1,21 +1,21 @@
 import { FC } from "react";
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes, Navigate } from "react-router";
 
-import AsideComponent from "./components/Layout/AsideComponent";
+import HomePage from "./pages/HomePage";
+import CreateResourcePage from "./pages/CreateResourcePage";
 import HeaderComponent from "./components/Layout/HeaderComponent";
-import RequireAuth from "./components/RequireAuth";
+import AsideComponent from "./components/Layout/AsideComponent";
+import ResourcesPage from "./pages/ResourcesPage";
 import BookmarksPage from "./pages/BookmarksPage";
+import MyResourcesPage from "./pages/MyResourcesPage";
+import TechnicalTestCreatePage from "./pages/TechnicalTestCreatePage";
+import MyTechnicalTestsPage from "./pages/MyTechnicalTestsPage";
+import RequireAuth from "./components/RequireAuth";
+import CodeConnectPage from "./pages/CodeConnectPage";
 import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
 import CodeConnectDetails from "./pages/CodeConnectDetails";
-import CodeConnectPage from "./pages/CodeConnectPage";
-import CreateResourcePage from "./pages/CreateResourcePage";
-import HomePage from "./pages/HomePage";
-import RankingsPage from "./pages/LeaguesPage";
-import MyResourcesPage from "./pages/MyResourcesPage";
-import MyTechnicalTestsPage from "./pages/MyTechnicalTestsPage";
-import ResourcesPage from "./pages/ResourcesPage";
 import TechnicalPage from "./pages/TechnicalPage";
-import TechnicalTestCreatePage from "./pages/TechnicalTestCreatePage";
+import RankingsPage from "./pages/RankingsPage";
 import TicketingPage from "./pages/TicketingPage";
 
 const App: FC = () => {

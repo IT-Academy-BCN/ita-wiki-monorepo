@@ -1,7 +1,7 @@
-import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { describe, expect, it, vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import "@testing-library/jest-dom/vitest";
 import App from "./App";
 
 vi.mock("./components/Layout/HeaderComponent", () => ({ default: () => null }));
@@ -11,8 +11,8 @@ vi.mock("./context/UserContext", () => ({
   useUserContext: () => ({ user: null }),
 }));
 
-vi.mock("./pages/LeaguesPage", () => ({
-  default: () => <div data-testid="leagues-page" />,
+vi.mock("./pages/RankingsPage", () => ({
+  default: () => <div data-testid="rankings-page" />,
 }));
 
 const renderAt = (path: string) =>
@@ -27,8 +27,8 @@ describe("App", () => {
     expect(App).toBeDefined();
   });
 
-  it("renders LeaguesPage at /ligas", () => {
+  it("renders RankingsPage at /ligas", () => {
     renderAt("/ligas");
-    expect(screen.getByTestId("leagues-page")).toBeInTheDocument();
+    expect(screen.getByTestId("rankings-page")).toBeInTheDocument();
   });
 });
