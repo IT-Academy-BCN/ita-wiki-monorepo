@@ -234,6 +234,7 @@ class TicketControllerTest extends TestCase{
             'affected_app' => 'other',
             'type' => 'error',
             'affected_function' => 'other',
+            'incident_date' => now()->toDateString(),
         ]);
     }
 
