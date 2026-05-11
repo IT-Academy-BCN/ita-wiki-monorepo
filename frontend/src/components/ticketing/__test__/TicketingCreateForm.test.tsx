@@ -37,4 +37,30 @@ describe("TicketingCreateForm", () => {
       );
     });
   });
+  it("clears textarea after successful submit", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    render(<TicketingCreateForm onSubmit={onSubmit} />);
+    await user.type(screen.getByPlaceholderText("Descripció..."), "Bug login");
+    await user.click(screen.getByRole("button", { name: "Crear ticket" }));
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("Descripció...")).toHaveValue("");
+    });
+  });
+
+  it("shows error message when error prop is provided", () => {
+    const onSubmit = vi.fn();
+    const error = new Error("No s'ha pogut crear el ticket");
+    render(<TicketingCreateForm onSubmit={onSubmit} error={error} />);
+    expect(
+      screen.getByText("No s'ha pogut crear el ticket"),
+    ).toBeInTheDocument();
+  });
+
+  it("disables button and shows loading text when isLoading is true", () => {
+    const onSubmit = vi.fn();
+    render(<TicketingCreateForm onSubmit={onSubmit} isLoading={true} />);
+    const button = screen.getByRole("button", { name: "Creant..." });
+    expect(button).toBeDisabled();
+  });
 });

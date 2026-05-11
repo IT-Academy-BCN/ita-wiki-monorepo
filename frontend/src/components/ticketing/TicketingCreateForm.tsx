@@ -3,10 +3,14 @@ import type { IntCreateTicket } from "../../types/ticketingTypes";
 
 type TicketingCreateFormProps = {
   onSubmit: (payload: IntCreateTicket) => void | Promise<void>;
+  isLoading?: boolean;
+  error?: Error | null;
 };
 
 export const TicketingCreateForm = ({
   onSubmit,
+  isLoading,
+  error,
 }: TicketingCreateFormProps): JSX.Element => {
   const [description, setDescription] = useState<string>("");
 
@@ -34,10 +38,12 @@ export const TicketingCreateForm = ({
         <button
           className="w-fit bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
           type="submit"
+          disabled={isLoading}
         >
-          Crear ticket
+          {isLoading ? "Creant..." : "Crear ticket"}
         </button>
       </div>
+      {error && <p className="mt-1 text-xs text-red-600">{error.message}</p>}
     </form>
   );
 };
