@@ -12,7 +12,7 @@ const options = [
 
 const LeagueToggle: FC<Props> = ({ view, onChange }) => (
   <div
-    className="flex gap-2 w-max p-1 border border-gray-300 rounded-md bg-white"
+    className="flex gap-2"
     role="group"
     aria-label="League view selector"
   >
