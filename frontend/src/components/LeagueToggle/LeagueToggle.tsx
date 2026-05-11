@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { FC } from "react";
+import clsx from "clsx";
 
 export type LeagueView = "weekly" | "global";
 
