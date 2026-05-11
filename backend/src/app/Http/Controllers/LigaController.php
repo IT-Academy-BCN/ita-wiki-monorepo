@@ -11,52 +11,83 @@ use Illuminate\Http\Request;
 
 class LigaController extends Controller
 {
-
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id'   => 'required|integer|exists:users,id',
+            'league_id' => 'required|integer',
         ]);
 
-        if (Liga::where('user_id', $validated['user_id'])->exists()) {
-            return response()->json(['error' => 'Entry already exists for this user'], 409);
+        if (Liga::where('user_id', $validated['user_id'])
+            ->where('league_id', $validated['league_id'])
+            ->exists()
+        ) {
+            return response()->json([
+                'error' => 'Entry already exists for this user in this league'
+            ], 409);
         }
 
-        $entry = Liga::create(['user_id' => $validated['user_id'], 'points' => 0]);
+        $user = User::findOrFail($validated['user_id']);
+
+        $entry = Liga::create([
+            'user_id'       => $user->id,
+            'league_id'     => $validated['league_id'],
+            'user_name'     => $user->github_user_name ?? $user->name,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
 
         return response()->json($entry, 201);
     }
 
     public function ranking()
     {
-        $entries = Liga::orderBy('points', 'desc')
+        return Liga::orderBy('points', 'desc')
             ->get()
             ->values()
-            ->map(fn ($entry, $index) => [
-                'position'   => $index + 1,
-                'user_id'    => $entry->user_id,
-                'points'     => $entry->points,
-                'created_at' => $entry->created_at,
-                'updated_at' => $entry->updated_at,
+            ->map(fn ($e, $i) => [
+                'position'      => $i + 1,
+                'user_id'       => $e->user_id,
+                'user_name'     => $e->user_name,
+                'points'        => $e->points,
+                'points_weekly' => $e->points_weekly,
+                'created_at'    => $e->created_at,
+                'updated_at'    => $e->updated_at,
             ]);
-
-        return response()->json($entries);
     }
 
-    public function addPoints(User $user): JsonResponse
+    public function addPoints(Request $request, int $userId): JsonResponse
     {
-        $entry = Liga::where('user_id', $user->id)->first();
+        $user = User::find($userId);
 
-        if (!$entry) {
-            return response()->json(['message' => 'User has not opted in to the liga'], 403);
+        if (!$user) {
+            return response()->json([], 404);
         }
 
-        $entry->increment('points', 5);
+        $validated = $request->validate([
+            'league_id' => 'required|integer',
+            'points'    => 'nullable|integer|min:1',
+        ]);
+
+        $entry = Liga::where('user_id', $user->id)
+            ->where('league_id', $validated['league_id'])
+            ->first();
+
+        if (!$entry) {
+            return response()->json([
+                'message' => 'User has not opted in to the liga'
+            ], 403);
+        }
+
+        $points = $validated['points'] ?? 5;
+
+        $entry->increment('points', $points);
+        $entry->increment('points_weekly', $points);
 
         return response()->json([
-            'user_id' => $user->id,
-            'points'  => $entry->points,
+            'user_id'       => $user->id,
+            'points'        => $entry->points,
+            'points_weekly' => $entry->points_weekly,
         ]);
     }
 }
-
