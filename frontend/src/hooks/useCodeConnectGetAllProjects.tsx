@@ -54,7 +54,7 @@ export const useProjects = () => {
                   ?.filter((c) => c.programming_role === "Frontend Developer")
                   ?.map((c) => ({
                     ...c,
-                    avatar: "",
+                    avatar: c.avatar_url ?? `https://ui-avatars.com/api/?name=${c.name}&background=b91879&color=fff&rounded=true`,
                   })) ?? [],
             },
             backend: {
@@ -66,7 +66,7 @@ export const useProjects = () => {
                   ?.filter((c) => c.programming_role === "Backend Developer")
                   ?.map((c) => ({
                     ...c,
-                    avatar: "",
+                    avatar: c.avatar_url ?? `https://ui-avatars.com/api/?name=${c.name}&background=b91879&color=fff&rounded=true`,
                   })) ?? [],
             },
           }));
