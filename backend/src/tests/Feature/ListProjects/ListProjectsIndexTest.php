@@ -87,6 +87,7 @@ class ListProjectsIndexTest extends TestCase
                 [
                     'name' => $this->contributorOne->user->name,
                     'programming_role' => $this->contributorOne->programming_role,
+                    'avatar_url' => $this->contributorOne->user->avatar_url,
                 ]
             ],
         ]);
