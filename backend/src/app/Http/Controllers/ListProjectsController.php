@@ -88,6 +88,7 @@ class ListProjectsController extends Controller
                     return [
                         'name' => $contributor->user->name,
                         'programming_role' => $contributor->programming_role,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ];
                 }),
             ];
@@ -179,7 +180,8 @@ class ListProjectsController extends Controller
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
                     'name' => $contributor->user->name,
-                    'programming_role' => $contributor->programming_role
+                    'programming_role' => $contributor->programming_role,
+                    'avatar_url' => $contributor->user->avatar_url,
                 ];
             }),
         ];
@@ -600,6 +602,7 @@ class ListProjectsController extends Controller
                         'id' => $contributor->user->id,
                         'name' => $contributor->user->name,
                         'email' => $contributor->user->email,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ],
                 ];
             });
