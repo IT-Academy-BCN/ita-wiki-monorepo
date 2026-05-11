@@ -12,7 +12,7 @@ export const useProjectContributors = (
 
     const members = roleMembers.map((member) => ({
       name: member.name,
-      avatar: `https://ui-avatars.com/api/?name=${member.name}&background=b91879&color=fff&rounded=true`,
+      avatar: member.avatar_url ?? `https://ui-avatars.com/api/?name=${member.name}&background=b91879&color=fff&rounded=true`,
     }));
 
     const emptySlots = 3 - members.length;
