@@ -21,6 +21,7 @@ class LigaAddPointsTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
+        $this->actingAs($this->user);
 
         $this->ligaEntry = Liga::create([
             'user_id' => $this->user->id,
