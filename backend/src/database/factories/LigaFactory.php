@@ -18,11 +18,11 @@ class LigaFactory extends Factory
     {
         return [
             'user_id'       => User::factory(),
-            'points'        => $this->faker->numberBetween(0, 100),
-            'points_weekly' => $this->faker->numberBetween(0, 100),
-            'language'      => $this->faker->randomElement(LanguageEnum::values()),
-            'status'        => $this->faker->randomElement(LigaStatusEnum::values()),
-            'league_id'     => $this->faker->numberBetween(1, 4),
+            'points'        => fake()->numberBetween(0, 100),
+            'points_weekly' => fake()->numberBetween(0, 100),
+            'language'      => fake()->randomElement(LanguageEnum::values()),
+            'status'        => fake()->randomElement(LigaStatusEnum::values()),
+            'league_id'     => fake()->numberBetween(1, 4),
         ];
     }
 }
