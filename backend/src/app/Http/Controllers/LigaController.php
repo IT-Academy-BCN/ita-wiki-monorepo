@@ -38,6 +38,9 @@ class LigaController extends Controller
                 'user_id'    => $entry->user_id,
                 'points'     => $entry->points,
                 'username'  => $entry->user->github_user_name,]);
+                'created_at' => $entry->created_at,
+                'updated_at' => $entry->updated_at,
+        ];
         return response()->json($entries);
     }
 
