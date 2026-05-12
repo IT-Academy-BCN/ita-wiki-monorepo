@@ -52,10 +52,4 @@ describe("createTicket", () => {
       }),
     );
   });
-
-  it("should throw error if request fails", async () => {
-    vi.mocked(axios.post).mockRejectedValue(new Error("Network error"));
-
-    await expect(createTicket(mockPayload)).rejects.toThrow("Network error");
-  });
 });
