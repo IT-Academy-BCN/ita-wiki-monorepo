@@ -8,20 +8,31 @@ import LeaguesPage from "../LeaguesPage";
 
 vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
 
-vi.mock("../../components/Leagues/StandingsTable/StandingsTable", () => ({
-  StandingsTable: () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Posició</th>
-        </tr>
-      </thead>
-    </table>
-  ),
-}));
+vi.mock(
+  "../../components/leagues-ranking/StandingsTable/StandingsTable",
+  () => ({
+    StandingsTable: () => (
+      <table>
+        <thead>
+          <tr>
+            <th>Posició</th>
+          </tr>
+        </thead>
+      </table>
+    ),
+  }),
+);
 
 const mockRanking = [
-  { position: 1, user_id: 101, points: 94, created_at: "", updated_at: "" },
+  {
+    position: 1,
+    user_id: 101,
+    username: "Júlia",
+    points: 94,
+    weekly_points: 94,
+    created_at: "",
+    updated_at: "",
+  },
 ];
 
 describe("LeaguesPage", () => {

@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { LeagueList } from "../LeagueList";
+import { LeagueList } from "../LeagueList/LeagueList";
 
 const mockStandings = [
   {
