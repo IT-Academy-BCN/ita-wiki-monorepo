@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getLeagueRanking } from "../../services/leagueService";
 import type { Liga } from "../../types/league";
-import { StandingsTable } from "./StandingsTable/StandingsTable";
+import { StandingsTable } from "../Leagues/StandingsTable/StandingsTable";
 
 export const WeeklyRanking = () => {
   const [data, setData] = useState<Liga[]>([]);
