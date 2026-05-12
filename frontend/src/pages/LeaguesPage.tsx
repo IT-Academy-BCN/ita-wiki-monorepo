@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StandingsTable } from "../components/Leagues/StandingsTable/StandingsTable";
+import { StandingsTable } from "../components/leagues-ranking/StandingsTable/StandingsTable";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga } from "../types/league";
 
