@@ -5,7 +5,11 @@ import { useProjectContributors } from "../useProjectContributors";
 describe("useProjectContributors Hook", () => {
   it("filtra correctament per rol i calcula els espais buits", () => {
     const mockContributors = [
-      { name: "Anna", programming_role: "Frontend Developer", avatar_url: null }, // Hauria de sortir
+      {
+        name: "Anna",
+        programming_role: "Frontend Developer",
+        avatar_url: null,
+      }, // Hauria de sortir
       { name: "Marc", programming_role: "Backend Developer", avatar_url: null }, // No hauria de sortir
     ];
 
@@ -36,7 +40,9 @@ describe("useProjectContributors Hook", () => {
 
     const { members } = result.current.getTeamByRole("frontend");
 
-    expect(members[0].avatar).toBe("https://avatars.githubusercontent.com/u/12345");
+    expect(members[0].avatar).toBe(
+      "https://avatars.githubusercontent.com/u/12345",
+    );
   });
 
   it("usa el placeholder cuando avatar_url es null", () => {
@@ -57,4 +63,3 @@ describe("useProjectContributors Hook", () => {
     expect(members[0].avatar).toContain("ui-avatars.com");
   });
 });
-
