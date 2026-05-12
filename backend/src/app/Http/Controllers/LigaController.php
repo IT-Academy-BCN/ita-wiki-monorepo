@@ -56,14 +56,14 @@ class LigaController extends Controller
         $pointsToAdd = $request->input('points', 5);
 
         $entry->increment('points', $pointsToAdd);
+        $entry->increment('points_weekly', $pointsToAdd);
 
-        // Waiting for database schema update
-        // $entry->increment('points_weekly', $pointsToAdd);
+        $entry->refresh();
 
         return response()->json([
             'user_id' => $user->id,
             'points'  => $entry->points,
-            'points_weekly' => $pointsToAdd,
+            'points_weekly' => $entry->points_weekly,
         ]);
     }
 }
