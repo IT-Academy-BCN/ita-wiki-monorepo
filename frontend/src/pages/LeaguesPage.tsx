@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { GlobalRanking } from "../components/Leagues/GlobalRanking/GlobalRanking";
 import LeagueToggle, {
   LeagueView,
-} from "../components/LeagueToggle/LeagueToggle";
-import { GlobalRanking } from "../components/Leagues/GlobalRanking/GlobalRanking";
+} from "../components/Leagues/LeagueToggle/LeagueToggle";
 import { WeeklyRanking } from "../components/Leagues/WeeklyRanking/WeeklyRanking";
 
-const RankingsPage = () => {
+const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
 
   return (
@@ -16,4 +16,4 @@ const RankingsPage = () => {
   );
 };
 
-export default RankingsPage;
+export default LeaguesPage;
