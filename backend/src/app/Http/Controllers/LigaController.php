@@ -29,17 +29,15 @@ class LigaController extends Controller
 
     public function ranking()
     {
-        $entries = Liga::orderBy('points', 'desc')
+        $entries = Liga::with('user')
+            ->orderBy('points', 'desc')
             ->get()
             ->values()
             ->map(fn ($entry, $index) => [
                 'position'   => $index + 1,
                 'user_id'    => $entry->user_id,
                 'points'     => $entry->points,
-                'created_at' => $entry->created_at,
-                'updated_at' => $entry->updated_at,
-            ]);
-
+                'username'  => $entry->user->github_user_name,]);
         return response()->json($entries);
     }
 
