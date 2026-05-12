@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { getLeagueRanking } from "../../services/leagueService";
 
-import RankingsPage from "../RankingsPage";
+import LeaguesPage from "../LeaguesPage";
 
 vi.mock("../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
@@ -30,28 +30,33 @@ vi.mock("../../components/leagues/LeagueList", () => ({
 
 const mockRanking = [
   {
-    username: "Albert",
+    position: 1,
+    user_id: 101,
+    username: "Júlia",
     points: 94,
+    weekly_points: 94,
+    created_at: "2026-04-24T00:00:00Z",
+    updated_at: "2026-04-24T00:00:00Z",
   },
 ];
 
-describe("RankingsPage", () => {
+describe("LeaguesPage", () => {
   it("renders the league list after fetch", async () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
 
-    render(<RankingsPage />);
+    render(<LeaguesPage />);
 
     await waitFor(() => {
       expect(screen.getByText("Posició")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Albert")).toBeInTheDocument();
+    expect(screen.getByText("Júlia")).toBeInTheDocument();
     expect(screen.getByText("94")).toBeInTheDocument();
   });
 
   it("renders without crashing on fetch error", () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
 
-    expect(() => render(<RankingsPage />)).not.toThrow();
+    expect(() => render(<LeaguesPage />)).not.toThrow();
   });
 });

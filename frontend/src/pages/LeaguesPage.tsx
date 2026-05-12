@@ -3,7 +3,7 @@ import { LeagueList } from "../components/leagues/LeagueList";
 import { getLeagueRanking } from "../services/leagueService";
 import type { Liga } from "../types/league";
 
-const RankingsPage = () => {
+const LeaguesPage = () => {
   const [data, setData] = useState<Liga[]>([]);
 
   useEffect(() => {
@@ -15,4 +15,4 @@ const RankingsPage = () => {
   return <LeagueList standings={data} />;
 };
 
-export default RankingsPage;
+export default LeaguesPage;
