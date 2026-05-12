@@ -15,18 +15,24 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TicketFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
-            'code_connect_id'   => User::factory(),
-            'name'              => fake()->sentence(3),
-            'incident_date'     => fake()->date(),
-            'affected_app'      => fake()->randomElement(AffectedAppEnum::values()),
-            'type'              => fake()->randomElement(TicketTypeEnum::values()),
+            'code_connect_id' => User::factory(),
+            'name' => fake()->sentence(3),
+            'incident_date' => fake()->date(),
+            'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
+            'type' => fake()->randomElement(TicketTypeEnum::values()),
             'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
-            'description'       => fake()->paragraph(),
-            'status'            => TicketStatusEnum::Pending->value,
-            'priority'          => fake()->randomElement(TicketPriorityEnum::values()),
+            'description' => fake()->paragraph(),
+            'status' => TicketStatusEnum::Pending->value,
+            'priority' => fake()->randomElement(TicketPriorityEnum::values()),
         ];
+
     }
 }

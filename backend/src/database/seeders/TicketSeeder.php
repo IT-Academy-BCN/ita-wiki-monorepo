@@ -14,10 +14,6 @@ class TicketSeeder extends Seeder
 {
     public function run(): void
     {
-         if (Ticket::count() > 0) {
-            return;
-        }
-
         $student    = $this->findOrCreateUser('student@itawiki.test', 'student');
         $mentor     = $this->findOrCreateUser('mentor@itawiki.test', 'mentor');
         $admin      = $this->findOrCreateUser('admin@itawiki.test', 'admin');
@@ -58,9 +54,7 @@ class TicketSeeder extends Seeder
             ]
         );
 
-        if (! $user->hasRole($role)) {
-            $user->assignRole($role);
-        }
+        $user->syncRoles([$role]);
 
         return $user;
     }
