@@ -66,9 +66,8 @@ const END_POINTS = {
     post: "tickets" as EndPoints,
   },
   leagues: {
-    ranking: "ligas/ranking" as EndPoints,
-    post: "ligas" as EndPoints,
-    points: "ligas" as EndPoints,
+    get: "ligas/ranking" as EndPoints,
+    addPoints: "ligas" as EndPoints,
   },
 };
 

@@ -8,7 +8,7 @@ export type AddLeaguePointsResponse = {
 export const addLeaguePoints = async (
   userId: number,
 ): Promise<AddLeaguePointsResponse> => {
-  const url = `${API_URL}${END_POINTS.leagues.points}/${userId}/points`;
+  const url = `${API_URL}${END_POINTS.leagues.addPoints}/${userId}/points`;
   const token = localStorage.getItem("auth_token");
 
   const response = await fetch(url, {
@@ -16,6 +16,7 @@ export const addLeaguePoints = async (
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
 

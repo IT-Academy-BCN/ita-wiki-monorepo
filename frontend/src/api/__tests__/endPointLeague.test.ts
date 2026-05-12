@@ -6,7 +6,7 @@ vi.mock("../../config", () => ({
   API_URL: "http://localhost:8000",
   END_POINTS: {
     leagues: {
-      points: "/ligas",
+      addPoints: "/ligas",
     },
   },
 }));
@@ -46,6 +46,7 @@ describe("addLeaguePoints", () => {
         headers: {
           Accept: "application/json",
           Authorization: "Bearer fake-token",
+          "Content-Type": "application/json",
         },
       },
     );
