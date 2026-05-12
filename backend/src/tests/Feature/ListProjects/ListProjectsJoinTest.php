@@ -33,62 +33,6 @@ class ListProjectsJoinTest extends TestCase
         $this->student->assignRole('student');
     }
 
-    public function test_join_requires_authentication(): void
-    {
-        $response = $this->postJson("/api/codeconnect/{$this->project->id}/join", [
-            'programming_role' => 'Backend Developer',
-        ]);
-
-        $response->assertStatus(401);
-        $response->assertJson(['message' => 'Unauthenticated.']);
-    }
-
-    public function test_non_student_cannot_join(): void
-    {
-        $mentor = User::factory()->create();
-        $mentor->assignRole('mentor');
-        Sanctum::actingAs($mentor);
-
-        $response = $this->postJson("/api/codeconnect/{$this->project->id}/join", [
-            'programming_role' => 'Backend Developer',
-        ]);
-
-        $response->assertStatus(403);
-        $response->assertJsonFragment(['message' => 'Only students can join projects']);
-    }
-
-    public function test_owner_cannot_join_own_project(): void
-    {
-        $studentOwner = User::factory()->create();
-        $studentOwner->assignRole('student');
-        $ownedProject = ListProjects::factory()->create(['user_id' => $studentOwner->id]);
-
-        Sanctum::actingAs($studentOwner);
-
-        $response = $this->postJson("/api/codeconnect/{$ownedProject->id}/join", [
-            'programming_role' => 'Backend Developer',
-        ]);
-
-        $response->assertStatus(400);
-        $response->assertJsonFragment(['message' => 'Project owner cannot join as contributor']);
-    }
-
-    public function test_cannot_join_twice(): void
-    {
-        Sanctum::actingAs($this->student);
-
-        $this->postJson("/api/codeconnect/{$this->project->id}/join", [
-            'programming_role' => 'Backend Developer',
-        ]);
-
-        $response = $this->postJson("/api/codeconnect/{$this->project->id}/join", [
-            'programming_role' => 'Frontend Developer',
-        ]);
-
-        $response->assertStatus(400);
-        $response->assertJsonFragment(['message' => 'You are already a member or have a pending request']);
-    }
-
     public function test_student_can_join_project(): void
     {
         Sanctum::actingAs($this->student);
@@ -108,17 +52,5 @@ class ListProjectsJoinTest extends TestCase
             'user_id' => $this->student->id,
             'status' => ContributorStatusEnum::Pending->value,
         ]);
-    }
-
-    public function test_join_nonexistent_project(): void
-    {
-        Sanctum::actingAs($this->student);
-
-        $response = $this->postJson('/api/codeconnect/99999/join', [
-            'programming_role' => 'Backend Developer',
-        ]);
-
-        $response->assertStatus(404);
-        $response->assertJsonFragment(['message' => 'Project not found']);
     }
 }

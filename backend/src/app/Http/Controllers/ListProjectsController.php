@@ -722,6 +722,72 @@ class ListProjectsController extends Controller
             ], 500);
         }
     }
+        /**
+     * @OA\Post(
+     *     path="/api/codeconnect/{listProject}/join",
+     *     summary="Student requests to join a project",
+     *     tags={"Contributors"},
+     *     description="Allows an authenticated student to submit a join request for a project",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"programming_role"},
+     *             @OA\Property(property="programming_role", type="string", enum={"Frontend Developer", "Backend Developer", "Fullstack Developer", "Other"}, example="Backend Developer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Join request submitted successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="user_id", type="integer", example=2),
+     *                 @OA\Property(property="programming_role", type="string", example="Backend Developer"),
+     *                 @OA\Property(property="list_project_id", type="integer", example=1),
+     *                 @OA\Property(property="status", type="string", example="pending")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Project owner cannot join as contributor")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Only students can join projects")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Project not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     )
+     * )
+     */
     public function joinProject(Request $request, int $listProjectId)
     {
         $user = auth()->user();
