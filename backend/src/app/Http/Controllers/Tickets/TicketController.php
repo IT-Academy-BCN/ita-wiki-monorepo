@@ -111,6 +111,9 @@ class TicketController extends Controller
         if ($status === 'closed') {
             $updateData['closed_by'] = auth()->id();
             $updateData['closed_at'] = now();
+        } else {
+            $updateData['closed_by'] = null;
+            $updateData['closed_at'] = null;
         }
 
         $ticket->update($updateData);
