@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { GlobalRanking } from "../components/Leagues/GlobalRanking/GlobalRanking";
+import { GlobalRanking } from "../components/leagues/GlobalRanking/GlobalRanking";
 import LeagueToggle, {
   LeagueView,
-} from "../components/Leagues/LeagueToggle/LeagueToggle";
-import { WeeklyRanking } from "../components/Leagues/WeeklyRanking/WeeklyRanking";
+} from "../components/leagues/LeagueToggle/LeagueToggle";
+import { WeeklyRanking } from "../components/leagues/WeeklyRanking/WeeklyRanking";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
