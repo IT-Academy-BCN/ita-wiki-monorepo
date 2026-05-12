@@ -25,6 +25,7 @@ class LigaAddPointsTest extends TestCase
         $this->ligaEntry = Liga::create([
             'user_id' => $this->user->id,
             'points'  => 0,
+            // 'points_weekly' => 0,
         ]);
     }
 
@@ -38,6 +39,7 @@ class LigaAddPointsTest extends TestCase
         $response->assertJson([
             'user_id' => $this->user->id,
             'points'  => 5,
+            // 'points_weekly' => 5,
         ]);
     }
 
@@ -52,6 +54,7 @@ class LigaAddPointsTest extends TestCase
         $response->assertJson([
             'user_id' => $this->user->id,
             'points'  => 15,
+            // 'points_weekly' => 15,
         ]);
     }
 
