@@ -17,7 +17,7 @@ class LigaStoreLigaTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson('/api/ligas', ['user_id' => $user->id]);
+        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => $user->id]);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('ligas', [
@@ -31,7 +31,7 @@ class LigaStoreLigaTest extends TestCase
         $user = User::factory()->create();
         Liga::create(['user_id' => $user->id, 'points' => 0]);
 
-        $response = $this->postJson('/api/ligas', ['user_id' => $user->id]);
+        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => $user->id]);
 
         $response->assertStatus(409);
         $response->assertJson(['error' => 'Entry already exists for this user']);
@@ -39,14 +39,18 @@ class LigaStoreLigaTest extends TestCase
 
     public function test_store_returns_422_when_user_id_is_missing(): void
     {
-        $response = $this->postJson('/api/ligas', []);
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson('/api/ligas', []);
 
         $response->assertStatus(422);
     }
 
     public function test_store_returns_422_when_user_does_not_exist(): void
     {
-        $response = $this->postJson('/api/ligas', ['user_id' => 99999]);
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => 99999]);
 
         $response->assertStatus(422);
     }
