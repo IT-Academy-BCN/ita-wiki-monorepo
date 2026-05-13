@@ -33,7 +33,6 @@ class TicketRequestValidationTest extends TestCase{
             'type' => 'nullable|in:error,suggestion',
             'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
-            'status' => 'nullable|in:pending,in_progress,blocked,ready,closed',
             'priority' => 'nullable|in:low,medium,high,critical',
         ];
 
