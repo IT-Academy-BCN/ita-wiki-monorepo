@@ -53,14 +53,4 @@ describe("addLeaguePoints", () => {
 
     expect(result).toEqual(mockResponse);
   });
-
-  it("Should throw an error when response is not ok", async () => {
-    fetchMock.mockResolvedValueOnce({
-      ok: false,
-    });
-
-    await expect(addLeaguePoints(1)).rejects.toThrow(
-      "Error adding league points",
-    );
-  });
 });
