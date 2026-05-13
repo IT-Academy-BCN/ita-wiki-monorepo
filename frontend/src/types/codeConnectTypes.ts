@@ -40,6 +40,8 @@ export interface ApiProjectData {
   roadmap?: { task: string; done: boolean }[];
   time_duration: string;
   title: string;
+  start_date?: string;
+  end_date?: string;
 }
 
 export interface ApiContributor {
