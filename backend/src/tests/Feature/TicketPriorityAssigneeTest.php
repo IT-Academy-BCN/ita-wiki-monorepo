@@ -39,10 +39,13 @@ class TicketPriorityAssigneeTest extends TestCase {
         $response->assertStatus(403);
     }
 
-    public function test_non_admin_cannot_update_assignee(): void {
-        $user   = User::factory()->create();
-        $ticket = Ticket::factory()->create();
-        $response = $this->actingAs($user) ->patchJson("/api/tickets/{$ticket->id}/assignee", ['assignee_id' => 1 ]);
+    public function test_non_admin_cannot_update_assignee(): void{
+        $user     = User::factory()->create();
+        $assignee = User::factory()->create(); 
+        $ticket   = Ticket::factory()->create();
+        $response = $this->actingAs($user)
+            ->patchJson("/api/tickets/{$ticket->id}/assignee", [
+                'assignee_id' => $assignee->id ]);
         $response->assertStatus(403);
     }
 }
