@@ -24,7 +24,7 @@ class LigaStubTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson('/api/ligas', ['user_id' => $user->id]);
+        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => $user->id]);
 
         $response->assertStatus(201);
     }
@@ -39,7 +39,7 @@ class LigaStubTest extends TestCase
             'points' => 0,
         ]);
 
-        $response = $this->putJson("/api/ligas/{$user->id}/points");
+        $response = $this->actingAs($user)->putJson("/api/ligas/{$user->id}/points");
 
         $response->assertStatus(200);
     }
