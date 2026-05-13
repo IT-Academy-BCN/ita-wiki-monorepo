@@ -4,38 +4,90 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    /*
+     * Credentials for local development and automated tests:
+     *
+     * | Role       | Email                      | Password |
+     * |------------|----------------------------|----------|
+     * | superadmin | superadmin@itawiki.test    | password |
+     * | admin      | admin@itawiki.test         | password |
+     * | mentor     | mentor@itawiki.test        | password |
+     * | student    | student@itawiki.test       | password |
+     * | student    | student2@itawiki.test      | password |
+     */
     public function run(): void
     {
-        $githubUsername = 'test_user';
-        $testUser = User::factory()->create([
-            'github_id' => '12345678',
-            'github_user_name' => $githubUsername,
-            'name' => $githubUsername,
-        ]);
+        // Superadmin
+        $superadmin = User::firstOrCreate(
+            ['email' => 'superadmin@itawiki.test'],
+            [
+                'github_id'        => '11111111',
+                'github_user_name' => 'superadmin_test',
+                'name'             => 'Superadmin Test',
+                'password'         => Hash::make('password'),
+            ]
+        );
+        $superadmin->syncRoles(['superadmin']);
 
-        $token = $testUser->createToken('Personal Access Token')->plainTextToken;
+        // Admin
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@itawiki.test'],
+            [
+                'github_id'        => '22222222',
+                'github_user_name' => 'admin_test',
+                'name'             => 'Admin Test',
+                'password'         => Hash::make('password'),
+            ]
+        );
+        $admin->syncRoles(['admin']);
 
-        $this->command->info('User test created successfully');
-        $this->command->info('Github ID: ' . $testUser->github_id);
-        $this->command->info('GitHub Username: ' . $testUser->github_user_name);
-        $this->command->info('Personal Access Token: ' . $token);
-        
-        /* $testUser->assignRole('student');
+        // Mentor
+        $mentor = User::firstOrCreate(
+            ['email' => 'mentor@itawiki.test'],
+            [
+                'github_id'        => '33333333',
+                'github_user_name' => 'mentor_test',
+                'name'             => 'Mentor Test',
+                'password'         => Hash::make('password'),
+            ]
+        );
+        $mentor->syncRoles(['mentor']);
 
-        $users = User::factory(20)->create();
-        
-        foreach ($users as $user) {
-            $roles = ['student', 'student', 'student', 'mentor', 'admin','superadmin'];
-            $randomRole = $roles[array_rand($roles)];
-            $user->assignRole($randomRole);
-        }
-        
-        $this->command->info('Created User and assigned Spatie roles'); */
+        // Student 1
+        $student1 = User::firstOrCreate(
+            ['email' => 'student@itawiki.test'],
+            [
+                'github_id'        => '44444444',
+                'github_user_name' => 'student_test_1',
+                'name'             => 'Student Test 1',
+                'password'         => Hash::make('password'),
+            ]
+        );
+        $student1->syncRoles(['student']);
+
+        // Student 2
+        $student2 = User::firstOrCreate(
+            ['email' => 'student2@itawiki.test'],
+            [
+                'github_id'        => '55555555',
+                'github_user_name' => 'student_test_2',
+                'name'             => 'Student Test 2',
+                'password'         => Hash::make('password'),
+            ]
+        );
+        $student2->syncRoles(['student']);
+
+        $this->command?->info('Users created with roles:');
+        $this->command?->info('superadmin@itawiki.test / password → superadmin');
+        $this->command?->info('admin@itawiki.test / password → admin');
+        $this->command?->info('mentor@itawiki.test / password → mentor');
+        $this->command?->info('student@itawiki.test / password → student');
+        $this->command?->info('student2@itawiki.test / password → student');
     }
 }
-

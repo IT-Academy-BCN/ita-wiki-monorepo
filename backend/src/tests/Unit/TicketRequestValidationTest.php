@@ -27,11 +27,11 @@ class TicketRequestValidationTest extends TestCase{
         $expectedRules = [
             'forum_answer_id' => 'nullable|integer|exists:forum_answers,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
-            'name' => 'required|string|max:255',
-            'incident_date' => 'required|date',
-            'affected_app' => 'required|in:wiki_frontend,wiki_backend,code_connect,other',
-            'type' => 'required|in:error,suggestion',
-            'affected_function' => 'required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
+            'name' => 'nullable|string|max:255',
+            'incident_date' => 'nullable|date',
+            'affected_app' => 'nullable|in:wiki_frontend,wiki_backend,code_connect,other',
+            'type' => 'nullable|in:error,suggestion',
+            'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
         ];
 
@@ -45,11 +45,11 @@ class TicketRequestValidationTest extends TestCase{
         $validator = Validator::make([], $request->rules());
 
         $this->assertTrue($validator->fails());
-        $this->assertTrue($validator->errors()->has('name'));
-        $this->assertTrue($validator->errors()->has('incident_date'));
-        $this->assertTrue($validator->errors()->has('affected_app'));
-        $this->assertTrue($validator->errors()->has('type'));
-        $this->assertTrue($validator->errors()->has('affected_function'));
+        $this->assertFalse($validator->errors()->has('name'));
+        $this->assertFalse($validator->errors()->has('incident_date'));
+        $this->assertFalse($validator->errors()->has('affected_app'));
+        $this->assertFalse($validator->errors()->has('type'));
+        $this->assertFalse($validator->errors()->has('affected_function'));
         $this->assertTrue($validator->errors()->has('description'));
     }
 
