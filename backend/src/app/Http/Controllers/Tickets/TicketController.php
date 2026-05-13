@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Tickets;
 
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
-use App\Enums\TicketPriorityEnum;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Http\Controllers\Controller;
@@ -66,8 +65,8 @@ class TicketController extends Controller
         $data['affected_app'] = $data['affected_app'] ?? AffectedAppEnum::Other->value;
         $data['type'] = $data['type'] ?? TicketTypeEnum::Error->value;
         $data['affected_function'] = $data['affected_function'] ?? AffectedFunctionEnum::Other->value;
-        $data['status'] = $data['status'] ?? TicketStatusEnum::Pending->value;
-        $data['priority'] = $data['priority'] ?? TicketPriorityEnum::Low->value;
+        $data['status'] = TicketStatusEnum::Pending->value;
+        unset($data['priority']);
 
         $ticket = Ticket::create($data);
 
