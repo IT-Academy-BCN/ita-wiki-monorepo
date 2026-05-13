@@ -344,6 +344,8 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
             'programming_role' => 'Backend Developer',
         ], $overrides);
     }
