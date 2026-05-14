@@ -13,6 +13,7 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
+use App\Http\Controllers\JoinProjectController;
 use App\Http\Controllers\ForumQuestionController;
 use App\Http\Controllers\ForumAnswerController;
 use App\Http\Controllers\Tickets\TicketController;
@@ -79,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codeconnect/{listProject}/contributors', [ListProjectsController::class, 'addContributor'])->name('contributors.store');
     Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
     Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
-    Route::post('/codeconnect/{listProject}/join', [ListProjectsController::class, 'joinProject'])->name('codeconnect.join');
+    Route::post('/codeconnect/{listProject}/join', JoinProjectController::class)->name('codeconnect.join');
 });
 
 // ========== FORUM ENDPOINTS ==========
