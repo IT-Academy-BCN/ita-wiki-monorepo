@@ -1,54 +1,29 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-
-import { getLeagueRanking } from "../../services/leagueService";
-
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import LeaguesPage from "../LeaguesPage";
 
-vi.mock("../../services/leagueService", () => ({ getLeagueRanking: vi.fn() }));
-
-vi.mock(
-  "../../components/leagues-ranking/StandingsTable/StandingsTable",
-  () => ({
-    StandingsTable: () => (
-      <table>
-        <thead>
-          <tr>
-            <th>Posició</th>
-          </tr>
-        </thead>
-      </table>
-    ),
-  }),
-);
-
-const mockRanking = [
-  {
-    position: 1,
-    user_id: 101,
-    username: "Júlia",
-    points: 94,
-    weekly_points: 94,
-    created_at: "",
-    updated_at: "",
-  },
-];
-
 describe("LeaguesPage", () => {
-  it("renders the league list after fetch", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
-
+  it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Posició")).toBeInTheDocument();
-    });
+    expect(
+      screen.getByRole("heading", { name: /lliga setmanal/i }),
+    ).toBeInTheDocument();
   });
-
-  it("renders without crashing on fetch error", () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
-
-    expect(() => render(<LeaguesPage />)).not.toThrow();
+  it("switches to GlobalRanking on toggle", () => {
+    render(<LeaguesPage />);
+    fireEvent.click(
+      screen.getByRole("button", { name: /classificació general/i }),
+    );
+    expect(
+      screen.getByRole("heading", { name: /classificació general/i }),
+    ).toBeInTheDocument();
+  });
+  it("switches back to WeeklyRanking on toggle from Global", () => {
+    render(<LeaguesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /lliga setmanal/i }));
+    expect(
+      screen.getByRole("heading", { name: /lliga setmanal/i }),
+    ).toBeInTheDocument();
   });
 });
