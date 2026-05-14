@@ -11,7 +11,7 @@ export const groupByLeague = (
       position: entry.position,
       user_id: entry.user_id,
       username: entry.username,
-      points: entry.points_weekly, // <-- your mapping
+      points: entry.points_weekly,
       status: entry.status,
       language: entry.language,
       created_at: entry.created_at,
