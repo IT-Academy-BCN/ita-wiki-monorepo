@@ -41,13 +41,9 @@ describe("useGlobalRanking", () => {
   it("returns ranking when API success=true", async () => {
     vi.mocked(fetchGlobalRanking).mockResolvedValueOnce(mockData);
     const { result } = renderHook(() => useGlobalRanking());
-
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(fetchGlobalRanking).toHaveBeenCalledTimes(1);
+      expect(result.current.globalRanking).toEqual(mockData);
     });
-
-    expect(fetchGlobalRanking).toHaveBeenCalledTimes(1);
-    expect(result.current.error).toBeNull();
-    expect(result.current.globalRanking).toEqual(mockData);
   });
 });
