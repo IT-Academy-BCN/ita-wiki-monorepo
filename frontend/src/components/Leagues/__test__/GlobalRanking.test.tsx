@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { GlobalRanking } from "../GlobalRanking";
+import { GlobalRanking } from "../../Leagues/GlobalRanking";
 
 describe("GlobalRanking", () => {
   it("renders the global ranking", () => {
