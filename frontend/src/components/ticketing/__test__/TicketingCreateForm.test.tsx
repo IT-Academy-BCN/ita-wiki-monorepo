@@ -16,7 +16,7 @@ describe("TicketingCreateForm", () => {
 
     expect(screen.getByPlaceholderText("Descripció...")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Crear ticket" }),
+      screen.getByRole("button", { name: "Crear tiquet" }),
     ).toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe("TicketingCreateForm", () => {
 
     await user.type(screen.getByPlaceholderText("Descripció..."), "Bug login");
 
-    await user.click(screen.getByRole("button", { name: "Crear ticket" }));
+    await user.click(screen.getByRole("button", { name: "Crear tiquet" }));
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith(

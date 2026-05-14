@@ -26,7 +26,7 @@ export const TicketingCreateForm = ({
   return (
     <form className="mt-8" onSubmit={handleSubmit}>
       <h3 className="mb-6 text-sm font-bold text-black underline">
-        Crear ticket
+        Crear tiquet
       </h3>
       <div className="grid gap-6 md:grid-cols-[minmax(0,410px)_auto] md:items-center">
         <textarea
@@ -40,7 +40,7 @@ export const TicketingCreateForm = ({
           type="submit"
           disabled={isLoading}
         >
-          {isLoading ? "Creant..." : "Crear ticket"}
+          {isLoading ? "Creant..." : "Crear tiquet"}
         </button>
       </div>
       {error && <p className="mt-1 text-xs text-red-600">{error.message}</p>}
