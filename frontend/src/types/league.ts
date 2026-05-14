@@ -3,7 +3,6 @@ export type Liga = {
   user_id: number;
   username: string;
   points: number;
-  points_weekly: number;
   created_at: string;
   updated_at: string;
 };
