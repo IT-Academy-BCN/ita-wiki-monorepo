@@ -3,7 +3,7 @@ export type Liga = {
   user_id: number;
   username: string;
   points: number;
-  points_weekly?: number;
+  points_weekly: number;
   status: string;
   language: string;
   created_at: string;
@@ -13,7 +13,7 @@ export type Liga = {
 export type LigaResponse = Liga[];
 
 export type LeagueListProps = {
-  standings: Liga[];
+  standings: Omit<Liga, "points_weekly">[];
 };
 
 export type Ranking = {
