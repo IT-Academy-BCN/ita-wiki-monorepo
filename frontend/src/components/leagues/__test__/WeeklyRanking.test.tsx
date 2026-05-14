@@ -8,17 +8,6 @@ import { WeeklyRanking } from "../WeeklyRanking";
 vi.mock("../../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
 }));
-vi.mock("../../Leagues/StandingsTable/StandingsTable", () => ({
-  StandingsTable: () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Posició</th>
-        </tr>
-      </thead>
-    </table>
-  ),
-}));
 
 const mockRanking: [string, Omit<Ranking, "points_weekly">[]][] = [
   [
