@@ -84,8 +84,11 @@ class LigaFactorySeederTest extends TestCase
     public function test_liga_factory_status_is_valid(): void
     {
         $liga = Liga::factory()->create();
-
-        $this->assertContains($liga->status, \App\Enums\LigaStatusEnum::values());
+    
+        $this->assertContains(
+        $liga->status,
+        \App\Enums\LigaStatusEnum::cases()
+        );
     }
 
     public function test_liga_factory_league_id_is_an_integer(): void
