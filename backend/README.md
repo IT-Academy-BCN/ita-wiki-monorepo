@@ -102,3 +102,4 @@ Inbisat Naveed
 Hebe Stark
 Flavio De Souza
 Miguel Montaño
+Laurea Gregori
