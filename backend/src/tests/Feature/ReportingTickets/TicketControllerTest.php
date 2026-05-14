@@ -782,7 +782,7 @@ class TicketControllerTest extends TestCase{
         $this->assertTrue($ticket->canClose($creator));
     }
     /** @test */
-public function reopening_a_ticket_clears_closed_by_and_closed_at(): void
+    public function reopening_a_ticket_clears_closed_by_and_closed_at(): void
 {
     $admin  = $this->authenticateUserWithRole('admin');
     $ticket = Ticket::factory()->create([
