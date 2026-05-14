@@ -26,6 +26,34 @@ describe("addLeaguePoints", () => {
     vi.unstubAllGlobals();
   });
 
+  it("Should add league points", async () => {
+    const mockResponse = {
+      points: 5,
+      user_id: 1,
+    };
+
+    fetchMock.mockResolvedValueOnce({
+      json: async () => mockResponse,
+      ok: true,
+    });
+
+    const result = await addLeaguePoints(1);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://localhost:8000/ligas/1/points",
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer fake-token",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    expect(result).toEqual(mockResponse);
+  });
+
   it("Should throw an error when response is not ok", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: false,
