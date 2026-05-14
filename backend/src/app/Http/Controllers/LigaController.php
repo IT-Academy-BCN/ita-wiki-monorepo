@@ -12,6 +12,23 @@ use Illuminate\Http\Request;
 class LigaController extends Controller
 {
 
+    public function index()
+    {
+        $entries = Liga::with('user')
+            ->orderBy('points_weekly', 'desc')
+            ->get()
+            ->groupBy('league_id')
+            ->map(fn ($group) => $group->values()->map(fn ($entry, $index) => [
+                'position'      => $index + 1,
+                'user_id'       => $entry->user_id,
+                'username'      => $entry->user->github_user_name,
+                'points_weekly' => $entry->points_weekly,
+                'league_id'     => $entry->league_id,
+            ]));
+    
+        return response()->json($entries);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
