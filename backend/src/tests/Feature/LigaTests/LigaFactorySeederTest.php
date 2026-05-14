@@ -65,4 +65,33 @@ class LigaFactorySeederTest extends TestCase
 
         $this->assertGreaterThanOrEqual(5, Liga::count());
     }
+
+    public function test_liga_factory_points_weekly_are_within_valid_range(): void
+    {
+        $liga = Liga::factory()->create();
+
+        $this->assertGreaterThanOrEqual(0, $liga->points_weekly);
+        $this->assertLessThanOrEqual(100, $liga->points_weekly);
+    }
+
+    public function test_liga_factory_language_is_valid(): void
+    {
+        $liga = Liga::factory()->create();
+
+        $this->assertContains($liga->language, \App\Enums\LanguageEnum::values());
+    }
+
+    public function test_liga_factory_status_is_valid(): void
+    {
+        $liga = Liga::factory()->create();
+
+        $this->assertContains($liga->status, \App\Enums\LigaStatusEnum::values());
+    }
+
+    public function test_liga_factory_league_id_is_an_integer(): void
+    {
+        $liga = Liga::factory()->create();
+
+        $this->assertIsInt($liga->league_id);
+    }
 }
