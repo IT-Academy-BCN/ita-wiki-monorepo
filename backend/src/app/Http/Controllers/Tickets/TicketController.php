@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Tickets;
-
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
@@ -48,7 +49,7 @@ class TicketController extends Controller
                 'message' => 'Unauthorized to view this ticket',
             ], 403);
         }
-        
+
         return response()->json([
             'success' => true,
             'data' => $ticket
@@ -64,13 +65,15 @@ class TicketController extends Controller
         $data['affected_app'] = $data['affected_app'] ?? AffectedAppEnum::Other->value;
         $data['type'] = $data['type'] ?? TicketTypeEnum::Error->value;
         $data['affected_function'] = $data['affected_function'] ?? AffectedFunctionEnum::Other->value;
+        $data['status'] = TicketStatusEnum::Pending->value;
+        unset($data['priority']);
 
         $ticket = Ticket::create($data);
 
         return response()->json([
-        'success' => true,
-        'message' => 'The Ticket has been created correctly',
-        'data' => $ticket
+            'success' => true,
+            'message' => 'The Ticket has been created correctly',
+            'data' => $ticket
         ], 201);
     }
 
@@ -130,8 +133,8 @@ class TicketController extends Controller
         ], 200);
     }
 
-    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse{
-
+    public function updatePriority(UpdatePriorityRequest $request, $id): JsonResponse
+    {
         $user = auth()->user();
 
         if (!$user->hasAnyRole(['admin', 'superadmin'])) {
@@ -142,7 +145,6 @@ class TicketController extends Controller
         }
 
         $ticket = Ticket::findOrFail($id);
-        $this->ensureTicketOwnership($ticket);
 
         $ticket->update(['priority' => $request->validated()['priority']]);
 
@@ -153,8 +155,8 @@ class TicketController extends Controller
         ], 200);
     }
 
-    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse{
-
+    public function updateAssignee(AssignTicketRequest $request, $id): JsonResponse
+    {
         $user = auth()->user();
 
         if (!$user->hasAnyRole(['admin', 'superadmin'])) {
@@ -163,9 +165,8 @@ class TicketController extends Controller
                 'message' => 'Unauthorized to assign this ticket',
             ], 403);
         }
-        
+
         $ticket = Ticket::findOrFail($id);
-        $this->ensureTicketOwnership($ticket);
 
         $ticket->update(['assignee_id' => $request->validated()['assignee_id']]);
 
