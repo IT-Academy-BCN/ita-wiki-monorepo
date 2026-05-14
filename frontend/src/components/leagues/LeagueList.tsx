@@ -7,6 +7,8 @@ export const LeagueList = ({ standings }: LeagueListProps) => {
         <div className="grid grid-cols-[1fr_2fr_1fr] border-b-2 border-pink-600 px-4 py-3 text-sm font-bold text-slate-950">
           <div>Posició</div>
           <div>Nom</div>
+          <div>Estatus</div>
+          <div>Llenguatge</div>
           <div>Punts</div>
         </div>
 
@@ -18,6 +20,8 @@ export const LeagueList = ({ standings }: LeagueListProps) => {
           >
             <div>{index + 1}</div>
             <div>{standing.username}</div>
+            <div>{standing.status}</div>
+            <div>{standing.language}</div>
             <div className="font-bold">{standing.points}</div>
           </div>
         ))}

@@ -10,7 +10,8 @@ const mockStandings = [
     user_id: 101,
     username: "Júlia",
     points: 94,
-    points_weekly: 94,
+    status: "Junior developer",
+    language: "React",
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -32,6 +33,8 @@ describe("LeagueList", () => {
     expect(screen.getByText("94")).toBeInTheDocument();
     expect(screen.getByTestId("league-position-1")).toBeInTheDocument();
     expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("Junior developer")).toBeInTheDocument();
+    expect(screen.getByText("React")).toBeInTheDocument();
   });
 
   it("does not render participant positions when standings are empty", () => {
