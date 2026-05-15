@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { getLeagueRanking } from "../../../services/leagueService";
+import { getEachLeagueRanking } from "../../../services/leagueService";
 import type { Ranking } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
 
 vi.mock("../../../services/leagueService", () => ({
-  getLeagueRanking: vi.fn(),
+  getEachLeagueRanking: vi.fn(),
 }));
 
 const mockRanking: [string, Omit<Ranking, "points_weekly">[]][] = [
@@ -30,7 +30,7 @@ const mockRanking: [string, Omit<Ranking, "points_weekly">[]][] = [
 
 describe("WeeklyRanking", () => {
   it("renders the standings table after fetch", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+    vi.mocked(getEachLeagueRanking).mockResolvedValue(mockRanking);
     render(<WeeklyRanking />);
     await waitFor(() => {
       expect(screen.getByText("Lliga Or")).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe("WeeklyRanking", () => {
   });
 
   it("renders without crashing on fetch error", () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
+    vi.mocked(getEachLeagueRanking).mockRejectedValue(new Error("fail"));
     expect(() => render(<WeeklyRanking />)).not.toThrow();
   });
 });

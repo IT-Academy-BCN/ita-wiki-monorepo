@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLeagueRanking } from "../../../services/leagueService";
+import { getEachLeagueRanking } from "../../../services/leagueService";
 import type { Ranking } from "../../../types/league";
 import { LeagueList } from "../LeagueList/LeagueList";
 
@@ -8,7 +8,7 @@ export const WeeklyRanking = () => {
     [string, Omit<Ranking, "points_weekly">[]][]
   >([]);
   useEffect(() => {
-    getLeagueRanking()
+    getEachLeagueRanking()
       .then(setData)
       .catch(() => {});
   }, []);
