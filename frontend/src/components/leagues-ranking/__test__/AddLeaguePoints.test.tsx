@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { AddLeaguePoints } from "../AddLeaguePoints";
+import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
 
 describe("AddLeaguePoints", () => {
   it("enables the submit button when a username is selected", async () => {
