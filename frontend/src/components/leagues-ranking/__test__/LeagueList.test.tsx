@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { LeagueList } from "../LeagueList";
+import { LeagueList } from "../LeagueList/LeagueList";
 
 const mockStandings = [
   {
@@ -10,7 +10,7 @@ const mockStandings = [
     user_id: 101,
     username: "Júlia",
     points: 94,
-    weekly_points: 94,
+    points_weekly: 94,
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
