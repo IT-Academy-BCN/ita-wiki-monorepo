@@ -795,6 +795,30 @@ class TicketControllerTest extends TestCase{
 
         $this->assertTrue($ticket->canClose($creator));
     }
-}
+    
+    /** @test */
+    public function reopening_a_ticket_clears_closed_by_and_closed_at(): void
+    {
+        $admin  = $this->authenticateUserWithRole('admin');
+        $ticket = Ticket::factory()->create([
+            'code_connect_id' => $admin->id,
+            'status'          => 'closed',
+            'closed_by'       => $admin->id,
+            'closed_at'       => now(),
+        ]);
 
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'in_progress',
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('tickets', [
+            'id'        => $ticket->id,
+            'status'    => 'in_progress',
+            'closed_by' => null,
+            'closed_at' => null,
+        ]);
+    }
+}
 ?>
