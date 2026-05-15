@@ -42,12 +42,12 @@ export type Ticket = {
 };
 
 export type IntCreateTicket = {
+  description: string;
   name?: string;
   incident_date?: string;
   affected_app?: AffectedApp;
   type?: TicketType;
   affected_function?: AffectedFunction;
-  description: string;
 };
 
 export interface IntTicket extends IntCreateTicket {
