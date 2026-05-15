@@ -173,6 +173,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // ========== LIGA ENDPOINTS ==========
 
 // PUBLIC
+Route::get('/ligas', [LigaController::class, 'index'])->name('ligas.index');
 Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
 
 // PROTECTED
