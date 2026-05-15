@@ -8,7 +8,7 @@ describe("LeaguesPage", () => {
     render(<LeaguesPage />);
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: /lliga oro/i }),
+        screen.getByRole("heading", { name: /lliga or/i }),
       ).toBeInTheDocument();
     });
   });
@@ -26,7 +26,7 @@ describe("LeaguesPage", () => {
     fireEvent.click(screen.getByRole("button", { name: /lliga setmanal/i }));
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: /lliga oro/i }),
+        screen.getByRole("heading", { name: /lliga or/i }),
       ).toBeInTheDocument();
     });
   });

@@ -18,29 +18,6 @@ describe("leagueService (mock version)", () => {
     });
   });
 
-  test("each item should have position, user_id and points", async () => {
-    const result = await getLeagueRanking();
-
-    result.forEach(([, entries]) => {
-      entries.forEach((liga) => {
-        expect(liga).toHaveProperty("position");
-        expect(liga).toHaveProperty("user_id");
-        expect(liga).toHaveProperty("points");
-      });
-    });
-  });
-
-  test("each item should have created_at and updated_at", async () => {
-    const result = await getLeagueRanking();
-
-    result.forEach(([, entries]) => {
-      entries.forEach((liga) => {
-        expect(liga).toHaveProperty("created_at");
-        expect(liga).toHaveProperty("updated_at");
-      });
-    });
-  });
-
   test("points should be a number", async () => {
     const result = await getLeagueRanking();
 

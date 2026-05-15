@@ -13,7 +13,7 @@ export const WeeklyRanking = () => {
       .catch(() => {});
   }, []);
   const LEAGUE_LABELS: Record<string, string> = {
-    "1": "Oro",
+    "1": "Or",
     "2": "Plata",
     "3": "Bronze",
   };

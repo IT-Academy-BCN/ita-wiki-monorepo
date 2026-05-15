@@ -33,7 +33,7 @@ describe("WeeklyRanking", () => {
     vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
     render(<WeeklyRanking />);
     await waitFor(() => {
-      expect(screen.getByText("Lliga Oro")).toBeInTheDocument();
+      expect(screen.getByText("Lliga Or")).toBeInTheDocument();
       expect(screen.getByText("Posició")).toBeInTheDocument();
     });
   });
