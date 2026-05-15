@@ -31,7 +31,6 @@ const PendingRequests = ({
     void loadContributors();
   }, [loadContributors]);
 
-
   if (isLoading) return null;
 
   const isOwner = currentUserId === ownerId;
