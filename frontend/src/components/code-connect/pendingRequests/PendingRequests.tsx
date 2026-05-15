@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ApiContributor } from "../../../types/codeConnectTypes";
 import {
   fetchProjectContributors,
   updateContributorStatus,
-} from "../../../api/endPointCodeConnect";
+} from "../../../api/endPointContributors";
 
 interface PendingRequestsProps {
   projectId: number;
@@ -20,16 +20,17 @@ const PendingRequests = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
 
-  const loadContributors = async () => {
+  const loadContributors = useCallback(async () => {
     setIsLoading(true);
     const data = await fetchProjectContributors(projectId);
     setContributors(data);
     setIsLoading(false);
-  };
+  }, [projectId]);
 
   useEffect(() => {
     void loadContributors();
-  }, [projectId]);
+  }, [loadContributors]);
+
 
   if (isLoading) return null;
 
