@@ -27,12 +27,12 @@ class TicketFactory extends Factory
             'name' => fake()->sentence(3),
             'incident_date' => fake()->date(),
             'affected_app' => fake()->randomElement(AffectedAppEnum::values()),
-            'type' => fake()->randomElement(['error', 'suggestion']),
+            'type' => fake()->randomElement(TicketTypeEnum::values()),
             'affected_function' => fake()->randomElement(AffectedFunctionEnum::values()),
             'description' => fake()->paragraph(),
-            'status' => 'pending',
+            'status' => TicketStatusEnum::Pending->value,
             'priority' => fake()->randomElement(TicketPriorityEnum::values()),
         ];
-        
+
     }
 }
