@@ -1,4 +1,4 @@
-import type { LeagueListProps } from "../../types/league";
+import type { LeagueListProps } from "../../../types/league";
 
 export const LeagueList = ({ standings }: LeagueListProps) => {
   return (

@@ -15,7 +15,9 @@ type EndPoints =
   | "technical-tests"
   | "codeconnect"
   | "auth"
-  | "tickets";
+  | "tickets"
+  | "ligas"
+  | "ligas/ranking";
 
 const END_POINTS = {
   resources: {
@@ -62,6 +64,10 @@ const END_POINTS = {
   tickets: {
     get: "tickets" as EndPoints,
     post: "tickets" as EndPoints,
+  },
+  leagues: {
+    get: "ligas/ranking" as EndPoints,
+    addPoints: "ligas" as EndPoints,
   },
 };
 
