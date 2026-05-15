@@ -72,4 +72,14 @@ describe("GlobalRanking", () => {
 
     expect(() => render(<GlobalRanking />)).not.toThrow();
   });
+
+  it("renders the add point component", () => {
+    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+
+    render(<GlobalRanking />);
+
+    expect(
+      screen.getByRole("form", { name: /add league points/i }),
+    ).toBeInTheDocument();
+  });
 });
