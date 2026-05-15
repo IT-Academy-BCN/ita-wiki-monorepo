@@ -11,7 +11,15 @@ vi.mock("../../config", () => ({
 
 describe("fetchProjectContributors", () => {
   it("should return contributors on success", async () => {
-    const mockContributors = [{ id: 1, user_id: 101, programming_role: "Frontend Developer", status: "pending", user: { id: 101, name: "Júlia", email: "julia@test.com" } }];
+    const mockContributors = [
+      {
+        id: 1,
+        user_id: 101,
+        programming_role: "Frontend Developer",
+        status: "pending",
+        user: { id: 101, name: "Júlia", email: "julia@test.com" },
+      },
+    ];
     global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({ data: mockContributors }),
@@ -36,4 +44,3 @@ describe("updateContributorStatus", () => {
     expect(await updateContributorStatus(1, 42, "rejected")).toBe(false);
   });
 });
-
