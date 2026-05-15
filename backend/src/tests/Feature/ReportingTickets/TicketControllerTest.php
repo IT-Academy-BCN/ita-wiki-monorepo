@@ -210,18 +210,32 @@ class TicketControllerTest extends TestCase{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-
         $response = $this->actingAs($user)->postJson('/api/tickets', []);
 
-        $response->assertStatus(422)->assertJsonValidationErrors([
-            'name',
-            'incident_date',
-            'affected_app',
-            'type',
-            'affected_function',
-            'description',
-        ]);  
-        
+        $response->assertStatus(422)->assertJsonValidationErrors(['description']);
+    }
+
+    /** @test */
+    public function a_ticket_can_be_created_with_only_description(): void{
+
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'description' => 'Login fails on production',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+            'description' => 'Login fails on production',
+            'name' => 'Login fails on production',
+            'affected_app' => 'other',
+            'type' => 'error',
+            'affected_function' => 'other',
+            'incident_date' => now()->toDateString(),
+        ]);
     }
 
     /** @test */
