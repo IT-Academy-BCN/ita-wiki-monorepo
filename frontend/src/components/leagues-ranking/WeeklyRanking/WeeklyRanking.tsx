@@ -10,7 +10,7 @@ export const WeeklyRanking = () => {
   useEffect(() => {
     getLeagueRanking()
       .then(setData)
-      .catch(() => { });
+      .catch(() => {});
   }, []);
   const LEAGUE_LABELS: Record<string, string> = {
     "1": "Or",
