@@ -23,6 +23,8 @@ describe("LeagueList", () => {
 
     expect(screen.getByText("Posició")).toBeInTheDocument();
     expect(screen.getByText("Nom")).toBeInTheDocument();
+    expect(screen.getByText("Estatus")).toBeInTheDocument();
+    expect(screen.getByText("Llenguatge")).toBeInTheDocument();
     expect(screen.getByText("Punts")).toBeInTheDocument();
   });
 
