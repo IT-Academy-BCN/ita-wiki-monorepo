@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { renderHook, act, waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { useCreateTicketing } from "../useCreateTicketing";
 import { IntCreateTicket, IntTicket } from "../../types/ticketingTypes";
 
@@ -39,7 +39,6 @@ describe("useCreateTicketing", () => {
 
   it("should initialize with empty state", () => {
     const { result } = renderHook(() => useCreateTicketing());
-
     expect(result.current.ticketing).toEqual([]);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
@@ -91,14 +90,13 @@ describe("useCreateTicketing", () => {
     );
     const { result } = renderHook(() => useCreateTicketing());
 
-    void result.current.submitTicketing(mockTicketData);
-
-    await waitFor(() => {
-      expect(result.current.error?.message).toBe(
-        "Error 500: Internal Server Error",
-      );
+    await act(async () => {
+      await result.current.submitTicketing(mockTicketData).catch(() => {});
     });
 
+    expect(result.current.error?.message).toBe(
+      "Error 500: Internal Server Error",
+    );
     expect(result.current.ticketing).toEqual([]);
     expect(result.current.isLoading).toBe(false);
   });
@@ -109,14 +107,13 @@ describe("useCreateTicketing", () => {
     );
     const { result } = renderHook(() => useCreateTicketing());
 
-    void result.current.submitTicketing(mockTicketData);
-
-    await waitFor(() => {
-      expect(result.current.error).not.toBeNull();
+    await act(async () => {
+      await result.current.submitTicketing(mockTicketData).catch(() => {});
     });
 
-    mockCreateTicket.mockResolvedValueOnce(mockTicketResponse);
+    expect(result.current.error).not.toBeNull();
 
+    mockCreateTicket.mockResolvedValueOnce(mockTicketResponse);
     await act(async () => {
       await result.current.submitTicketing(mockTicketData);
     });
