@@ -172,6 +172,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // ========== LIGA ENDPOINTS ==========
 
+// PUBLIC
+Route::get('/ligas', [LigaController::class, 'index'])->name('ligas.index');
 Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
-Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
-Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
+
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
+    Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
+});
