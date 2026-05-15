@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getLeagueRanking } from "../../services/leagueService";
-import type { Ranking } from "../../types/league";
-import { LeagueList } from "./LeagueList";
+import { getLeagueRanking } from "../../../services/leagueService";
+import type { Ranking } from "../../../types/league";
+import { LeagueList } from "../LeagueList/LeagueList";
 
 export const WeeklyRanking = () => {
   const [data, setData] = useState<
@@ -10,7 +10,7 @@ export const WeeklyRanking = () => {
   useEffect(() => {
     getLeagueRanking()
       .then(setData)
-      .catch(() => {});
+      .catch(() => { });
   }, []);
   const LEAGUE_LABELS: Record<string, string> = {
     "1": "Or",
