@@ -13,13 +13,12 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
 }));
 
 describe("LeaguesPage", () => {
-  it("shows WeeklyRanking by default", async () => {
+  it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
-    await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { name: /lliga or/i }),
-      ).toBeInTheDocument();
-    });
+
+    expect(
+      screen.getByRole("heading", { name: /lliga setmanal/i }),
+    ).toBeInTheDocument();
   });
 
   it("switches to GlobalRanking on toggle", () => {
@@ -33,7 +32,8 @@ describe("LeaguesPage", () => {
       screen.getByRole("heading", { name: /classificació general/i }),
     ).toBeInTheDocument();
   });
-  it("switches back to WeeklyRanking on toggle from Global", async () => {
+
+  it("switches back to WeeklyRanking on toggle from Global", () => {
     render(<LeaguesPage />);
 
     fireEvent.click(
@@ -41,10 +41,9 @@ describe("LeaguesPage", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /lliga setmanal/i }));
-    await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { name: /lliga or/i }),
-      ).toBeInTheDocument();
-    });
+
+    expect(
+      screen.getByRole("heading", { name: /lliga setmanal/i }),
+    ).toBeInTheDocument();
   });
 });
