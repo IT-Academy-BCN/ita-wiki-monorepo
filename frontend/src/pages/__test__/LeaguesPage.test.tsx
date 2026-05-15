@@ -1,8 +1,16 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import LeaguesPage from "../LeaguesPage";
+
+vi.mock("../../components/leagues-ranking/WeeklyRanking/WeeklyRanking", () => ({
+  WeeklyRanking: () => <h1>Lliga setmanal</h1>,
+}));
+
+vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
+  GlobalRanking: () => <h1>Classificació general</h1>,
+}));
 
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
