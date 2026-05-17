@@ -6,7 +6,7 @@ import { useCreateTicketing } from "../hooks/useCreateTicketing";
 import type { IntCreateTicket } from "../types/ticketingTypes";
 
 const TicketingPage = (): JSX.Element => {
-  const { submitTicketing } = useCreateTicketing();
+  const { submitTicketing, isLoading, error } = useCreateTicketing();
 
   const handleCreateTicket = async (
     ticketData: IntCreateTicket,
@@ -22,7 +22,11 @@ const TicketingPage = (): JSX.Element => {
           Ticketing
         </h2>
 
-        <TicketingCreateForm onSubmit={handleCreateTicket} />
+        <TicketingCreateForm
+          onSubmit={handleCreateTicket}
+          isLoading={isLoading}
+          error={error}
+        />
       </Container>
     </>
   );

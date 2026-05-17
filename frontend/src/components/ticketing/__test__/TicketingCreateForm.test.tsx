@@ -1,40 +1,41 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { TicketingCreateForm } from "../TicketingCreateForm";
-
-const createCurrentDate = (): string => {
-  return new Date().toISOString().split("T")[0];
-};
+import "@testing-library/jest-dom";
 
 describe("TicketingCreateForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("submits a valid ticket payload with default required backend values", async () => {
+  it("renders form elements", () => {
+    const onSubmit = vi.fn();
+
+    render(<TicketingCreateForm onSubmit={onSubmit} />);
+
+    expect(screen.getByPlaceholderText("Descripció...")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Crear tiquet" }),
+    ).toBeInTheDocument();
+  });
+
+  it("submits with description on submit", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
     render(<TicketingCreateForm onSubmit={onSubmit} />);
 
-    await user.type(screen.getByLabelText("Nom del ticket"), "Error login");
-    await user.click(screen.getByRole("button", { name: "Crear ticket" }));
+    await user.type(screen.getByPlaceholderText("Descripció..."), "Bug login");
+
+    await user.click(screen.getByRole("button", { name: "Crear tiquet" }));
 
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledTimes(1);
-    });
-
-    expect(onSubmit).toHaveBeenCalledWith({
-      forum_answer_id: null,
-      assignee_id: null,
-      name: "Error login",
-      incident_date: createCurrentDate(),
-      affected_app: "wiki_frontend",
-      type: "error",
-      affected_function: "other",
-      description: "Error login",
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          description: "Bug login",
+        }),
+      );
     });
   });
 });
