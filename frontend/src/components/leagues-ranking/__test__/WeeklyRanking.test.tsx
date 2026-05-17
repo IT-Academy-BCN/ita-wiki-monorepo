@@ -2,12 +2,12 @@ import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { getLeagueRanking } from "../../../services/leagueService";
-import { WeeklyRanking } from "../WeeklyRanking";
+import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
 
 vi.mock("../../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
 }));
-vi.mock("../../Leagues/StandingsTable/StandingsTable", () => ({
+vi.mock("../StandingsTable/StandingsTable", () => ({
   StandingsTable: () => (
     <table>
       <thead>
