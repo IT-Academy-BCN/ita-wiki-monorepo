@@ -1,12 +1,14 @@
-import type { LigaResponse, Ranking } from "../types/league";
+import type { Ranking } from "../types/league";
 
-const mockData: LigaResponse = [
+const mockData: Omit<Ranking, "league_id">[] = [
   {
     position: 1,
     user_id: 101,
     username: "Júlia",
     points: 94,
     points_weekly: 94,
+    status: "Junior developer",
+    language: "React",
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -16,6 +18,8 @@ const mockData: LigaResponse = [
     username: "Marc",
     points: 88,
     points_weekly: 88,
+    status: "Junior developer",
+    language: "Java",
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -25,6 +29,8 @@ const mockData: LigaResponse = [
     username: "Laia",
     points: 75,
     points_weekly: 75,
+    status: "Junior developer",
+    language: "PHP",
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -76,7 +82,9 @@ const mockEachLeagueData: [string, Omit<Ranking, "points_weekly">[]][] = [
   ],
 ];
 
-export async function getLeagueRanking(): Promise<LigaResponse> {
+export async function getLeagueRanking(): Promise<
+  Omit<Ranking, "league_id">[]
+> {
   return Promise.resolve(mockData);
 }
 

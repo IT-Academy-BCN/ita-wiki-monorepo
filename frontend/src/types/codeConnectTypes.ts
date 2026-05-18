@@ -27,10 +27,12 @@ export interface Project {
 export interface ApiProjectContributor {
   name: string;
   programming_role: ProgrammingRole;
+  avatar_url: string | null;
 }
 
 export interface ApiProjectData {
   id: number;
+  user_id: number;
   contributors: ApiProjectContributor[];
   description?: string;
   language_backend: string;
@@ -38,6 +40,18 @@ export interface ApiProjectData {
   roadmap?: { task: string; done: boolean }[];
   time_duration: string;
   title: string;
+}
+
+export interface ApiContributor {
+  id: number;
+  user_id: number;
+  programming_role: string;
+  status: "pending" | "accepted" | "rejected";
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
 }
 
 export interface ApiProjectsResponse {
