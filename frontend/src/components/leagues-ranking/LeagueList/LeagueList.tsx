@@ -1,21 +1,35 @@
 import type { LeagueListProps } from "../../../types/league";
 
 export const LeagueList = ({ standings }: LeagueListProps) => {
+  const getStyle = (index: number) => {
+    const base =
+      "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";
+
+    const color =
+      standings.length > 3 && index < 3
+        ? "bg-green-100"
+        : standings.length > 6 && index >= standings.length - 3
+          ? "bg-red-100"
+          : "";
+
+    return `${base} ${color}`.trim();
+  };
+
   return (
     <article className="w-full max-w-3xl">
-      <div className="w-full">
-        <div className="grid grid-cols-6 border-b-2 border-pink-600 px-4 py-3 text-sm font-bold text-slate-950">
-          <div>Posició</div>
-          <div>Nom</div>
-          <div className="col-span-2">Estatus</div>
-          <div>Llenguatge</div>
-          <div>Punts</div>
-        </div>
+      <div className="grid grid-cols-6 px-4 py-3 text-sm text-center font-bold text-slate-950">
+        <div>Posició</div>
+        <div>Nom</div>
+        <div className="col-span-2">Estatus</div>
+        <div>Llenguatge</div>
+        <div>Punts</div>
+      </div>
 
+      <div className="border border-gray-400 bg-white rounded-xl overflow-hidden">
         {standings.map((standing, index) => (
           <div
             key={standing.username}
-            className="grid grid-cols-6 border-b border-slate-300 px-4 py-4 text-sm text-slate-950"
+            className={getStyle(index)}
             data-testid={`league-position-${index + 1}`}
           >
             <div>{index + 1}</div>
