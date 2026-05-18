@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchGlobalRanking } from "../api/endPointLeagues";
-import { Liga } from "../types/league";
+import type { Ranking } from "../types/league";
+import { groupByLeague } from "../utils/leagueUtils";
 
 export const useGlobalRanking = () => {
-  const [globalRanking, setGlobalRanking] = useState<Liga[]>([]);
+  const [globalRanking, setGlobalRanking] = useState<Ranking[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -21,5 +22,10 @@ export const useGlobalRanking = () => {
     return () => controller.abort();
   }, []);
 
-  return { globalRanking };
+  const leagueGroups = useMemo(
+    () => groupByLeague(globalRanking),
+    [globalRanking],
+  );
+
+  return { globalRanking, leagueGroups };
 };
