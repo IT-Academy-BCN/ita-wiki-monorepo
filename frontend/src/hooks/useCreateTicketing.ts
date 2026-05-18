@@ -9,7 +9,7 @@ export const useCreateTicketing = () => {
 
   const submitTicketing = async (
     ticketData: IntCreateTicket,
-  ): Promise<IntTicket | null> => {
+  ): Promise<IntTicket> => {
     setIsLoading(true);
     setError(null);
 
@@ -20,7 +20,7 @@ export const useCreateTicketing = () => {
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
-      return null;
+      throw error;
     } finally {
       setIsLoading(false);
     }
