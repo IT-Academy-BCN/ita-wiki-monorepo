@@ -17,31 +17,40 @@ class LigaStoreLigaTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => $user->id]);
+        $response = $this->actingAs($user, 'sanctum')->postJson('/api/ligas', ['user_id' => $user->id]);;
 
         $response->assertStatus(201);
-        $this->assertDatabaseHas('ligas', [
-            'user_id' => $user->id,
-            'points'  => 0,
-        ]);
+
+          $this->assertDatabaseHas('ligas', [
+             'user_id' => $user->id,
+             'points'  => 0,
+             'league_id' => 1,
+             'points_weekly' => 0,
+          ]);
+  
+        $response->assertJson(['user_id' => $user->id,'points' => 0,]);
     }
 
     public function test_store_returns_409_if_entry_already_exists(): void
     {
         $user = User::factory()->create();
-        Liga::create(['user_id' => $user->id, 'points' => 0]);
 
-        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => $user->id]);
+        Liga::create(['user_id' => $user->id,'points' => 0, 'league_id' => 1, 'points_weekly' => 0]);
+
+        $response = $this->actingAs($user, 'sanctum')->postJson('/api/ligas', ['user_id' => $user->id]);
 
         $response->assertStatus(409);
-        $response->assertJson(['error' => 'Entry already exists for this user']);
+
+        $response->assertJson([
+            'error' => 'Entry already exists for this user',
+        ]);
     }
 
     public function test_store_returns_422_when_user_id_is_missing(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/ligas', []);
+        $response = $this->actingAs($user, 'sanctum')->postJson('/api/ligas', []);
 
         $response->assertStatus(422);
     }
@@ -50,7 +59,7 @@ class LigaStoreLigaTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/ligas', ['user_id' => 99999]);
+        $response = $this->actingAs($user, 'sanctum')->postJson('/api/ligas', [  'user_id' => 99999,]);
 
         $response->assertStatus(422);
     }
