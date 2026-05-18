@@ -1,6 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fetchGlobalRanking } from "../../api/endPointLeagues";
 import { Ranking } from "../../types/league";
 import { groupByLeague } from "../../utils/leagueUtils";
+import { useGlobalRanking } from "../useGlobalRanking";
+
+vi.mock("../../api/endPointLeagues", () => ({
+  fetchGlobalRanking: vi.fn(),
+}));
 
 const mockData: Ranking[] = [
   {
@@ -41,12 +48,28 @@ const mockData: Ranking[] = [
   },
 ];
 
-describe("groupByLeague", () => {
+describe("useGlobalRanking", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns ranking when API success=true", async () => {
+    vi.mocked(fetchGlobalRanking).mockResolvedValueOnce(mockData);
+    const { result } = renderHook(() => useGlobalRanking());
+    await waitFor(() => {
+      expect(fetchGlobalRanking).toHaveBeenCalledTimes(1);
+      expect(result.current.globalRanking).toEqual(mockData);
+    });
+  });
+
   it("groups entries by league_id", () => {
     const result = groupByLeague(mockData);
     expect(result).toHaveLength(2);
   });
-
   it("converts weekly points into points (so the same List component can process it) and removes the weeklu_point property", () => {
     const result = groupByLeague(mockData);
     const league1 = result.find(([id]) => id === "1");
@@ -54,6 +77,7 @@ describe("groupByLeague", () => {
     expect(league1?.[1][0].points).toBe(30);
     expect(league1?.[0]).not.toHaveProperty("points_weekly");
   });
+
   it("preserves all other fields", () => {
     const result = groupByLeague(mockData);
     const league2 = result.find(([id]) => id === "2");
@@ -63,6 +87,8 @@ describe("groupByLeague", () => {
       league_id: 2,
       status: "Junior developer",
       language: "React",
+      created_at: "2026-04-24T00:00:00Z",
+      updated_at: "2026-04-24T00:00:00Z",
     });
   });
 });
