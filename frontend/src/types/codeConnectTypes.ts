@@ -27,6 +27,7 @@ export interface Project {
 export interface ApiProjectContributor {
   name: string;
   programming_role: ProgrammingRole;
+  avatar_url: string | null;
 }
 
 export interface ApiProjectData {
@@ -52,6 +53,7 @@ export interface ApiContributor {
     email: string;
   };
 }
+
 export interface ApiProjectsResponse {
   success: boolean;
   data: ApiProjectData[];
