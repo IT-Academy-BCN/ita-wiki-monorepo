@@ -67,6 +67,7 @@ const END_POINTS = {
   },
   leagues: {
     get: "ligas/ranking" as EndPoints,
+    post: "ligas" as EndPoints,
     addPoints: "ligas" as EndPoints,
   },
 };
