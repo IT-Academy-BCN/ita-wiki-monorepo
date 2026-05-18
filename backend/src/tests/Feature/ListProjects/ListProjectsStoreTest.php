@@ -344,6 +344,8 @@ class ListProjectsStoreTest extends TestCase
             'time_duration' => '1 mes',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
             'programming_role' => 'Backend Developer',
         ], $overrides);
     }
@@ -373,5 +375,29 @@ class ListProjectsStoreTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['roadmap']);
+    }
+
+    public function test_start_date_is_required(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $payload = $this->validProjectPayload();
+        unset($payload['start_date']);
+        $response = $this->postJson('/api/codeconnect/', $payload);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['start_date']);
+    }
+
+    public function test_end_date_is_required(): void
+    {
+        Sanctum::actingAs($this->userOne);
+
+        $payload = $this->validProjectPayload();
+        unset($payload['end_date']);
+        $response = $this->postJson('/api/codeconnect/', $payload);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['end_date']);
     }
 }
