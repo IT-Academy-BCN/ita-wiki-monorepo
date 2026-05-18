@@ -14,7 +14,6 @@ class LigaAddPointsTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
-    protected Liga $ligaEntry;
 
     public function setUp(): void
     {
@@ -22,43 +21,52 @@ class LigaAddPointsTest extends TestCase
 
         $this->user = User::factory()->create();
 
-        $this->ligaEntry = Liga::create([
-            'user_id' => $this->user->id,
-            'points'  => 0,
-        ]);
+        $this->actingAs($this->user, 'sanctum');
     }
 
-     
     public function test_put_increments_points_by_5(): void
     {
-        
-        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
+        Liga::create([
+            'user_id' => $this->user->id,
+            'points' => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $response = $this->putJson("/api/ligas/{$this->user->id}/points");
 
         $response->assertStatus(200);
+
         $response->assertJson([
             'user_id' => $this->user->id,
             'points'  => 5,
+            'points_weekly' => 5,
         ]);
     }
 
-     public function test_put_three_times_gives_15_points(): void
+    public function test_put_three_times_gives_15_points(): void
     {
-        
-        $this->putJson('/api/ligas/' . $this->user->id . '/points');
-        $this->putJson('/api/ligas/' . $this->user->id . '/points');
-        $response = $this->putJson('/api/ligas/' . $this->user->id . '/points');
+        Liga::create([
+            'user_id' => $this->user->id,
+            'points' => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $this->putJson("/api/ligas/{$this->user->id}/points");
+        $this->putJson("/api/ligas/{$this->user->id}/points");
+
+        $response = $this->putJson("/api/ligas/{$this->user->id}/points");
 
         $response->assertStatus(200);
+
         $response->assertJson([
             'user_id' => $this->user->id,
             'points'  => 15,
+            'points_weekly' => 15,
         ]);
     }
 
-
-     public function test_put_returns_404_for_unknown_user(): void
+    public function test_put_returns_404_for_unknown_user(): void
     {
-        
         $response = $this->putJson('/api/ligas/99999/points');
 
         $response->assertStatus(404);
@@ -68,11 +76,12 @@ class LigaAddPointsTest extends TestCase
     {
         $userWithoutLiga = User::factory()->create();
 
-        $response = $this->putJson('/api/ligas/' . $userWithoutLiga->id . '/points');
+        $response = $this->putJson("/api/ligas/{$userWithoutLiga->id}/points");
 
         $response->assertStatus(403);
-        $response->assertJson(['message' => 'User has not opted in to the liga']);
+
+        $response->assertJson([
+            'message' => 'User has not opted in to the liga'
+        ]);
     }
-
 }
-

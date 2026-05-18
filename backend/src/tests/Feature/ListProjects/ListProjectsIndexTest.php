@@ -35,7 +35,8 @@ class ListProjectsIndexTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
             'description' => 'Project description text',
             'roadmap' => [['task' => 'Setup project', 'done' => true]],
-
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
         ]);
 
         $this->projectTwo = ListProjects::factory()->create([
@@ -119,6 +120,8 @@ class ListProjectsIndexTest extends TestCase
         $response->assertJsonFragment([
             'user_id' => $this->projectOne->user_id,
             'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
             'dev_front_number' => $this->projectOne->dev_front_number,
             'dev_back_number' => $this->projectOne->dev_back_number,
         ]);

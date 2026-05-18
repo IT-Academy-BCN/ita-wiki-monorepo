@@ -15,11 +15,15 @@ class ListProjects extends Model
     protected $table = 'list_projects';
     protected $casts = [
         'roadmap' => 'array',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
     protected $fillable = [
         'user_id',
         'title',
         'limit_date_inscription',
+        'start_date',
+        'end_date',
         'dev_front_number',
         'dev_back_number',
         'time_duration',
