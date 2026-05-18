@@ -81,6 +81,8 @@ class ListProjectsController extends Controller
                 'description' => $project->description,
                 'roadmap' => $project->roadmap,
                 'limit_date_inscription' => $project->limit_date_inscription,
+                'start_date' => $project->start_date?->format('Y-m-d'),
+                'end_date' => $project->end_date?->format('Y-m-d'),
                 'dev_front_number' => $project->dev_front_number,
                 'dev_back_number' => $project->dev_back_number,
                 'owner' => $this->formatOwner($project->user),
@@ -88,6 +90,7 @@ class ListProjectsController extends Controller
                     return [
                         'name' => $contributor->user->name,
                         'programming_role' => $contributor->programming_role,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ];
                 }),
             ];
@@ -173,13 +176,16 @@ class ListProjectsController extends Controller
             'description' => $project->description,
             'roadmap' => $project->roadmap,
             'limit_date_inscription' => $project->limit_date_inscription,
+            'start_date' => $project->start_date?->format('Y-m-d'),
+            'end_date' => $project->end_date?->format('Y-m-d'),
             'dev_front_number' => $project->dev_front_number,
             'dev_back_number' => $project->dev_back_number,
             'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
                     'name' => $contributor->user->name,
-                    'programming_role' => $contributor->programming_role
+                    'programming_role' => $contributor->programming_role,
+                    'avatar_url' => $contributor->user->avatar_url,
                 ];
             }),
         ];
@@ -600,6 +606,7 @@ class ListProjectsController extends Controller
                         'id' => $contributor->user->id,
                         'name' => $contributor->user->name,
                         'email' => $contributor->user->email,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ],
                 ];
             });
