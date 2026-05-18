@@ -5,20 +5,15 @@ cd /var/www/html
 
 echo "=== ENTRYPOINT START ==="
 
-if [ ! -f .env ]; then
-    echo "[INFO] .env not found, using .env.dev as base"
-    if [ -f .env.dev ]; then
-        cp .env.dev .env
-    else
-        echo "[ERROR] .env.dev not found in /var/www/html"
-        exit 1
-    fi
+if [[ ! -f ".env" ]]; then
+    touch .env
 fi
 
-echo "Loading environment variables from .env..."
-if [ -f .env ]; then
-    export $(grep -v '^[#[:space:]]' .env | xargs)
+if [[ -z "$APP_ENV" ]]; then
+    echo "[ERROR] APP_ENV is not defined"
+    exit 1
 fi
+
 
 echo "APP_ENV is set to: '$APP_ENV'"
 
@@ -43,9 +38,6 @@ if [ -z "$APP_KEY" ]; then
     echo "APP_KEY is empty or not set. Generating application key..."
     php artisan key:generate --force
 
-        if [ -f .env ]; then
-        export $(grep -v '^[#[:space:]]' .env | xargs)
-    fi
 else
     echo "APP_KEY is already set. Skipping key:generate."
 fi
