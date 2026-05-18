@@ -22,6 +22,6 @@ describe("TicketingPage", () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByRole("button", { name: "Crear ticket" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Crear tiquet" })).toBeTruthy();
   });
 });
