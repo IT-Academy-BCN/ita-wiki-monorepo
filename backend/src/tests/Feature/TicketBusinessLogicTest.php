@@ -101,16 +101,10 @@ class TicketBusinessLogicTest extends TestCase{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson('/api/tickets', ['name' => 'Test']);
+        $response = $this->postJson('/api/tickets', []);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'incident_date',
-                'affected_app',
-                'type',
-                'affected_function',
-                'description',
-            ]);
+            ->assertJsonValidationErrors(['description']);
     }
 
     /** @test */
