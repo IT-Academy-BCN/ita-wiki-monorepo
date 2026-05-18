@@ -1,10 +1,9 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { GlobalRanking } from "../GlobalRanking/GlobalRanking";
 
 import { getLeagueRanking } from "../../../services/leagueService";
-
-import { GlobalRanking } from "../GlobalRanking/GlobalRanking";
 
 vi.mock("../../../services/leagueService", () => ({
   getLeagueRanking: vi.fn(),
@@ -72,5 +71,15 @@ describe("GlobalRanking", () => {
     vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
 
     expect(() => render(<GlobalRanking />)).not.toThrow();
+  });
+
+  it("renders the add point component", () => {
+    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+
+    render(<GlobalRanking />);
+
+    expect(
+      screen.getByRole("form", { name: /add league points/i }),
+    ).toBeInTheDocument();
   });
 });
