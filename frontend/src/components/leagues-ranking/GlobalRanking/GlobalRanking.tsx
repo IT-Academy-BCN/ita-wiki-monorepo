@@ -1,21 +1,13 @@
-import { useEffect, useState } from "react";
-import { getLeagueRanking } from "../../../services/leagueService";
-import type { Ranking } from "../../../types/league";
+import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
 import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const GlobalRanking = () => {
-  const [data, setData] = useState<Omit<Ranking, "league_id">[]>([]);
-
-  useEffect(() => {
-    getLeagueRanking()
-      .then(setData)
-      .catch(() => {});
-  }, []);
+  const { globalRanking } = useGlobalRanking();
 
   return (
     <section>
-      <LeagueList standings={data} />
+      <LeagueList standings={globalRanking} />
       <AddLeaguePoints />
     </section>
   );
