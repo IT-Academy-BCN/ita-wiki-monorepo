@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+
 import { getLeagueRanking } from "../../../services/leagueService";
+
+import { LeagueList } from "../LeagueList/LeagueList";
 import type { Ranking } from "../../../types/league";
 import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
-import { LeagueList } from "../LeagueList/LeagueList";
 
 export const GlobalRanking = () => {
   const [data, setData] = useState<Omit<Ranking, "league_id">[]>([]);
@@ -16,7 +18,7 @@ export const GlobalRanking = () => {
   return (
     <section>
       <LeagueList standings={data} />
-      <AddLeaguePoints />
+      <AddLeaguePoints users={data} />
     </section>
   );
 };
