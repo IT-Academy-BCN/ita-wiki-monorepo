@@ -28,18 +28,19 @@ class LigaController extends Controller
     }
 
     public function ranking() {
-        $entries = Liga::with('user')
-            ->orderBy('points', 'desc')
-            ->get()
-            ->values()
-            ->map(fn ($entry, $index) => [
-                'position'   => $index + 1,
-                'user_id'    => $entry->user_id,
-                'points'     => $entry->points,
-                'username'   => $entry->user->github_user_name,
-                'created_at' => $entry->created_at,
-                'updated_at' => $entry->updated_at,
-            ]);
+    $entries = Liga::with('user')
+        ->orderBy('points', 'desc')
+        ->get()
+        ->values()
+        ->map(fn ($entry, $index) => [
+            'position'   => $index + 1,
+            'user_id'    => $entry->user_id,
+            'points'     => $entry->points,
+            'username'   => $entry->user->github_user_name,
+            'league_id'  => $entry->league_id,
+            'created_at' => $entry->created_at,
+            'updated_at' => $entry->updated_at,
+        ]);
 
         return response()->json($entries);
     }
