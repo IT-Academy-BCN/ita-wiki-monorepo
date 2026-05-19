@@ -1,12 +1,11 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { fetchGlobalRanking } from "../../../api/endPointLeagues";
 import { GlobalRanking } from "../GlobalRanking/GlobalRanking";
 
-import { getLeagueRanking } from "../../../services/leagueService";
-
-vi.mock("../../../services/leagueService", () => ({
-  getLeagueRanking: vi.fn(),
+vi.mock("../../../api/endPointLeagues", () => ({
+  fetchGlobalRanking: vi.fn(),
 }));
 
 vi.mock("../LeagueList/LeagueList", () => ({
@@ -48,6 +47,9 @@ const mockRanking = [
     username: "Júlia",
     points: 94,
     points_weekly: 94,
+    status: "Junior developer",
+    language: "React",
+    league_id: 1,
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -55,7 +57,7 @@ const mockRanking = [
 
 describe("GlobalRanking", () => {
   it("renders the league list after fetch", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
@@ -68,7 +70,7 @@ describe("GlobalRanking", () => {
   });
 
   it("renders AddLeaguePoints", () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue([]);
 
     render(<GlobalRanking />);
 
@@ -78,7 +80,7 @@ describe("GlobalRanking", () => {
   });
 
   it("renders AddLeaguePoints with ranking users", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
@@ -92,13 +94,13 @@ describe("GlobalRanking", () => {
   });
 
   it("renders without crashing on fetch error", () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(new Error("fail"));
 
     expect(() => render(<GlobalRanking />)).not.toThrow();
   });
 
   it("renders the add point component", () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
