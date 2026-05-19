@@ -32,7 +32,6 @@ const TicketingPage = (): JSX.Element => {
           isLoading={isLoading}
           error={errorMessage}
         />
-        {/* TODO: <TicketStatusForm /> */}
       </Container>
     </>
   );

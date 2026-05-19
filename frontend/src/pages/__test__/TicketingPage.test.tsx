@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
+import type { TicketListProps } from "../../types/ticketingTypes";
 
 const mockSubmitTicketing = vi.hoisted(() => vi.fn());
 
@@ -10,8 +11,7 @@ vi.mock("../../hooks/useTicketingGetAll");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock("../../hooks/useCreateTicketing", () => ({ useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }) }));
 vi.mock("../../components/tickets/TicketList", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: ({ isLoading, error }: any) => {
+  default: ({ isLoading, error }: TicketListProps) => {
     if (isLoading) return <p>Carregant tickets...</p>;
     if (error) return <p>{error}</p>;
     return <div data-testid="ticket-list" />;
