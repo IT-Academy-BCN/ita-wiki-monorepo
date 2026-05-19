@@ -1,12 +1,11 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { fetchGlobalRanking } from "../../../api/endPointLeagues";
 import { GlobalRanking } from "../GlobalRanking/GlobalRanking";
 
-import { getLeagueRanking } from "../../../services/leagueService";
-
-vi.mock("../../../services/leagueService", () => ({
-  getLeagueRanking: vi.fn(),
+vi.mock("../../../api/endPointLeagues", () => ({
+  fetchGlobalRanking: vi.fn(),
 }));
 
 vi.mock("../LeagueList/LeagueList", () => ({
@@ -28,7 +27,17 @@ vi.mock("../LeagueList/LeagueList", () => ({
 }));
 
 vi.mock("../AddLeaguePoints/AddLeaguePoints", () => ({
-  AddLeaguePoints: () => <form aria-label="add league points" />,
+  AddLeaguePoints: ({
+    users,
+  }: {
+    users: { user_id: number; username: string }[];
+  }) => (
+    <form aria-label="add league points">
+      {users.map((user) => (
+        <span key={user.user_id}>{user.username}</span>
+      ))}
+    </form>
+  ),
 }));
 
 const mockRanking = [
@@ -38,6 +47,9 @@ const mockRanking = [
     username: "Júlia",
     points: 94,
     points_weekly: 94,
+    status: "Junior developer",
+    language: "React",
+    league_id: 1,
     created_at: "2026-04-24T00:00:00Z",
     updated_at: "2026-04-24T00:00:00Z",
   },
@@ -45,7 +57,7 @@ const mockRanking = [
 
 describe("GlobalRanking", () => {
   it("renders the league list after fetch", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
@@ -53,12 +65,12 @@ describe("GlobalRanking", () => {
       expect(screen.getByText("Posició")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Júlia")).toBeInTheDocument();
+    expect(screen.getAllByText("Júlia")).toHaveLength(2);
     expect(screen.getByText("94")).toBeInTheDocument();
   });
 
   it("renders AddLeaguePoints", () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue([]);
 
     render(<GlobalRanking />);
 
@@ -67,14 +79,28 @@ describe("GlobalRanking", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders AddLeaguePoints with ranking users", async () => {
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
+
+    render(<GlobalRanking />);
+
+    expect(
+      screen.getByRole("form", { name: /add league points/i }),
+    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Júlia")).toHaveLength(2);
+    });
+  });
+
   it("renders without crashing on fetch error", () => {
-    vi.mocked(getLeagueRanking).mockRejectedValue(new Error("fail"));
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(new Error("fail"));
 
     expect(() => render(<GlobalRanking />)).not.toThrow();
   });
 
   it("renders the add point component", () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue([]);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
