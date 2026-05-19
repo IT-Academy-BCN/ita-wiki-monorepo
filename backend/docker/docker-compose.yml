@@ -8,7 +8,9 @@ services:
             - "8000:80"
         volumes:
             - ../src:/var/www/html/src
-            - ../.env.docker:/var/www/html/.env.docker:ro
+        env_file:
+            - path: ./.env
+              required: false
         depends_on:
             - mysql
         networks:
