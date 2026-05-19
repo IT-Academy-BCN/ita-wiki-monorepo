@@ -80,7 +80,7 @@ describe("GlobalRanking", () => {
   });
 
   it("renders AddLeaguePoints with ranking users", async () => {
-    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
 
     render(<GlobalRanking />);
 
