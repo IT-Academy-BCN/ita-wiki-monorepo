@@ -1,8 +1,8 @@
-import PageTitle from "../components/ui/PageTitle";
-import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
+import { useParams } from "react-router";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
-import { useParams } from "react-router";
+import PageTitle from "../components/ui/PageTitle";
+import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
 import { displayLanguageIcon } from "../utils/iconUtils";
 
 const CodeConnectDetails = () => {
@@ -38,12 +38,18 @@ const CodeConnectDetails = () => {
                 {codeConnectProject.data?.description ||
                   "Aquesta informació no està disponible a la base de dades."}
               </p>
-
               <h3 className="text-[22px] font-extrabold mb-5">Roadmap:</h3>
-              <p className="text-[16px]">
-                {codeConnectProject.data?.roadmap ||
-                  "Aquesta informació no està disponible a la base de dades."}
-              </p>
+              {codeConnectProject?.data?.roadmap?.length ? (
+                <>
+                  <ul>
+                    {codeConnectProject.data.roadmap.map((task, index) => (
+                      <li key={index}>{task.task}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                "Aquesta informació no està disponible a la base de dades."
+              )}
             </div>
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
