@@ -9,7 +9,9 @@ const mockSubmitTicketing = vi.hoisted(() => vi.fn());
 
 vi.mock("../../hooks/useTicketingGetAll");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-vi.mock("../../hooks/useCreateTicketing", () => ({ useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }) }));
+vi.mock("../../hooks/useCreateTicketing", () => ({
+  useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
+}));
 vi.mock("../../components/tickets/TicketList", () => ({
   default: ({ isLoading, error }: TicketListProps) => {
     if (isLoading) return <p>Carregant tickets...</p>;
@@ -18,11 +20,21 @@ vi.mock("../../components/tickets/TicketList", () => ({
   },
 }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-vi.mock("../../components/ticketing/TicketingCreateForm", () => ({ TicketingCreateForm: ({ onSubmit }: any) => <button onClick={() => onSubmit({})}>Crear ticket</button> }));
+vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
+  TicketingCreateForm: ({ onSubmit }: any) => (
+    <button onClick={() => onSubmit({})}>Crear ticket</button>
+  ),
+}));
 
 const mockHook = vi.mocked(useTicketingGetAll);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const hookReturn = (o: any = {}) => ({ tickets: [], isLoading: false, errorMessage: null, refetch: vi.fn(), ...o });
+const hookReturn = (o: any = {}) => ({
+  tickets: [],
+  isLoading: false,
+  errorMessage: null,
+  refetch: vi.fn(),
+  ...o,
+});
 
 describe("TicketingPage", () => {
   beforeEach(() => mockHook.mockReturnValue(hookReturn()));
