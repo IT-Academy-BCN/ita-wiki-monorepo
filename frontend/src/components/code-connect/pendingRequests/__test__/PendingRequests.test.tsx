@@ -30,8 +30,12 @@ describe("PendingRequests", () => {
     render(<PendingRequests projectId={1} ownerId={99} currentUserId={99} />);
     expect(await screen.findByText("[Anna]")).toBeInTheDocument();
     expect(screen.getByText("Frontend Developer")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Acceptar" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Rebutjar" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Acceptar" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Rebutjar" }),
+    ).toBeInTheDocument();
   });
 
   it("calls updateContributorStatus with accepted when clicking Acceptar", async () => {
