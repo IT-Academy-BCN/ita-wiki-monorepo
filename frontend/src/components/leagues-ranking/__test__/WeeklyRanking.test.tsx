@@ -18,7 +18,7 @@ const mockLeagueGroups: [string, Omit<Ranking, "points_weekly">[]][] = [
         user_id: 101,
         username: "Júlia",
         points: 94,
-        status: "Junior developer",
+        status: "Junior Coder",
         language: "React",
         created_at: "2026-04-24T00:00:00Z",
         updated_at: "2026-04-24T00:00:00Z",
