@@ -42,12 +42,12 @@ export type Ticket = {
 };
 
 export type IntCreateTicket = {
-  name: string;
-  incident_date: string;
-  affected_app?: AffectedApp;
-  type: TicketType;
-  affected_function?: AffectedFunction;
   description: string;
+  name?: string;
+  incident_date?: string;
+  affected_app?: AffectedApp;
+  type?: TicketType;
+  affected_function?: AffectedFunction;
 };
 
 export interface IntTicket extends IntCreateTicket {
@@ -62,7 +62,7 @@ export interface IntTicket extends IntCreateTicket {
 }
 
 export type TicketListProps = {
-  tickets: Ticket[];
+  tickets: ApiTicketData[];
   isLoading?: boolean;
   error?: string | null;
 };
