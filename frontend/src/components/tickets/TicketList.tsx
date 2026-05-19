@@ -2,7 +2,6 @@ import type {
   TicketListProps,
   TicketPriority,
   TicketStatus,
-  TicketType,
 } from "../../types/ticketingTypes";
 
 const formatDate = (date: string) => {
@@ -29,21 +28,11 @@ const priorityLabels: Record<TicketPriority, string> = {
 };
 
 const statusLabels: Record<TicketStatus, string> = {
-  pending: "Pendent",
+  pending: "Nou",
   in_progress: "En progrés",
   blocked: "Bloquejat",
-  ready: "Preparat",
+  ready: "Fet",
   closed: "Tancat",
-};
-
-const typeLabels: Record<TicketType, string> = {
-  error: "Error",
-  suggestion: "Suggeriment",
-};
-
-const typeColors: Record<TicketType, string> = {
-  error: "text-red-600",
-  suggestion: "text-blue-600",
 };
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
@@ -71,17 +60,13 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
       <div role="table" className="w-full">
         <div
           role="row"
-          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
+          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
         >
           <div role="columnheader">ID</div>
-          <div role="columnheader">Nom</div>
-          <div role="columnheader">Tipus</div>
+          <div role="columnheader">Descripció</div>
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
-          <div role="columnheader" className="sr-only">
-            Accions
-          </div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">
@@ -89,7 +74,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
             <div
               key={ticket.id}
               role="row"
-              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
             >
               <div role="cell" className="font-semibold">
                 {String(ticket.id).padStart(6, "0")}
@@ -97,13 +82,6 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
 
               <div role="cell" className="truncate">
                 {ticket.name}
-              </div>
-
-              <div
-                role="cell"
-                className={`font-medium ${typeColors[ticket.type]}`}
-              >
-                {typeLabels[ticket.type]}
               </div>
 
               <div role="cell">
@@ -117,12 +95,6 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
                 className={`font-bold ${priorityColors[ticket.priority ?? "low"] ?? "text-foreground"}`}
               >
                 {priorityLabels[ticket.priority ?? "low"]}
-              </div>
-
-              <div role="cell">
-                <button className="text-sm text-primary hover:underline">
-                  Accions
-                </button>
               </div>
             </div>
           ))}

@@ -84,10 +84,10 @@ describe("TicketList", () => {
   it("renders ticket status labels in catalan", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
-    expect(screen.getByText("Pendent")).toBeInTheDocument();
+    expect(screen.getByText("Nou")).toBeInTheDocument();
     expect(screen.getByText("En progrés")).toBeInTheDocument();
     expect(screen.getByText("Bloquejat")).toBeInTheDocument();
-    expect(screen.getByText("Preparat")).toBeInTheDocument();
+    expect(screen.getByText("Fet")).toBeInTheDocument();
   });
 
   it("applies correct color class depending on priority", () => {
@@ -99,11 +99,22 @@ describe("TicketList", () => {
     expect(screen.getByText("Baixa")).toHaveClass("text-emerald-600");
   });
 
-  it("renders one action button per ticket", () => {
+  it("renders Descripció column header", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
 
-    expect(screen.getAllByRole("button", { name: /accions/i })).toHaveLength(
-      mockTickets.length,
+    expect(screen.getByText("Descripció")).toBeInTheDocument();
+    expect(screen.queryByText("Tipus")).not.toBeInTheDocument();
+  });
+
+  it("handles priority null without crash", () => {
+    const ticketWithNullPriority = [{ ...mockTickets[0], priority: null }];
+    render(
+      <TicketList
+        tickets={ticketWithNullPriority}
+        isLoading={false}
+        error={null}
+      />,
     );
+    expect(screen.getByText("Baixa")).toBeInTheDocument();
   });
 });
