@@ -1,18 +1,36 @@
 import { FormEvent, JSX, useState } from "react";
 
-type AddLeaguePointsProps = {
-  usernames?: string[];
+import { addLeaguePoints } from "../../../api/endPointLeague";
+import { useAddLeaguePoints } from "../../../hooks/useAddLeaguePoints";
+
+type AddLeaguePointsUser = {
+  user_id: number;
+  username: string;
 };
 
-const defaultUsernames = ["Jordi", "Laia", "Marc"];
+type AddLeaguePointsProps = {
+  users: AddLeaguePointsUser[];
+};
 
 export const AddLeaguePoints = ({
-  usernames = defaultUsernames,
+  users,
 }: AddLeaguePointsProps): JSX.Element => {
   const [selectedUsername, setSelectedUsername] = useState<string>("");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const { addPoints, error, isLoading } = useAddLeaguePoints({
+    addLeaguePoints,
+  });
+
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
+
+    if (!selectedUsername) {
+      return;
+    }
+
+    await addPoints(Number(selectedUsername));
     setSelectedUsername("");
   };
 
@@ -28,21 +46,23 @@ export const AddLeaguePoints = ({
         >
           <option value="">Username, user ID...</option>
 
-          {usernames.map((username) => (
-            <option key={username} value={username}>
-              {username}
+          {users.map((user) => (
+            <option key={user.user_id} value={user.user_id}>
+              {user.username}
             </option>
           ))}
         </select>
 
         <button
           className="w-fit bg-[#B91879] px-5 py-3 text-xs font-bold uppercase text-white hover:shadow-md disabled:cursor-not-allowed"
-          disabled={!selectedUsername}
+          disabled={!selectedUsername || isLoading}
           type="submit"
         >
-          Sumar punts
+          {isLoading ? "Sumant..." : "Sumar punts"}
         </button>
       </div>
+
+      {error && <p>{error}</p>}
     </form>
   );
 };

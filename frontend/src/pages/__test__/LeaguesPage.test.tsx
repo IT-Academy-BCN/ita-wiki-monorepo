@@ -29,8 +29,8 @@ describe("LeaguesPage", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: /classificació general/i }),
-    ).toBeInTheDocument();
+      screen.getByRole("button", { name: /classificació general/i }),
+    ).toHaveAttribute("aria-pressed", "true");
   });
 
   it("switches back to WeeklyRanking on toggle from Global", () => {

@@ -28,7 +28,17 @@ vi.mock("../LeagueList/LeagueList", () => ({
 }));
 
 vi.mock("../AddLeaguePoints/AddLeaguePoints", () => ({
-  AddLeaguePoints: () => <form aria-label="add league points" />,
+  AddLeaguePoints: ({
+    users,
+  }: {
+    users: { user_id: number; username: string }[];
+  }) => (
+    <form aria-label="add league points">
+      {users.map((user) => (
+        <span key={user.user_id}>{user.username}</span>
+      ))}
+    </form>
+  ),
 }));
 
 const mockRanking = [
@@ -53,7 +63,7 @@ describe("GlobalRanking", () => {
       expect(screen.getByText("Posició")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Júlia")).toBeInTheDocument();
+    expect(screen.getAllByText("Júlia")).toHaveLength(2);
     expect(screen.getByText("94")).toBeInTheDocument();
   });
 
@@ -65,6 +75,20 @@ describe("GlobalRanking", () => {
     expect(
       screen.getByRole("form", { name: /add league points/i }),
     ).toBeInTheDocument();
+  });
+
+  it("renders AddLeaguePoints with ranking users", async () => {
+    vi.mocked(getLeagueRanking).mockResolvedValue(mockRanking);
+
+    render(<GlobalRanking />);
+
+    expect(
+      screen.getByRole("form", { name: /add league points/i }),
+    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Júlia")).toHaveLength(2);
+    });
   });
 
   it("renders without crashing on fetch error", () => {
