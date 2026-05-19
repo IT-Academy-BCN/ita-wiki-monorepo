@@ -3,12 +3,14 @@ import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
-import type { TicketListProps } from "../../types/ticketingTypes";
+import type {
+  IntCreateTicket,
+  TicketListProps,
+} from "../../types/ticketingTypes";
 
 const mockSubmitTicketing = vi.hoisted(() => vi.fn());
 
 vi.mock("../../hooks/useTicketingGetAll");
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock("../../hooks/useCreateTicketing", () => ({
   useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
 }));
@@ -19,16 +21,22 @@ vi.mock("../../components/tickets/TicketList", () => ({
     return <div data-testid="ticket-list" />;
   },
 }));
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
-  TicketingCreateForm: ({ onSubmit }: any) => (
-    <button onClick={() => onSubmit({})}>Crear ticket</button>
+  TicketingCreateForm: ({
+    onSubmit,
+  }: {
+    onSubmit: (data: IntCreateTicket) => void;
+  }) => (
+    <button onClick={() => onSubmit({} as IntCreateTicket)}>
+      Crear ticket
+    </button>
   ),
 }));
 
 const mockHook = vi.mocked(useTicketingGetAll);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const hookReturn = (o: any = {}) => ({
+const hookReturn = (
+  o: Partial<ReturnType<typeof useTicketingGetAll>> = {},
+) => ({
   tickets: [],
   isLoading: false,
   errorMessage: null,
