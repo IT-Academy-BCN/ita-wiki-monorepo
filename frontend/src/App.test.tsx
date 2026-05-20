@@ -1,22 +1,19 @@
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
 import App from "./App";
 
-vi.mock("./components/Layout/HeaderComponent", () => ({
-  default: () => <div data-testid="header" />,
-}));
-
-vi.mock("./components/Layout/AsideComponent", () => ({
-  default: () => <div data-testid="aside" />,
-}));
-
-vi.mock("./components/RequireAuth", () => ({
-  default: () => null,
-}));
-
+vi.mock("./components/Layout/HeaderComponent", () => ({ default: () => null }));
+vi.mock("./components/Layout/AsideComponent", () => ({ default: () => null }));
+vi.mock("./components/RequireAuth", () => ({ default: () => null }));
 vi.mock("./context/UserContext", () => ({
   useUserContext: () => ({ user: null }),
+}));
+
+vi.mock("./pages/LeaguesPage", () => ({
+  default: () => <div data-testid="leagues-page" />,
 }));
 
 const renderAt = (path: string) =>
@@ -27,14 +24,13 @@ const renderAt = (path: string) =>
   );
 
 describe("App", () => {
-  it("App is defined", () => {
+  it("is defined", () => {
     expect(App).toBeDefined();
   });
-});
 
-describe("App routes", () => {
-  it("renders RankingsPage at /ligas", () => {
-    renderAt("/ligas");
-    expect(screen.getByText("En construcció...")).toBeTruthy();
+  it("renders LeaguesPage at /lligues", () => {
+    renderAt("/lligues");
+
+    expect(screen.getByTestId("leagues-page")).toBeInTheDocument();
   });
 });

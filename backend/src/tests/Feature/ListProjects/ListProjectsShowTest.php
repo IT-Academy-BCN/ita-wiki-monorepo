@@ -34,7 +34,8 @@ class ListProjectsShowTest extends TestCase
             'language_frontend' => LanguageEnum::JavaScript->value,
             'description' => 'Project description text',
             'roadmap' => [['task' => 'Setup project', 'done' => true]],
-
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
         ]);
 
         $this->contributorOne = ContributorListProject::factory()->create([
@@ -56,6 +57,8 @@ class ListProjectsShowTest extends TestCase
                 'id' => $this->projectOne->id,
                 'user_id' => $this->projectOne->user_id,
                 'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+                'start_date' => '2026-06-01',
+                'end_date' => '2026-12-31',
                 'dev_front_number' => $this->projectOne->dev_front_number,
                 'dev_back_number' => $this->projectOne->dev_back_number,    
                 'title' => $this->projectOne->title,
@@ -72,6 +75,7 @@ class ListProjectsShowTest extends TestCase
                     [
                         'name' => $this->contributorOne->user->name,
                         'programming_role' => $this->contributorOne->programming_role,
+                        'avatar_url' => $this->contributorOne->user->avatar_url,
                     ]
                 ],
             ],
@@ -105,6 +109,8 @@ class ListProjectsShowTest extends TestCase
         $response->assertJsonFragment([
             'user_id' => $this->projectOne->user_id,
             'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
             'dev_front_number' => $this->projectOne->dev_front_number,
             'dev_back_number' => $this->projectOne->dev_back_number,
         ]);

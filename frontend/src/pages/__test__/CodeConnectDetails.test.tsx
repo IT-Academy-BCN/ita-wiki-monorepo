@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
-import CodeConnectDetails from "../CodeConnectDetails";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
+import CodeConnectDetails from "../CodeConnectDetails";
 
 vi.mock("react-router", () => ({
   useParams: () => ({ projectId: "1" }),
@@ -25,7 +25,10 @@ describe("CodeConnectDetails Page", () => {
       data: {
         title: "Super Projecte de Prova",
         description: "Descripció de prova del projecte",
-        roadmap: "Roadmap de prova del projecte",
+        roadmap: [
+          { task: "Tarea 1", done: false },
+          { task: "Tarea 2", done: false },
+        ],
         contributors: [],
         time_duration: "2 setmanes",
         language_frontend: "react",
@@ -43,7 +46,7 @@ describe("CodeConnectDetails Page", () => {
 
     expect(screen.getByText("Super Projecte de Prova")).toBeTruthy();
     expect(screen.getByText("Descripció de prova del projecte")).toBeTruthy();
-    expect(screen.getByText("Roadmap de prova del projecte")).toBeTruthy();
+    expect(screen.getByText("Tarea 1")).toBeTruthy();
     expect(screen.getByTestId("mock-project-team")).toBeTruthy();
     expect(screen.getByText("Roadmap:")).toBeTruthy();
     expect(screen.getByText("Descripció:")).toBeTruthy();
@@ -54,7 +57,7 @@ describe("CodeConnectDetails Page", () => {
       data: {
         title: "Projecte Antic",
         description: "",
-        roadmap: "",
+        roadmap: [],
         contributors: [],
         time_duration: "1 mes",
         language_frontend: "javascript",

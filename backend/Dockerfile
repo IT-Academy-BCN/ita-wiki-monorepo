@@ -25,7 +25,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY bootstrap ./bootstrap
 COPY public ./public
 COPY src ./src
-COPY .env.dev ./
 COPY  artisan composer.json composer.lock phpunit.xml ./
 RUN mkdir -p storage/app/public
 
