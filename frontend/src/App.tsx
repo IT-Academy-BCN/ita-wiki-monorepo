@@ -15,7 +15,7 @@ import CodeConnectPage from "./pages/CodeConnectPage";
 import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
 import CodeConnectDetails from "./pages/CodeConnectDetails";
 import TechnicalPage from "./pages/TechnicalPage";
-import RankingsPage from "./pages/RankingsPage";
+import LeaguesPage from "./pages/LeaguesPage";
 import TicketingPage from "./pages/TicketingPage";
 
 const App: FC = () => {
@@ -35,8 +35,7 @@ const App: FC = () => {
               path="/codeconnect/:projectId"
               element={<CodeConnectDetails />}
             />
-            <Route path="/ranking" element={<RankingsPage />} />
-            <Route path="/ligas" element={<RankingsPage />} />
+            <Route path="/lligues" element={<LeaguesPage />} />
             <Route path="/ticketing" element={<TicketingPage />} />
 
             {/* Protected routes */}

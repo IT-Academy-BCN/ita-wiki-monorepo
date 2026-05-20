@@ -210,18 +210,32 @@ class TicketControllerTest extends TestCase{
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-
         $response = $this->actingAs($user)->postJson('/api/tickets', []);
 
-        $response->assertStatus(422)->assertJsonValidationErrors([
-            'name',
-            'incident_date',
-            'affected_app',
-            'type',
-            'affected_function',
-            'description',
-        ]);  
-        
+        $response->assertStatus(422)->assertJsonValidationErrors(['description']);
+    }
+
+    /** @test */
+    public function a_ticket_can_be_created_with_only_description(): void{
+
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'description' => 'Login fails on production',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+            'description' => 'Login fails on production',
+            'name' => 'Login fails on production',
+            'affected_app' => 'other',
+            'type' => 'error',
+            'affected_function' => 'other',
+            'incident_date' => now()->toDateString(),
+        ]);
     }
 
     /** @test */
@@ -781,6 +795,30 @@ class TicketControllerTest extends TestCase{
 
         $this->assertTrue($ticket->canClose($creator));
     }
-}
+    
+    /** @test */
+    public function reopening_a_ticket_clears_closed_by_and_closed_at(): void
+    {
+        $admin  = $this->authenticateUserWithRole('admin');
+        $ticket = Ticket::factory()->create([
+            'code_connect_id' => $admin->id,
+            'status'          => 'closed',
+            'closed_by'       => $admin->id,
+            'closed_at'       => now(),
+        ]);
 
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'in_progress',
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('tickets', [
+            'id'        => $ticket->id,
+            'status'    => 'in_progress',
+            'closed_by' => null,
+            'closed_at' => null,
+        ]);
+    }
+}
 ?>

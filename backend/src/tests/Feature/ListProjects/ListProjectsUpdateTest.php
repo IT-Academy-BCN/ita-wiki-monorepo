@@ -97,6 +97,8 @@ class ListProjectsUpdateTest extends TestCase
             'programming_role' => 'Backend Developer',
             'dev_front_number' => 1,
             'dev_back_number' => 1,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
         ]);
 
         $response->assertStatus(400);
