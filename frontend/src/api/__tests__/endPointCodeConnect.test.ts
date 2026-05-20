@@ -22,9 +22,9 @@ let mockFetch: ReturnType<typeof vi.fn>;
 describe("createCodeConnect", () => {
   const mockNewCodeConnect: Omit<IntCodeConnect, "time" | "unitTime"> = {
     title: "Lorem ipsum",
+    description: "Some random text to describe lorem ipsum",
     language_frontend: "React",
     language_backend: "Node",
-    description: "Some random text to describe lorem ipsum",
     programming_role: "Frontend",
     dev_front_number: 3,
     dev_back_number: 10,
@@ -35,6 +35,7 @@ describe("createCodeConnect", () => {
   beforeEach(() => {
     mockFetch = vi.fn();
     global.fetch = mockFetch;
+    localStorage.clear();
   });
 
   afterEach(() => {
@@ -47,6 +48,8 @@ describe("createCodeConnect", () => {
       message: "Code connect created successfully",
       status: "success",
     };
+
+    localStorage.setItem("auth_token", "test-token");
 
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -70,6 +73,36 @@ describe("createCodeConnect", () => {
     );
 
     expect(result).toEqual(mockResponseData);
+  });
+
+  it("should not send Authorization header when no token in localStorage", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    });
+
+    await createCodeConnect(mockNewCodeConnect);
+
+    const calledWithOptions = mockFetch.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBeUndefined();
+  });
+
+  it("should send Authorization header with token from localStorage", async () => {
+    localStorage.setItem("auth_token", "fake-token-123");
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    });
+
+    await createCodeConnect(mockNewCodeConnect);
+
+    const calledWithOptions = mockFetch.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBe(
+      "Bearer fake-token-123",
+    );
   });
 
   it("should throw an error on failed request", async () => {

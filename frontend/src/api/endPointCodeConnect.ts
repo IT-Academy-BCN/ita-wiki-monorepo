@@ -17,13 +17,14 @@ export const createCodeConnect = async (
 ) => {
   const url = `${API_URL}${END_POINTS.codeconnect.post}`;
   const token = localStorage.getItem("auth_token");
+
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(formData),
       signal,
