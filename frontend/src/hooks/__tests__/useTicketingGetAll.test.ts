@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import axios from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -100,5 +100,23 @@ describe("useTicketingGetAll", () => {
 
     expect(result.current.tickets).toEqual([]);
     expect(result.current.errorMessage).toBe("Unauthorized");
+  });
+
+  it("refetches tickets when refetch is called", async () => {
+    const apiTickets: ApiTicketData[] = [makeTicket()];
+
+    vi.spyOn(axios, "get")
+      .mockResolvedValueOnce({ data: { success: true, data: [] } })
+      .mockResolvedValueOnce({ data: { success: true, data: apiTickets } });
+
+    const { result } = renderHook(() => useTicketingGetAll());
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.tickets).toEqual([]);
+
+    await act(async () => result.current.refetch());
+
+    await waitFor(() => expect(result.current.tickets).toEqual(apiTickets));
+    expect(axios.get).toHaveBeenCalledTimes(2);
   });
 });

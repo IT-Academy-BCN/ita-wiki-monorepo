@@ -9,12 +9,17 @@ import type { IntCreateTicket } from "../types/ticketingTypes";
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
-  const { tickets, isLoading, errorMessage } = useTicketingGetAll();
+  const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
 
   const handleCreateTicket = async (
     ticketData: IntCreateTicket,
   ): Promise<void> => {
-    await submitTicketing(ticketData);
+    try {
+      await submitTicketing(ticketData);
+      refetch();
+    } catch {
+      // error already handled by useCreateTicketing error state
+    }
   };
 
   return (
