@@ -51,15 +51,6 @@ const mockLeaguesData = {
       points_weekly: 99,
       league_id: 1,
     },
-  ],
-  "2": [
-    {
-      position: 1,
-      user_id: 3,
-      username: "mentor_test",
-      points_weekly: 48,
-      league_id: 2,
-    },
   ]
 };
 export const fetchLeagueRanking = async (): Promise<LigaResponse> => {
