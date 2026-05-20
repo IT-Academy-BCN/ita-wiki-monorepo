@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
-import { getLeagueRanking } from "../../../services/leagueService";
-import type { Liga } from "../../../types/league";
-import { StandingsTable } from "../StandingsTable/StandingsTable";
+import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
+import { LeagueList } from "../LeagueList/LeagueList";
 
 export const WeeklyRanking = () => {
-  const [data, setData] = useState<Liga[]>([]);
-  useEffect(() => {
-    getLeagueRanking()
-      .then(setData)
-      .catch(() => {});
-  }, []);
+  const { leagueGroups } = useGlobalRanking();
+  const LEAGUE_LABELS: Record<string, string> = {
+    "1": "Or",
+    "2": "Plata",
+    "3": "Bronze",
+  };
 
   return (
     <section>
-      <h1>Lliga setmanal</h1>
-      <StandingsTable standings={data} />
+      {leagueGroups.map(([id, league]) => (
+        <div key={id} className="my-10">
+          <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
+          <LeagueList standings={league} />
+        </div>
+      ))}
     </section>
   );
 };

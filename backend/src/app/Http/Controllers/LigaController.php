@@ -25,7 +25,7 @@ class LigaController extends Controller
                 'points_weekly' => $entry->points_weekly,
                 'league_id'     => $entry->league_id,
             ]));
-    
+
         return response()->json($entries);
     }
 
@@ -54,8 +54,10 @@ class LigaController extends Controller
                 'user_id'    => $entry->user_id,
                 'points'     => $entry->points,
                 'username'   => $entry->user->github_user_name,
+                'league_id'  => $entry->league_id,
                 'created_at' => $entry->created_at,
                 'updated_at' => $entry->updated_at,
+
             ]);
 
         return response()->json($entries);
