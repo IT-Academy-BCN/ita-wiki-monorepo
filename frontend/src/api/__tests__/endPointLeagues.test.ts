@@ -25,19 +25,18 @@ describe("fetchLeagueRanking", () => {
   });
 
   it("Should fetch the league rankings", async () => {
-    const mockResponse: LigaResponse = [
-      {
-        "1": [
-          {
-            position: 1,
-            user_id: 7,
-            username: "ckoelpin",
-            points_weekly: 99,
-            league_id: 1,
-          },
-        ],
-      },
-    ];
+    const mockResponse: LigaResponse = {
+      "1": [
+        {
+          position: 1,
+          user_id: 7,
+          username: "ckoelpin",
+          points_weekly: 99,
+          league_id: 1,
+        },
+      ],
+    };
+
     fetchMock.mockResolvedValueOnce({
       json: async () => mockResponse,
       ok: true,
