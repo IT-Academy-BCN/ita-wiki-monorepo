@@ -51,7 +51,7 @@ const mockLeaguesData = {
       points_weekly: 99,
       league_id: 1,
     },
-  ]
+  ],
 };
 export const fetchLeagueRanking = async (): Promise<LigaResponse> => {
   return Promise.resolve(mockLeaguesData);
