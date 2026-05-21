@@ -28,9 +28,20 @@ class TicketController extends Controller
             });
         }
 
+        $tickets = $query->get();
+
+        if (auth()->user()->hasAnyRole(['admin'])) {
+            $tickets->each(function ($ticket) {
+                if ($ticket->codeConnect) {
+                    $ticket->codeConnect->role = $ticket->codeConnect->getRoleName();
+                    $ticket->codeConnect->makeHidden('roles');
+                }
+            });
+        }
+
         return response()->json([
             'success' => true,
-            'data' => $query->get()
+            'data' => $tickets
         ]);
     }
 
