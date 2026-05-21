@@ -37,4 +37,3 @@ export const getComments = async (
 
   return response.data.data;
 };
-
