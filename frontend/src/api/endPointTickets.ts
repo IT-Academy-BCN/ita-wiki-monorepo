@@ -1,12 +1,5 @@
 import axios from "axios";
-import {
-  IntCreateTicket,
-  IntTicket,
-  ApiUpdateTicketResponse,
-  IntUpdateTicket,
-  ApiTicketData,
-} from "../types/ticketingTypes";
-
+import { IntCreateTicket, IntTicket, ApiUpdateTicketResponse, IntUpdateTicket, ApiTicketData, } from "../types/ticketingTypes";
 import { API_URL, END_POINTS } from "../config";
 
 export const createTicket = async (
