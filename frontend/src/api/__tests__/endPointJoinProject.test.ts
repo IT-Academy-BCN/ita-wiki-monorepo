@@ -61,4 +61,17 @@ describe("endPointJoinProject - joinProject", () => {
       joinProject(listProjectId, "Backend Developer"),
     ).rejects.toThrow("Network error");
   });
+
+  it("calls the correct endpoint URL", async () => {
+  const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    ok: true,
+    status: 200,
+    json: async () => ({}),
+  } as unknown as Response);
+  await joinProject(listProjectId, "Backend Developer");
+  expect(fetchSpy).toHaveBeenCalledWith(
+    expect.stringContaining(`codeconnect/${listProjectId}/join`),
+    expect.any(Object),
+  );
+});
 });
