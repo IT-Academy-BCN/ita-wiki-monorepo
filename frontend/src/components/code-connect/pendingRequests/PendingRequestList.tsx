@@ -20,7 +20,7 @@ const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
 
   return (
     <div className="mb-8 p-4 bg-pink-50 rounded-lg">
-      <h3 className="text-[22px] font-extrabold mb-5">
+      <h3 className="text-[16px] font-extrabold mb-5">
         Peticions de col·laboració:
       </h3>
       <ul className="flex flex-col gap-3">
