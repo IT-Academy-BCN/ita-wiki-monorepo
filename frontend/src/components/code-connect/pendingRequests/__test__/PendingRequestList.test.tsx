@@ -23,7 +23,10 @@ beforeEach(() => {
 
 describe("PendingRequestList", () => {
   it("does not render when there are no pending requests", async () => {
-    vi.spyOn(endPointContributors, "fetchProjectContributors").mockResolvedValue([]);
+    vi.spyOn(
+      endPointContributors,
+      "fetchProjectContributors",
+    ).mockResolvedValue([]);
 
     const { container } = render(<PendingRequestList projectId={1} />);
 
@@ -33,7 +36,10 @@ describe("PendingRequestList", () => {
   });
 
   it("renders the section when there are pending requests", async () => {
-    vi.spyOn(endPointContributors, "fetchProjectContributors").mockResolvedValue([pendingContributor]);
+    vi.spyOn(
+      endPointContributors,
+      "fetchProjectContributors",
+    ).mockResolvedValue([pendingContributor]);
 
     render(<PendingRequestList projectId={1} />);
 
