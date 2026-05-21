@@ -1,11 +1,10 @@
+import type { FC } from "react";
 import type { ApiContributor } from "../../../types/codeConnectTypes";
 
 interface PendingRequestProps {
   contributor: ApiContributor;
 }
 
-const PendingRequest = (_props: PendingRequestProps) => {
-  return null;
-};
+const PendingRequest: FC<PendingRequestProps> = () => null;
 
 export default PendingRequest;
