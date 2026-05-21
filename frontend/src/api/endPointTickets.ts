@@ -38,5 +38,5 @@ export const updateTicket = async (
     },
   });
 
-  return response.data.data;
+  return response.data.data; //ss
 };
