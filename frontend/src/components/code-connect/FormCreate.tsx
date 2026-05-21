@@ -149,7 +149,7 @@ const FormCreate = () => {
       dev_back_number: formData.dev_back_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
-      ...(formData.start_date && { start_date: formData.start_date }),
+      start_date: formData.start_date,
     };
 
     try {
