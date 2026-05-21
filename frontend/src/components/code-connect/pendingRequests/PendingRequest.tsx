@@ -4,7 +4,7 @@ interface PendingRequestProps {
   contributor: ApiContributor;
 }
 
-const PendingRequest = (_: PendingRequestProps) => {
+const PendingRequest = (_props: PendingRequestProps) => {
   return null;
 };
 
