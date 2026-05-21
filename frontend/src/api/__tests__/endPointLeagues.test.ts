@@ -4,7 +4,7 @@ import { LigaResponse } from "../../types/league";
 import { fetchLeagueRanking } from "../endPointLeagues";
 
 vi.mock("../../config", () => ({
-  API_URL: "http://localhost:8000",
+  API_URL: "http://localhost/api",
   END_POINTS: {
     leagues: {
       getWeekly: "/ligas",
@@ -44,7 +44,7 @@ describe("fetchLeagueRanking", () => {
 
     const result = await fetchLeagueRanking();
 
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8000/ligas", {
+    expect(fetchMock).toHaveBeenCalledWith("http://localhost/api/ligas", {
       signal: undefined,
     });
     expect(result).toEqual(mockResponse);
