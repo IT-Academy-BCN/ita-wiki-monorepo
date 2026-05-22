@@ -1,10 +1,10 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fetchLeagueRanking } from "../../services/leagueService";
+import { fetchLeagueRanking } from "../../api/endPointLeagues";
 import type { LigaResponse } from "../../types/league";
 import { useLeagues } from "../useLeagues";
 
-vi.mock("../../services/leagueService", () => ({
+vi.mock("../../api/endPointLeagues", () => ({
   fetchLeagueRanking: vi.fn(),
 }));
 
