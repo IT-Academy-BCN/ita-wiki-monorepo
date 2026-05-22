@@ -9,7 +9,7 @@ export type Liga = {
 export type LigaResponse = { [key: string]: Liga[] };
 
 export type LeagueListProps = {
-  standings: Omit<Ranking, "points_weekly" | "league_id">[];
+  standings: Omit<Ranking, "points_weekly" | "league_id">[] | Liga[];
 };
 
 export type Ranking = {

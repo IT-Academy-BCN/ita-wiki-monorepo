@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchLeagueRanking } from "../services/leagueService";
+import { fetchLeagueRanking } from "../api/endPointLeagues";
 import type { LigaResponse } from "../types/league";
 
 export const useLeagues = () => {

@@ -1,4 +1,4 @@
-import type { LigaResponse, Ranking } from "../types/league";
+import type { Ranking } from "../types/league";
 
 const mockData: Omit<Ranking, "league_id">[] = [
   {
@@ -41,18 +41,3 @@ export async function getLeagueRanking(): Promise<
 > {
   return Promise.resolve(mockData);
 }
-
-const mockLeaguesData = {
-  "1": [
-    {
-      position: 1,
-      user_id: 7,
-      username: "ckoelpin",
-      points_weekly: 99,
-      league_id: 1,
-    },
-  ],
-};
-export const fetchLeagueRanking = async (): Promise<LigaResponse> => {
-  return Promise.resolve(mockLeaguesData);
-};
