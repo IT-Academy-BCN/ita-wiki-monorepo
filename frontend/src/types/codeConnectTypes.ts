@@ -1,73 +1,116 @@
-import { FC, ReactNode } from "react";
-import closeIcon from "../../assets/close.svg";
+import type { ReactNode } from "react";
 
-type ItaBtnVariant =
-  | "primary"
-  | "secondary"
-  | "neutral"
-  | "github"
-  | "close"
-  | "icon"
-  | "custom";
+export type ProgrammingRole = "Frontend Developer" | "Backend Developer";
 
-interface ItaButtonProps {
-  children?: ReactNode;
-  variant?: ItaBtnVariant;
-  text?: string;
-  title?: string;
-  icon?: string;
-  type?: "button" | "submit" | "reset";
-  className?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
+export interface ProjectParticipant {
+  name: string;
+  avatar: string;
 }
 
-const basicCss =
-  "block text-[14px] h-[41px] capitalize text-center rounded-[12px] outline-none cursor-pointer box-sizing w-full";
-const classList = {
-  primary: `${basicCss} text-white min-w-[152px] bg-primary font-[600] hover:opacity-90 border-none`,
-  secondary: `${basicCss} border border-gray-foreground font-[600] text-gray-foregorund hover:bg-neutral-50 min-w-[138px]`,
-  neutral: `${basicCss} bg-white text-gray-foreground font-[500] min-w-[138px] hover:bg-neutral-50`,
-  github:
-    "text-[var(--github-color)] bg-[var(--github-bg)]  justify-between max-w-60 hover:bg-[var(--github-color)] hover:text-[var(--github-bg)] hover:border-black outline-none cursor-pointer box-sizing",
-  close:
-    "inline-flex items-center justify-center w-[21px] h-[19px] text-[#282828] bg-transparent border-none hover:duration-100 will-change-transform hover:opacity-50 outline-none cursor-pointer box-sizing m-[10px]",
-  icon: "inline-flex items-center justify-center h-[41px] px-4 text-[#808080] border-2 rounded-[10px] border-white bg-white hover:duration-200 will-change-transform ease-in-out hover:bg-[#dcdcdc]  hover:border-[#808080] hover:scale-95 outline-none cursor-pointer box-sizing",
-};
+export interface ProjectSideInfo {
+  tech: string;
+  logo: string;
+  positions: number;
+  participants: ProjectParticipant[];
+}
 
-const ButtonComponent: FC<ItaButtonProps> = ({
-  children,
-  variant,
-  text,
-  icon,
-  type,
-  className,
-  onClick,
-  disabled,
-}) => {
-  const baseClass =
-    variant === "custom"
-      ? className || ""
-      : `${classList[variant ?? "primary"]} ${className || ""}`.trim();
+export interface Project {
+  id: number;
+  title: string;
+  duration: string;
+  frontend: ProjectSideInfo;
+  backend: ProjectSideInfo;
+  startDate: string;
+  endDate: string;
+}
 
-  return (
-    <button type={type || "button"} onClick={onClick} className={baseClass} disabled={disabled}>
-      {variant === "close" && <img src={closeIcon} alt="Close" />}
+export interface ApiProjectContributor {
+  name: string;
+  programming_role: ProgrammingRole;
+  avatar_url: string | null;
+}
 
-      {variant === "icon" && text && (
-        <>
-          <span className="mr-2">{text}</span>
-          <img src={icon} alt="icon" className="h-[17px]" />
-        </>
-      )}
+export interface ApiProjectData {
+  id: number;
+  user_id: number;
+  contributors: ApiProjectContributor[];
+  description?: string;
+  language_backend: string;
+  language_frontend: string;
+  roadmap?: { task: string; done: boolean }[];
+  time_duration: string;
+  title: string;
+}
 
-      {variant === "icon" && !text && (
-        <img src={icon} alt="icon" className="h-[17px]" />
-      )}
+export interface ApiContributor {
+  id: number;
+  user_id: number;
+  programming_role: string;
+  status: "pending" | "accepted" | "rejected";
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
 
-      {variant !== "icon" && (text || children)}
-    </button>
-  );
-};
+export interface ApiProjectsResponse {
+  success: boolean;
+  data: ApiProjectData[];
+  message: string;
+}
 
-export default ButtonComponent;
+export interface ApiProjectResponse {
+  success: boolean;
+  data: ApiProjectData;
+  message: string;
+}
+
+export interface UseProjectsState {
+  projects: Project[];
+  isLoading: boolean;
+  errorMessage: string | null;
+}
+
+export interface CodeConnectError {
+  message: string;
+  status?: number;
+  code?: string;
+}
+
+export interface PendingSlot {
+  area: "frontend" | "backend";
+  index: number;
+  role: ProgrammingRole;
+}
+
+export interface ProjectCardProps {
+  project: Project;
+  onClick?: (id: number) => void;
+}
+
+export interface TeamRowProps {
+  members: ProjectParticipant[];
+  emptySlots: number;
+  slotIndexOffset?: number;
+  onEmptySlotClick?: (slotIndex: number) => void;
+}
+
+export interface ProjectTeamProps {
+  logoFront?: string;
+  logoBack?: string;
+  contributors?: ApiProjectContributor[];
+  timeDuration?: string;
+}
+
+export interface ProgressBarProps {
+  title: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface ProjectButtonProps {
+  children?: ReactNode;
+  onClick?: () => void;
+  isSelected?: boolean;
+}
