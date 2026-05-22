@@ -6,6 +6,20 @@ import { describe, expect, it } from "vitest";
 import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
 
 describe("AddLeaguePoints", () => {
+  it("shows a button for each scoring activity", () => {
+    render(
+      <AddLeaguePoints
+        users={[
+          {
+            user_id: 1,
+            username: "Jordi",
+          },
+        ]}
+      />,
+    );
+    const buttons = screen.getAllByRole("button");
+    expect(buttons).toHaveLength(3);
+  });
   it("enables the submit button when a username is selected", async () => {
     const user = userEvent.setup();
 
@@ -21,13 +35,16 @@ describe("AddLeaguePoints", () => {
     );
 
     const select = screen.getByRole("combobox");
-    const button = screen.getByRole("button", { name: "Sumar punts" });
-
-    expect(button).toBeDisabled();
+    const buttons = screen.getAllByRole("button");
+    buttons.forEach((button) => {
+      expect(button).toBeDisabled();
+    });
 
     await user.selectOptions(select, "1");
-
     expect(select).toHaveValue("1");
-    expect(button).toBeEnabled();
+
+    buttons.forEach((button) => {
+      expect(button).toBeEnabled();
+    });
   });
 });
