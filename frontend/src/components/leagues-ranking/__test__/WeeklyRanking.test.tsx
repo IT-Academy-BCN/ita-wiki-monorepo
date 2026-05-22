@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import UserProvider from "../../../context/UserContext";
 import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
 import type { Ranking } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
@@ -34,7 +35,11 @@ describe("WeeklyRanking", () => {
       globalRanking: [],
       leagueGroups: mockLeagueGroups,
     });
-    render(<WeeklyRanking />);
+    render(
+      <UserProvider>
+        <WeeklyRanking />
+      </UserProvider>,
+    );
     await waitFor(() => {
       expect(screen.getByText("Lliga Or")).toBeInTheDocument();
       expect(screen.getByText("Posició")).toBeInTheDocument();
