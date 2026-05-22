@@ -9,6 +9,7 @@ type ItaBtnVariant =
   | "close"
   | "icon"
   | "custom";
+
 interface ItaButtonProps {
   children?: ReactNode;
   variant?: ItaBtnVariant;
@@ -18,6 +19,7 @@ interface ItaButtonProps {
   type?: "button" | "submit" | "reset";
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 
 const basicCss =
@@ -41,6 +43,7 @@ const ButtonComponent: FC<ItaButtonProps> = ({
   type,
   className,
   onClick,
+  disabled,
 }) => {
   const baseClass =
     variant === "custom"
@@ -48,7 +51,12 @@ const ButtonComponent: FC<ItaButtonProps> = ({
       : `${classList[variant ?? "primary"]} ${className || ""}`.trim();
 
   return (
-    <button type={type || "button"} onClick={onClick} className={baseClass}>
+    <button
+      type={type || "button"}
+      onClick={onClick}
+      className={baseClass}
+      disabled={disabled}
+    >
       {variant === "close" && <img src={closeIcon} alt="Close" />}
 
       {variant === "icon" && text && (
