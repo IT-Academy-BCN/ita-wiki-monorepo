@@ -2,7 +2,10 @@ export type Liga = {
   position: number;
   user_id: number;
   username: string;
+  points?: number;
   points_weekly: number;
+  status?: string;
+  language?: string;
   league_id: number;
 };
 
