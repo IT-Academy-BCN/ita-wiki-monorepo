@@ -6,7 +6,7 @@ export async function joinProject(
   listProjectId: number,
   programmingRole: ProgrammingRole,
 ): Promise<unknown | null> {
-  const url = `${API_URL}listsProject/${listProjectId}/contributors`;
+  const url = `${API_URL}codeconnect/${listProjectId}/join`;
 
   const response = await fetch(url, {
     method: "POST",
