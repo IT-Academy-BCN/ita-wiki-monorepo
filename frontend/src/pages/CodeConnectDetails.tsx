@@ -54,6 +54,7 @@ const CodeConnectDetails = () => {
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
               <ProjectTeam
+                projectId={Number(projectId)}
                 logoFront={displayLanguageIcon(
                   codeConnectProject.data.language_frontend,
                 )}
