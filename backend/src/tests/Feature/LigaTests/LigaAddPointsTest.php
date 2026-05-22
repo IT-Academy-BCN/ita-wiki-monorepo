@@ -85,7 +85,7 @@ class LigaAddPointsTest extends TestCase
         ]);
     }
 
-    public function test_manual_points_does_not_increment_points_weekly(): void
+    public function test_put_returns_422_for_zero_or_negative_points(): void
     {
         Liga::create([
             'user_id'       => $this->user->id,
@@ -93,15 +93,11 @@ class LigaAddPointsTest extends TestCase
             'points_weekly' => 0,
         ]);
 
-        $response = $this->putJson("/api/ligas/{$this->user->id}/points", [
-            'points' => 10,
-            'manual' => true,
-        ]);
+        $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => 0])
+            ->assertStatus(422);
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'points'        => 10,
-            'points_weekly' => 0,
-        ]);
+        $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => -5])
+            ->assertStatus(422);
     }
+
 }

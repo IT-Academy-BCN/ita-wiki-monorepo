@@ -73,14 +73,14 @@ class LigaController extends Controller
             ], 403);
         }
 
-        $pointsToAdd = $request->input('points', 5);
-        $isManual    = $request->boolean('manual', false);
+        $validated = $request->validate([
+            'points' => 'nullable|integer|min:1',
+        ]);
 
-        $entry->increment('points', $pointsToAdd);
+         $pointsToAdd = $validated['points'] ?? 5;
 
-        if (!$isManual) {
-            $entry->increment('points_weekly', $pointsToAdd);
-        }
+         $entry->increment('points', $pointsToAdd);
+         $entry->increment('points_weekly', $pointsToAdd);
 
         $entry->refresh();
 
