@@ -74,17 +74,22 @@ class LigaController extends Controller
         }
 
         $pointsToAdd = $request->input('points', 5);
+        $isManual    = $request->boolean('manual', false);
 
         $entry->increment('points', $pointsToAdd);
-        $entry->increment('points_weekly', $pointsToAdd);
+
+        if (!$isManual) {
+            $entry->increment('points_weekly', $pointsToAdd);
+        }
 
         $entry->refresh();
 
         return response()->json([
-            'user_id' => $user->id,
-            'points'  => $entry->points,
+            'user_id'       => $user->id,
+            'points'        => $entry->points,
             'points_weekly' => $entry->points_weekly,
         ]);
     }
+
 }
 

@@ -84,4 +84,24 @@ class LigaAddPointsTest extends TestCase
             'message' => 'User has not opted in to the liga'
         ]);
     }
+
+    public function test_manual_points_does_not_increment_points_weekly(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $response = $this->putJson("/api/ligas/{$this->user->id}/points", [
+            'points' => 10,
+            'manual' => true,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'points'        => 10,
+            'points_weekly' => 0,
+        ]);
+    }
 }
