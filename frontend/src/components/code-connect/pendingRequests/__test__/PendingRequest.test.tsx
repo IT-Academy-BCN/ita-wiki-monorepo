@@ -14,7 +14,11 @@ const contributor: ApiContributor = {
 
 describe("PendingRequest", () => {
   it("renders the contributor username", () => {
-    render(<ul><PendingRequest contributor={contributor} /></ul>);
+    render(
+      <ul>
+        <PendingRequest contributor={contributor} />
+      </ul>,
+    );
     expect(screen.getByText("Ivilarop")).toBeTruthy();
   });
 
@@ -29,7 +33,11 @@ describe("PendingRequest", () => {
   });
 
   it("does not render a role icon when roleIcon is not provided", () => {
-    render(<ul><PendingRequest contributor={contributor} /></ul>);
+    render(
+      <ul>
+        <PendingRequest contributor={contributor} />
+      </ul>,
+    );
     expect(screen.queryByAltText("Frontend Developer")).toBeNull();
   });
 });
