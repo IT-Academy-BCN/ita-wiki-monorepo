@@ -30,7 +30,7 @@ class TicketController extends Controller
 
         $tickets = $query->get();
 
-        if (auth()->user()->hasAnyRole(['admin'])) {
+        if (auth()->user()->hasAnyRole(['admin' , 'superadmin'])) {
             $tickets->each(function ($ticket) {
                 if ($ticket->codeConnect) {
                     $ticket->codeConnect->role = $ticket->codeConnect->getRoleName();
