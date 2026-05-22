@@ -1,7 +1,9 @@
 import { UserCheck } from "lucide-react";
+import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
 import type { LeagueListProps } from "../../../types/league";
 
-export const LeagueList = ({ standings, user }: LeagueListProps) => {
+export const LeagueList = ({ standings }: LeagueListProps) => {
+  const { user } = useGlobalRanking();
   const getStyle = (index: number) => {
     const base =
       "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";

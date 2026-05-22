@@ -3,11 +3,11 @@ import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const GlobalRanking = () => {
-  const { globalRanking, user } = useGlobalRanking();
+  const { globalRanking } = useGlobalRanking();
 
   return (
     <section>
-      <LeagueList standings={globalRanking} user={user} />
+      <LeagueList standings={globalRanking} />
       <AddLeaguePoints users={globalRanking} />
     </section>
   );
