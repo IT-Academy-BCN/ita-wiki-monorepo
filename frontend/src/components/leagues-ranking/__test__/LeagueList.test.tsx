@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import UserProvider from "../../../context/UserContext";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const createMockStandings = (count: number) =>
@@ -18,7 +19,11 @@ export const createMockStandings = (count: number) =>
 
 describe("LeagueList", () => {
   it("renders the column headers", () => {
-    render(<LeagueList standings={createMockStandings(1)} />);
+    render(
+      <UserProvider>
+        <LeagueList standings={createMockStandings(1)} />
+      </UserProvider>,
+    );
 
     expect(screen.getByText("Posició")).toBeInTheDocument();
     expect(screen.getByText("Nom")).toBeInTheDocument();
@@ -28,7 +33,11 @@ describe("LeagueList", () => {
   });
 
   it("renders all standings correctly", () => {
-    render(<LeagueList standings={createMockStandings(1)} />);
+    render(
+      <UserProvider>
+        <LeagueList standings={createMockStandings(1)} />
+      </UserProvider>,
+    );
 
     expect(screen.getByText("Júlia")).toBeInTheDocument();
     expect(screen.getByText("94")).toBeInTheDocument();
@@ -39,13 +48,21 @@ describe("LeagueList", () => {
   });
 
   it("does not render participant positions when standings are empty", () => {
-    render(<LeagueList standings={[]} />);
+    render(
+      <UserProvider>
+        <LeagueList standings={[]} />
+      </UserProvider>,
+    );
 
     expect(screen.queryByTestId("league-position-1")).not.toBeInTheDocument();
   });
 
   it("applies green background to the top 3 when there are more than 3 participants", () => {
-    render(<LeagueList standings={createMockStandings(4)} />);
+    render(
+      <UserProvider>
+        <LeagueList standings={createMockStandings(4)} />
+      </UserProvider>,
+    );
     expect(screen.getByTestId("league-position-1")).toHaveClass("bg-green-100");
     expect(screen.getByTestId("league-position-2")).toHaveClass("bg-green-100");
     expect(screen.getByTestId("league-position-3")).toHaveClass("bg-green-100");
@@ -55,7 +72,11 @@ describe("LeagueList", () => {
   });
 
   it("applies red background to the last 3 when there are more than 6 participants", () => {
-    render(<LeagueList standings={createMockStandings(7)} />);
+    render(
+      <UserProvider>
+        <LeagueList standings={createMockStandings(7)} />
+      </UserProvider>,
+    );
     expect(screen.getByTestId("league-position-5")).toHaveClass("bg-red-100");
     expect(screen.getByTestId("league-position-6")).toHaveClass("bg-red-100");
     expect(screen.getByTestId("league-position-7")).toHaveClass("bg-red-100");

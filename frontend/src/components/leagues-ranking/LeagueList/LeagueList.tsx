@@ -1,9 +1,14 @@
 import { UserCheck } from "lucide-react";
-import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
+import { useEffect } from "react";
+import { useUserContext } from "../../../context/UserContext";
 import type { LeagueListProps } from "../../../types/league";
 
 export const LeagueList = ({ standings }: LeagueListProps) => {
-  const { user } = useGlobalRanking();
+  const { user, setUser } = useUserContext();
+  useEffect(() => {
+    if (user) setUser({ ...user, id: 8 });
+  }, []);
+
   const getStyle = (index: number) => {
     const base =
       "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";
