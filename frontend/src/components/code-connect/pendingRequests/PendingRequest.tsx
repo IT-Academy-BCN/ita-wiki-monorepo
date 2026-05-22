@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import githubLogo from "../../../assets/github-logo.png";
+import githubLogo from "../../../assets/github-logo.svg";
 import type { ApiContributor } from "../../../types/codeConnectTypes";
 
 interface PendingRequestProps {
