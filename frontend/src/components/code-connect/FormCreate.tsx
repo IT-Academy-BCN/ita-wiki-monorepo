@@ -31,6 +31,7 @@ const FormCreate = () => {
     time: 0,
     unitTime: "",
     limit_date_inscription: "",
+    start_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [roadmap, setRoadmap] = useState<Task[]>([]);
@@ -61,7 +62,7 @@ const FormCreate = () => {
   };
 
   const handleDeadLine = (
-    field: keyof Pick<IntCodeConnect, "limit_date_inscription">,
+    field: keyof Pick<IntCodeConnect, "limit_date_inscription" | "start_date">,
     value: string,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -79,6 +80,7 @@ const FormCreate = () => {
       time,
       unitTime,
       limit_date_inscription,
+      start_date,
     } = formData;
 
     if (!language_frontend) {
@@ -108,7 +110,8 @@ const FormCreate = () => {
       dev_back_number <= 0 ||
       !time ||
       !unitTime ||
-      !limit_date_inscription
+      !limit_date_inscription ||
+      !start_date
     ) {
       toast.error("Completa tots els camps obligatoris.");
       return false;
@@ -146,6 +149,7 @@ const FormCreate = () => {
       dev_back_number: formData.dev_back_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
+      start_date: formData.start_date,
     };
 
     try {
@@ -331,6 +335,24 @@ const FormCreate = () => {
             onChange={(e) =>
               handleDeadLine("limit_date_inscription", e.target.value)
             }
+            min={getMinDeadline()}
+          />
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-4">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="start_date" className="block font-medium">
+            Data d'inici del projecte *
+          </label>
+          <input
+            id="start_date"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            type="date"
+            value={formData.start_date || ""}
+            required
+            disabled={isSubmitting}
+            onChange={(e) => handleDeadLine("start_date", e.target.value)}
             min={getMinDeadline()}
           />
         </div>
