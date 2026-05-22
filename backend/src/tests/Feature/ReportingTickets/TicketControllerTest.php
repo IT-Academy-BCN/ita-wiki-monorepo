@@ -820,5 +820,46 @@ class TicketControllerTest extends TestCase{
             'closed_at' => null,
         ]);
     }
+
+    /** @test */
+    public function admin_can_see_creator_role_in_ticket_list(): void
+    {
+        $admin = $this->authenticateUserWithRole('admin');
+        $creator = User::factory()->create();
+        $creator->assignRole('student');
+        Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('role', $response->json('data.0.code_connect'));
+        $this->assertEquals('student', $response->json('data.0.code_connect.role'));
+    }
+
+    /** @test */
+    public function non_admin_cannot_see_creator_role_in_ticket_list(): void
+    {
+        $student = $this->authenticateUserWithRole('student');
+        Ticket::factory()->create(['code_connect_id' => $student->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+        $this->assertArrayNotHasKey('role', $response->json('data.0.code_connect'));
+    }
+
+    /** @test */
+    public function superadmin_can_see_creator_role_in_ticket_list(): void{
+        $superadmin = $this->authenticateUserWithRole('superadmin');
+        $creator = User::factory()->create();
+        $creator->assignRole('student');
+        Ticket::factory()->create(['code_connect_id' => $creator->id]);
+
+        $response = $this->getJson('/api/tickets');
+
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('role', $response->json('data.0.code_connect'));
+        $this->assertEquals('student', $response->json('data.0.code_connect.role'));
+    }
 }
 ?>
