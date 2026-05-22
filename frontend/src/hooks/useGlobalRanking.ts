@@ -5,6 +5,7 @@ import { groupByLeague } from "../utils/leagueUtils";
 
 export const useGlobalRanking = () => {
   const [globalRanking, setGlobalRanking] = useState<Ranking[]>([]);
+
   useEffect(() => {
     const controller = new AbortController();
     const fetchRanking = async (): Promise<void> => {
