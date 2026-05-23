@@ -6,6 +6,7 @@ namespace Tests\Feature\Liga;
 
 use App\Models\Liga;
 use App\Models\User;
+use \App\Enums\LeagueTypeEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -50,8 +51,7 @@ class LigaTableTest extends TestCase
     
         $this->assertEquals(5, $liga->points_weekly);
         $this->assertEquals('PHP', $liga->language);
-        $this->assertEquals(1, $liga->league_id);
-    
+        $this->assertEquals(LeagueTypeEnum::Bronze, $liga->league_id);    
         $statusValue = $liga->status instanceof \BackedEnum
             ? $liga->status->value
             : $liga->status;
