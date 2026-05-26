@@ -37,7 +37,11 @@ export const AddLeaguePoints = ({
   };
 
   return (
-    <form className="mt-8" onSubmit={handleSubmit}>
+    <form
+      className="mt-8"
+      onSubmit={handleSubmit}
+      aria-label="add league points"
+    >
       <h1>Afegir punts</h1>
       <div className="flex gap-3 md:items-center">
         <select

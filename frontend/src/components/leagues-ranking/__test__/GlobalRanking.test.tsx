@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchGlobalRanking } from "../../../api/endPointLeagues";
 import { useUserContext } from "../../../context/UserContext";
@@ -25,20 +26,6 @@ vi.mock("../LeagueList/LeagueList", () => ({
         </div>
       ))}
     </div>
-  ),
-}));
-
-vi.mock("../AddLeaguePoints/AddLeaguePoints", () => ({
-  AddLeaguePoints: ({
-    users,
-  }: {
-    users: { user_id: number; username: string }[];
-  }) => (
-    <form aria-label="add league points">
-      {users.map((user) => (
-        <span key={user.user_id}>{user.username}</span>
-      ))}
-    </form>
   ),
 }));
 
@@ -124,8 +111,36 @@ describe("GlobalRanking", () => {
     });
   });
 
+  it("refreshes the ranking after adding point", async () => {
+    mockUserContext("mentor");
+    const user = userEvent.setup();
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
+    render(<GlobalRanking />);
+    const select = await screen.findByRole("combobox");
+    const options = screen.getAllByRole("option");
+    const button = screen.getByRole("button", {
+      name: "RESOLUCIÓ DE DUBTES (5 pt)",
+    });
+    await user.selectOptions(select, options[1]);
+    await user.click(button);
+    expect(fetchGlobalRanking).toHaveBeenCalled();
+  });
+
   it("renders without crashing on fetch error", () => {
     vi.mocked(fetchGlobalRanking).mockResolvedValue(new Error("fail"));
     expect(() => render(<GlobalRanking />)).not.toThrow();
+  });
+
+  it("renders AddLeaguePoints with ranking users (for mentors)", async () => {
+    mockUserContext("mentor");
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
+
+    render(<GlobalRanking />);
+
+    const options = screen.getAllByRole("option");
+
+    await waitFor(() => {
+      expect(options.length).toBeGreaterThan(0);
+    });
   });
 });

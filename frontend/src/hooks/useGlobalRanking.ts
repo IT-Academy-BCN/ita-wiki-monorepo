@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { addLeaguePoints } from "../api/endPointLeague";
 import { fetchGlobalRanking } from "../api/endPointLeagues";
 import type { Ranking } from "../types/league";
 import { groupByLeague } from "../utils/leagueUtils";
+import { useAddLeaguePoints } from "./useAddLeaguePoints";
 
 export const useGlobalRanking = () => {
+  const { addPoints } = useAddLeaguePoints({ addLeaguePoints });
   const [globalRanking, setGlobalRanking] = useState<Ranking[]>([]);
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export const useGlobalRanking = () => {
 
     fetchRanking();
     return () => controller.abort();
-  }, []);
+  }, [addPoints]);
 
   const leagueGroups = useMemo(
     () => groupByLeague(globalRanking),
