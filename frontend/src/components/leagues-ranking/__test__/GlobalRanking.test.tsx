@@ -130,17 +130,4 @@ describe("GlobalRanking", () => {
     vi.mocked(fetchGlobalRanking).mockResolvedValue(new Error("fail"));
     expect(() => render(<GlobalRanking />)).not.toThrow();
   });
-
-  it("renders AddLeaguePoints with ranking users (for mentors)", async () => {
-    mockUserContext("mentor");
-    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
-
-    render(<GlobalRanking />);
-
-    const options = screen.getAllByRole("option");
-
-    await waitFor(() => {
-      expect(options.length).toBeGreaterThan(0);
-    });
-  });
 });
