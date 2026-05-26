@@ -15,9 +15,7 @@ describe("useTicketingUpdatePriority", () => {
       data: { success: true },
     });
 
-    const { result } = renderHook(() =>
-      useTicketingUpdatePriority(),
-    );
+    const { result } = renderHook(() => useTicketingUpdatePriority());
 
     await act(async () => {
       await result.current.updatePriority("1", "high");

@@ -28,8 +28,12 @@ export const useTicketingUpdatePriority = () => {
       );
       return true;
     } catch (error) {
-        setErrorMessage(error instanceof AxiosError? error.response?.data?.message || error.message: "Unknown error",);
-        return false;
+      setErrorMessage(
+        error instanceof AxiosError
+          ? error.response?.data?.message || error.message
+          : "Unknown error",
+      );
+      return false;
     } finally {
       setIsLoading(false);
     }
