@@ -119,7 +119,7 @@ describe("TicketList", () => {
   });
 
   it("renders Rol column header", () => {
-  render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-  expect(screen.getByText("Rol")).toBeInTheDocument();
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+    expect(screen.getByText("Rol")).toBeInTheDocument();
   });
 });
