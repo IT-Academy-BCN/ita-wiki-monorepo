@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTicketingUpdatePriority } from "../useTicketingUpdatePriority";
+import { useTicketingUpdatePriority } from "../useTicketingUpdate";
 
 describe("useTicketingUpdatePriority", () => {
   beforeEach(() => {
