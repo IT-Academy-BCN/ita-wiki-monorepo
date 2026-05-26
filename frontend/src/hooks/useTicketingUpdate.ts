@@ -1,42 +1,48 @@
-import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { API_URL } from "../config";
-import type { TicketPriority } from "../types/ticketingTypes";
+import { updateTicket } from "../api/endPointTickets";
+import type { TicketStatus, TicketPriority } from "../types/ticketingTypes";
 
-export const useTicketingUpdatePriority = () => {
+export const useTicketingUpdate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const updatePriority = async (
-    ticketId: string,
-    priority: TicketPriority,
+
+  const updateStatus = async (
+    ticketId: number,
+    status: TicketStatus,
   ): Promise<boolean> => {
     setIsLoading(true);
     setErrorMessage(null);
-
     try {
-      const token = localStorage.getItem("auth_token");
-
-      await axios.patch(
-        `${API_URL}tickets/${ticketId}/priority`,
-        { priority },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      await updateTicket(ticketId, { status });
       return true;
     } catch (error) {
       setErrorMessage(
-        error instanceof AxiosError
-          ? error.response?.data?.message || error.message
-          : "Unknown error",
+        error instanceof Error ? error.message : "Unknown error",
       );
       return false;
     } finally {
       setIsLoading(false);
     }
   };
-  return { updatePriority, isLoading, errorMessage };
+
+  const updatePriority = async (
+    ticketId: number,
+    priority: TicketPriority,
+  ): Promise<boolean> => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      await updateTicket(ticketId, { priority });
+      return true;
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unknown error",
+      );
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { updateStatus, updatePriority, isLoading, errorMessage };
 };

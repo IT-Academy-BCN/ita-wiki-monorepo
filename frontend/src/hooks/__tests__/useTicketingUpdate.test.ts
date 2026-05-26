@@ -1,30 +1,34 @@
 import { act, renderHook } from "@testing-library/react";
-import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTicketingUpdatePriority } from "../useTicketingUpdate";
+import { useTicketingUpdate } from "../useTicketingUpdate";
+import { updateTicket } from "../../api/endPointTickets";
 
-describe("useTicketingUpdatePriority", () => {
+vi.mock("../../api/endPointTickets", () => ({
+  updateTicket: vi.fn(),
+}));
+
+describe("useTicketingUpdate", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(Storage.prototype, "getItem").mockReturnValue("fake-token");
   });
 
-  it("updates ticket priority", async () => {
-    vi.spyOn(axios, "patch").mockResolvedValueOnce({
-      data: { success: true },
-    });
+  it("updates ticket priority correctly", async () => {
+    vi.mocked(updateTicket).mockResolvedValue({
+      id: 1,
+      priority: "high",
+    } as never);
 
-    const { result } = renderHook(() => useTicketingUpdatePriority());
+    const { result } = renderHook(() => useTicketingUpdate());
 
     await act(async () => {
-      await result.current.updatePriority("1", "high");
+      await result.current.updatePriority(1, "high");
     });
 
-    expect(axios.patch).toHaveBeenCalledWith(
-      expect.stringContaining("tickets/1/priority"),
-      { priority: "high" },
-      expect.any(Object),
-    );
+    expect(updateTicket).toHaveBeenCalledWith(1, {
+      priority: "high",
+    });
+
+    expect(result.current.errorMessage).toBeNull();
   });
 });
