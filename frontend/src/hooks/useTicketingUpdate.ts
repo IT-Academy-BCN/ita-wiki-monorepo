@@ -16,9 +16,7 @@ export const useTicketingUpdate = () => {
       await updateTicket(ticketId, { status });
       return true;
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unknown error",
-      );
+      setErrorMessage(error instanceof Error ? error.message : "Unknown error");
       return false;
     } finally {
       setIsLoading(false);
@@ -35,9 +33,7 @@ export const useTicketingUpdate = () => {
       await updateTicket(ticketId, { priority });
       return true;
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unknown error",
-      );
+      setErrorMessage(error instanceof Error ? error.message : "Unknown error");
       return false;
     } finally {
       setIsLoading(false);
