@@ -22,7 +22,7 @@ describe("useTicketingUpdatePriority", () => {
     });
 
     expect(axios.patch).toHaveBeenCalledWith(
-      expect.stringContaining("/tickets/1/priority"),
+      expect.stringContaining("tickets/1/priority"),
       { priority: "high" },
       expect.any(Object),
     );
