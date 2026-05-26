@@ -117,4 +117,9 @@ describe("TicketList", () => {
     );
     expect(screen.getByText("Baixa")).toBeInTheDocument();
   });
+
+  it("renders Rol column header", () => {
+  render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+  expect(screen.getByText("Rol")).toBeInTheDocument();
+});
 });
