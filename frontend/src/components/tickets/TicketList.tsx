@@ -97,9 +97,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
               >
                 {priorityLabels[ticket.priority ?? "low"]}
               </div>
-              <div role="cell">
-                {ticket.code_connect?.role ?? "-"}
-              </div>
+              <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
             </div>
           ))}
         </div>
