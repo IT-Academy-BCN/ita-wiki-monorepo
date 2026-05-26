@@ -100,4 +100,23 @@ class LigaAddPointsTest extends TestCase
             ->assertStatus(422);
     }
 
+    public function test_put_increments_by_custom_points_amount(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $response = $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => 10]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'user_id'       => $this->user->id,
+            'points'        => 10,
+            'points_weekly' => 10,
+        ]);
+    }
+
 }
