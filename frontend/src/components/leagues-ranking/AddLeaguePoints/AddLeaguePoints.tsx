@@ -10,10 +10,12 @@ type AddLeaguePointsUser = {
 
 type AddLeaguePointsProps = {
   users: AddLeaguePointsUser[];
+  onPointAdded: () => void;
 };
 
 export const AddLeaguePoints = ({
   users,
+  onPointAdded,
 }: AddLeaguePointsProps): JSX.Element => {
   const [selectedUsername, setSelectedUsername] = useState<string>("");
   const [addedPoints, setAddedPoints] = useState<number | null>(null);
@@ -34,6 +36,7 @@ export const AddLeaguePoints = ({
     await addPoints(Number(selectedUsername), addedPoints);
     setSelectedUsername("");
     setAddedPoints(null);
+    onPointAdded();
   };
 
   return (
