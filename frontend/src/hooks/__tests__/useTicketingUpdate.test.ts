@@ -21,8 +21,10 @@ describe("useTicketingUpdate", () => {
 
     const { result } = renderHook(() => useTicketingUpdate());
 
+    let response: boolean | undefined;
+
     await act(async () => {
-      await result.current.updatePriority(1, "high");
+      response = await result.current.updatePriority(1, "high");
     });
 
     expect(updateTicket).toHaveBeenCalledWith(1, {
@@ -30,5 +32,6 @@ describe("useTicketingUpdate", () => {
     });
 
     expect(result.current.errorMessage).toBeNull();
+    expect(response).toBe(true);
   });
 });
