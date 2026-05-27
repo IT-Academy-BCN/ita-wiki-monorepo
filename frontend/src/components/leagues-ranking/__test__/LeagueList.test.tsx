@@ -57,12 +57,8 @@ describe("LeagueList", () => {
     expect(screen.queryByTestId("league-position-1")).not.toBeInTheDocument();
   });
 
-  it("applies green background to the top 3 when there are more than 3 participants", () => {
-    render(
-      <UserProvider>
-        <LeagueList standings={createMockStandings(4)} />
-      </UserProvider>,
-    );
+  it("applies green background to the (ascending) top 3 when there are more than 3 participants", () => {
+    render(<LeagueList standings={createMockStandings(4)} showUp />);
     expect(screen.getByTestId("league-position-1")).toHaveClass("bg-green-100");
     expect(screen.getByTestId("league-position-2")).toHaveClass("bg-green-100");
     expect(screen.getByTestId("league-position-3")).toHaveClass("bg-green-100");
@@ -71,12 +67,8 @@ describe("LeagueList", () => {
     );
   });
 
-  it("applies red background to the last 3 when there are more than 6 participants", () => {
-    render(
-      <UserProvider>
-        <LeagueList standings={createMockStandings(7)} />
-      </UserProvider>,
-    );
+  it("applies red background to the (descending) last 3 when there are more than 6 participants", () => {
+    render(<LeagueList standings={createMockStandings(7)} showDown />);
     expect(screen.getByTestId("league-position-5")).toHaveClass("bg-red-100");
     expect(screen.getByTestId("league-position-6")).toHaveClass("bg-red-100");
     expect(screen.getByTestId("league-position-7")).toHaveClass("bg-red-100");

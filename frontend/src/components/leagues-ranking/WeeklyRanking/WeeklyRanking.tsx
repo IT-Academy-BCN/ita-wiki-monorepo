@@ -11,10 +11,14 @@ export const WeeklyRanking = () => {
 
   return (
     <section>
-      {leagueGroups.map(([id, league]) => (
+      {leagueGroups.map(([id, league], index) => (
         <div key={id} className="my-10">
           <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
-          <LeagueList standings={league} />
+          <LeagueList
+            standings={league}
+            showUp={index > 0}
+            showDown={index + 1 < leagueGroups.length}
+          />
         </div>
       ))}
     </section>

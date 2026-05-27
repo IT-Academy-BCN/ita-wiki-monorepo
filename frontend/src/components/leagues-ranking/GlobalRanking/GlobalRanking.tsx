@@ -1,14 +1,18 @@
 import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
+import { useUser } from "../../../hooks/useUser";
 import { AddLeaguePoints } from "../AddLeaguePoints/AddLeaguePoints";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const GlobalRanking = () => {
+  const { user } = useUser();
   const { globalRanking } = useGlobalRanking();
 
   return (
     <section>
       <LeagueList standings={globalRanking} />
-      <AddLeaguePoints users={globalRanking} />
+      {user?.role && user.role !== "student" && (
+        <AddLeaguePoints users={globalRanking} />
+      )}
     </section>
   );
 };

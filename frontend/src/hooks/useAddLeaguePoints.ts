@@ -8,11 +8,16 @@ export type AddLeaguePointsResponse = {
 type UseAddLeaguePointsParams = {
   addLeaguePoints: (userId: number) => Promise<AddLeaguePointsResponse>;
 };
+type PointSystem = { points: number; activity: string }[];
 
 type UseAddLeaguePointsReturn = {
-  addPoints: (userId: number) => Promise<AddLeaguePointsResponse | null>;
+  addPoints: (
+    userId: number,
+    points: number,
+  ) => Promise<AddLeaguePointsResponse | null>;
   error: string | null;
   isLoading: boolean;
+  pointSystem: PointSystem;
 };
 
 export const useAddLeaguePoints = ({
@@ -37,9 +42,16 @@ export const useAddLeaguePoints = ({
     }
   };
 
+  const pointSystem: PointSystem = [
+    { points: 5, activity: "RESOLUCIÓ DE DUBTES (5 pt)" },
+    { points: 10, activity: "CORRECCIÓ DE PR (10 pt)" },
+    { points: 20, activity: "PRESENTACIÓ (20 pt)" },
+  ];
+
   return {
     addPoints,
     error,
     isLoading,
+    pointSystem,
   };
 };

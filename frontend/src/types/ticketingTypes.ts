@@ -114,3 +114,14 @@ export interface UseTicketingGetAllState {
   isLoading: boolean;
   errorMessage: string | null;
 }
+
+export interface IntUpdateTicket {
+  status?: TicketStatus;
+  priority?: TicketPriority;
+}
+
+export interface ApiUpdateTicketResponse {
+  success: boolean;
+  data: ApiTicketData;
+  message?: string;
+}
