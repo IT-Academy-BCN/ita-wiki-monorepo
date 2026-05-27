@@ -3,9 +3,16 @@ import ProjectButton from "../../code-connect/projectCard/ProjectButton";
 interface TeamRowProps {
   members: { name: string; avatar: string }[];
   emptySlots: number;
+  onSlotClick?: () => void;
+  isSelected?: boolean;
 }
 
-const TeamRow = ({ members, emptySlots }: TeamRowProps) => (
+const TeamRow = ({
+  members,
+  emptySlots,
+  onSlotClick,
+  isSelected,
+}: TeamRowProps) => (
   <div className="w-full flex gap-6 pr-2 mb-4">
     {members.map((member, index) => (
       <figure className="flex flex-col items-center" key={index}>
@@ -20,7 +27,13 @@ const TeamRow = ({ members, emptySlots }: TeamRowProps) => (
       </figure>
     ))}
     {Array.from({ length: emptySlots }).map((_, index) => (
-      <ProjectButton key={`empty-${index}`}>+</ProjectButton>
+      <ProjectButton
+        key={`empty-${index}`}
+        onClick={onSlotClick}
+        isSelected={isSelected}
+      >
+        +
+      </ProjectButton>
     ))}
   </div>
 );
