@@ -158,6 +158,17 @@ const FormCreate = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (
+      formData.start_date &&
+      formData.end_date &&
+      formData.end_date < formData.start_date
+    ) {
+      toast.error(
+        "La data de finalització no pot ser anterior a la data d'inici.",
+      );
+      return false;
+    }
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
