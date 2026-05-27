@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { updateTicket } from "../api/endPointTickets";
-import type { TicketStatus, TicketPriority } from "../types/ticketingTypes";
+import type { TicketPriority } from "../types/ticketingTypes";
 
 export const useTicketingUpdate = () => {
   const [isLoading, setIsLoading] = useState(false);
