@@ -6,23 +6,6 @@ export const useTicketingUpdate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const updateStatus = async (
-    ticketId: number,
-    status: TicketStatus,
-  ): Promise<boolean> => {
-    setIsLoading(true);
-    setErrorMessage(null);
-    try {
-      await updateTicket(ticketId, { status });
-      return true;
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Unknown error");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const updatePriority = async (
     ticketId: number,
     priority: TicketPriority,
@@ -40,5 +23,5 @@ export const useTicketingUpdate = () => {
     }
   };
 
-  return { updateStatus, updatePriority, isLoading, errorMessage };
+  return { updatePriority, isLoading, errorMessage };
 };
