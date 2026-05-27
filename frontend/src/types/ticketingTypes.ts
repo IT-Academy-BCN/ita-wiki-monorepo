@@ -125,9 +125,11 @@ export interface ApiUpdateTicketResponse {
   data: ApiTicketData;
   message?: string;
 }
+
 export interface DropdownOption {
   label: string;
   value: string;
+}
 
 export interface TicketComment {
   id: number;
