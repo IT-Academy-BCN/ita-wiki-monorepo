@@ -36,12 +36,6 @@ const CodeConnectDetails = () => {
 
               <PendingRequestList
                 projectId={codeConnectProject.data.id}
-                languageFrontend={displayLanguageIcon(
-                  codeConnectProject.data.language_frontend,
-                )}
-                languageBackend={displayLanguageIcon(
-                  codeConnectProject.data.language_backend,
-                )}
               />
               <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
               <p className="text-[16px] mb-10">

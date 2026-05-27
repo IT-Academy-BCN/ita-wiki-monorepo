@@ -5,20 +5,9 @@ import PendingRequest from "./PendingRequest";
 
 interface PendingRequestListProps {
   projectId: number;
-  languageFrontend?: string;
-  languageBackend?: string;
 }
 
-const PendingRequestList = ({
-  projectId,
-  languageFrontend,
-  languageBackend,
-}: PendingRequestListProps) => {
-  const getRoleIcon = (role: string) => {
-    if (role === "Frontend Developer") return languageFrontend;
-    if (role === "Backend Developer") return languageBackend;
-    return undefined;
-  };
+const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
   const [pending, setPending] = useState<ApiContributor[]>([]);
 
   useEffect(() => {
@@ -39,7 +28,6 @@ const PendingRequestList = ({
           <PendingRequest
             key={contributor.id}
             contributor={contributor}
-            roleIcon={getRoleIcon(contributor.programming_role)}
           />
         ))}
       </ul>
