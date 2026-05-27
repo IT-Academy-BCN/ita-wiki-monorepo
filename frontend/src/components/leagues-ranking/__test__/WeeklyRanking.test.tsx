@@ -10,18 +10,19 @@ vi.mock("../../../hooks/useLeagues", () => ({
 }));
 
 const mockLeagues: LigaResponse = {
-  "1": [
-    {
-      position: 1,
-      user_id: 101,
-      username: "Júlia",
-      points_weekly: 94,
-      status: "Junior Coder",
-      language: "React",
-      league_id: 1,
-    },
-  ],
-};
+  "1":
+    [
+      {
+        position: 1,
+        user_id: 101,
+        username: "Júlia",
+        points_weekly: 94,
+        status: "Junior Coder",
+        language: "React",
+        league_id: 1,
+      },
+    ]
+}
 
 describe("WeeklyRanking", () => {
   it("renders the standings table after fetch", async () => {
