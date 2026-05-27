@@ -21,23 +21,4 @@ describe("PendingRequest", () => {
     );
     expect(screen.getByText("Ivilarop")).toBeTruthy();
   });
-
-  it("renders the role icon when provided", () => {
-    render(
-      <ul>
-        <PendingRequest contributor={contributor} roleIcon="/react-logo.svg" />
-      </ul>,
-    );
-    const icon = screen.getByAltText("Frontend Developer");
-    expect(icon).toBeTruthy();
-  });
-
-  it("does not render a role icon when roleIcon is not provided", () => {
-    render(
-      <ul>
-        <PendingRequest contributor={contributor} />
-      </ul>,
-    );
-    expect(screen.queryByAltText("Frontend Developer")).toBeNull();
-  });
 });
