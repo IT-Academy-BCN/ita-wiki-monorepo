@@ -16,8 +16,9 @@ export const AddLeaguePoints = ({
   users,
 }: AddLeaguePointsProps): JSX.Element => {
   const [selectedUsername, setSelectedUsername] = useState<string>("");
+  const [addedPoints, setAddedPoints] = useState<number | null>(null);
 
-  const { addPoints, error, isLoading } = useAddLeaguePoints({
+  const { addPoints, error, isLoading, pointSystem } = useAddLeaguePoints({
     addLeaguePoints,
   });
 
@@ -26,17 +27,19 @@ export const AddLeaguePoints = ({
   ): Promise<void> => {
     event.preventDefault();
 
-    if (!selectedUsername) {
+    if (!selectedUsername || !addedPoints) {
       return;
     }
 
-    await addPoints(Number(selectedUsername));
+    await addPoints(Number(selectedUsername), addedPoints);
     setSelectedUsername("");
+    setAddedPoints(null);
   };
 
   return (
     <form className="mt-8" onSubmit={handleSubmit}>
-      <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+      <h1>Afegir punts</h1>
+      <div className="flex gap-3 md:items-center">
         <select
           className="min-h-[40px] border border-gray-600 px-3 py-2 text-xs uppercase text-gray-700 focus:border-[#B91879] focus:outline-none focus:ring-1 focus:ring-[#B91879]"
           id="league-username"
@@ -53,13 +56,17 @@ export const AddLeaguePoints = ({
           ))}
         </select>
 
-        <button
-          className="w-fit bg-[#B91879] px-5 py-3 text-xs font-bold uppercase text-white hover:shadow-md disabled:cursor-not-allowed"
-          disabled={!selectedUsername || isLoading}
-          type="submit"
-        >
-          {isLoading ? "Sumant..." : "Sumar punts"}
-        </button>
+        {pointSystem.map((item, index) => (
+          <button
+            key={index}
+            className="flex-1 bg-[#B91879] px-5 py-3 text-xs font-bold uppercase text-white hover:shadow-md disabled:cursor-not-allowed"
+            disabled={!selectedUsername || isLoading}
+            type="submit"
+            onClick={() => setAddedPoints(item.points)}
+          >
+            {isLoading ? "Sumant..." : item.activity}
+          </button>
+        ))}
       </div>
 
       {error && <p>{error}</p>}

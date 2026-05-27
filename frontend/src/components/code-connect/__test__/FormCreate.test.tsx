@@ -104,6 +104,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   ) as HTMLInputElement;
   await user.type(devsBackInput, "2");
 
+  const startDateInput = screen.getByLabelText(
+    /data d'inici del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(startDateInput, "2025-12-01");
+
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
@@ -416,6 +421,31 @@ describe("FormCreateCodeConnect", () => {
       expect(form).toHaveFormValues({ language_frontend: "React" });
     });
 
+    it("should render start_date input and include it in payload", async () => {
+      const user = userEvent.setup();
+      mockCreateCodeConnect.mockResolvedValueOnce({});
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      expect(
+        screen.getByLabelText(/data d'inici del projecte/i),
+      ).toBeInTheDocument();
+
+      await fillCompleteForm(user);
+      const form = screen
+        .getByRole("textbox", { name: /títol/i })
+        .closest("form");
+      if (!form) throw new Error("Form not found");
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+          expect.objectContaining({
+            start_date: "2025-12-01",
+          }),
+        );
+      });
+    });
+
     it("should show placeholder '0' and empty value when number inputs are at default", () => {
       renderWithRouter(<FormCreateCodeConnect />);
       const timeInput = document.getElementById("time") as HTMLInputElement;
@@ -432,6 +462,30 @@ describe("FormCreateCodeConnect", () => {
       expect(devsFrontInput.placeholder).toBe("0");
       expect(devsBackInput.value).toBe("");
       expect(devsBackInput.placeholder).toBe("0");
+    });
+  });
+  it("should calculate end_date automatically when start_date, time and unitTime are set", async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<FormCreateCodeConnect />);
+
+    const startDateInput = screen.getByLabelText(
+      /data d'inici del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(startDateInput, "2026-01-01");
+
+    const timeInput = screen.getByLabelText(
+      /durada del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(timeInput, "2");
+
+    const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+    await user.selectOptions(unitTimeSelect, "month");
+
+    const endDateInput = document.getElementById(
+      "end_date",
+    ) as HTMLInputElement;
+    await waitFor(() => {
+      expect(endDateInput.value).toBe("2026-03-01");
     });
   });
 });
