@@ -1,35 +1,27 @@
-import { Link, useNavigate, useLocation } from "react-router";
-import logoItAcademy from "../../assets/LogoItAcademy.svg";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import addIcon from "../../assets/add.svg";
-import userIcon from "../../assets/user2.svg";
 import arrowDown from "../../assets/arrow-down.svg";
 import logOutIcon from "../../assets/logOut.svg";
-import ButtonComponent from "../atoms/ButtonComponent";
-import DropdownButtonComponent from "../atoms/DropdownButtonComponent";
+import userIcon from "../../assets/user2.svg";
 import { useUserContext } from "../../context/UserContext";
 import { useChangeUserRole } from "../../hooks/useChangeUserRole";
-import { useEffect, useRef, useState } from "react";
-import { Modal } from "../Modal/Modal";
-import GitHubLogin from "../github-login/GitHubLogin";
-import { AddUsersModal } from "../resources/AddUserModal";
-import { getUserRole } from "../../api/userApi";
-import { TermsAndConditionsModal } from "../Modal/TermsAndConditionsModal";
-import RoleDropdownComponent from "./header/RoleDropdownComponent";
 import { TypUserRole } from "../../types";
+import { Modal } from "../Modal/Modal";
+import ButtonComponent from "../atoms/ButtonComponent";
+import DropdownButtonComponent from "../atoms/DropdownButtonComponent";
+import { AddUsersModal } from "../resources/AddUserModal";
+import RoleDropdownComponent from "./header/RoleDropdownComponent";
+import { SignInComponent } from "./header/SignInComponent";
 
 const HeaderComponent = () => {
-  const { user, signIn, signOut } = useUserContext();
-
-  console.log(user);
+  const { user, signOut } = useUserContext();
   const { isChanging, updateUserRole } = useChangeUserRole();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [resource, setResource] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
-  const [loginError, setLoginError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showChangeRoleDropdown, setShowChangeRoleDropdown] =
     useState<boolean>(false);
@@ -42,7 +34,6 @@ const HeaderComponent = () => {
   const langDropdownRef = useRef<HTMLDivElement>(null);
   const roleDropdownRef = useRef<HTMLDivElement>(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const resourcePath =
@@ -52,13 +43,13 @@ const HeaderComponent = () => {
     }
   }, [location.pathname, resource]);
 
-  const dropdowns = [
-    { ref: dropdownRef, setter: setShowDropdown },
-    { ref: langDropdownRef, setter: setShowLangDropdown },
-    { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
-  ];
-
   useEffect(() => {
+    const dropdowns = [
+      { ref: dropdownRef, setter: setShowDropdown },
+      { ref: langDropdownRef, setter: setShowLangDropdown },
+      { ref: roleDropdownRef, setter: setShowChangeRoleDropdown },
+    ];
+
     const handleClickOutside = (event: MouseEvent) => {
       dropdowns.forEach(({ ref, setter }) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -101,60 +92,18 @@ const HeaderComponent = () => {
   };
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   const openAddUserModal = () => setIsAddUserModalOpen(true);
   const closeAddUserModal = () => setIsAddUserModalOpen(false);
 
-  const openTermsModal = () => setIsTermsModalOpen(true);
-  const closeTermsModal = () => setIsTermsModalOpen(false);
-
-  const [userRole, setUserRole] = useState<TypUserRole | null>(null);
-
-  useEffect(() => {
-    if (user && user.id) {
-      getUserRole(user.id)
-        .then((roleData) => {
-          setUserRole(roleData || null);
-        })
-        .catch((err) => {
-          console.error("Error fetching role:", err);
-          setUserRole(null);
-        });
-    } else {
-      setUserRole(null);
-    }
-  }, [user]);
+  const userRole: TypUserRole | null = (user?.role as TypUserRole) ?? null;
 
   const hasPermission = userRole
     ? ["superadmin", "admin", "mentor"].includes(userRole)
     : false;
 
-  const handleSignIn = async () => {
-    if (!isChecked) {
-      setLoginError(true);
-      return;
-    }
-    setIsLoading(true);
-    try {
-      await signIn();
-      setIsModalOpen(false);
-    } catch {
-      setLoginError(true);
-    }
-    setIsLoading(false);
-  };
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-    setLoginError(false);
-  };
-
   return (
-    <header className="hidden lg:flex py-4 px-6 items-center justify-between">
-      <Link to="/">
-        <img src={logoItAcademy} alt="logo" width={"116px"} />
-      </Link>
+    <header className="hidden lg:flex py-4 px-6 items-center justify-end">
       <div className="flex items-center gap-[6px]">
         {hasPermission && (
           <ButtonComponent
@@ -223,8 +172,7 @@ const HeaderComponent = () => {
               className="h-[41px] px-4 flex items-center gap-1 rounded-lg hover:bg-white border border-transparent hover:border-gray-300 transition cursor-pointer"
             >
               <img
-                //user todavía no tiene .photoUrl
-                src={undefined}
+                src={user.photoURL ?? userIcon}
                 alt="avatar"
                 className="w-8 h-8 rounded-full"
               />
@@ -244,27 +192,23 @@ const HeaderComponent = () => {
                 />
                 <hr className="h-px -mx-2 bg-gray-300 border-0" />
                 {/*Role*/}
-                {devMode ? (
-                  <div className="relative" ref={roleDropdownRef}>
-                    <DropdownButtonComponent
-                      title={userRole}
-                      onClick={() =>
-                        setShowChangeRoleDropdown(!showChangeRoleDropdown)
-                      }
-                      disabled={false}
-                      icon={arrowDown}
+                <div className="relative" ref={roleDropdownRef}>
+                  <DropdownButtonComponent
+                    title={userRole}
+                    onClick={() =>
+                      setShowChangeRoleDropdown(!showChangeRoleDropdown)
+                    }
+                    disabled={false}
+                    icon={arrowDown}
+                  />
+                  {showChangeRoleDropdown && (
+                    <RoleDropdownComponent
+                      userRole={userRole}
+                      isChanging={isChanging}
+                      onRoleChange={handleRoleChange}
                     />
-                    {showChangeRoleDropdown && (
-                      <RoleDropdownComponent
-                        userRole={userRole}
-                        isChanging={isChanging}
-                        onRoleChange={handleRoleChange}
-                      />
-                    )}
-                  </div>
-                ) : (
-                  <DropdownButtonComponent title={userRole} disabled={true} />
-                )}
+                  )}
+                </div>
                 <hr className="h-px -mx-2 bg-gray-300 border-0" />
                 {/*Cerrar sesión*/}
                 <DropdownButtonComponent
@@ -290,63 +234,7 @@ const HeaderComponent = () => {
         )}
 
         {/* MODAL LOGIN */}
-        {isModalOpen && (
-          <Modal closeModal={closeModal} title="Inici de sessió">
-            <GitHubLogin onClick={handleSignIn} isLoading={isLoading} />
-            <section className="flex items-center gap-2 mt-8 font-medium">
-              <label htmlFor="terms">
-                <input
-                  name="terms"
-                  id="terms"
-                  type="checkbox"
-                  onChange={handleCheckboxChange}
-                  checked={isChecked}
-                  className="hidden"
-                />
-                <div
-                  className={`w-5 h-5 flex items-center justify-center rounded border ${
-                    isChecked
-                      ? "bg-[#B91879] border-[#B91879]"
-                      : "border-gray-400"
-                  }`}
-                >
-                  {isChecked && (
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      ></path>
-                    </svg>
-                  )}
-                </div>
-              </label>
-              <p>
-                Accepto{" "}
-                <span
-                  className="underline cursor-pointer"
-                  onClick={() => openTermsModal()}
-                >
-                  els termes legals
-                </span>
-              </p>
-            </section>
-
-            {loginError && (
-              <div className="text-red-500 text-[1rem] mt-8 text-center font-medium">
-                Ho sentim, no s'ha pogut iniciar sessió,
-                <br /> contacti amb l'administrador
-              </div>
-            )}
-          </Modal>
-        )}
+        {isModalOpen && <SignInComponent setIsModalOpen={setIsModalOpen} />}
 
         {/* MODAL LOGOUT CONFIRM */}
         {showConfirmLogout && (
@@ -376,14 +264,6 @@ const HeaderComponent = () => {
               </button>
             </div>
           </Modal>
-        )}
-
-        {/* MODAL TERMS AND CONDITIONS */}
-        {isTermsModalOpen && (
-          <TermsAndConditionsModal
-            closeModal={closeTermsModal}
-            title="Termes Legals"
-          />
         )}
 
         {/* MODAL ADD USER */}

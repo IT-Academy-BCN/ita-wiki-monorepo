@@ -7,16 +7,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ForumQuestion;
 
 class ListProjects extends Model
 {
     use HasFactory;
     protected $table = 'list_projects';
+    protected $casts = [
+        'roadmap' => 'array',
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
     protected $fillable = [
+        'user_id',
         'title',
+        'limit_date_inscription',
+        'start_date',
+        'end_date',
+        'dev_front_number',
+        'dev_back_number',
         'time_duration',
         'language_backend',
-        'language_frontend'
+        'language_frontend',
+        'description',
+        'roadmap'
+    
     ];
 
     public function contributorListProject()
@@ -28,4 +43,9 @@ class ListProjects extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function forumQuestions()
+    {
+        return $this->hasMany(ForumQuestion::class, 'list_project_id');
+    }
+
 }

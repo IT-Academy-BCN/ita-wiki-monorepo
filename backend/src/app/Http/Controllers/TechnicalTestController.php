@@ -10,6 +10,7 @@ use App\Enums\DifficultyLevelEnum;
 use App\Enums\TechnicalTestStatusEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -339,16 +340,16 @@ class TechnicalTestController extends Controller
      */
     public function update(StoreTechnicalTestRequest $request, TechnicalTest $technicalTest)
     {
-       /* $user = auth('api')->user();
+        $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }*/
+        }
 
-        /* if (!$user->can('edit all technical tests')) {
+        if (!$user->can('edit all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('edit own technical tests')) {
                 return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
             }
-        }*/
+        }
 
         try {
             DB::beginTransaction();
@@ -447,17 +448,17 @@ class TechnicalTestController extends Controller
      *     @OA\Response(response=403, description="Forbidden - Not your technical test")
      * )
      */
-    public function destroy(TechnicalTest $technicalTest)
+    public function destroy(Request $request, TechnicalTest $technicalTest)
     {
-       /* $user = auth('api')->user();
+        $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }*/
-        /* if (!$user->can('delete all technical tests')) {
+        }
+        if (!$user->can('delete all technical tests')) {
             if ($technicalTest->github_id !== $user->github_id || !$user->can('delete own technical tests')) {
                 return response()->json(['error' => 'Forbidden - Not your technical test'], 403);
             }
-        }*/
+        }
 
 
         $technicalTest->delete();

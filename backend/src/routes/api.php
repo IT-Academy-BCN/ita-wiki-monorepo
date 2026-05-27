@@ -13,7 +13,14 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListProjectsController;
+use App\Http\Controllers\JoinProjectController;
+use App\Http\Controllers\ForumQuestionController;
+use App\Http\Controllers\ForumAnswerController;
+use App\Http\Controllers\Tickets\TicketController;
+use App\Http\Controllers\Tickets\TicketCommentController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FeatureFlagController;
+use App\Http\Controllers\LigaController;
 
 // GitHub Auth System Endpoints (PUBLIC)
 Route::get('/auth/github/redirect', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
@@ -37,6 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
             'message' => 'Session closed successfully'
         ]);
     });
+
+    Route::put('/feature-flags/role-self-assignment', [FeatureFlagController::class, 'roleSelfAssignment']);
+    Route::patch('/users/{user}/role', [UserController::class, 'updateOwnRole'])->name('users.role.update');
+
 });
 
 
@@ -69,6 +80,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codeconnect/{listProject}/contributors', [ListProjectsController::class, 'addContributor'])->name('contributors.store');
     Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
     Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
+    Route::post('/codeconnect/{listProject}/join', JoinProjectController::class)->name('codeconnect.join');
+});
+
+// ========== FORUM ENDPOINTS ==========
+
+// PUBLIC
+Route::get('/codeconnect/{listProject}/forum', [ForumQuestionController::class, 'index'])->name('forum.questions.index');
+Route::get('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'show'])->name('forum.questions.show');
+
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/codeconnect/{listProject}/forum', [ForumQuestionController::class, 'store'])->name('forum.questions.store');
+    Route::put('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'update'])->name('forum.questions.update');
+    Route::delete('/codeconnect/{listProject}/forum/{question}', [ForumQuestionController::class, 'destroy'])->name('forum.questions.destroy');
+
+    Route::post('/codeconnect/{listProject}/forum/{question}/answers', [ForumAnswerController::class, 'store'])->name('forum.answers.store');
+    Route::put('/codeconnect/{listProject}/forum/{question}/answers/{answer}', [ForumAnswerController::class, 'update'])->name('forum.answers.update');
+    Route::delete('/codeconnect/{listProject}/forum/{question}/answers/{answer}', [ForumAnswerController::class, 'destroy'])->name('forum.answers.destroy');
 });
 
 // ========== RESOURCES ENDPOINTS ==========
@@ -121,4 +150,36 @@ Route::prefix('roles')->group(function () {
     Route::get('/', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/assign', [RoleController::class, 'assignRole'])->name('roles.assign');
     Route::get('/users/{user}', [RoleController::class, 'getUserRoles'])->name('roles.user');
+});
+
+// ========== BUGS REPORTING TICKETING SYSTEM ==========
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::post('tickets', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::put('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+    Route::patch('tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update.patch');
+    Route::delete('tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+
+    Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus'])->name('tickets.status.update');
+    Route::patch('tickets/{ticket}/priority', [TicketController::class, 'updatePriority'])->name('tickets.priority.update');
+    Route::patch('tickets/{ticket}/assignee', [TicketController::class, 'updateAssignee'])->name('tickets.assignee');
+
+    Route::get('tickets/{ticket}/comments', [TicketCommentController::class, 'index'])->name('tickets.comments.index');
+    Route::post('tickets/{ticket}/comments', [TicketCommentController::class, 'store'])->name('tickets.comments.store');
+    Route::put('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'update'])->name('tickets.comments.update');
+    Route::delete('tickets/{ticket}/comments/{comment}', [TicketCommentController::class, 'destroy'])->name('tickets.comments.destroy');
+});
+
+// ========== LIGA ENDPOINTS ==========
+
+// PUBLIC
+Route::get('/ligas', [LigaController::class, 'index'])->name('ligas.index');
+Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ranking');
+
+// PROTECTED
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
+    Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
 });

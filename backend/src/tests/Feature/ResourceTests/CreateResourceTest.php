@@ -26,9 +26,8 @@ class CreateResourceTest extends TestCase
     private function authenticateSanctumUser(int $githubId = 123456): User
     {
         $user = User::factory()->create(['github_id' => $githubId]);
-
+        $user->assignRole('student');
         Sanctum::actingAs($user, ['*']);
-
         return $user;
     }
 
@@ -56,6 +55,12 @@ class CreateResourceTest extends TestCase
 
 
     // ========== VALIDATION TESTS ==========
+
+    public function test_authenticated_student_can_create_resource():void{
+        $this->authenticateSanctumUser();
+        $response = $this->postJson(route('resources.store'), $this->getResourceData());
+        $response->assertStatus(201);
+    }
 
     #[DataProvider('resourceCreationValidationProvider')]
     public function test_create_resource_validation(array $invalidData, string $fieldName): void
@@ -110,5 +115,11 @@ class CreateResourceTest extends TestCase
         $response = $this->postJson('/api/non-existent-route', []);
 
         $response->assertStatus(404);
+    }
+
+    public function test_create_resource_without_authentication():void{
+
+        $response = $this->postJson(route('resources.store'), $this->getResourceData());
+        $response->assertStatus(401);
     }
 }

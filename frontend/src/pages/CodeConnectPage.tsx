@@ -1,14 +1,14 @@
-import PageTitle from "../components/ui/PageTitle";
-import CodeConnectFiltersComponent from "../components/code-connect/CodeConnectFiltersComponent";
-import ProjectList from "../components/code-connect/projectList/ProjectList";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import ButtonComponent from "../components/atoms/ButtonComponent";
-import { useState } from "react";
+import CodeConnectFiltersComponent from "../components/code-connect/CodeConnectFiltersComponent";
+import ProjectList from "../components/code-connect/projectList/ProjectList";
 import Container from "../components/ui/Container";
+import PageTitle from "../components/ui/PageTitle";
 
 const CodeConnectPage = () => {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string[]>([]);
 
   return (
     <>

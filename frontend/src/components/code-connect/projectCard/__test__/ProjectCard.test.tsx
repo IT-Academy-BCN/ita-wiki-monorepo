@@ -1,9 +1,16 @@
-import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
-import { Project } from "../types/projectTypes";
-import ProjectCard from "../ProjectCard";
 import { MemoryRouter } from "react-router";
+import { describe, expect, it } from "vitest";
+import { UserProvider } from "../../../../context/UserContext";
+import { Project } from "../../../../types/codeConnectTypes";
+import ProjectCard from "../ProjectCard";
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <UserProvider>
+    <MemoryRouter>{children}</MemoryRouter>
+  </UserProvider>
+);
 
 function makeProject(partial: Partial<Project> = {}): Project {
   const base: Project = {
@@ -12,7 +19,7 @@ function makeProject(partial: Partial<Project> = {}): Project {
     duration: "1 mes",
     frontend: {
       tech: "Angular",
-      logo: "../assets/angular.svg",
+      logo: "../assets/technologies/angular-logo.svg",
       positions: 3,
       participants: [
         { name: "Natasha", avatar: "../assets/project-avatar.svg" },
@@ -21,7 +28,7 @@ function makeProject(partial: Partial<Project> = {}): Project {
     },
     backend: {
       tech: "Java",
-      logo: "../assets/logo-java 1.svg",
+      logo: "../assets/technologies/java-logo.svg",
       positions: 2,
       participants: [],
     },
@@ -34,11 +41,7 @@ function makeProject(partial: Partial<Project> = {}): Project {
 describe("ProjectCard", () => {
   it("renders title, duration, and role labels", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     expect(screen.getByText(project.title)).toBeInTheDocument();
     expect(
@@ -51,11 +54,7 @@ describe("ProjectCard", () => {
 
   it("renders logos and participant avatars with correct alt text", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const frontLogo = screen.getByAltText(
       project.frontend.tech,
@@ -72,6 +71,21 @@ describe("ProjectCard", () => {
     });
   });
 
+  it("renders avatar placeholder when participant avatar is empty", () => {
+    const project = makeProject({
+      frontend: {
+        tech: "Angular",
+        logo: "../assets/technologies/angular-logo.svg",
+        positions: 3,
+        participants: [{ name: "Natasha", avatar: "" }],
+      },
+    });
+    render(<ProjectCard project={project} />, { wrapper });
+    const avatar = screen.getByAltText("Natasha") as HTMLImageElement;
+    expect(avatar).toBeInTheDocument();
+    expect(avatar.src).not.toBe("");
+  });
+
   it('shows "+" buttons equal to available slots per role', () => {
     const project = makeProject();
     const availableFrontend =
@@ -79,11 +93,7 @@ describe("ProjectCard", () => {
     const availableBackend =
       project.backend.positions - project.backend.participants.length;
 
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const addButtons = screen.getAllByRole("button", { name: "+" });
     expect(addButtons.length).toBe(availableFrontend + availableBackend);
@@ -91,11 +101,7 @@ describe("ProjectCard", () => {
 
   it("renders a link to the project details route", () => {
     const project = makeProject();
-    render(
-      <MemoryRouter>
-        <ProjectCard project={project} />
-      </MemoryRouter>,
-    );
+    render(<ProjectCard project={project} />, { wrapper });
 
     const link = screen.getByRole("link");
     expect(link).toBeInTheDocument();
