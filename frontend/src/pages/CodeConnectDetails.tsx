@@ -1,49 +1,73 @@
-import { FC } from "react";
-import PageTitle from "../components/ui/PageTitle";
-import moockData from "../moock/projectDetails.json";
+import { useParams } from "react-router";
+import PendingRequestList from "../components/code-connect/pendingRequests/PendingRequestList";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
+import PageTitle from "../components/ui/PageTitle";
+import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
+import { displayLanguageIcon } from "../utils/iconUtils";
 
-import react from "../assets/react.svg";
-import php from "../assets/logo-php 1.svg";
-import avatar1 from "../assets/project-avatar.jpg";
-import avatar2 from "../assets/project-avatar2.jpg";
-import avatar3 from "../assets/project-avatar3.jpg";
+const CodeConnectDetails = () => {
+  const { projectId } = useParams<{ projectId: string }>();
 
-const CodeConnectDetails: FC = () => {
-  const { title, description, roadmap } = moockData.details[0];
+  const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
+    projectId || null,
+  );
+
   return (
     <>
-      <PageTitle title={title} />
+      <PageTitle
+        title={
+          codeConnectProject?.data?.title || "Codeconnect | IT Academy Wiki"
+        }
+      />
 
       <Container className="px-4 py-6 lg:pl-8 xl:pl-6">
-        <div className="flex flex-col lg:flex-row gap-8 w-full">
-          <div className="lg:w-2/3">
-            <h2 className="text-[26px] font-extrabold text-left mb-10">
-              {title}
-            </h2>
-            <p className="text-[16px] mb-20 whitespace-pre-line">
-              {description}
-            </p>{" "}
-            <h3 className="text-[22px] font-extrabold mb-5">Roadmap</h3>
-            <ol className="list-decimal list-inside">
-              {(roadmap || []).map((item, index) => (
-                <li key={index} className="text-[16px] mb-2">
-                  {item}
-                </li>
-              ))}
-            </ol>
+        {isLoading && <p>Carregant...</p>}
+
+        {!isLoading && errorMessage && <p>{errorMessage}</p>}
+
+        {!isLoading && !errorMessage && codeConnectProject?.data && (
+          <div className="flex flex-col lg:flex-row gap-8 w-full">
+            <div className="lg:w-2/3">
+              <h2 className="text-[26px] font-extrabold text-left mb-10">
+                {codeConnectProject.data.title ||
+                  "No s'ha pogut carregar el títol del projecte."}
+              </h2>
+
+              <PendingRequestList projectId={codeConnectProject.data.id} />
+              <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
+              <p className="text-[16px] mb-10">
+                {codeConnectProject.data?.description ||
+                  "Aquesta informació no està disponible a la base de dades."}
+              </p>
+              <h3 className="text-[22px] font-extrabold mb-5">Roadmap:</h3>
+              {codeConnectProject?.data?.roadmap?.length ? (
+                <>
+                  <ul>
+                    {codeConnectProject.data.roadmap.map((task, index) => (
+                      <li key={index}>{task.task}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                "Aquesta informació no està disponible a la base de dades."
+              )}
+            </div>
+
+            <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
+              <ProjectTeam
+                logoFront={displayLanguageIcon(
+                  codeConnectProject.data.language_frontend,
+                )}
+                logoBack={displayLanguageIcon(
+                  codeConnectProject.data.language_backend,
+                )}
+                contributors={codeConnectProject.data.contributors}
+                timeDuration={codeConnectProject.data.time_duration}
+              />
+            </div>
           </div>
-          <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
-            <ProjectTeam
-              logoFront={react}
-              logoBack={php}
-              avatarSrc={avatar1}
-              avatarSrc2={avatar2}
-              avatarSrc3={avatar3}
-            />
-          </div>
-        </div>
+        )}
       </Container>
     </>
   );

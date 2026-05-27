@@ -1,8 +1,7 @@
 import { TechnicalTest } from "../../types/TechnicalTest";
-import XnixCalendar from "../../assets/xnix-calendar.svg";
 import { contentForTechnicalTest } from "../technical-test/languageLabelsContent";
 import { Link } from "react-router";
-import { Clock, Heart } from "lucide-react";
+import { Clock, Heart, Calendar } from "lucide-react";
 import { getLevelIcon } from "../../utils/getLevelIcon";
 
 interface TechnicalTestCardProps {
@@ -16,10 +15,10 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
   const IconComponent = language?.icon;
 
   const formattedDate =
-    typeof test.updated_at === "string" && isNaN(Date.parse(test.updated_at))
-      ? test.updated_at
-      : test.updated_at
-        ? new Date(test.updated_at).toLocaleDateString("ca-ES", {
+    typeof test.created_at === "string" && isNaN(Date.parse(test.created_at))
+      ? test.created_at
+      : test.created_at
+        ? new Date(test.created_at).toLocaleDateString("ca-ES", {
             day: "2-digit",
             month: "short",
             year: "numeric",
@@ -28,45 +27,68 @@ const TechnicalTestCard = ({ test }: TechnicalTestCardProps) => {
 
   const likeCount = test.like_count ?? 0;
 
-  const levelIcon = getLevelIcon(test.title);
+  const levelIcon = getLevelIcon(test.difficulty_level);
 
   return (
     <Link to={`/resources/technical-test/${test.id}`}>
-      <li className="flex flex-col w-full py-5.5 px-4 rounded-2xl shadow-xs border border-[#7E7E7E] hover:bg-gray-100 transition-colors duration-100">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-col sm:flex-row gap-1">
-            <div>
-              <img src={levelIcon} alt="Test level" className="mt-1" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3>
-                <span className="text-lg font-bold text-black">
-                  {test.title}
-                </span>
-              </h3>
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500 mt-2 sm:mt-2">
-                <span className="flex items-center gap-1">
-                  <Clock size={16} />
-                  <span>30 min</span>
-                </span>
-                <span className="flex items-center gap-1">
-                  <Heart size={16} />
-                  <span>{likeCount}</span>
-                </span>
-                <span className="flex items-center gap-1">
-                  <img src={XnixCalendar} alt="XnixCalendar" />
-                  <span>{formattedDate}</span>
-                </span>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 max-w-sm min-h-[347px] hover:bg-gray-50 transition-colors duration-100">
+        {/* Header: language icon + title + level icon */}
+        <div>
+          <div className="flex justify-between items-start">
+            {IconComponent && (
+              <div className="w-7 h-7 flex items-center justify-center">
+                <IconComponent />
               </div>
-            </div>
+            )}
           </div>
-          {IconComponent && (
-            <div className="flex items-center justify-start sm:justify-center w-10 h-10 mt-2 sm:mt-0">
-              <IconComponent />
+          <div className="text-xl font-bold text-gray-900 leading-tight mt-2">
+            {test.title}
+          </div>
+        </div>
+
+        {/* Body: description + tags + footer */}
+        <div className="flex flex-col gap-3 flex-1">
+          {test.description && (
+            <p className="text-sm text-gray-500 line-clamp-2">
+              {test.description}
+            </p>
+          )}
+
+          {test.tags && test.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {test.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-700 bg-white"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           )}
+
+          <div className="flex items-center gap-2 mt-auto text-gray-500 font-medium flex-nowrap">
+            <div className="flex items-center gap-1 shrink-0">
+              <img src={levelIcon} alt="Test level" className="h-4" />
+            </div>
+
+            <div className="flex items-center gap-1 shrink-0">
+              <Clock size={14} className="text-gray-400" />
+              <span className="text-xs whitespace-nowrap">30 min</span>
+            </div>
+
+            <div className="flex items-center gap-1 shrink-0">
+              <Heart size={14} className="text-gray-400" />
+              <span className="text-xs">{likeCount}</span>
+            </div>
+
+            <div className="flex items-center gap-1 ml-auto text-xs shrink-0 whitespace-nowrap">
+              <Calendar size={14} className="text-gray-400" />
+              {formattedDate}
+            </div>
+          </div>
         </div>
-      </li>
+      </div>
     </Link>
   );
 };

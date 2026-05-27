@@ -14,26 +14,36 @@ use Database\Seeders\ResourceSeeder;
 use Database\Seeders\BookmarkSeeder;
 use Database\Seeders\LikeSeeder;
 use Database\Seeders\TechnicalTestSeeder;
+use Database\Seeders\TicketSeeder;
 use Database\Seeders\ListProjectsSeeder;
 use Database\Seeders\ContributorListProjectSeeder;
+use Database\Seeders\ForumSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RolePermissionSeeder;
+use Database\Seeders\LigaSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
-    
+
     public function run(): void
     {
         $this->call([
-            //RoleSeeder::class,              
-            //PermissionSeeder::class,       
-            //RolePermissionSeeder::class,    
-            UserSeeder::class,              
-            TagSeeder::class,               
-            ResourceSeeder::class,         
-            //BookmarkSeeder::class,         
-            //LikeSeeder::class,              
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+            TicketSeeder::class,
+            LigaSeeder::class,
+            TagSeeder::class,
+            ResourceSeeder::class,
+            //BookmarkSeeder::class,
+            //LikeSeeder::class,
             TechnicalTestSeeder::class,
             ListProjectsSeeder::class,
             ContributorListProjectSeeder::class,
+            ForumSeeder::class,
         ]);
     }
 }
