@@ -9,7 +9,7 @@ const contributor: ApiContributor = {
   user_id: 200,
   programming_role: "Frontend Developer",
   status: "pending",
-  user: { id: 200, name: "Ivilarop", email: "ivilarop@test.com" },
+  user: { id: 200, name: "userTest", email: "usertest@test.com" },
 };
 
 describe("PendingRequest", () => {
@@ -19,6 +19,6 @@ describe("PendingRequest", () => {
         <PendingRequest contributor={contributor} />
       </ul>,
     );
-    expect(screen.getByText("Ivilarop")).toBeTruthy();
+    expect(screen.getByText("userTest")).toBeTruthy();
   });
 });
