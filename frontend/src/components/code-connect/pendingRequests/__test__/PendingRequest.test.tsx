@@ -21,5 +21,4 @@ describe("PendingRequest", () => {
     );
     expect(screen.getByAltText("Frontend Developer")).toBeTruthy();
   });
-
 });
