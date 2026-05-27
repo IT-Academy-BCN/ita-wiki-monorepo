@@ -136,4 +136,13 @@ export interface DropdownMenuProps {
   options: DropdownOption[];
   onSelect: (value: string) => void;
   disabled?: boolean;
+export interface TicketComment {
+  id: number;
+  ticket_id: number;
+  user_id: number;
+  comment: string;
+  is_closing_comment: boolean;
+  created_at: string;
+  updated_at: string;
+  user: TicketUserData;
 }
