@@ -47,11 +47,31 @@ class LigaEndpointAuthTest extends TestCase
 
     public function test_authenticated_user_can_add_points(): void
     {
-        $user = User::factory()->create();
+        $user = $this->authenticateUserWithRole('mentor');
         Liga::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->putJson("/api/ligas/{$user->id}/points", ['points' => 10]);
-
-        $response->assertStatus(200);
+        $this->putJson("/api/ligas/{$user->id}/points", ['points' => 10])
+            ->assertStatus(200);
     }
+
+    public function test_student_cannot_add_points(): void
+    {
+        $student = $this->authenticateUserWithRole('student');
+        Liga::factory()->create(['user_id' => $student->id]);
+
+        $this->putJson("/api/ligas/{$student->id}/points")
+            ->assertStatus(403);
+    }
+
+    public function test_mentor_can_add_points(): void
+    {
+        $mentor = $this->authenticateUserWithRole('mentor');
+        Liga::factory()->create(['user_id' => $mentor->id]);
+
+        $this->putJson("/api/ligas/{$mentor->id}/points")
+            ->assertStatus(200);
+    }
+
+
+
 }
