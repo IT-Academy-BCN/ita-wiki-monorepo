@@ -25,7 +25,7 @@ const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
       </h3>
       <ul className="flex flex-col gap-3">
         {pending.map((contributor) => (
-          <PendingRequest key={contributor.id} contributor={contributor} />
+          <PendingRequest key={contributor.id} contributor={contributor} projectId={projectId}/>
         ))}
       </ul>
     </div>
