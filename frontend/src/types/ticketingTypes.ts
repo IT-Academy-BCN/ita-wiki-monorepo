@@ -136,8 +136,3 @@ export interface TicketComment {
   updated_at: string;
   user: TicketUserData;
 }
-
-export interface DropdownOption {
-  value: string;
-  label: string;
-}
