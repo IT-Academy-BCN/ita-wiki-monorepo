@@ -114,3 +114,25 @@ export interface UseTicketingGetAllState {
   isLoading: boolean;
   errorMessage: string | null;
 }
+
+export interface IntUpdateTicket {
+  status?: TicketStatus;
+  priority?: TicketPriority;
+}
+
+export interface ApiUpdateTicketResponse {
+  success: boolean;
+  data: ApiTicketData;
+  message?: string;
+}
+
+export interface TicketComment {
+  id: number;
+  ticket_id: number;
+  user_id: number;
+  comment: string;
+  is_closing_comment: boolean;
+  created_at: string;
+  updated_at: string;
+  user: TicketUserData;
+}
