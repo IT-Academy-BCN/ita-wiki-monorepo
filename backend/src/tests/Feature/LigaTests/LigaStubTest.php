@@ -31,7 +31,7 @@ class LigaStubTest extends TestCase
 
     public function test_add_points_updates_user_points(): void
     {
-        $user = User::factory()->create();
+       $user = $this->createUserWithRole('mentor');
 
         // addPoints uses firstOrFail(), so a liga entry must exist before calling the endpoint
         Liga::create([
