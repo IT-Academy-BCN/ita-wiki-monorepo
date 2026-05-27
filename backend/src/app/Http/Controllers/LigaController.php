@@ -78,18 +78,23 @@ class LigaController extends Controller
             ], 403);
         }
 
-        $pointsToAdd = $request->input('points', 5);
+        $validated = $request->validate([
+            'points' => 'nullable|integer|min:1',
+        ]);
 
-        $entry->increment('points', $pointsToAdd);
-        $entry->increment('points_weekly', $pointsToAdd);
+         $pointsToAdd = $validated['points'] ?? 5;
+
+         $entry->increment('points', $pointsToAdd);
+         $entry->increment('points_weekly', $pointsToAdd);
 
         $entry->refresh();
 
         return response()->json([
-            'user_id' => $user->id,
-            'points'  => $entry->points,
+            'user_id'       => $user->id,
+            'points'        => $entry->points,
             'points_weekly' => $entry->points_weekly,
         ]);
     }
+
 }
 
