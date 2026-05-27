@@ -34,9 +34,7 @@ const CodeConnectDetails = () => {
                   "No s'ha pogut carregar el títol del projecte."}
               </h2>
 
-              <PendingRequestList
-                projectId={codeConnectProject.data.id}
-              />
+              <PendingRequestList projectId={codeConnectProject.data.id} />
               <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
               <p className="text-[16px] mb-10">
                 {codeConnectProject.data?.description ||
