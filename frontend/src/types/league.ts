@@ -2,16 +2,19 @@ export type Liga = {
   position: number;
   user_id: number;
   username: string;
-  points: number;
+  points?: number;
   points_weekly: number;
-  created_at: string;
-  updated_at: string;
+  status?: string;
+  language?: string;
+  league_id: number;
 };
 
-export type LigaResponse = Liga[];
+export type LigaResponse = { [key: string]: Liga[] };
 
 export type LeagueListProps = {
-  standings: Omit<Ranking, "points_weekly" | "league_id">[];
+  standings: Omit<Ranking, "points_weekly" | "league_id">[] | Liga[];
+  showUp?: boolean;
+  showDown?: boolean;
 };
 
 export type Ranking = {
