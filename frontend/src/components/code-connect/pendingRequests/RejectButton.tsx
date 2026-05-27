@@ -1,16 +1,19 @@
 import { updateContributorStatus } from "../../../api/endPointContributors";
 
 type RejectButtonProps = {
-  project: number;
-  contributor: number;
+  projectId: number;
+  contributorId: number;
 };
 
-export const RejectButton = ({ project, contributor }: RejectButtonProps) => {
+export const RejectButton = ({
+  projectId,
+  contributorId,
+}: RejectButtonProps) => {
   const handleReject = async () => {
     try {
       const res = await updateContributorStatus(
-        project,
-        contributor,
+        projectId,
+        contributorId,
         "rejected",
       );
       console.log(res);

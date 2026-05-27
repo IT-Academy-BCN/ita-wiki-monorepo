@@ -10,7 +10,7 @@ vi.mock("../../../../api/endPointContributors", () => ({
 
 describe("RejectButton", () => {
   it("calls updateContributorStatus with the status rejected on click", async () => {
-    render(<RejectButton project={1} contributor={1} />);
+    render(<RejectButton projectId={1} contributorId={1} />);
     const user = userEvent.setup();
     const button = screen.getByRole("button", { name: /rebutjar/i });
     await user.click(button);
