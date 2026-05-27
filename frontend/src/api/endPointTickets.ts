@@ -4,7 +4,6 @@ import {
   IntTicket,
   TicketComment,
 } from "../types/ticketingTypes";
-
 import { API_URL, END_POINTS } from "../config";
 
 export const createTicket = async (
