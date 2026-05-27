@@ -13,7 +13,7 @@ describe("useTicketingUpdate", () => {
     vi.clearAllMocks();
   });
 
- it("updates ticket status correctly", async () => {
+  it("updates ticket status correctly", async () => {
     vi.mocked(updateTicket).mockResolvedValue({
       id: 1,
       status: "resolved",

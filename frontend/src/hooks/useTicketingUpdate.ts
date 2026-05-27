@@ -6,7 +6,7 @@ export const useTicketingUpdate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-   const updateStatus = async (
+  const updateStatus = async (
     ticketId: number,
     status: TicketStatus,
   ): Promise<boolean> => {
@@ -24,5 +24,4 @@ export const useTicketingUpdate = () => {
   };
 
   return { updateStatus, isLoading, errorMessage };
-
 };
