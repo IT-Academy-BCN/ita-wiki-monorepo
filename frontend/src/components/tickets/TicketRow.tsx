@@ -1,20 +1,11 @@
 // components/ticketing/TicketRow.tsx
 import { useState } from "react";
-import type {
-  ApiTicketData,
-  TicketStatus,
-  TicketPriority,
-} from "../../types/ticketingTypes";
+import type { ApiTicketData, TicketStatus } from "../../types/ticketingTypes";
 import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
 import DropdownMenu from "../atoms/DropdownMenu";
-import {
-  STATUS_LABELS,
-  PRIORITY_LABELS,
-  STATUS_OPTIONS,
-  PRIORITY_OPTIONS,
-} from "./ticketingConstants";
+import { STATUS_LABELS, STATUS_OPTIONS } from "./ticketingConstants";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -30,14 +21,11 @@ interface TicketRowProps {
 }
 
 const TicketRow = ({ ticket }: TicketRowProps) => {
-  const { updateStatus, updatePriority, isLoading } = useTicketingUpdate();
+  const { updateStatus, isLoading } = useTicketingUpdate();
   const { user } = useUserContext();
   const isAdmin = user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
   const [currentStatus, setCurrentStatus] = useState<TicketStatus>(
     ticket.status,
-  );
-  const [currentPriority, setCurrentPriority] = useState<TicketPriority>(
-    ticket.priority ?? "low",
   );
 
   return (
@@ -69,21 +57,6 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
       </div>
 
       <div role="cell">{formatDate(ticket.incident_date)}</div>
-
-      <div role="cell">
-        <DropdownMenu
-          currentValue={PRIORITY_LABELS[currentPriority]}
-          options={PRIORITY_OPTIONS}
-          onSelect={async (value) => {
-            const success = await updatePriority(
-              ticket.id,
-              value as TicketPriority,
-            );
-            if (success) setCurrentPriority(value as TicketPriority);
-          }}
-          disabled={isLoading || !isAdmin}
-        />
-      </div>
     </div>
   );
 };
