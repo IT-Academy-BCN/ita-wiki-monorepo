@@ -33,7 +33,7 @@ const DropdownMenu = ({
       <DropdownButtonComponent
         title={currentValue}
         onClick={() => setIsOpen((prev) => !prev)}
-        disabled={disabled}        
+        disabled={disabled}
       />
       {isOpen && (
         <div className="absolute z-50 mt-1 w-36 rounded-md border border-border bg-white shadow-lg">
