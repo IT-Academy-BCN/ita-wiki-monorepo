@@ -1,3 +1,4 @@
+// types/ticketingTypes.ts
 export type TicketType = "error" | "suggestion";
 
 export type TicketStatus =
@@ -124,4 +125,9 @@ export interface ApiUpdateTicketResponse {
   success: boolean;
   data: ApiTicketData;
   message?: string;
+}
+
+export interface DropdownOption {
+  value: string;
+  label: string;
 }

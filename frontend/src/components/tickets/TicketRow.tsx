@@ -1,3 +1,4 @@
+// components/ticketing/TicketRow.tsx
 import { useState } from "react";
 import type {
   ApiTicketData,
@@ -8,6 +9,12 @@ import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
 import DropdownMenu from "../atoms/DropdownMenu";
+import {
+  STATUS_LABELS,
+  PRIORITY_LABELS,
+  STATUS_OPTIONS,
+  PRIORITY_OPTIONS,
+} from "./ticketConstants";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -16,43 +23,6 @@ const formatDate = (date: string) => {
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
   return `${day}/${month}/${year}`;
-};
-
-const priorityColors: Record<TicketPriority, string> = {
-  low: "text-emerald-600",
-  medium: "text-amber-600",
-  high: "text-orange-600",
-  critical: "text-red-600",
-};
-
-const statusOptions = [
-  { label: "Nou", value: "pending" },
-  { label: "En progrés", value: "in_progress" },
-  { label: "Bloquejat", value: "blocked" },
-  { label: "Fet", value: "ready" },
-  { label: "Tancat", value: "closed" },
-];
-
-const priorityOptions = [
-  { label: "Baixa", value: "low" },
-  { label: "Mitjana", value: "medium" },
-  { label: "Alta", value: "high" },
-  { label: "Crítica", value: "critical" },
-];
-
-const statusLabels: Record<TicketStatus, string> = {
-  pending: "Nou",
-  in_progress: "En progrés",
-  blocked: "Bloquejat",
-  ready: "Fet",
-  closed: "Tancat",
-};
-
-const priorityLabels: Record<TicketPriority, string> = {
-  low: "Baixa",
-  medium: "Mitjana",
-  high: "Alta",
-  critical: "Crítica",
 };
 
 interface TicketRowProps {
@@ -85,8 +55,8 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
 
       <div role="cell">
         <DropdownMenu
-          currentValue={statusLabels[currentStatus]}
-          options={statusOptions}
+          currentValue={STATUS_LABELS[currentStatus]}
+          options={STATUS_OPTIONS}
           onSelect={async (value) => {
             const success = await updateStatus(
               ticket.id,
@@ -102,8 +72,8 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
 
       <div role="cell">
         <DropdownMenu
-          currentValue={priorityLabels[currentPriority]}
-          options={priorityOptions}
+          currentValue={PRIORITY_LABELS[currentPriority]}
+          options={PRIORITY_OPTIONS}
           onSelect={async (value) => {
             const success = await updatePriority(
               ticket.id,
