@@ -1,4 +1,5 @@
 import { useParams } from "react-router";
+import PendingRequestList from "../components/code-connect/pendingRequests/PendingRequestList";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
@@ -33,6 +34,7 @@ const CodeConnectDetails = () => {
                   "No s'ha pogut carregar el títol del projecte."}
               </h2>
 
+              <PendingRequestList projectId={codeConnectProject.data.id} />
               <h3 className="text-[22px] font-extrabold mb-5">Descripció:</h3>
               <p className="text-[16px] mb-10">
                 {codeConnectProject.data?.description ||

@@ -104,6 +104,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   ) as HTMLInputElement;
   await user.type(devsBackInput, "2");
 
+  const startDateInput = screen.getByLabelText(
+    /data d'inici del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(startDateInput, "2025-12-01");
+
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
@@ -414,6 +419,31 @@ describe("FormCreateCodeConnect", () => {
       expect(reactRadio).toHaveAttribute("value", "React");
       const form = reactRadio.closest("form");
       expect(form).toHaveFormValues({ language_frontend: "React" });
+    });
+
+    it("should render start_date input and include it in payload", async () => {
+      const user = userEvent.setup();
+      mockCreateCodeConnect.mockResolvedValueOnce({});
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      expect(
+        screen.getByLabelText(/data d'inici del projecte/i),
+      ).toBeInTheDocument();
+
+      await fillCompleteForm(user);
+      const form = screen
+        .getByRole("textbox", { name: /títol/i })
+        .closest("form");
+      if (!form) throw new Error("Form not found");
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+          expect.objectContaining({
+            start_date: "2025-12-01",
+          }),
+        );
+      });
     });
 
     it("should show placeholder '0' and empty value when number inputs are at default", () => {
