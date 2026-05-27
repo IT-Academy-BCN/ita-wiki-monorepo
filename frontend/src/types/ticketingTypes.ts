@@ -125,15 +125,3 @@ export interface ApiUpdateTicketResponse {
   data: ApiTicketData;
   message?: string;
 }
-
-export interface DropdownOption {
-  label: string;
-  value: string;
-}
-
-export interface DropdownMenuProps {
-  currentValue: string;
-  options: DropdownOption[];
-  onSelect: (value: string) => void;
-  disabled?: boolean;
-}
