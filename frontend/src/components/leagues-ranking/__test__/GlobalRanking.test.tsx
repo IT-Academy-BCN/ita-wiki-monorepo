@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchGlobalRanking } from "../../../api/endPointLeagues";
@@ -121,9 +121,13 @@ describe("GlobalRanking", () => {
     const button = screen.getByRole("button", {
       name: "RESOLUCIÓ DE DUBTES (5 pt)",
     });
+    const form = screen.getByRole("form", { name: /add league points/i });
     await user.selectOptions(select, options[1]);
     await user.click(button);
-    expect(fetchGlobalRanking).toHaveBeenCalled();
+    fireEvent.submit(form);
+    await waitFor(() => {
+      expect(fetchGlobalRanking).toHaveBeenCalledTimes(2);
+    });
   });
 
   it("renders without crashing on fetch error", () => {
