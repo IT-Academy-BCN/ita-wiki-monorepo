@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { getResources } from "./endPointResources";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IntResource } from "../types";
+import { getResources } from "./endPointResources";
 
 type MinimalResource = Pick<IntResource, "id" | "title" | "type">;
 
@@ -60,7 +60,7 @@ describe("getResources", () => {
     );
   });
 
-  it("debería devolver los datos mockeados si la API devuelve un error", async () => {
+  it("debería lanzar error si la API devuelve un error HTTP", async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: false,
@@ -69,9 +69,9 @@ describe("getResources", () => {
       } as Response),
     );
 
-    const resources = await getResources();
-    expect(Array.isArray(resources)).toBe(true);
-    expect(resources).toHaveLength(0);
+    await expect(getResources()).rejects.toThrow(
+      "Error al obtener los recursos",
+    );
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 });

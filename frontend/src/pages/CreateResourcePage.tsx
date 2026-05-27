@@ -1,23 +1,27 @@
-import { IntResource, Category, Tag } from "../types";
-import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resourceSchema } from "../validations/resourceSchema";
-import FormInput from "../components/resources/create-resources/FormInput";
-import TagInput from "../components/forms/TagInput";
-import { createResource } from "../api/endPointResources";
-import { toast } from "sonner";
-import ButtonComponent from "../components/atoms/ButtonComponent";
-import PageTitle from "../components/ui/PageTitle";
-import { useState, useCallback } from "react";
-import arrowLeft from "../assets/arrow-left.svg";
+import { useCallback, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router";
-import Container from "../components/ui/Container";
+import { toast } from "sonner";
+import { createResource } from "../api/endPointResources";
+import arrowLeft from "../assets/arrow-left.svg";
+import ButtonComponent from "../components/atoms/ButtonComponent";
+import TagInput from "../components/forms/TagInput";
+import { SignInComponent } from "../components/Layout/header/SignInComponent";
+import FormInput from "../components/resources/create-resources/FormInput";
 import { contentResourcesForm } from "../components/resources/create-resources/languagesLabelsContent";
+import Container from "../components/ui/Container";
+import PageTitle from "../components/ui/PageTitle";
 import { useResources } from "../context/ResourcesContext";
+import { useUserContext } from "../context/UserContext";
+import { Category, IntResource, Tag } from "../types";
+import { resourceSchema } from "../validations/resourceSchema";
 
 export default function CreateResourcePage() {
+  const [signInModalOpen, setSignInModalOpen] = useState(false);
   const navigate = useNavigate();
   const { refreshResources } = useResources();
+  const { user } = useUserContext();
 
   const {
     register,
@@ -61,6 +65,10 @@ export default function CreateResourcePage() {
   };
 
   const onSubmit = async (data: Partial<IntResource>) => {
+    if (!user) {
+      setSignInModalOpen(true);
+      return;
+    }
     const tagsWithIds =
       Array.isArray(data.tags) && data.tags.length
         ? data.tags.map((tag) =>
@@ -75,16 +83,13 @@ export default function CreateResourcePage() {
       category: data.category,
       tags: tagsWithIds,
       type: data.type,
-      github_id: 39952,
     };
 
     try {
       await createResource(newResource);
       toast.success("¡Recurso creado con éxito!");
-      refreshResources();
-      setTimeout(() => {
-        navigate(`/resources/${data?.category}`);
-      }, 1000);
+      await refreshResources();
+      navigate(`/resources/${data?.category}`);
       reset();
     } catch (error) {
       console.error("Error al crear el recurso:", error);
@@ -140,37 +145,36 @@ export default function CreateResourcePage() {
 
         <div className="flex mt-6 overflow-y-scroll">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
-            <h2 className="text-sm text-black font-medium mb-3">Títol</h2>
-            <FormInput
-              id="title"
-              placeholder=""
-              register={register}
-              errors={errors.title?.message}
-              className="max-w-[482px] max-h-[2.6rem] border-[0.06rem]  border-gray-300 focus:border-2 focus:border-[#B91879] outline-none "
-              maxLength={charLimitTitle}
-              onChange={(e) => {
-                setValue("title", e.target.value);
-              }}
-            />
-            <div className="w-1/2">
-              <p className="text-sm text-slate-600 -mt-5 text-center ml-75">
-                {titleValue?.length}/{charLimitTitle}
-              </p>
+            <div className="flex-col gap-5 my-5">
+              <FormInput
+                id="title"
+                label="Títol"
+                placeholder=""
+                limitedText={true}
+                register={register}
+                textLength={titleValue?.length}
+                errors={errors.title?.message}
+                className="max-h-[2.6rem]"
+                maxLength={charLimitTitle}
+                onChange={(e) => {
+                  setValue("title", e.target.value);
+                }}
+              />
+
+              <FormInput
+                id="url"
+                label="URL"
+                placeholder=""
+                register={register}
+                errors={errors.url?.message}
+                className="max-h-[2.6rem]"
+                onChange={(e) => {
+                  setValue("url", e.target.value);
+                }}
+              />
             </div>
 
-            <h2 className="text-sm text-black font-medium mb-2 ">URL</h2>
-            <FormInput
-              id="url"
-              placeholder=""
-              register={register}
-              errors={errors.url?.message}
-              className="max-w-[482px] max-h-[2.6rem] border-[0.06rem] border-gray-300 focus:border-2 focus:border-[#B91879] outline-none "
-              onChange={(e) => {
-                setValue("url", e.target.value);
-              }}
-            />
-
-            <h2 className="text-sm text-black font-medium mb-2">Llenguatge</h2>
+            <h2 className="text-sm text-black font-medium mb-3">Llenguatge</h2>
             <div className="flex flex-wrap gap-3">
               {contentResourcesForm.map((cat) => {
                 const IconComponent = cat.icon;
@@ -267,29 +271,27 @@ export default function CreateResourcePage() {
               <h2 className="text-base font-semibold mt-6 mb-6">
                 Informació addicional
               </h2>
-              <h2 className="text-sm text-black font-medium mt-2 mb-2">
-                Descripció
-              </h2>
               <FormInput
                 id="description"
+                label="Descripció"
                 placeholder=""
                 register={register}
+                limitedText={true}
+                textLength={descriptionValue?.length}
                 errors={errors.description?.message}
-                className="max-w-[482px] max-h-[4.5rem] border-[0.06rem] border-gray-300 focus:border-[#B91879] outline-none"
+                className="max-h-[4.5rem]"
                 maxLength={charLimitDescription}
                 onChange={(e) => {
                   setValue("description", e.target.value);
                 }}
               />
-              <div className="w-1/2">
-                <p className="text-sm text-slate-600 -mt-5 text-center ml-75">
-                  {descriptionValue?.length}/{charLimitDescription}
-                </p>
-              </div>
             </div>
           </form>
         </div>
       </Container>
+      {signInModalOpen && (
+        <SignInComponent setIsModalOpen={setSignInModalOpen} />
+      )}
     </>
   );
 }

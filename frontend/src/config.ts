@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost/api/";
 
 type EndPoints =
   | "resources/"
@@ -14,7 +14,10 @@ type EndPoints =
   | "tags/by-category"
   | "technical-tests"
   | "codeconnect"
-  | "auth";
+  | "auth"
+  | "tickets"
+  | "ligas"
+  | "ligas/ranking";
 
 const END_POINTS = {
   resources: {
@@ -49,6 +52,7 @@ const END_POINTS = {
     get: "technical-tests" as EndPoints,
   },
   codeconnect: {
+    get: "codeconnect" as EndPoints,
     post: "codeconnect" as EndPoints,
   },
   auth: {
@@ -56,6 +60,17 @@ const END_POINTS = {
     getAuthUser: "auth/github/user" as EndPoints,
     getCurrentUser: "auth/me" as EndPoints,
     logout: "auth/logout" as EndPoints,
+  },
+  tickets: {
+    get: "tickets" as EndPoints,
+    post: "tickets" as EndPoints,
+    patch: "tickets" as EndPoints,
+  },
+  leagues: {
+    get: "ligas/ranking" as EndPoints,
+    getWeekly: "ligas" as EndPoints,
+    post: "ligas" as EndPoints,
+    addPoints: "ligas" as EndPoints,
   },
 };
 

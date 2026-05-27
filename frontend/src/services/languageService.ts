@@ -21,9 +21,6 @@ const mockLanguages: Language[] = [
 ];
 
 // Mock version for current sprint
-export async function getLanguages(): Promise<Language[]> {
-  // simulate a small network delay
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockLanguages), 300);
-  });
+export function getLanguages(): Language[] {
+  return mockLanguages;
 }

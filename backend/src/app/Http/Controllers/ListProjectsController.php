@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Enums\LanguageEnum;
 use App\Http\Requests\ListProjectRequest;
 use App\Enums\ContributorStatusEnum;
+use App\Models\User;
 
 class ListProjectsController extends Controller
 {
@@ -32,6 +33,20 @@ class ListProjectsController extends Controller
      *               @OA\Property(property="time_duration", type="string", example="2 months"),
      *               @OA\Property(property="language_backend", type="string", example="PHP"),
      *               @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *               @OA\Property(property="description", type="string", nullable=true, example="Project description"),
+     *               @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *               @OA\Property(property="user_id", type="integer", example=1),
+     *               @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *               @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *               @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
+     *               @OA\Property(
+     *                   property="owner",
+     *                   type="object",
+     *                   @OA\Property(property="id", type="integer", example=1),
+     *                   @OA\Property(property="name", type="string", example="John Doe")
+     *               ),
+     * 
+     * 
      *               @OA\Property(
      *                   property="contributors",
      *                   type="array",
@@ -47,20 +62,35 @@ class ListProjectsController extends Controller
      * )
      */
 
+    private function formatOwner(?User $user): ?array{
+
+        return $user ? ['id' => $user->id, 'name' => $user->name,] : null;
+    }
+
     public function index(Request $request)
     {
 
-        $projects = ListProjects::with('contributorListProject.user')->get()->map(function ($project) {
+        $projects = ListProjects::with('user', 'contributorListProject.user')->get()->map(function ($project) {
             return [
                 'id' => $project->id,
+                'user_id' => $project->user_id,
                 'title' => $project->title,
                 'time_duration' => $project->time_duration,
                 'language_backend' => $project->language_backend,
                 'language_frontend' => $project->language_frontend,
+                'description' => $project->description,
+                'roadmap' => $project->roadmap,
+                'limit_date_inscription' => $project->limit_date_inscription,
+                'start_date' => $project->start_date?->format('Y-m-d'),
+                'end_date' => $project->end_date?->format('Y-m-d'),
+                'dev_front_number' => $project->dev_front_number,
+                'dev_back_number' => $project->dev_back_number,
+                'owner' => $this->formatOwner($project->user),
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
                         'name' => $contributor->user->name,
                         'programming_role' => $contributor->programming_role,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ];
                 }),
             ];
@@ -89,10 +119,24 @@ class ListProjectsController extends Controller
      *      description="Project retrieved successfully",
      *      @OA\JsonContent(
      *           type="object",
+     *           @OA\Property(property="id", type="integer", example=1),
      *           @OA\Property(property="title", type="string", example="Project Alpha"),
      *           @OA\Property(property="time_duration", type="string", example="1 month"),
      *           @OA\Property(property="language_backend", type="string", example="PHP"),
      *           @OA\Property(property="language_frontend", type="string", example="JavaScript"),
+     *           @OA\Property(property="description", type="string", nullable=true, example="Project description"),
+     *           @OA\Property(property="roadmap", type="string", nullable=true, example="Project roadmap"),
+     *           @OA\Property(property="user_id", type="integer", example=1),
+     *           @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2025-12-31"),
+     *           @OA\Property(property="dev_front_number", type="integer", nullable=true, example=2),
+     *           @OA\Property(property="dev_back_number", type="integer", nullable=true, example=2),
+     *           @OA\Property(
+     *               property="owner",
+     *               type="object",
+     *               @OA\Property(property="id", type="integer", example=1),
+     *               @OA\Property(property="name", type="string", example="Macaulay Culkin")
+     *           ),
+
      *           @OA\Property(
      *               property="contributors",
      *               type="array",
@@ -112,7 +156,7 @@ class ListProjectsController extends Controller
      */
     public function show($id)
     {
-        $project = ListProjects::with('contributorListProject.user')->find($id);
+        $project = ListProjects::with('user', 'contributorListProject.user')->find($id);
 
         if (!$project) {
             return response()->json([
@@ -122,15 +166,26 @@ class ListProjectsController extends Controller
         }
 
         $project = [
+            'id' => $project->id,
+            'user_id' => $project->user_id,
 
             'title' => $project->title,
             'time_duration' => $project->time_duration,
             'language_backend' => $project->language_backend,
             'language_frontend' => $project->language_frontend,
+            'description' => $project->description,
+            'roadmap' => $project->roadmap,
+            'limit_date_inscription' => $project->limit_date_inscription,
+            'start_date' => $project->start_date?->format('Y-m-d'),
+            'end_date' => $project->end_date?->format('Y-m-d'),
+            'dev_front_number' => $project->dev_front_number,
+            'dev_back_number' => $project->dev_back_number,
+            'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
                     'name' => $contributor->user->name,
-                    'programming_role' => $contributor->programming_role
+                    'programming_role' => $contributor->programming_role,
+                    'avatar_url' => $contributor->user->avatar_url,
                 ];
             }),
         ];
@@ -152,15 +207,20 @@ class ListProjectsController extends Controller
      *   @OA\RequestBody(
      *      required=true,
      *      @OA\JsonContent(
-     *          required={"title","time_duration","language_backend","language_frontend"},
+     *          required={"title", "description", "time_duration", "language_backend", "language_frontend","programming_role", "dev_front_number", "dev_back_number"},
      *          @OA\Property(property="title", type="string", example="Project Delta"),
+     *          @OA\Property(property="description", type="string", example="Project description"),
      *          @OA\Property(property="time_duration", type="string", example="3 months"),
-     *          @OA\Property(property="language_backend", type="string", example="PHP"),
-     *          @OA\Property(property="language_frontend", type="string", example="JavaScript")
+     *          @OA\Property(property="language_backend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="PHP"),
+     *          @OA\Property(property="language_frontend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="JavaScript"),
+     *          @OA\Property(property="dev_front_number", type="integer", example=2),
+     *          @OA\Property(property="dev_back_number", type="integer", example=2),
+     *          @OA\Property(property="limit_date_inscription", type="string", format="date", nullable=true, example="2026-12-31"),
+     *          @OA\Property(property="programming_role", type="string", enum={"Frontend Developer", "Backend Developer", "Fullstack Developer", "Other"}, example="Fullstack Developer"),
      *      )
      *   ),
      *   @OA\Response(
-     *      response=200,
+     *      response=201,
      *      description="Project created successfully"
      *   ),
      *   @OA\Response(
@@ -194,12 +254,26 @@ class ListProjectsController extends Controller
         }
 
         try {
+            $userId = auth()->id();
+
+            $validatedData['user_id'] = $userId;
+
             $newProject = ListProjects::create($validatedData);
+
+            $contributor = ContributorListProject::create([
+                'list_project_id' => $newProject->id,
+                'user_id' => $userId,
+                'programming_role' => $validatedData['programming_role'],
+                'status' => ContributorStatusEnum::Accepted->value,
+            ]);
+
+            $newProject = ListProjects::with('contributorListProject')->find($newProject->id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully',
-                'data' => $newProject
-            ], 200);
+                'data' => $newProject,
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -224,8 +298,8 @@ class ListProjectsController extends Controller
      *      @OA\JsonContent(
      *          @OA\Property(property="title", type="string", example="Updated Project"),
      *          @OA\Property(property="time_duration", type="string", example="2 months"),
-     *          @OA\Property(property="language_backend", type="string", example="PHP"),
-     *          @OA\Property(property="language_frontend", type="string", example="TypeScript")
+     *          @OA\Property(property="language_backend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="PHP"),
+     *          @OA\Property(property="language_frontend", type="string", enum={"PHP","JavaScript","Java","React","TypeScript","Python","SQL","Other","Angular","Svelte","Vue","Node"}, example="TypeScript")
      *      )
      *   ),
      *   @OA\Response(
@@ -371,6 +445,19 @@ class ListProjectsController extends Controller
                 'success' => false,
                 'message' => 'Contributor not found',
             ], 404);
+        }
+
+        if ($user) {
+            $isMember = ContributorListProject::where('list_project_id', $listProjectId)
+                ->where('user_id', $user->id)
+                ->where('status', ContributorStatusEnum::Accepted->value)
+                ->exists();
+
+            if (!$isMember) {
+                return response()->json([
+                    'error' => 'You cannot validate this request',
+                ], 403);
+            }
         }
 
         //Only if is an authenticated user
@@ -519,6 +606,7 @@ class ListProjectsController extends Controller
                         'id' => $contributor->user->id,
                         'name' => $contributor->user->name,
                         'email' => $contributor->user->email,
+                        'avatar_url' => $contributor->user->avatar_url,
                     ],
                 ];
             });
@@ -609,6 +697,12 @@ class ListProjectsController extends Controller
             ->first();
 
         if ($existingContributor) {
+            if ($existingContributor->status === ContributorStatusEnum::Rejected->value) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User was rejected and cannot request again for this project',
+                ], 403);
+            }
             return response()->json([
                 'success' => false,
                 'message' => 'User is already a contributor for this project'
@@ -674,6 +768,24 @@ class ListProjectsController extends Controller
      */
     public function removeContributor(int $listProjectId, int $contributorId)
     {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json([
+                'succes' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $project = ListProjects::find($listProjectId);
+
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+
         $contributor = ContributorListProject::where('id', $contributorId)
             ->where('list_project_id', $listProjectId)
             ->first();
@@ -683,6 +795,13 @@ class ListProjectsController extends Controller
                 'success' => false,
                 'message' => 'Contributor not found'
             ], 404);
+        }
+
+        if ($project->user_id !== $user->id && $contributor->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not allowed to remove this contributor'
+            ], 403);
         }
 
         try {

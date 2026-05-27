@@ -1,37 +1,72 @@
+import { useMemo } from "react";
+import { useProjects } from "../../../hooks/useCodeConnectGetAllProjects";
+import { useMinLoading } from "../../../hooks/useMinLoading";
+import EmptyState from "../../ui/EmptyState";
+import CodeConnectCardSkeleton from "../CodeConnectCardSkeleton";
 import ProjectCard from "../projectCard/ProjectCard";
-import type { Project } from "../projectCard/types/projectTypes";
-import projectsData from "../../../moock/projects.json";
 
 function ProjectList({
   onCardClick,
   filter,
 }: {
   onCardClick?: (id: number) => void;
-  filter?: string | null;
+  filter?: string[] | null;
 }) {
-  const projects = (projectsData as Project[]).filter((p) => {
-    if (!filter) return true;
-    const f = filter.toLowerCase();
-    return (
-      p.frontend?.tech?.toLowerCase() === f ||
-      p.backend?.tech?.toLowerCase() === f
+  const { projects, isLoading, errorMessage } = useProjects();
+  const showLoader = useMinLoading(isLoading);
+
+  const filteredProjects = useMemo(() => {
+    if (!filter?.length) return projects;
+    const normalizedFilter = filter.map((tech) => tech.toLowerCase());
+    return projects.filter(
+      (project) =>
+        normalizedFilter.includes(project.frontend.tech.toLowerCase()) ||
+        normalizedFilter.includes(project.backend.tech.toLowerCase()),
     );
-  });
+  }, [projects, filter]);
+
+  const hasError = Boolean(errorMessage);
 
   return (
     <>
-      <h2 className="text-2xl font-bold  py-4 sm:py-6 text-black sm:mb-4">
+      <h2 className="text-2xl font-bold py-4 sm:py-6 text-black sm:mb-4">
         Llista de projectes
       </h2>
-      <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onClick={onCardClick}
-          />
-        ))}
-      </div>
+
+      {showLoader && !hasError && (
+        <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <CodeConnectCardSkeleton key={index} />
+          ))}
+        </div>
+      )}
+
+      {hasError && (
+        <EmptyState
+          text="Error al obtenir projectes"
+          subtext="Hi ha hagut un problema. Torna-ho a provar."
+          textClassName="text-red-500"
+        />
+      )}
+
+      {!showLoader && !hasError && filteredProjects.length === 0 && (
+        <EmptyState
+          text="No hi ha projectes"
+          subtext="Torna-ho a provar més tard o crea un nou projecte"
+        />
+      )}
+
+      {!showLoader && !hasError && filteredProjects.length > 0 && (
+        <div className="grid justify-center ml-3 sm:ml-0 gap-1 sm:gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] w-full">
+          {filteredProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={onCardClick}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

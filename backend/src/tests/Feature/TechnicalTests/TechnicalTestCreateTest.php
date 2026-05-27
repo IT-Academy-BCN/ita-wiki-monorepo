@@ -23,6 +23,7 @@ class TechnicalTestCreateTest extends TestCase
         
         // Authenticate user for all tests in this class
         $user = User::factory()->create();
+        $user->assignRole('mentor');
         Sanctum::actingAs($user);
     }
 
@@ -323,4 +324,20 @@ class TechnicalTestCreateTest extends TestCase
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['exercises.0.title']);
     }
+    
+    public function test_expert_difficulty_level_is_rejected(): void
+    {
+        $data = [
+            'title' => 'Test Expert Difficulty',
+            'language' => LanguageEnum::PHP->value,
+            'difficulty_level' => 'expert',
+            'github_id' => 123456,
+        ];
+
+        $response = $this->postJson(route('technical-tests.store'), $data);
+
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors(['difficulty_level']);
+    }
+
 }

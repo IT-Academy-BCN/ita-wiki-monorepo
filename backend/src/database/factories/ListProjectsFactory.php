@@ -22,10 +22,21 @@ class ListProjectsFactory extends Factory
         $languages = LanguageEnum::values();
 
         return [
+            'user_id' => \App\Models\User::factory(),
             'title' => $this->faker->sentence(3),
+            'description'=> $this->faker->paragraph(),
+            'limit_date_inscription' => $this->faker->optional()->dateTimeBetween('now', '+3 months')?->format('Y-m-d'),
+            'start_date' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
+            'end_date' => $this->faker->dateTimeBetween('+1 month', '+6 months')->format('Y-m-d'),
+            'dev_front_number' => $this->faker->optional()->numberBetween(1, 5),
+            'dev_back_number' => $this->faker->optional()->numberBetween(1, 5),
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
             'language_frontend' => $this->faker->randomElement($languages),
+            'roadmap'=> $this->faker->optional()->passthrough([
+                ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
+                ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
+            ])
         ];
     }
 }
