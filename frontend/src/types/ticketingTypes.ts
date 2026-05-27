@@ -115,6 +115,17 @@ export interface UseTicketingGetAllState {
   errorMessage: string | null;
 }
 
+export interface IntUpdateTicket {
+  status?: TicketStatus;
+  priority?: TicketPriority;
+}
+
+export interface ApiUpdateTicketResponse {
+  success: boolean;
+  data: ApiTicketData;
+  message?: string;
+}
+
 export interface TicketComment {
   id: number;
   ticket_id: number;

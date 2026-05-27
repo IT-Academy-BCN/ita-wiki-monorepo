@@ -64,9 +64,11 @@ const END_POINTS = {
   tickets: {
     get: "tickets" as EndPoints,
     post: "tickets" as EndPoints,
+    patch: "tickets" as EndPoints,
   },
   leagues: {
     get: "ligas/ranking" as EndPoints,
+    getWeekly: "ligas" as EndPoints,
     post: "ligas" as EndPoints,
     addPoints: "ligas" as EndPoints,
   },

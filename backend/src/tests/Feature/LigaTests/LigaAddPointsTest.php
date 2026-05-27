@@ -19,9 +19,8 @@ class LigaAddPointsTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
-
-        $this->actingAs($this->user, 'sanctum');
+        $this->user = $this->authenticateUserWithRole('mentor');
+        
     }
 
     public function test_put_increments_points_by_5(): void
