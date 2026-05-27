@@ -28,7 +28,7 @@ const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
           <PendingRequest
             key={contributor.id}
             contributor={contributor}
-            project={projectId}
+            projectId={projectId}
           />
         ))}
       </ul>
