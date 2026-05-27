@@ -5,10 +5,22 @@ import PendingRequest from "./PendingRequest";
 
 interface PendingRequestListProps {
   projectId: number;
+  languageFrontend?: string;
+  languageBackend?: string;
 }
 
-const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
+const PendingRequestList = ({
+  projectId,
+  languageFrontend,
+  languageBackend,
+}: PendingRequestListProps) => {
   const [pending, setPending] = useState<ApiContributor[]>([]);
+
+  const getRoleIcon = (role: string) => {
+    if (role === "Frontend Developer") return languageFrontend;
+    if (role === "Backend Developer") return languageBackend;
+    return undefined;
+  };
 
   useEffect(() => {
     fetchProjectContributors(projectId).then((contributors) => {
@@ -25,7 +37,11 @@ const PendingRequestList = ({ projectId }: PendingRequestListProps) => {
       </h3>
       <ul className="flex flex-col gap-3">
         {pending.map((contributor) => (
-          <PendingRequest key={contributor.id} contributor={contributor} />
+          <PendingRequest
+            key={contributor.id}
+            contributor={contributor}
+            roleIcon={getRoleIcon(contributor.programming_role)}
+          />
         ))}
       </ul>
     </div>
