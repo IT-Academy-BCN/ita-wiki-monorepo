@@ -3,7 +3,7 @@ import type { ApiContributor } from "../../../types/codeConnectTypes";
 
 interface PendingRequestProps {
   contributor: ApiContributor;
-  project: number;
+  projectId: number;
 }
 
 const PendingRequest: FC<PendingRequestProps> = () => null;
