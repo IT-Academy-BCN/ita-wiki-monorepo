@@ -11,11 +11,7 @@ export const RejectButton = ({
 }: RejectButtonProps) => {
   const handleReject = async () => {
     try {
-      await updateContributorStatus(
-        projectId,
-        contributorId,
-        "rejected",
-      );
+      await updateContributorStatus(projectId, contributorId, "rejected");
     } catch (error) {
       console.error(error);
     }
