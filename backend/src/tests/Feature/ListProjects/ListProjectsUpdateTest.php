@@ -72,6 +72,7 @@ class ListProjectsUpdateTest extends TestCase
             'time_duration' => '3 months',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
         ]);
 
 
@@ -89,9 +90,15 @@ class ListProjectsUpdateTest extends TestCase
 
         $response = $this->postJson('/api/codeconnect/', [
             'title' => 'project invalid',
+            'description' => 'Invalid project',
             'time_duration' => '1 month',
             'language_backend' => 'pokemon',
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'programming_role' => 'Backend Developer',
+            'dev_front_number' => 1,
+            'dev_back_number' => 1,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
         ]);
 
         $response->assertStatus(400);
@@ -127,5 +134,19 @@ class ListProjectsUpdateTest extends TestCase
         $response->assertJson([
             'message' => 'Unauthenticated.',
         ]);
+    }
+
+    public function test_update_accepts_new_languages(): void{
+        Sanctum::actingAs($this->userOne);
+
+        $response = $this->putJson("/api/codeconnect/{$this->projectOne->id}", [
+            'title' => 'Project updated',
+            'time_duration' => '2 months',
+            'language_backend' => LanguageEnum::Node->value,
+            'language_frontend' => LanguageEnum::Vue->value,
+            'programming_role' => 'Backend Developer',
+        ]);
+
+        $response->assertStatus(200);
     }
 }

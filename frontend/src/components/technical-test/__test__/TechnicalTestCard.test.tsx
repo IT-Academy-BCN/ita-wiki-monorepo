@@ -25,37 +25,41 @@ const renderWithRouter = (component: React.ReactElement) => {
 
 describe("TechnicalTestCard", () => {
   const mockTest: TechnicalTest = {
-    id: "test-123",
+    id: 123,
     title: "React Testing Best Practices",
     language: "React",
     description: "Learn how to test React components",
     tags: ["testing", "react"],
     created_at: "2025-01-15T10:30:00Z",
     updated_at: "2025-11-24T14:20:00Z",
+    difficulty_level: "easy",
+    duration: null,
+    exercises: [],
+    state: "published",
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe("Level icon hashing", () => {
-    it("should always return the same icon for the same title", () => {
-      const title = "React Testing Best Practices";
-
-      const firstResult = getLevelIcon(title);
-      const secondResult = getLevelIcon(title);
+  describe("Level icon by difficulty", () => {
+    it("should return the same icon for the same difficulty level", () => {
+      const firstResult = getLevelIcon("easy");
+      const secondResult = getLevelIcon("easy");
 
       expect(firstResult).toBe(secondResult);
     });
 
-    it("should return different icons for clearly different titles", () => {
-      const titleA = "A";
-      const titleB = "B";
+    it("should return different icons for different difficulty levels", () => {
+      const resultEasy = getLevelIcon("easy");
+      const resultHard = getLevelIcon("hard");
 
-      const resultA = getLevelIcon(titleA);
-      const resultB = getLevelIcon(titleB);
+      expect(resultEasy).not.toBe(resultHard);
+    });
 
-      expect(resultA).not.toBe(resultB);
+    it("should return a default icon for null difficulty", () => {
+      const result = getLevelIcon(null);
+      expect(result).toBeTruthy();
     });
   });
 
@@ -68,24 +72,18 @@ describe("TechnicalTestCard", () => {
       });
 
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute(
-        "href",
-        `/resources/technical-test/${mockTest.id}`,
-      );
+      expect(link).toHaveAttribute("href", "/resources/technical-test/123");
     });
 
     it("should generate correct URL for different test IDs", () => {
-      const differentTest = { ...mockTest, id: "test-456" };
+      const differentTest = { ...mockTest, id: 456 };
       renderWithRouter(<TechnicalTestCard test={differentTest} />);
 
       const link = screen.getByRole("link", {
         name: new RegExp(differentTest.title, "i"),
       });
 
-      expect(link).toHaveAttribute(
-        "href",
-        "/resources/technical-test/test-456",
-      );
+      expect(link).toHaveAttribute("href", "/resources/technical-test/456");
     });
   });
 
@@ -93,14 +91,14 @@ describe("TechnicalTestCard", () => {
     it("should format a valid ISO date to Catalan locale (ca-ES)", () => {
       renderWithRouter(<TechnicalTestCard test={mockTest} />);
 
-      const dateElement = screen.getByText(/24/);
+      const dateElement = screen.getByText(/15/);
       expect(dateElement).toBeInTheDocument();
     });
 
-    it("should display 'Data desconeguda' when updated_at is undefined", () => {
+    it("should display 'Data desconeguda' when created_at is undefined", () => {
       const testWithoutDate = {
         ...mockTest,
-        updated_at: undefined as unknown as string,
+        created_at: undefined as unknown as string,
       };
       renderWithRouter(<TechnicalTestCard test={testWithoutDate} />);
 

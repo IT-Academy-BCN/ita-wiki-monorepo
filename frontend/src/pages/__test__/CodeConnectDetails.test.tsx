@@ -1,85 +1,112 @@
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import React from "react";
-import { MemoryRouter, Routes, Route } from "react-router";
-import { vi } from "vitest";
+import { describe, expect, it, vi, type Mock } from "vitest";
+import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 import CodeConnectDetails from "../CodeConnectDetails";
-import moockData from "../../moock/projectDetails.json";
 
-vi.mock("../../components/ui/Container", () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="mock-container">{children}</div>
+vi.mock("react-router", () => ({
+  useParams: () => ({ projectId: "1" }),
+}));
+
+vi.mock("../../hooks/useCodeConnectDetails");
+
+vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
+  default: () => (
+    <div data-testid="mock-project-team">Component ProjectTeam</div>
   ),
 }));
 
-vi.mock("../components/ui/projectTeam/ProjectTeam", () => ({
-  default: () => <div data-testid="mock-project-team" />,
+vi.mock("../../utils/iconUtils", () => ({
+  displayLanguageIcon: () => "fake-icon.svg",
 }));
 
-vi.mock("../components/ui/PageTitle", () => ({
-  default: ({ title }: { title: string }) => (
-    <h1 data-testid="mock-page-title">{title}</h1>
-  ),
-}));
+describe("CodeConnectDetails Page", () => {
+  it("renders the project title and team when data arrives", () => {
+    const mockProjectData = {
+      data: {
+        title: "Super Projecte de Prova",
+        description: "Descripció de prova del projecte",
+        roadmap: [
+          { task: "Tarea 1", done: false },
+          { task: "Tarea 2", done: false },
+        ],
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
 
-vi.mock("../projectCard/ProjectButton", () => ({
-  default: () => <div data-testid="mock-project-button" />,
-}));
-
-vi.mock("../projectCard/ProgressBar", () => ({
-  default: () => <div data-testid="mock-progress-bar" />,
-}));
-
-vi.mock("../../atoms/ButtonComponent", () => ({
-  default: (props: React.ComponentProps<"button">) => (
-    <button {...props}>Mock Button</button>
-  ),
-}));
-
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useParams: () => ({ projectId: "taskforge" }),
-  };
-});
-
-describe("CodeConnectDetails", () => {
-  const project = moockData.details[0];
-
-  it("renders project details correctly", () => {
-    render(
-      <MemoryRouter initialEntries={["/codeconnect/taskforge"]}>
-        <Routes>
-          <Route
-            path="/codeconnect/:projectId"
-            element={<CodeConnectDetails />}
-          />
-        </Routes>
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText(project.title)).toBeInTheDocument();
-
-    project.roadmap.forEach((item) => {
-      expect(screen.getByText(item)).toBeInTheDocument();
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
     });
 
-    expect(screen.getByTestId("mock-container")).toBeInTheDocument();
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Super Projecte de Prova")).toBeTruthy();
+    expect(screen.getByText("Descripció de prova del projecte")).toBeTruthy();
+    expect(screen.getByText("Tarea 1")).toBeTruthy();
+    expect(screen.getByTestId("mock-project-team")).toBeTruthy();
+    expect(screen.getByText("Roadmap:")).toBeTruthy();
+    expect(screen.getByText("Descripció:")).toBeTruthy();
   });
 
-  it("navigates to correct project using URL parameter", () => {
-    render(
-      <MemoryRouter initialEntries={["/codeconnect/taskforge"]}>
-        <Routes>
-          <Route
-            path="/codeconnect/:projectId"
-            element={<CodeConnectDetails />}
-          />
-        </Routes>
-      </MemoryRouter>,
+  it("renders the fallback message when description and roadmap are empty", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Antic",
+        description: "",
+        roadmap: [],
+        contributors: [],
+        time_duration: "1 mes",
+        language_frontend: "javascript",
+        language_backend: "php",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Projecte Antic")).toBeTruthy();
+
+    const fallbackMessages = screen.getAllByText(
+      "Aquesta informació no està disponible a la base de dades.",
     );
 
-    expect(screen.getByText(project.title)).toBeInTheDocument();
+    expect(fallbackMessages).toHaveLength(2);
+  });
+
+  it("renders the error message when the hook returns an error", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: null,
+      isLoading: false,
+      errorMessage: "Error de connexió. Verifica la teva connexió a internet.",
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(
+      screen.getByText(
+        "Error de connexió. Verifica la teva connexió a internet.",
+      ),
+    ).toBeTruthy();
+  });
+
+  it("renders the loading state when isLoading is true", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: null,
+      isLoading: true,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Carregant...")).toBeTruthy();
   });
 });

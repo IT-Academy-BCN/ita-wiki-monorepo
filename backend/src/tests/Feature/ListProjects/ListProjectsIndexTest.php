@@ -28,10 +28,15 @@ class ListProjectsIndexTest extends TestCase
 
         $this->projectOne = ListProjects::factory()->create([
             'id' => 1,
+            'user_id' => $this->userOne->id,
             'title' => 'Project Alpha',
             'time_duration' => '1 month',
             'language_backend' => LanguageEnum::PHP->value,
             'language_frontend' => LanguageEnum::JavaScript->value,
+            'description' => 'Project description text',
+            'roadmap' => [['task' => 'Setup project', 'done' => true]],
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
         ]);
 
         $this->projectTwo = ListProjects::factory()->create([
@@ -76,10 +81,14 @@ class ListProjectsIndexTest extends TestCase
             'time_duration' => $this->projectOne->time_duration,
             'language_backend' => $this->projectOne->language_backend,
             'language_frontend' => $this->projectOne->language_frontend,
+            'description' => $this->projectOne->description,
+            'roadmap' => $this->projectOne->roadmap,
+
             'contributors' => [
                 [
                     'name' => $this->contributorOne->user->name,
                     'programming_role' => $this->contributorOne->programming_role,
+                    'avatar_url' => $this->contributorOne->user->avatar_url,
                 ]
             ],
         ]);
@@ -94,4 +103,39 @@ class ListProjectsIndexTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_index_returns_description_and_roadmap(): void
+    {
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'description' => $this->projectOne->description,
+            'roadmap' => $this->projectOne->roadmap,
+        ]);
+    }
+
+    public function test_index_returns_new_fields():void{
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'user_id' => $this->projectOne->user_id,
+            'limit_date_inscription' => $this->projectOne->limit_date_inscription,
+            'start_date' => '2026-06-01',
+            'end_date' => '2026-12-31',
+            'dev_front_number' => $this->projectOne->dev_front_number,
+            'dev_back_number' => $this->projectOne->dev_back_number,
+        ]);
+    }
+
+     public function test_index_returns_owner():void{
+        $response = $this->Get("/api/codeconnect");
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'owner' => [
+                'id' => $this->projectOne->user->id,
+                'name'=> $this->projectOne->user->name,
+            ]
+        ]);
+    }
+
 }

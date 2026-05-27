@@ -11,6 +11,7 @@ export const captureAuthToken = (): void => {
   if (token) {
     localStorage.setItem("auth_token", token);
     // Limpiar la URL para no exponer el token
-    window.history.replaceState({}, "", window.location.pathname);
+    const safePath = window.location.pathname.replace(/^\/+/, "/");
+    window.history.replaceState({}, "", safePath);
   }
 };

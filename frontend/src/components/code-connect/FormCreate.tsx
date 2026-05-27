@@ -1,117 +1,158 @@
-import { useState, FormEvent } from "react";
-import {
-  contentTechsFrontCodeConnect,
-  contentTechsBackCodeConnect,
-} from "./techsLabelsContent";
-import { IntCodeConnect } from "../../types";
-import { createCodeConnect } from "../../api/endPointCodeConnect";
-import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { ArrowLeftIcon } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { createCodeConnect } from "../../api/endPointCodeConnect";
+import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
+import { IntCodeConnect, Task } from "../../types";
+import { RoadmapField } from "../forms/RoadmapField";
+import { computeEndDate } from "./utils/computeEndDate";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+} from "./techsLabelsContent";
+
+const getMinDeadline = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split("T")[0];
+};
 
 const FormCreate = () => {
-  const [formData, setFormData] = useState<IntCodeConnect>({
+  const [formData, setFormData] = useState<
+    Omit<IntCodeConnect, "time_duration">
+  >({
     title: "",
-    techsFront: [],
-    techsBack: [],
+    language_frontend: "",
+    language_backend: "",
     description: "",
-    numberDevsFront: 0,
-    numberDevsBack: 0,
+    programming_role: "",
+    dev_front_number: 0,
+    dev_back_number: 0,
     time: 0,
     unitTime: "",
-    deadline: "",
+    limit_date_inscription: "",
+    start_date: "",
+    end_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmap, setRoadmap] = useState<Task[]>([]);
   const navigate = useNavigate();
 
-  const handleTechsFrontToggle = (tech: string) => {
-    setFormData((prev) => {
-      const isSelected = prev.techsFront.includes(tech);
-      return {
-        ...prev,
-        techsFront: isSelected
-          ? prev.techsFront.filter((item) => item !== tech)
-          : [...prev.techsFront, tech],
-      };
-    });
-  };
-
-  const handleTechsBackToggle = (tech: string) => {
-    setFormData((prev) => {
-      const isSelected = prev.techsBack.includes(tech);
-      return {
-        ...prev,
-        techsBack: isSelected
-          ? prev.techsBack.filter((item) => item !== tech)
-          : [...prev.techsBack, tech],
-      };
-    });
-  };
-
-  const handleInputText = (
-    field: keyof Pick<IntCodeConnect, "title" | "description" | "unitTime">,
-    value: string,
-  ) => {
+  const handleInputText = (field: keyof IntCodeConnect, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
+      ...(field === "unitTime" && {
+        end_date: computeEndDate(prev.start_date ?? "", prev.time, value),
+      }),
     }));
   };
 
   const handleInputsNumber = (
     field: keyof Pick<
       IntCodeConnect,
-      "numberDevsFront" | "numberDevsBack" | "time"
+      "dev_front_number" | "dev_back_number" | "time"
     >,
     rawValue: string,
   ) => {
     if (rawValue === "") {
-      return setFormData((prev) => ({ ...prev, [field]: 0 }));
+      return setFormData((prev) => ({
+        ...prev,
+        [field]: 0,
+        ...(field === "time" && {
+          end_date: computeEndDate(prev.start_date ?? "", 0, prev.unitTime),
+        }),
+      }));
     }
 
     const value = Number(rawValue);
     if (!isNaN(value) && value >= 0) {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+        ...(field === "time" && {
+          end_date: computeEndDate(prev.start_date ?? "", value, prev.unitTime),
+        }),
+      }));
     }
   };
 
   const handleDeadLine = (
-    field: keyof Pick<IntCodeConnect, "deadline">,
+    field: keyof Pick<IntCodeConnect, "limit_date_inscription" | "start_date">,
     value: string,
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+      ...(field === "start_date" && {
+        end_date: computeEndDate(value, prev.time, prev.unitTime),
+      }),
+    }));
   };
 
   const validateForm = (): boolean => {
     const {
       title,
-      techsFront,
-      techsBack,
+      language_frontend,
+      language_backend,
       description,
-      numberDevsFront,
-      numberDevsBack,
+      programming_role,
+      dev_front_number,
+      dev_back_number,
       time,
       unitTime,
-      deadline,
+      limit_date_inscription,
+      start_date,
     } = formData;
+
+    if (!language_frontend) {
+      toast.error("Selecciona una tecnologia frontend.");
+      return false;
+    }
+
+    if (!language_backend) {
+      toast.error("Selecciona una tecnologia backend.");
+      return false;
+    }
+
+    if (
+      (unitTime === "week" && time > 26) ||
+      (unitTime === "month" && time > 6)
+    ) {
+      toast.error(
+        "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+      );
+      return false;
+    }
 
     if (
       !title.trim() ||
-      techsFront.length === 0 ||
-      techsBack.length === 0 ||
       !description.trim() ||
-      numberDevsFront <= 0 ||
-      numberDevsBack <= 0 ||
-      time <= 0 ||
-      !unitTime.trim() ||
-      !deadline
+      !programming_role.trim() ||
+      dev_front_number <= 0 ||
+      dev_back_number <= 0 ||
+      !time ||
+      !unitTime ||
+      !limit_date_inscription ||
+      !start_date
     ) {
       toast.error("Completa tots els camps obligatoris.");
       return false;
     }
 
     return true;
+  };
+
+  const getTimeDuration = (time: number, timeUnit: string): string => {
+    switch (timeUnit) {
+      case "week":
+        return time > 1 ? `${time} setmanes` : `${time} setmana`;
+      case "month":
+        return time > 1 ? `${time} mesos` : `${time} mes`;
+      default:
+        return "";
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -123,14 +164,17 @@ const FormCreate = () => {
 
     const formPayload = {
       title: formData.title,
-      techsFront: formData.techsFront,
-      techsBack: formData.techsBack,
+      language_frontend: formData.language_frontend,
+      language_backend: formData.language_backend,
       description: formData.description,
-      numberDevsFront: formData.numberDevsFront,
-      numberDevsBack: formData.numberDevsBack,
-      time: formData.time,
-      unitTime: formData.unitTime,
-      deadline: formData.deadline,
+      roadmap: roadmap,
+      programming_role: formData.programming_role,
+      dev_front_number: formData.dev_front_number,
+      dev_back_number: formData.dev_back_number,
+      time_duration: getTimeDuration(formData.time, formData.unitTime),
+      limit_date_inscription: formData.limit_date_inscription,
+      start_date: formData.start_date,
+      ...(formData.end_date && { end_date: formData.end_date }),
     };
 
     try {
@@ -207,8 +251,7 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsFrontCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsFront.includes(item.label);
-
+            const isSelected = formData.language_frontend.includes(item.label);
             return (
               <label
                 key={item.label}
@@ -219,15 +262,16 @@ const FormCreate = () => {
                 }`}
               >
                 <input
-                  type="checkbox"
-                  name="techsFront[]"
+                  type="radio"
+                  name="language_frontend"
                   value={item.label}
                   checked={isSelected}
-                  required
-                  onChange={() => handleTechsFrontToggle(item.label)}
+                  onChange={() =>
+                    handleInputText("language_frontend", item.label)
+                  }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );
@@ -240,8 +284,7 @@ const FormCreate = () => {
         <div className="flex flex-wrap gap-3 mb-4">
           {contentTechsBackCodeConnect.map((item) => {
             const IconComponent = item.icon;
-            const isSelected = formData.techsBack.includes(item.label);
-
+            const isSelected = formData.language_backend.includes(item.label);
             return (
               <label
                 key={item.label}
@@ -252,15 +295,16 @@ const FormCreate = () => {
                 }`}
               >
                 <input
-                  type="checkbox"
-                  name="techsBack[]"
+                  type="radio"
+                  name="language_backend"
                   value={item.label}
                   checked={isSelected}
-                  required
-                  onChange={() => handleTechsBackToggle(item.label)}
+                  onChange={() =>
+                    handleInputText("language_backend", item.label)
+                  }
                   className="sr-only"
                 />
-                <IconComponent className="w-5 h-5" />
+                {IconComponent ? <IconComponent className="w-5 h-5" /> : null}
                 <span className="text-sm font-medium">{item.label}</span>
               </label>
             );
@@ -297,20 +341,61 @@ const FormCreate = () => {
         </div>
       </div>
 
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+      <RoadmapField setRoadmap={setRoadmap} />
+      <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
-          <label htmlFor="deadline" className="block font-medium">
+          <label htmlFor="limit_date_inscription" className="block font-medium">
             Data límit d'inscripció *
           </label>
           <input
-            id="deadline"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            id="limit_date_inscription"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
             type="date"
-            value={formData.deadline || ""}
+            value={formData.limit_date_inscription || ""}
             required
             disabled={isSubmitting}
-            onChange={(e) => handleDeadLine("deadline", e.target.value)}
-            min="2023-01-01"
+            onChange={(e) =>
+              handleDeadLine("limit_date_inscription", e.target.value)
+            }
+            min={getMinDeadline()}
+          />
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-4">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="start_date" className="block font-medium">
+            Data d'inici del projecte *
+          </label>
+          <input
+            id="start_date"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            type="date"
+            value={formData.start_date || ""}
+            required
+            disabled={isSubmitting}
+            onChange={(e) => handleDeadLine("start_date", e.target.value)}
+            min={getMinDeadline()}
+          />
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-4">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="end_date" className="block font-medium text-gray-500">
+            Data de finalització del projecte
+          </label>
+          <input
+            id="end_date"
+            className="border border-gray-300 rounded-lg py-2 px-4 bg-gray-100 text-gray-500 cursor-not-allowed"
+            type="date"
+            value={formData.end_date || ""}
+            readOnly
+            disabled
+            tabIndex={-1}
           />
         </div>
       </div>
@@ -323,9 +408,10 @@ const FormCreate = () => {
           <div className="flex lg:col-start-2 lg:col-span-1">
             <input
               id="time"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-t border-b border-l border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tl-lg rounded-bl-lg py-2 px-4 w-11"
+              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-t border-b border-l border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tl-lg rounded-bl-lg py-2 px-4 w-16"
               type="number"
-              value={formData.time}
+              value={formData.time === 0 ? "" : formData.time}
+              placeholder="0"
               required
               onChange={(e) => handleInputsNumber("time", e.target.value)}
             />
@@ -337,7 +423,7 @@ const FormCreate = () => {
             </label>
             <select
               id="unitTime"
-              className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
+              className="bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-tr-lg rounded-br-lg py-2 px-4 w-full"
               value={formData.unitTime}
               required
               disabled={isSubmitting}
@@ -346,10 +432,39 @@ const FormCreate = () => {
               <option value="" disabled>
                 Selecciona
               </option>
-              <option value="month">Mes</option>
-              <option value="week">Setmana</option>
+              <option value="month">
+                {formData.time <= 1 ? "Mes" : "Mesos"}
+              </option>
+              <option value="week">
+                {formData.time <= 1 ? "Setmana" : "Setmanes"}
+              </option>
             </select>
           </div>
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-8">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="programming_role" className="font-medium">
+            Selecciona el teu rol tècnic *
+          </label>
+          <select
+            id="programming_role"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-100 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg h-10.5 px-4"
+            value={formData.programming_role}
+            required
+            disabled={isSubmitting}
+            onChange={(e) =>
+              handleInputText("programming_role", e.target.value)
+            }
+          >
+            <option value="" disabled>
+              Selecciona
+            </option>
+            <option value="Backend Developer">Backend</option>
+            <option value="Frontend Developer">Frontend</option>
+            <option value="Fullstack Developer">Full stack</option>
+          </select>
         </div>
       </div>
 
@@ -360,12 +475,15 @@ const FormCreate = () => {
           </label>
           <input
             id="devs-front"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsFront}
+            value={
+              formData.dev_front_number === 0 ? "" : formData.dev_front_number
+            }
+            placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsFront", e.target.value)
+              handleInputsNumber("dev_front_number", e.target.value)
             }
           />
         </div>
@@ -378,12 +496,15 @@ const FormCreate = () => {
           </label>
           <input
             id="devs-back"
-            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-11"
+            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4 w-full lg:w-16"
             type="number"
-            value={formData.numberDevsBack}
+            value={
+              formData.dev_back_number === 0 ? "" : formData.dev_back_number
+            }
+            placeholder="0"
             required
             onChange={(e) =>
-              handleInputsNumber("numberDevsBack", e.target.value)
+              handleInputsNumber("dev_back_number", e.target.value)
             }
           />
         </div>

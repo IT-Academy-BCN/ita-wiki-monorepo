@@ -14,16 +14,16 @@ import RequireAuth from "./components/RequireAuth";
 import CodeConnectPage from "./pages/CodeConnectPage";
 import CodeConnectCreatePage from "./pages/CodeConnectCreatePage";
 import CodeConnectDetails from "./pages/CodeConnectDetails";
-import TechnicalPage from "./components/technical-page/TechnicalPage";
-import RankingsPage from "./pages/RankingsPage";
+import TechnicalPage from "./pages/TechnicalPage";
+import LeaguesPage from "./pages/LeaguesPage";
+import TicketingPage from "./pages/TicketingPage";
 
 const App: FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <HeaderComponent />
-
-      <div className="flex flex-col lg:flex-row lg:flex-grow">
-        <AsideComponent />
+    <div className="min-h-screen flex flex-row">
+      <AsideComponent />
+      <div className="flex flex-col lg:flex-grow">
+        <HeaderComponent />
         <div className="flex-grow">
           <Routes>
             {/* Public routes */}
@@ -35,7 +35,8 @@ const App: FC = () => {
               path="/codeconnect/:projectId"
               element={<CodeConnectDetails />}
             />
-            <Route path="/ranking" element={<RankingsPage />} />
+            <Route path="/lligues" element={<LeaguesPage />} />
+            <Route path="/ticketing" element={<TicketingPage />} />
 
             {/* Protected routes */}
             <Route element={<RequireAuth />}>
@@ -45,9 +46,6 @@ const App: FC = () => {
                 element={<MyResourcesPage />}
               />
             </Route>
-
-            {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
 
             <Route
               path="/resources/technical-test/create"
@@ -66,6 +64,9 @@ const App: FC = () => {
               path="/codeconnect/create"
               element={<CodeConnectCreatePage />}
             />
+
+            {/* Fallback route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </div>

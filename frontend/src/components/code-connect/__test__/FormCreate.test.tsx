@@ -1,9 +1,15 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import FormCreateCodeConnect from "../FormCreate";
 import { toast } from "sonner";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import FormCreateCodeConnect from "../FormCreate";
+import {
+  contentTechsBackCodeConnect,
+  contentTechsFrontCodeConnect,
+  TechnologyItem,
+} from "../techsLabelsContent";
 
 vi.mock("sonner", () => ({
   toast: {
@@ -33,6 +39,26 @@ const renderWithRouter = (ui: React.ReactElement) => {
   return render(<MemoryRouter>{ui}</MemoryRouter>);
 };
 
+const createATooLongProject = async (
+  user: ReturnType<typeof userEvent.setup>,
+  time: string,
+  unitTime: string,
+) => {
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
+
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
+
+  const timeInput = screen.getByLabelText(
+    /durada del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(timeInput, time);
+
+  const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+  await user.selectOptions(unitTimeSelect, unitTime);
+};
+
 const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const titleInput = screen.getByRole("textbox", {
     name: /títol/i,
@@ -44,11 +70,11 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   }) as HTMLInputElement;
   await user.type(descriptionTextarea, "Test description");
 
-  const reactCheckbox = screen.getByRole("checkbox", { name: /react/i });
-  await user.click(reactCheckbox);
+  const reactRadio = screen.getByRole("radio", { name: /react/i });
+  await user.click(reactRadio);
 
-  const nodeCheckbox = screen.getByRole("checkbox", { name: /node/i });
-  await user.click(nodeCheckbox);
+  const nodeRadio = screen.getByRole("radio", { name: /node/i });
+  await user.click(nodeRadio);
 
   const deadlineInput = screen.getByLabelText(
     /data límit d'inscripció/i,
@@ -58,32 +84,55 @@ const fillCompleteForm = async (user: ReturnType<typeof userEvent.setup>) => {
   const timeInput = screen.getByLabelText(
     /durada del projecte/i,
   ) as HTMLInputElement;
-  await user.tripleClick(timeInput);
-  await user.keyboard("2");
+  await user.type(timeInput, "2");
 
   const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
   await user.selectOptions(unitTimeSelect, "month");
 
+  const ownerRoleSelect = screen.getByLabelText(
+    /selecciona el teu rol tècnic/i,
+  );
+  await user.selectOptions(ownerRoleSelect, "Frontend");
+
   const devsFrontInput = screen.getByLabelText(
     /nombre de programadors frontend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsFrontInput);
-  await user.keyboard("2");
+  await user.type(devsFrontInput, "2");
 
   const devsBackInput = screen.getByLabelText(
     /nombre de programadors backend/i,
   ) as HTMLInputElement;
-  await user.tripleClick(devsBackInput);
-  await user.keyboard("2");
+  await user.type(devsBackInput, "2");
+
+  const startDateInput = screen.getByLabelText(
+    /data d'inici del projecte/i,
+  ) as HTMLInputElement;
+  await user.type(startDateInput, "2025-12-01");
 
   await waitFor(() => {
     expect(titleInput.value).toBe("Test Project");
     expect(descriptionTextarea.value).toBe("Test description");
+    expect((ownerRoleSelect as HTMLSelectElement).value).toBe(
+      "Frontend Developer",
+    );
     expect(devsFrontInput.value).toBe("2");
     expect(devsBackInput.value).toBe("2");
     expect(timeInput.value).toBe("2");
     expect((unitTimeSelect as HTMLSelectElement).value).toBe("month");
     expect(deadlineInput.value).toBe("2025-11-20");
+  });
+};
+
+const checkTechOptionsRender = (language: string, list: TechnologyItem[]) => {
+  const inputs = screen
+    .getAllByRole("radio")
+    .filter((radio) => radio.getAttribute("name") === language);
+  expect(inputs).toHaveLength(list.length);
+  list.forEach((tech) => {
+    if (tech.icon) {
+      const label = screen.getByDisplayValue(tech.label).closest("label")!;
+      expect(label.querySelector("svg")).toBeInTheDocument();
+    }
   });
 };
 
@@ -94,11 +143,60 @@ describe("FormCreateCodeConnect", () => {
 
   describe("validateForm", () => {
     it("should show error when submitting empty form", async () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+    });
+
+    it("should show error if the time duration exceeds 6 months", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      await createATooLongProject(user, "7", "month");
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
+    it("should show error if the time duration exceeds 26 weeks", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      await createATooLongProject(user, "27", "week");
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "El projecte no pot tenir una durada superior a 6 mesos (26 setmanes).",
+        );
+      });
+    });
+
+    it("should only allow to set a future inscription deadline", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
 
-      const submitButton = screen.getByRole("button", { name: /publicar/i });
-      await user.click(submitButton);
+      const deadlineInput = screen.getByLabelText(
+        /data límit d'inscripció/i,
+      ) as HTMLInputElement;
+
+      await user.type(deadlineInput, "2025-01-01");
+      expect(deadlineInput).toBeInvalid();
+      const now = new Date();
+      const today = now.toISOString().split("T")[0];
+      await user.clear(deadlineInput);
+      await user.type(deadlineInput, today);
+      expect(deadlineInput).toBeInvalid();
+      await user.clear(deadlineInput);
+      await user.type(deadlineInput, "2030-01-01");
+      expect(deadlineInput).toBeValid();
     });
 
     it("should pass validation with all required fields filled correctly", async () => {
@@ -123,19 +221,19 @@ describe("FormCreateCodeConnect", () => {
       mockCreateCodeConnect.mockResolvedValueOnce({
         id: "123",
         title: "Test Project",
-        techsFront: ["React"],
-        techsBack: ["Node"],
+        language_frontend: "React",
+        language_backend: "Node",
         description: "Test description",
-        numberDevsFront: 2,
-        numberDevsBack: 2,
+        programming_role: "Frontend",
+        dev_front_number: 2,
+        dev_back_number: 2,
         time: 2,
-        unitTime: "month",
+        unitTime: "week",
+        limit_date_inscription: "20/05/2026",
       });
 
       renderWithRouter(<FormCreateCodeConnect />);
-
       await fillCompleteForm(user);
-
       expect(toast.error).not.toHaveBeenCalled();
 
       const form = screen
@@ -147,6 +245,11 @@ describe("FormCreateCodeConnect", () => {
       await waitFor(
         () => {
           expect(mockCreateCodeConnect).toHaveBeenCalled();
+          expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+            expect.objectContaining({
+              time_duration: "2 mesos",
+            }),
+          );
         },
         { timeout: 3000 },
       );
@@ -242,11 +345,147 @@ describe("FormCreateCodeConnect", () => {
     it("should navigate back to code connect when clicking back link", async () => {
       const user = userEvent.setup();
       renderWithRouter(<FormCreateCodeConnect />);
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
 
       const backLink = screen.getByText(/tornar a code connect/i);
       await user.click(backLink);
 
       expect(mockNavigate).toHaveBeenCalledWith("/codeconnect");
+    });
+    it("should display the time unit value options for the project duration in plural or singular depending on the time value entered previously by the user", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      const timeInput = screen.getByLabelText(
+        /durada del projecte/i,
+      ) as HTMLInputElement;
+      const monthOption = screen.getByRole("option", { name: /mes/i });
+      const weekOption = screen.getByRole("option", { name: /setmana/i });
+      expect(monthOption).toHaveTextContent("Mes");
+      await user.clear(timeInput);
+      await user.type(timeInput, "2");
+      expect(monthOption).toHaveTextContent("Mesos");
+      expect(weekOption).toHaveTextContent("Setmanes");
+    });
+  });
+
+  describe("Tech selection", () => {
+    it("should show error when submitting without selecting any frontend technology", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const nodeRadio = screen.getByRole("radio", { name: /node/i });
+      await user.click(nodeRadio);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona una tecnologia frontend.",
+        );
+      });
+    });
+
+    it("should show error when submitting without selecting any backend technology", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+
+      const form = document.querySelector("form")!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Selecciona una tecnologia backend.",
+        );
+      });
+    });
+
+    it("should show all the technologies with their icons when available", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      checkTechOptionsRender("language_frontend", contentTechsFrontCodeConnect);
+      checkTechOptionsRender("language_backend", contentTechsBackCodeConnect);
+    });
+
+    it("should select the correct technology onclick", async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<FormCreateCodeConnect />);
+      const reactRadio = screen.getByRole("radio", { name: /react/i });
+      await user.click(reactRadio);
+      expect(reactRadio).toBeChecked();
+      expect(reactRadio).toHaveAttribute("value", "React");
+      const form = reactRadio.closest("form");
+      expect(form).toHaveFormValues({ language_frontend: "React" });
+    });
+
+    it("should render start_date input and include it in payload", async () => {
+      const user = userEvent.setup();
+      mockCreateCodeConnect.mockResolvedValueOnce({});
+      renderWithRouter(<FormCreateCodeConnect />);
+
+      expect(
+        screen.getByLabelText(/data d'inici del projecte/i),
+      ).toBeInTheDocument();
+
+      await fillCompleteForm(user);
+      const form = screen
+        .getByRole("textbox", { name: /títol/i })
+        .closest("form");
+      if (!form) throw new Error("Form not found");
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(mockCreateCodeConnect).toHaveBeenCalledWith(
+          expect.objectContaining({
+            start_date: "2025-12-01",
+          }),
+        );
+      });
+    });
+
+    it("should show placeholder '0' and empty value when number inputs are at default", () => {
+      renderWithRouter(<FormCreateCodeConnect />);
+      const timeInput = document.getElementById("time") as HTMLInputElement;
+      const devsFrontInput = document.getElementById(
+        "devs-front",
+      ) as HTMLInputElement;
+      const devsBackInput = document.getElementById(
+        "devs-back",
+      ) as HTMLInputElement;
+
+      expect(timeInput.value).toBe("");
+      expect(timeInput.placeholder).toBe("0");
+      expect(devsFrontInput.value).toBe("");
+      expect(devsFrontInput.placeholder).toBe("0");
+      expect(devsBackInput.value).toBe("");
+      expect(devsBackInput.placeholder).toBe("0");
+    });
+  });
+  it("should calculate end_date automatically when start_date, time and unitTime are set", async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<FormCreateCodeConnect />);
+
+    const startDateInput = screen.getByLabelText(
+      /data d'inici del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(startDateInput, "2026-01-01");
+
+    const timeInput = screen.getByLabelText(
+      /durada del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(timeInput, "2");
+
+    const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+    await user.selectOptions(unitTimeSelect, "month");
+
+    const endDateInput = document.getElementById(
+      "end_date",
+    ) as HTMLInputElement;
+    await waitFor(() => {
+      expect(endDateInput.value).toBe("2026-03-01");
     });
   });
 });

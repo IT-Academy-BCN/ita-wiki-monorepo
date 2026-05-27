@@ -18,7 +18,7 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, string $permission, ?string $ownershipField = null): Response
     {
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
         
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -31,11 +31,14 @@ class CheckPermission
 
         
         if ($ownershipField && str_contains($permission, 'own')) {
-            $resourceId = $request->route($ownershipField);
-            $model = $this->getModelFromRoute($request);
+            $allPermission = str_replace('own', 'all', $permission);
+
+            if (!$user->can($allPermission)) {
+                $model = $this->getModelFromRoute($request);
             
-            if ($model && $model->github_id !== $user->github_id) {
-                return response()->json(['error' => 'Forbidden - Not your resource'], 403);
+                if ($model && $model->github_id !== $user->github_id) {
+                    return response()->json(['error' => 'Forbidden - Not your resource'], 403);
+                }
             }
         }
 
@@ -44,12 +47,18 @@ class CheckPermission
     
     private function getModelFromRoute(Request $request)
     {
-        if ($request->route('resource')) {
-            return \App\Models\Resource::find($request->route('resource'));
+        $resource = $request->route('resource');
+        if ($resource) {
+            return $resource instanceof \App\Models\Resource
+                ? $resource
+                : \App\Models\Resource::find($resource);
         }
-        
-        if ($request->route('technicalTest')) {
-            return \App\Models\TechnicalTest::find($request->route('technicalTest'));
+
+        $technicalTest = $request->route('technicalTest');
+        if ($technicalTest) {
+            return $technicalTest instanceof \App\Models\TechnicalTest
+                ? $technicalTest
+                : \App\Models\TechnicalTest::find($technicalTest);
         }
         
         return null;

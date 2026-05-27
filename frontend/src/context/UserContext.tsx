@@ -8,7 +8,7 @@ import {
 import { IntUser } from "../types";
 import { login, getNewUser, logout } from "../api/endpointLogin";
 
-interface UserContextType {
+export interface UserContextType {
   user: IntUser | null;
   isAuthenticated: boolean;
   setUser: (user: IntUser | null) => void;

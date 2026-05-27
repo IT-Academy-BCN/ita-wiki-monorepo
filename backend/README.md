@@ -68,21 +68,21 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ## Contributors
 
 Luis Vicente
-Jordi Morillo 
-Juan Valdivia 
-Raquel Martínez 
-Stéphane Carteaux 
-Diego Chacón 
-Óscar Anguera 
-Rossana Liendo 
-Constanza Gómez 
-Xavier R 
-Sergio López 
-Frank Pulido (@frankpulido) 
-Raquel Patiño 
-Anna Mercado 
-Lena Prado 
-Kawsu Nagib 
+Jordi Morillo
+Juan Valdivia
+Raquel Martínez
+Stéphane Carteaux
+Diego Chacón
+Óscar Anguera
+Rossana Liendo
+Constanza Gómez
+Xavier R
+Sergio López
+Frank Pulido (@frankpulido)
+Raquel Patiño
+Anna Mercado
+Lena Prado
+Kawsu Nagib
 Simón Menendez Bravo
 Guillem Gaona Borastero
 Michelle Di Terlizzi
@@ -93,4 +93,16 @@ Sandra Gutierrez
 Antonia Minnucci
 Leandro da Silva Gusmao
 Marc Sanchez
+Alejandro Jarque
+Marc Sanchez
+Nacho Abollo (@ignatiusreillius)
+Victor Charneco
+Alex Beltran
+Vicenç Sirvent
+Inbisat Naveed
+Hebe Stark
+Flavio De Souza
+Miguel Montaño
+Orlando Rojas
+Laurea Gregori
 Franco Bridarolli

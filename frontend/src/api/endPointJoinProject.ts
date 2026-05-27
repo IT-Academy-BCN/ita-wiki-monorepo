@@ -1,12 +1,12 @@
 import { API_URL } from "../config";
 
-export type ProgrammingRole = "Frontend Developer" | "Backend Developer";
+import type { ProgrammingRole } from "../types/codeConnectTypes";
 
 export async function joinProject(
   listProjectId: number,
   programmingRole: ProgrammingRole,
 ): Promise<unknown | null> {
-  const url = `${API_URL}listsProject/${listProjectId}/contributors`;
+  const url = `${API_URL}codeconnect/${listProjectId}/join`;
 
   const response = await fetch(url, {
     method: "POST",
