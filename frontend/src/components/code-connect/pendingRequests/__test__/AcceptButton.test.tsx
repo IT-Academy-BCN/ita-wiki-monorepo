@@ -12,7 +12,7 @@ describe("AcceptButton", () => {
   it("calls updateContributorStatus with the status accepted on click", async () => {
     render(<AcceptButton projectId={1} contributorId={1} />);
     const user = userEvent.setup();
-    const button = screen.getByRole("button", { name: /aceptar/i });
+    const button = screen.getByRole("button", { name: "Acceptar" });
     await user.click(button);
     expect(updateContributorStatus).toHaveBeenCalledWith(1, 1, "accepted");
   });
