@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class LigaController extends Controller
 {
+    public function __construct()
+    {
+    $this->middleware('check.permission:add liga points')->only(['addPoints']);
+    }
+
 
     public function index()
     {
