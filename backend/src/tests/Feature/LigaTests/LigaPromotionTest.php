@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace Tests\Feature\Liga;
+namespace Tests\Feature\LigaTests;
 use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
