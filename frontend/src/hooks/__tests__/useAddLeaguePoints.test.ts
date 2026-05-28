@@ -17,10 +17,10 @@ describe("useAddLeaguePoints Hook", () => {
     );
 
     await act(async () => {
-      await result.current.addPoints(1);
+      await result.current.addPoints(1, 15);
     });
 
-    expect(addLeaguePointsMock).toHaveBeenCalledWith(1);
+    expect(addLeaguePointsMock).toHaveBeenCalledWith(1, 15);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
   });
