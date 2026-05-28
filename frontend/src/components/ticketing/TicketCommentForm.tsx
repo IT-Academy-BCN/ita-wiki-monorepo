@@ -48,7 +48,7 @@ const TicketCommentForm = ({
       ) : (
         <textarea
           className={textareaClass}
-          placeholder="Escribe un comentario..."
+          placeholder="Escriu un comentari..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
@@ -67,7 +67,7 @@ const TicketCommentForm = ({
           type="button"
           onClick={onClose}
         >
-          Cerrar
+          Tanca
         </button>
       </div>
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
