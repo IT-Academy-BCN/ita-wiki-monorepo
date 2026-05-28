@@ -6,7 +6,10 @@ export type AddLeaguePointsResponse = {
 };
 
 type UseAddLeaguePointsParams = {
-  addLeaguePoints: (userId: number) => Promise<AddLeaguePointsResponse>;
+  addLeaguePoints: (
+    userId: number,
+    points: number,
+  ) => Promise<AddLeaguePointsResponse>;
 };
 type PointSystem = { points: number; activity: string }[];
 
@@ -28,12 +31,13 @@ export const useAddLeaguePoints = ({
 
   const addPoints = async (
     userId: number,
+    points: number,
   ): Promise<AddLeaguePointsResponse | null> => {
     setError(null);
     setIsLoading(true);
 
     try {
-      return await addLeaguePoints(userId);
+      return await addLeaguePoints(userId, points);
     } catch {
       setError("No s'han pogut sumar els punts.");
       return null;
