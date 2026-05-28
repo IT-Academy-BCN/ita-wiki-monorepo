@@ -19,9 +19,8 @@ class LigaAddPointsTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
-
-        $this->actingAs($this->user, 'sanctum');
+        $this->user = $this->authenticateUserWithRole('mentor');
+        
     }
 
     public function test_put_increments_points_by_5(): void
@@ -84,4 +83,39 @@ class LigaAddPointsTest extends TestCase
             'message' => 'User has not opted in to the liga'
         ]);
     }
+
+    public function test_put_returns_422_for_zero_or_negative_points(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => 0])
+            ->assertStatus(422);
+
+        $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => -5])
+            ->assertStatus(422);
+    }
+
+    public function test_put_increments_by_custom_points_amount(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $response = $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => 10]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'user_id'       => $this->user->id,
+            'points'        => 10,
+            'points_weekly' => 10,
+        ]);
+    }
+
 }

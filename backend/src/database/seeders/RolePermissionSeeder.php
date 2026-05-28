@@ -72,6 +72,7 @@ class RolePermissionSeeder extends Seeder
                 'update ticket status',
                 'update ticket priority',
                 'assign tickets',
+                'add liga points',
             ],
 
             'admin' => [
@@ -97,6 +98,7 @@ class RolePermissionSeeder extends Seeder
                 'update ticket priority',
                 'assign tickets',
                 'add closing comment',
+                'add liga points',
             ],
 
             'superadmin' => 'all',  // Special marker for all permissions

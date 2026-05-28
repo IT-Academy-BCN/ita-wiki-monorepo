@@ -6,6 +6,7 @@ import { createCodeConnect } from "../../api/endPointCodeConnect";
 import { formatDocumentIcons } from "../../icons/formatDocumentIconsArray";
 import { IntCodeConnect, Task } from "../../types";
 import { RoadmapField } from "../forms/RoadmapField";
+import { computeEndDate } from "./utils/computeEndDate";
 import {
   contentTechsBackCodeConnect,
   contentTechsFrontCodeConnect,
@@ -31,6 +32,8 @@ const FormCreate = () => {
     time: 0,
     unitTime: "",
     limit_date_inscription: "",
+    start_date: "",
+    end_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [roadmap, setRoadmap] = useState<Task[]>([]);
@@ -40,6 +43,9 @@ const FormCreate = () => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
+      ...(field === "unitTime" && {
+        end_date: computeEndDate(prev.start_date ?? "", prev.time, value),
+      }),
     }));
   };
 
@@ -51,20 +57,38 @@ const FormCreate = () => {
     rawValue: string,
   ) => {
     if (rawValue === "") {
-      return setFormData((prev) => ({ ...prev, [field]: 0 }));
+      return setFormData((prev) => ({
+        ...prev,
+        [field]: 0,
+        ...(field === "time" && {
+          end_date: computeEndDate(prev.start_date ?? "", 0, prev.unitTime),
+        }),
+      }));
     }
 
     const value = Number(rawValue);
     if (!isNaN(value) && value >= 0) {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+        ...(field === "time" && {
+          end_date: computeEndDate(prev.start_date ?? "", value, prev.unitTime),
+        }),
+      }));
     }
   };
 
   const handleDeadLine = (
-    field: keyof Pick<IntCodeConnect, "limit_date_inscription">,
+    field: keyof Pick<IntCodeConnect, "limit_date_inscription" | "start_date">,
     value: string,
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+      ...(field === "start_date" && {
+        end_date: computeEndDate(value, prev.time, prev.unitTime),
+      }),
+    }));
   };
 
   const validateForm = (): boolean => {
@@ -79,6 +103,7 @@ const FormCreate = () => {
       time,
       unitTime,
       limit_date_inscription,
+      start_date,
     } = formData;
 
     if (!language_frontend) {
@@ -100,6 +125,7 @@ const FormCreate = () => {
       );
       return false;
     }
+
     if (
       !title.trim() ||
       !description.trim() ||
@@ -108,7 +134,8 @@ const FormCreate = () => {
       dev_back_number <= 0 ||
       !time ||
       !unitTime ||
-      !limit_date_inscription
+      !limit_date_inscription ||
+      !start_date
     ) {
       toast.error("Completa tots els camps obligatoris.");
       return false;
@@ -146,6 +173,8 @@ const FormCreate = () => {
       dev_back_number: formData.dev_back_number,
       time_duration: getTimeDuration(formData.time, formData.unitTime),
       limit_date_inscription: formData.limit_date_inscription,
+      start_date: formData.start_date,
+      ...(formData.end_date && { end_date: formData.end_date }),
     };
 
     try {
@@ -223,7 +252,6 @@ const FormCreate = () => {
           {contentTechsFrontCodeConnect.map((item) => {
             const IconComponent = item.icon;
             const isSelected = formData.language_frontend.includes(item.label);
-
             return (
               <label
                 key={item.label}
@@ -257,7 +285,6 @@ const FormCreate = () => {
           {contentTechsBackCodeConnect.map((item) => {
             const IconComponent = item.icon;
             const isSelected = formData.language_backend.includes(item.label);
-
             return (
               <label
                 key={item.label}
@@ -313,9 +340,11 @@ const FormCreate = () => {
           </div>
         </div>
       </div>
+
       <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
       <RoadmapField setRoadmap={setRoadmap} />
       <div className="mx-[-3.7rem] border-t border-gray-300 my-8"></div>
+
       <div className="lg:w-2/3 my-4">
         <div className="grid gap-4 lg:grid-cols-3 items-center">
           <label htmlFor="limit_date_inscription" className="block font-medium">
@@ -332,6 +361,41 @@ const FormCreate = () => {
               handleDeadLine("limit_date_inscription", e.target.value)
             }
             min={getMinDeadline()}
+          />
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-4">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="start_date" className="block font-medium">
+            Data d'inici del projecte *
+          </label>
+          <input
+            id="start_date"
+            className="invalid:text-gray-200 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#B91879] focus:border-[#B91879] rounded-lg py-2 px-4"
+            type="date"
+            value={formData.start_date || ""}
+            required
+            disabled={isSubmitting}
+            onChange={(e) => handleDeadLine("start_date", e.target.value)}
+            min={getMinDeadline()}
+          />
+        </div>
+      </div>
+
+      <div className="lg:w-2/3 my-4">
+        <div className="grid gap-4 lg:grid-cols-3 items-center">
+          <label htmlFor="end_date" className="block font-medium text-gray-500">
+            Data de finalització del projecte
+          </label>
+          <input
+            id="end_date"
+            className="border border-gray-300 rounded-lg py-2 px-4 bg-gray-100 text-gray-500 cursor-not-allowed"
+            type="date"
+            value={formData.end_date || ""}
+            readOnly
+            disabled
+            tabIndex={-1}
           />
         </div>
       </div>
