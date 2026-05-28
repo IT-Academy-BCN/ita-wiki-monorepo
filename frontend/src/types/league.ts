@@ -12,7 +12,7 @@ export type Liga = {
 export type LigaResponse = { [key: string]: Liga[] };
 
 export type LeagueListProps = {
-  standings: Omit<Ranking, "points_weekly" | "league_id">[] | Liga[];
+  standings: Omit<Ranking, "league_id">[] | Liga[];
   showUp?: boolean;
   showDown?: boolean;
 };
