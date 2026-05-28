@@ -1,8 +1,8 @@
-import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
+import { useLeagues } from "../../../hooks/useLeagues";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const WeeklyRanking = () => {
-  const { leagueGroups } = useGlobalRanking();
+  const { leagues } = useLeagues();
   const LEAGUE_LABELS: Record<string, string> = {
     "1": "Or",
     "2": "Plata",
@@ -10,13 +10,17 @@ export const WeeklyRanking = () => {
   };
 
   return (
-    <section>
-      {leagueGroups.map(([id, league]) => (
-        <div key={id} className="my-10">
-          <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
-          <LeagueList standings={league} />
-        </div>
-      ))}
-    </section>
+    <>
+      {leagues && (
+        <section>
+          {Object.entries(leagues).map(([id, league]) => (
+            <div key={id} className="my-10">
+              <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
+              <LeagueList standings={league} />
+            </div>
+          ))}
+        </section>
+      )}
+    </>
   );
 };

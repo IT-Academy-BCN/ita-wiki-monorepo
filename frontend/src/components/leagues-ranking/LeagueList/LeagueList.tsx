@@ -1,14 +1,18 @@
 import type { LeagueListProps } from "../../../types/league";
 
-export const LeagueList = ({ standings }: LeagueListProps) => {
+export const LeagueList = ({
+  standings,
+  showUp,
+  showDown,
+}: LeagueListProps) => {
   const getStyle = (index: number) => {
     const base =
       "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";
 
     const color =
-      standings.length > 3 && index < 3
+      showUp && standings.length > 3 && index < 3
         ? "bg-green-100"
-        : standings.length > 6 && index >= standings.length - 3
+        : showDown && standings.length > 6 && index >= standings.length - 3
           ? "bg-red-100"
           : "";
 
@@ -36,7 +40,9 @@ export const LeagueList = ({ standings }: LeagueListProps) => {
             <div>{standing.username}</div>
             <div className="col-span-2">{standing.status}</div>
             <div>{standing.language}</div>
-            <div className="font-bold">{standing.points}</div>
+            <div className="font-bold">
+              {standing.points || standing.points_weekly}
+            </div>
           </div>
         ))}
       </div>
