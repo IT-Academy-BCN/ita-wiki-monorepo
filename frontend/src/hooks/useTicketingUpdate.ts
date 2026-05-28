@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { updateTicket } from "../api/endPointTickets";
-import type { TicketStatus } from "../types/ticketingTypes";
+import type { TicketPriority } from "../types/ticketingTypes";
 
 export const useTicketingUpdate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const updateStatus = async (
+  const updatePriority = async (
     ticketId: number,
-    status: TicketStatus,
+    priority: TicketPriority,
   ): Promise<boolean> => {
     setIsLoading(true);
     setErrorMessage(null);
+
     try {
-      await updateTicket(ticketId, { status });
+      await updateTicket(ticketId, { priority });
       return true;
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unknown error");
@@ -23,5 +24,5 @@ export const useTicketingUpdate = () => {
     }
   };
 
-  return { updateStatus, isLoading, errorMessage };
+  return { updatePriority, isLoading, errorMessage };
 };
