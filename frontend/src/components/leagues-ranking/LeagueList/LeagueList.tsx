@@ -1,5 +1,4 @@
 import { UserCheck } from "lucide-react";
-import { useEffect } from "react";
 import { useUserContext } from "../../../context/UserContext";
 import type { LeagueListProps } from "../../../types/league";
 
@@ -8,10 +7,8 @@ export const LeagueList = ({
   showUp,
   showDown,
 }: LeagueListProps) => {
-  const { user, setUser } = useUserContext();
-  useEffect(() => {
-    if (user) setUser({ ...user, id: 8 });
-  }, []);
+  const { user } = useUserContext();
+  const demoUser = user ? { ...user, id: 8 } : user;
   const getStyle = (index: number) => {
     const base =
       "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";
@@ -45,7 +42,7 @@ export const LeagueList = ({
           >
             <div>{index + 1}</div>
             <div className="flex items-center gap-2 justify-center">
-              {user?.id === standing.user_id && (
+              {demoUser?.id === standing.user_id && (
                 <UserCheck size={18} strokeWidth={2.5} />
               )}
               {standing.username}
