@@ -15,11 +15,11 @@ describe("TicketCommentForm", () => {
       />,
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Escribe un comentario..."), {
-      target: { value: "Nuevo comentario" },
+    fireEvent.change(screen.getByPlaceholderText("Escriu un comentari..."), {
+      target: { value: "Nou comentari" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Guardar" }));
 
-    expect(mockSubmit).toHaveBeenCalledWith("Nuevo comentario");
+    expect(mockSubmit).toHaveBeenCalledWith("Nou comentari");
   });
 });
