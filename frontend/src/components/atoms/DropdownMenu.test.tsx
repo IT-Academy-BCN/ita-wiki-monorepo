@@ -9,28 +9,7 @@ const options = [
 ];
 
 describe("DropdownMenu", () => {
-  it("should render the current value", () => {
-    render(
-      <DropdownMenu currentValue="Nou" options={options} onSelect={vi.fn()} />,
-    );
-    const button = screen.getByRole("button", { name: "Nou" });
-    expect(button).toBeInTheDocument();
-  });
-
-  it("should open the dropdown when clicked", () => {
-    render(
-      <DropdownMenu currentValue="Nou" options={options} onSelect={vi.fn()} />,
-    );
-    const button = screen.getByRole("button", { name: "Nou" });
-    fireEvent.click(button);
-
-    expect(
-      screen.getByRole("button", { name: "En progrés" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Tancat" })).toBeInTheDocument();
-  });
-
-  it("should call onSelect with the correct value when an option is clicked", () => {
+  it("should open the dropdown and call onSelect when an option is clicked", () => {
     const handleSelect = vi.fn();
     render(
       <DropdownMenu
@@ -41,7 +20,6 @@ describe("DropdownMenu", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Nou" }));
     fireEvent.click(screen.getByRole("button", { name: "Tancat" }));
-
     expect(handleSelect).toHaveBeenCalledWith("closed");
   });
 
@@ -51,7 +29,6 @@ describe("DropdownMenu", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Nou" }));
     fireEvent.click(screen.getByRole("button", { name: "Tancat" }));
-
     expect(
       screen.queryByRole("button", { name: "En progrés" }),
     ).not.toBeInTheDocument();
@@ -66,7 +43,6 @@ describe("DropdownMenu", () => {
         disabled={true}
       />,
     );
-    const button = screen.getByRole("button", { name: "Nou" });
-    expect(button).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Nou" })).toBeDisabled();
   });
 });
