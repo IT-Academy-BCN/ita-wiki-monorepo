@@ -47,6 +47,8 @@ const TicketingPage = (): JSX.Element => {
             onClose={() => setSelectedTicketId(null)}
             error={commentError}
             initialValue={comments[0]?.comment}
+            authorId={comments[0]?.user_id}
+            date={comments[0]?.created_at}
           />
         )}
       </Container>

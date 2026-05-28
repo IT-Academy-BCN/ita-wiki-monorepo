@@ -5,6 +5,8 @@ type Props = {
   onClose: () => void;
   error: string | null;
   initialValue?: string;
+  authorId?: number;
+  date?: string;
 };
 
 const TicketCommentForm = ({
@@ -12,6 +14,8 @@ const TicketCommentForm = ({
   onClose,
   error,
   initialValue,
+  authorId,
+  date,
 }: Props) => {
   const [comment, setComment] = useState("");
 
@@ -22,22 +26,51 @@ const TicketCommentForm = ({
     setComment("");
   };
 
+  const textareaClass =
+    "h-[60px] w-full max-w-[410px] resize-none border border-gray-600 px-4 py-3 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]";
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="mt-8" onSubmit={handleSubmit}>
+      <h3 className="mb-4 text-sm font-bold text-black underline">Comentari</h3>
       {initialValue ? (
-        <textarea value={initialValue} readOnly />
+        <>
+          <textarea
+            className={`${textareaClass} bg-gray-50`}
+            value={initialValue}
+            readOnly
+          />
+          {(authorId || date) && (
+            <p className="mt-1 text-xs text-gray-500">
+              ID: {authorId} · {date}
+            </p>
+          )}
+        </>
       ) : (
         <textarea
+          className={textareaClass}
+          placeholder="Escribe un comentario..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Escribe un comentario..."
         />
       )}
-      {!initialValue && <button type="submit">Guardar</button>}
-      <button type="button" onClick={onClose}>
-        Cerrar
-      </button>
-      {error && <p>{error}</p>}
+      <div className="mt-4 flex gap-2">
+        {!initialValue && (
+          <button
+            className="bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md"
+            type="submit"
+          >
+            Guardar
+          </button>
+        )}
+        <button
+          className="border border-gray-600 px-10 py-4 text-sm font-bold text-gray-600 hover:shadow-md"
+          type="button"
+          onClick={onClose}
+        >
+          Cerrar
+        </button>
+      </div>
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </form>
   );
 };
