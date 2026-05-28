@@ -4,6 +4,7 @@ import type { ApiContributor } from "../../../types/codeConnectTypes";
 
 interface PendingRequestProps {
   contributor: ApiContributor;
+  projectId: number;
   roleIcon?: string;
 }
 
