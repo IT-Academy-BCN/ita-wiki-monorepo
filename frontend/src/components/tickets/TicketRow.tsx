@@ -5,7 +5,7 @@ import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
 import DropdownMenu from "../atoms/DropdownMenu";
-import { STATUS_LABELS, STATUS_OPTIONS } from "./ticketingConstants";
+import { STATUS_LABELS, STATUS_OPTIONS } from "./ticketConstants";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
