@@ -164,7 +164,7 @@ const FormCreate = () => {
       formData.end_date < formData.start_date
     ) {
       toast.error(
-        "La data de finalització no pot ser anterior a la data d'inici.",
+        "Hi ha un error amb les dates. Torna a seleccionar la data d'inici.",
       );
       return false;
     }
