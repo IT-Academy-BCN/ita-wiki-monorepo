@@ -5,6 +5,7 @@ interface DropdownButtonComponentProps {
   onClick?: () => void;
   icon?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 const DropdownButtonComponent: FC<DropdownButtonComponentProps> = ({
@@ -12,12 +13,13 @@ const DropdownButtonComponent: FC<DropdownButtonComponentProps> = ({
   onClick,
   icon,
   disabled = false,
+  className,
 }) => {
   return (
     <button
       title={title || "Usuari"}
       onClick={onClick}
-      className={`flex items-center justify-start gap-3 px-3 py-1 mx-3 text-[0.85rem] whitespace-nowrap transition rounded-md ${disabled ? "cursor-default" : "cursor-pointer hover:bg-[#fcecec]"}`}
+      className={`flex items-center justify-start gap-3 px-3 py-1 text-[0.85rem] whitespace-nowrap transition rounded-md ${className ?? "mx-3"} ${disabled ? "cursor-default" : "cursor-pointer hover:bg-[#fcecec]"}`}
       disabled={disabled}
     >
       <span>

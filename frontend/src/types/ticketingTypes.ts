@@ -73,6 +73,7 @@ export interface TicketUserData {
   github_user_name?: string | null;
   name?: string | null;
   email?: string | null;
+  role?: string | null;
 }
 
 export interface ApiTicketData {
@@ -124,4 +125,15 @@ export interface ApiUpdateTicketResponse {
   success: boolean;
   data: ApiTicketData;
   message?: string;
+}
+
+export interface TicketComment {
+  id: number;
+  ticket_id: number;
+  user_id: number;
+  comment: string;
+  is_closing_comment: boolean;
+  created_at: string;
+  updated_at: string;
+  user: TicketUserData;
 }
