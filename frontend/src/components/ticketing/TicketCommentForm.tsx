@@ -59,7 +59,7 @@ const TicketCommentForm = ({
             className="bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md"
             type="submit"
           >
-            Guardar
+            Desar
           </button>
         )}
         <button
