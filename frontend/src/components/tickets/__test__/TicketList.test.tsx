@@ -1,22 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
-import { UserContext } from "../../../context/UserContext";
-
-const mockUserContext = {
-  user: { role: "admin" },
-  isAuthenticated: true,
-  setUser: vi.fn(),
-  signOut: vi.fn(),
-  signIn: vi.fn(),
-  saveUser: vi.fn(),
-  error: null,
-  setError: vi.fn(),
-  loading: false,
-  setIsLoading: vi.fn(),
-};
 
 const base = {
   code_connect_id: 1,
@@ -84,52 +70,38 @@ const mockTickets: ApiTicketData[] = [
   },
 ];
 
-const renderWithContext = (ui: React.ReactElement) => {
-  return render(
-    <UserContext.Provider value={mockUserContext}>{ui}</UserContext.Provider>,
-  );
-};
-
 describe("TicketList", () => {
   it("renders empty state", () => {
-    renderWithContext(
-      <TicketList tickets={[]} isLoading={false} error={null} />,
-    );
+    render(<TicketList tickets={[]} isLoading={false} error={null} />);
     expect(
       screen.getByText("No hi ha tickets disponibles"),
     ).toBeInTheDocument();
   });
 
   it("renders all ticket names", () => {
-    renderWithContext(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />,
-    );
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
     mockTickets.forEach((ticket) => {
       expect(screen.getByText(ticket.name)).toBeInTheDocument();
     });
   });
 
   it("renders ticket status labels in catalan", () => {
-    renderWithContext(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />,
-    );
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
     expect(screen.getByText("Nou")).toBeInTheDocument();
     expect(screen.getByText("En progrés")).toBeInTheDocument();
     expect(screen.getByText("Bloquejat")).toBeInTheDocument();
     expect(screen.getByText("Fet")).toBeInTheDocument();
   });
 
-  it("renders Descripció column header", () => {
-    renderWithContext(
-      <TicketList tickets={mockTickets} isLoading={false} error={null} />,
-    );
+  it("renders Descripció column header but not Tipus", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
     expect(screen.getByText("Descripció")).toBeInTheDocument();
     expect(screen.queryByText("Tipus")).not.toBeInTheDocument();
   });
 
   it("handles priority null without crash", () => {
     const ticketWithNullPriority = [{ ...mockTickets[0], priority: null }];
-    renderWithContext(
+    render(
       <TicketList
         tickets={ticketWithNullPriority}
         isLoading={false}
