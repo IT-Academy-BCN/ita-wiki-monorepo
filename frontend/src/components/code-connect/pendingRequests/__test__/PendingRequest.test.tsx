@@ -13,6 +13,15 @@ const contributor: ApiContributor = {
 };
 
 describe("PendingRequest", () => {
+  it("renders the contributor username", () => {
+    render(
+      <ul>
+        <PendingRequest contributor={contributor} />
+      </ul>,
+    );
+    expect(screen.getByText("userTest")).toBeTruthy();
+  });
+
   it("renders the role icon when provided", () => {
     render(
       <ul>
