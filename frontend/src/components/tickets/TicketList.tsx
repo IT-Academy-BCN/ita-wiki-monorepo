@@ -60,13 +60,14 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
       <div role="table" className="w-full">
         <div
           role="row"
-          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
+          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
         >
           <div role="columnheader">ID</div>
           <div role="columnheader">Descripció</div>
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
+          <div role="columnheader">Rol</div>
         </div>
 
         <div role="rowgroup" className="flex flex-col">
@@ -74,7 +75,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
             <div
               key={ticket.id}
               role="row"
-              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
             >
               <div role="cell" className="font-semibold">
                 {String(ticket.id).padStart(6, "0")}
@@ -96,6 +97,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
               >
                 {priorityLabels[ticket.priority ?? "low"]}
               </div>
+              <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
             </div>
           ))}
         </div>
