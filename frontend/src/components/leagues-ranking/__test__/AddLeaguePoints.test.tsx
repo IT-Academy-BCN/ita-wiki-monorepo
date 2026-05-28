@@ -15,6 +15,7 @@ describe("AddLeaguePoints", () => {
             username: "Jordi",
           },
         ]}
+        onPointAdded={() => {}}
       />,
     );
     const buttons = screen.getAllByRole("button");
@@ -31,6 +32,7 @@ describe("AddLeaguePoints", () => {
             username: "Jordi",
           },
         ]}
+        onPointAdded={() => {}}
       />,
     );
 
