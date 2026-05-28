@@ -12,6 +12,11 @@ const base = {
   closed_at: null,
   created_at: "2026-04-23T10:00:00Z",
   updated_at: "2026-04-23T10:00:00Z",
+  code_connect: {
+    id: 1,
+    name: "Student Test",
+    role: "student",
+  },
 };
 
 const mockTickets: ApiTicketData[] = [
@@ -116,5 +121,15 @@ describe("TicketList", () => {
       />,
     );
     expect(screen.getByText("Baixa")).toBeInTheDocument();
+  });
+
+  it("renders Rol column header", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+    expect(screen.getByText("Rol")).toBeInTheDocument();
+  });
+
+  it("renders the creator role in the Rol column", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+    expect(screen.getAllByText("student").length).toBeGreaterThan(0);
   });
 });
