@@ -21,9 +21,13 @@ describe("useTicketingUpdate", () => {
 
     const { result } = renderHook(() => useTicketingUpdate());
 
+    let response: boolean;
+
     await act(async () => {
-      await result.current.updateStatus(1, "closed");
+      response = await result.current.updateStatus(1, "closed");
     });
+
+    expect(response!).toBe(true);
 
     expect(updateTicket).toHaveBeenCalledWith(1, {
       status: "closed",
