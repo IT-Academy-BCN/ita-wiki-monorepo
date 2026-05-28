@@ -16,17 +16,17 @@ describe("useTicketingUpdate", () => {
   it("updates ticket status correctly", async () => {
     vi.mocked(updateTicket).mockResolvedValue({
       id: 1,
-      status: "resolved",
+      status: "closed",
     } as never);
 
     const { result } = renderHook(() => useTicketingUpdate());
 
     await act(async () => {
-      await result.current.updateStatus(1, "resolved");
+      await result.current.updateStatus(1, "closed");
     });
 
     expect(updateTicket).toHaveBeenCalledWith(1, {
-      status: "resolved",
+      status: "closed",
     });
 
     expect(result.current.errorMessage).toBeNull();
