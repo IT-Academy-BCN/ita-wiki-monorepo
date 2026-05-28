@@ -1,14 +1,14 @@
 import { useState } from "react";
-import type {
-  ApiTicketData,
-  TicketPriority,
-  TicketStatus,
-} from "../../types/ticketingTypes";
+import type { ApiTicketData, TicketPriority } from "../../types/ticketingTypes";
 import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
 import DropdownMenu from "../atoms/DropdownMenu";
-import { PRIORITY_LABELS, PRIORITY_OPTIONS } from "./ticketConstants";
+import {
+  PRIORITY_LABELS,
+  PRIORITY_OPTIONS,
+  STATUS_LABELS,
+} from "./ticketConstants";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -17,14 +17,6 @@ const formatDate = (date: string) => {
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
   return `${day}/${month}/${year}`;
-};
-
-const STATUS_LABELS: Record<TicketStatus, string> = {
-  pending: "Nou",
-  in_progress: "En progrés",
-  blocked: "Bloquejat",
-  ready: "Fet",
-  closed: "Tancat",
 };
 
 interface TicketRowProps {
