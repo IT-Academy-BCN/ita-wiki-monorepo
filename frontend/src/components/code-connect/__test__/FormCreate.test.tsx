@@ -464,4 +464,28 @@ describe("FormCreateCodeConnect", () => {
       expect(devsBackInput.placeholder).toBe("0");
     });
   });
+  it("should calculate end_date automatically when start_date, time and unitTime are set", async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<FormCreateCodeConnect />);
+
+    const startDateInput = screen.getByLabelText(
+      /data d'inici del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(startDateInput, "2026-01-01");
+
+    const timeInput = screen.getByLabelText(
+      /durada del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(timeInput, "2");
+
+    const unitTimeSelect = screen.getByLabelText(/tipus durada/i);
+    await user.selectOptions(unitTimeSelect, "month");
+
+    const endDateInput = document.getElementById(
+      "end_date",
+    ) as HTMLInputElement;
+    await waitFor(() => {
+      expect(endDateInput.value).toBe("2026-03-01");
+    });
+  });
 });
