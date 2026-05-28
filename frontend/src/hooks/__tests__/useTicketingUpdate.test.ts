@@ -13,26 +13,25 @@ describe("useTicketingUpdate", () => {
     vi.clearAllMocks();
   });
 
-  it("updates ticket status correctly", async () => {
+  it("updates ticket priority correctly", async () => {
     vi.mocked(updateTicket).mockResolvedValue({
       id: 1,
-      status: "closed",
+      priority: "high",
     } as never);
 
     const { result } = renderHook(() => useTicketingUpdate());
 
-    let response: boolean;
+    let response: boolean | undefined;
 
     await act(async () => {
-      response = await result.current.updateStatus(1, "closed");
+      response = await result.current.updatePriority(1, "high");
     });
 
-    expect(response!).toBe(true);
-
     expect(updateTicket).toHaveBeenCalledWith(1, {
-      status: "closed",
+      priority: "high",
     });
 
     expect(result.current.errorMessage).toBeNull();
+    expect(response).toBe(true);
   });
 });
