@@ -21,9 +21,23 @@ function ProjectTeam({
   const { getTeamByRole } = useProjectContributors(contributors);
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
+  const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(
+    null,
+  );
   const [selectedRole, setSelectedRole] = useState<
     "Frontend Developer" | "Backend Developer" | null
   >(null);
+
+  const handleSlotClick = (
+    role: "Frontend Developer" | "Backend Developer",
+    index: number,
+  ) => {
+    setSelectedRole(role);
+    setSelectedSlotIndex(index);
+  };
+
+  const frontendOffset = 0;
+  const backendOffset = frontendData.emptySlots;
 
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -40,8 +54,13 @@ function ProjectTeam({
         <TeamRow
           members={frontendData.members}
           emptySlots={frontendData.emptySlots}
-          onSlotClick={() => setSelectedRole("Frontend Developer")}
-          isSelected={selectedRole === "Frontend Developer"}
+          onSlotClick={(index) =>
+            handleSlotClick("Frontend Developer", index + frontendOffset)
+          }
+          selectedSlotIndex={
+            selectedRole === "Frontend Developer" ? selectedSlotIndex : null
+          }
+          slotIndexOffset={frontendOffset}
         />
         <div className="flex w-full items-center gap-4 mb-4">
           <h2 className="text-sm font-bold">Backend</h2>
@@ -53,8 +72,13 @@ function ProjectTeam({
           <TeamRow
             members={backendData.members}
             emptySlots={backendData.emptySlots}
-            onSlotClick={() => setSelectedRole("Backend Developer")}
-            isSelected={selectedRole === "Backend Developer"}
+            onSlotClick={(index) =>
+              handleSlotClick("Backend Developer", index + backendOffset)
+            }
+            selectedSlotIndex={
+              selectedRole === "Backend Developer" ? selectedSlotIndex : null
+            }
+            slotIndexOffset={backendOffset}
           />
         </div>
       </div>
