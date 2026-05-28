@@ -21,4 +21,13 @@ describe("PendingRequest", () => {
     );
     expect(screen.getByText("userTest")).toBeTruthy();
   });
+
+  it("renders the role icon when provided", () => {
+    render(
+      <ul>
+        <PendingRequest contributor={contributor} roleIcon="/react-logo.svg" />
+      </ul>,
+    );
+    expect(screen.getByAltText("Frontend Developer")).toBeTruthy();
+  });
 });
