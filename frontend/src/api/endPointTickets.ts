@@ -56,3 +56,24 @@ export const getComments = async (
 
   return response.data.data;
 };
+
+export const addComment = async (
+  ticketId: number,
+  comment: string,
+): Promise<TicketComment> => {
+  const token = localStorage.getItem("auth_token");
+  const url = `${API_URL}/api/tickets/${ticketId}/comments`;
+
+  const response = await axios.post<{ data: TicketComment }>(
+    url,
+    { comment },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return response.data.data;
+};

@@ -65,6 +65,7 @@ export type TicketListProps = {
   tickets: ApiTicketData[];
   isLoading?: boolean;
   error?: string | null;
+  onCommentClick?: (id: number) => void;
 };
 
 export interface TicketUserData {

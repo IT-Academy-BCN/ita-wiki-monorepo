@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
 
@@ -116,5 +116,19 @@ describe("TicketList", () => {
       />,
     );
     expect(screen.getByText("Baixa")).toBeInTheDocument();
+  });
+
+  it("calls onCommentClick with ticket id when Comentari button is clicked", () => {
+    const mockCommentClick = vi.fn();
+    render(
+      <TicketList
+        tickets={mockTickets}
+        isLoading={false}
+        error={null}
+        onCommentClick={mockCommentClick}
+      />,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Comentari" })[0]);
+    expect(mockCommentClick).toHaveBeenCalledWith(mockTickets[0].id);
   });
 });
