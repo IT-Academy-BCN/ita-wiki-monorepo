@@ -1,6 +1,8 @@
 import type { FC } from "react";
 import githubLogo from "../../../assets/github-logo.svg";
 import type { ApiContributor } from "../../../types/codeConnectTypes";
+import { AcceptButton } from "./AcceptButton";
+import { RejectButton } from "./RejectButton";
 
 interface PendingRequestProps {
   contributor: ApiContributor;
@@ -8,7 +10,11 @@ interface PendingRequestProps {
   roleIcon?: string;
 }
 
-const PendingRequest: FC<PendingRequestProps> = ({ contributor, roleIcon }) => (
+const PendingRequest: FC<PendingRequestProps> = ({
+  contributor,
+  projectId,
+  roleIcon,
+}) => (
   <li className="flex items-center p-3 border-b last:border-b-0">
     <div className="flex items-center gap-2 flex-1">
       <span className="text-[16px] font-semibold">{contributor.user.name}</span>
@@ -23,7 +29,10 @@ const PendingRequest: FC<PendingRequestProps> = ({ contributor, roleIcon }) => (
         />
       )}
     </div>
-    <div className="flex items-center gap-2 flex-1 justify-end" />
+    <div className="flex items-center gap-2 flex-1 justify-end">
+      <AcceptButton projectId={projectId} contributorId={contributor.id} />
+      <RejectButton projectId={projectId} contributorId={contributor.id} />
+    </div>
   </li>
 );
 
