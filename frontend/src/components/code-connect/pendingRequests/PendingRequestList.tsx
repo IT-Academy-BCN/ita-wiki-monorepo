@@ -40,6 +40,7 @@ const PendingRequestList = ({
           <PendingRequest
             key={contributor.id}
             contributor={contributor}
+            projectId={projectId}
             roleIcon={getRoleIcon(contributor.programming_role)}
           />
         ))}
