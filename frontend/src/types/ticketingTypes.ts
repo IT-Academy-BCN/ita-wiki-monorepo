@@ -74,6 +74,7 @@ export interface TicketUserData {
   github_user_name?: string | null;
   name?: string | null;
   email?: string | null;
+  role?: string | null;
 }
 
 export interface ApiTicketData {
