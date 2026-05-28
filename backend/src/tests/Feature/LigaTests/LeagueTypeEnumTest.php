@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace Tests\Unit\Enums;
+namespace Tests\Feature\LigaTests;
 use App\Enums\LeagueTypeEnum;
 use Tests\TestCase;
 
