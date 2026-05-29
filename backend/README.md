@@ -94,6 +94,7 @@ Antonia Minnucci
 Leandro da Silva Gusmao
 Alejandro Jarque
 Marc Sanchez
+Daniel Vera
 Nacho Abollo (@ignatiusreillius)
 Victor Charneco
 Alex Beltran
