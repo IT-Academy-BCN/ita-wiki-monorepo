@@ -104,3 +104,4 @@ Flavio De Souza
 Miguel Montaño
 Orlando Rojas
 Laurea Gregori
+Jose Manuel Riu
