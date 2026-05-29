@@ -7,6 +7,7 @@ export type AddLeaguePointsResponse = {
 
 export const addLeaguePoints = async (
   userId: number,
+  points: number,
 ): Promise<AddLeaguePointsResponse> => {
   const url = `${API_URL}${END_POINTS.leagues.addPoints}/${userId}/points`;
   const token = localStorage.getItem("auth_token");
@@ -18,6 +19,7 @@ export const addLeaguePoints = async (
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ points: points }),
   });
 
   if (!response.ok) {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import axios from "axios";
-import { createTicket, getComments } from "../endPointTickets";
+import { createTicket, addComment, getComments } from "../endPointTickets";
 import { IntCreateTicket } from "../../types/ticketingTypes";
 
 vi.mock("axios");
@@ -10,6 +10,7 @@ vi.mock("../../config", () => ({
     tickets: {
       get: "/api/tickets",
       post: "/api/tickets",
+      patch: "/api/tickets",
     },
   },
 }));
@@ -67,5 +68,21 @@ describe("getComments", () => {
 
     expect(result).toEqual(mockComments);
     expect(axios.get).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("addComment", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should add a comment and return data", async () => {
+    const mockComment = { id: 1, comment: "New comment", user: { id: 1 } };
+    vi.mocked(axios.post).mockResolvedValue({ data: { data: mockComment } });
+
+    const result = await addComment(1, "New comment");
+
+    expect(result).toEqual(mockComment);
+    expect(axios.post).toHaveBeenCalledTimes(1);
   });
 });
