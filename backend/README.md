@@ -105,3 +105,4 @@ Miguel Montaño
 Orlando Rojas
 Laurea Gregori
 Clara Cerdà de Palou
+Jose Manuel Riu
