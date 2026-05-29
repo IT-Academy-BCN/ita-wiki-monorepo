@@ -13,10 +13,14 @@ export const WeeklyRanking = () => {
     <>
       {leagues && (
         <section>
-          {Object.entries(leagues).map(([id, league]) => (
+          {Object.entries(leagues).map(([id, league], index) => (
             <div key={id} className="my-10">
               <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
-              <LeagueList standings={league} />
+              <LeagueList
+                standings={league}
+                showUp={index > 0}
+                showDown={index + 1 < Object.entries(leagues).length}
+              />
             </div>
           ))}
         </section>
