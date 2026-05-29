@@ -1,39 +1,32 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import UserProvider from "../../../context/UserContext";
-import { useGlobalRanking } from "../../../hooks/useGlobalRanking";
-import type { Ranking } from "../../../types/league";
+import { useLeagues } from "../../../hooks/useLeagues";
+import type { LigaResponse } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
 
-vi.mock("../../../hooks/useGlobalRanking", () => ({
-  useGlobalRanking: vi.fn(),
+vi.mock("../../../hooks/useLeagues", () => ({
+  useLeagues: vi.fn(),
 }));
 
-const mockLeagueGroups: [string, Omit<Ranking, "points_weekly">[]][] = [
-  [
-    "1",
-    [
-      {
-        position: 1,
-        user_id: 101,
-        username: "Júlia",
-        points: 94,
-        status: "Junior Coder",
-        language: "React",
-        created_at: "2026-04-24T00:00:00Z",
-        updated_at: "2026-04-24T00:00:00Z",
-        league_id: 1,
-      },
-    ],
+const mockLeagues: LigaResponse = {
+  "1": [
+    {
+      position: 1,
+      user_id: 101,
+      username: "Júlia",
+      points_weekly: 94,
+      status: "Junior Coder",
+      language: "React",
+      league_id: 1,
+    },
   ],
-];
+};
 
 describe("WeeklyRanking", () => {
   it("renders the standings table after fetch", async () => {
-    vi.mocked(useGlobalRanking).mockReturnValue({
-      globalRanking: [],
-      leagueGroups: mockLeagueGroups,
+    vi.mocked(useLeagues).mockReturnValue({
+      leagues: mockLeagues,
     });
     render(
       <UserProvider>

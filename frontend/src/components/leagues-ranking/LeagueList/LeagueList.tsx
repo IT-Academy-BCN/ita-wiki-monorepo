@@ -49,7 +49,9 @@ export const LeagueList = ({
             </div>
             <div className="col-span-2">{standing.status}</div>
             <div>{standing.language}</div>
-            <div className="font-bold">{standing.points}</div>
+            <div className="font-bold">
+              {standing.points || standing.points_weekly}
+            </div>
           </div>
         ))}
       </div>
