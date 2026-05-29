@@ -1,10 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import DropdownButtonComponent from "./DropdownButtonComponent";
-
-interface DropdownOption {
-  label: string;
-  value: string;
-}
+import { DropdownOption } from "../../types/ticketingTypes";
 
 interface DropdownMenuProps {
   currentValue: string;
