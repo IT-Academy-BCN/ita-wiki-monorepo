@@ -31,8 +31,8 @@ const TeamRow = ({
     {Array.from({ length: emptySlots }).map((_, index) => (
       <ProjectButton
         key={`empty-${index}`}
-        onClick={() => onSlotClick?.(index + slotIndexOffset)}
-        isSelected={selectedSlotIndex === index + slotIndexOffset}
+        onClick={() => onSlotClick?.(index)}
+        isSelected={selectedSlotIndex === index}
       >
         +
       </ProjectButton>
