@@ -1,5 +1,8 @@
 import { API_URL, END_POINTS } from "../config";
-import type { ApiContributor } from "../types/codeConnectTypes";
+import type {
+  ApiContributor,
+  ProgrammingRole,
+} from "../types/codeConnectTypes";
 
 export const fetchProjectContributors = async (
   projectId: number,
@@ -33,6 +36,28 @@ export const updateContributorStatus = async (
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ status }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
+export const joinProject = async (
+  projectId: number,
+  role: ProgrammingRole,
+): Promise<boolean> => {
+  const token = localStorage.getItem("auth_token");
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/contributors`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ programming_role: role }),
     });
     return response.ok;
   } catch {
