@@ -7,7 +7,7 @@ import type {
 export const fetchProjectContributors = async (
   projectId: number,
 ): Promise<ApiContributor[]> => {
-  const url = `${API_URL}codeconnect/${projectId}/join`;
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/contributors`;
   try {
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
@@ -48,7 +48,7 @@ export const joinProject = async (
   role: ProgrammingRole,
 ): Promise<boolean> => {
   const token = localStorage.getItem("auth_token");
-  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/contributors`;
+  const url = `${API_URL}codeconnect/${projectId}/join`;
   try {
     const response = await fetch(url, {
       method: "POST",
