@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { getComments } from "../api/endPointTickets";
+import { addComment, getComments } from "../api/endPointTickets";
 import type { TicketComment } from "../types/ticketingTypes";
 
 export const useTicketComments = (ticketId: number) => {
@@ -24,5 +24,16 @@ export const useTicketComments = (ticketId: number) => {
     fetchComments();
   }, [ticketId]);
 
-  return { comments, isLoading, error };
+  const submitComment = useCallback(
+    async (comment: string) => {
+      try {
+        await addComment(ticketId, comment);
+      } catch {
+        setError("Error al enviar el comentario");
+      }
+    },
+    [ticketId],
+  );
+
+  return { comments, isLoading, error, submitComment };
 };

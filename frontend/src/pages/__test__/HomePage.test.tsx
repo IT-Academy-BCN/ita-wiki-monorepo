@@ -31,7 +31,7 @@ describe("HomePage", () => {
     render(<HomePage />);
     const header = await screen.findByRole("banner");
     expect(header).toBeTruthy();
-    expect(header.textContent).toMatch(/Aprèn, pràctica i creix/i);
+    expect(header.textContent).toMatch(/Aprèn, practica i creix/i);
   });
 
   it("renders exactly 4 section elements", async () => {
