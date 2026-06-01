@@ -18,7 +18,11 @@ const getMinDeadline = () => {
   return tomorrow.toISOString().split("T")[0];
 };
 
-const FormCreate = () => {
+const FormCreate = ({
+  _computeEndDate = computeEndDate,
+}: {
+  _computeEndDate?: typeof computeEndDate;
+} = {}) => {
   const [formData, setFormData] = useState<
     Omit<IntCodeConnect, "time_duration">
   >({
@@ -44,7 +48,7 @@ const FormCreate = () => {
       ...prev,
       [field]: value,
       ...(field === "unitTime" && {
-        end_date: computeEndDate(prev.start_date ?? "", prev.time, value),
+        end_date: _computeEndDate(prev.start_date ?? "", prev.time, value),
       }),
     }));
   };
@@ -61,7 +65,7 @@ const FormCreate = () => {
         ...prev,
         [field]: 0,
         ...(field === "time" && {
-          end_date: computeEndDate(prev.start_date ?? "", 0, prev.unitTime),
+          end_date: _computeEndDate(prev.start_date ?? "", 0, prev.unitTime),
         }),
       }));
     }
@@ -72,7 +76,11 @@ const FormCreate = () => {
         ...prev,
         [field]: value,
         ...(field === "time" && {
-          end_date: computeEndDate(prev.start_date ?? "", value, prev.unitTime),
+          end_date: _computeEndDate(
+            prev.start_date ?? "",
+            value,
+            prev.unitTime,
+          ),
         }),
       }));
     }
@@ -86,7 +94,7 @@ const FormCreate = () => {
       ...prev,
       [field]: value,
       ...(field === "start_date" && {
-        end_date: computeEndDate(value, prev.time, prev.unitTime),
+        end_date: _computeEndDate(value, prev.time, prev.unitTime),
       }),
     }));
   };
@@ -157,6 +165,17 @@ const FormCreate = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (
+      formData.start_date &&
+      formData.end_date &&
+      formData.end_date < formData.start_date
+    ) {
+      toast.error(
+        "Hi ha un error amb les dates. Torna a seleccionar la data d'inici.",
+      );
+      return false;
+    }
 
     if (!validateForm()) return;
 
