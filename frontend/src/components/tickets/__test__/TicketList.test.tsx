@@ -98,10 +98,10 @@ describe("TicketList", () => {
 
   it("renders ticket status labels in catalan", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-    expect(screen.getByText("Nou")).toBeInTheDocument();
-    expect(screen.getByText("En progrés")).toBeInTheDocument();
-    expect(screen.getByText("Bloquejat")).toBeInTheDocument();
-    expect(screen.getByText("Fet")).toBeInTheDocument();
+    expect(screen.getByText("pending")).toBeInTheDocument();
+    expect(screen.getByText("in_progress")).toBeInTheDocument();
+    expect(screen.getByText("blocked")).toBeInTheDocument();
+    expect(screen.getByText("ready")).toBeInTheDocument();
   });
 
   it("renders Descripció column header but not Tipus", () => {
@@ -119,7 +119,7 @@ describe("TicketList", () => {
         error={null}
       />,
     );
-    expect(screen.getByText("Baixa")).toBeInTheDocument();
+    expect(screen.getByText("low")).toBeInTheDocument();
   });
 
   it("renders Rol column header", () => {
