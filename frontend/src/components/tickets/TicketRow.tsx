@@ -32,8 +32,7 @@ interface TicketRowProps {
 const TicketRow = ({ ticket }: TicketRowProps) => {
   const { updateStatus, updatePriority, isLoading } = useTicketingUpdate();
   const { user } = useUserContext();
-  const isAdmin =
-    user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
+  const isAdmin = user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
 
   const [currentStatus, setCurrentStatus] = useState<TicketStatus>(
     ticket.status,
