@@ -37,7 +37,7 @@ describe("addLeaguePoints", () => {
       ok: true,
     });
 
-    const result = await addLeaguePoints(1);
+    const result = await addLeaguePoints(1, 5);
 
     expect(fetchMock).toHaveBeenCalledWith(
       "http://localhost:8000/ligas/1/points",
@@ -48,6 +48,7 @@ describe("addLeaguePoints", () => {
           Authorization: "Bearer fake-token",
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ points: 5 }),
       },
     );
 
@@ -59,7 +60,7 @@ describe("addLeaguePoints", () => {
       ok: false,
     });
 
-    await expect(addLeaguePoints(1)).rejects.toThrow(
+    await expect(addLeaguePoints(1, 5)).rejects.toThrow(
       "Error adding league points",
     );
   });

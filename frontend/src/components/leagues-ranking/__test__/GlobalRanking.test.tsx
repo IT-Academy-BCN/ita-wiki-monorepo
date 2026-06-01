@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchGlobalRanking } from "../../../api/endPointLeagues";
 import { useUserContext } from "../../../context/UserContext";
@@ -25,20 +26,6 @@ vi.mock("../LeagueList/LeagueList", () => ({
         </div>
       ))}
     </div>
-  ),
-}));
-
-vi.mock("../AddLeaguePoints/AddLeaguePoints", () => ({
-  AddLeaguePoints: ({
-    users,
-  }: {
-    users: { user_id: number; username: string }[];
-  }) => (
-    <form aria-label="add league points">
-      {users.map((user) => (
-        <span key={user.user_id}>{user.username}</span>
-      ))}
-    </form>
   ),
 }));
 
@@ -121,6 +108,25 @@ describe("GlobalRanking", () => {
 
     await waitFor(() => {
       expect(screen.getAllByText("Júlia")).toHaveLength(2);
+    });
+  });
+
+  it("refreshes the ranking after adding point", async () => {
+    mockUserContext("mentor");
+    const user = userEvent.setup();
+    vi.mocked(fetchGlobalRanking).mockResolvedValue(mockRanking);
+    render(<GlobalRanking />);
+    const select = await screen.findByRole("combobox");
+    const options = screen.getAllByRole("option");
+    const button = screen.getByRole("button", {
+      name: "RESOLUCIÓ DE DUBTES (5 pt)",
+    });
+    const form = screen.getByRole("form", { name: /add league points/i });
+    await user.selectOptions(select, options[1]);
+    await user.click(button);
+    fireEvent.submit(form);
+    await waitFor(() => {
+      expect(fetchGlobalRanking).toHaveBeenCalledTimes(2);
     });
   });
 

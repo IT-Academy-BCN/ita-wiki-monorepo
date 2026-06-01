@@ -1,3 +1,5 @@
+import { UserCheck } from "lucide-react";
+import { useUserContext } from "../../../context/UserContext";
 import type { LeagueListProps } from "../../../types/league";
 
 export const LeagueList = ({
@@ -5,6 +7,8 @@ export const LeagueList = ({
   showUp,
   showDown,
 }: LeagueListProps) => {
+  const { user } = useUserContext();
+  const demoUser = user ? { ...user, id: 8 } : user;
   const getStyle = (index: number) => {
     const base =
       "grid grid-cols-6 border-b last:border-b-0 border-gray-400 px-4 py-4 text-sm text-center text-slate-950";
@@ -29,7 +33,7 @@ export const LeagueList = ({
         <div>Punts</div>
       </div>
 
-      <div className="border border-gray-400 bg-white rounded-xl overflow-hidden">
+      <div className="border border-gray-400 bg-white rounded-xl overflow-clip">
         {standings.map((standing, index) => (
           <div
             key={standing.username}
@@ -37,10 +41,17 @@ export const LeagueList = ({
             data-testid={`league-position-${index + 1}`}
           >
             <div>{index + 1}</div>
-            <div>{standing.username}</div>
+            <div className="flex items-center gap-2 justify-center">
+              {demoUser?.id === standing.user_id && (
+                <UserCheck size={18} strokeWidth={2.5} />
+              )}
+              {standing.username}
+            </div>
             <div className="col-span-2">{standing.status}</div>
             <div>{standing.language}</div>
-            <div className="font-bold">{standing.points}</div>
+            <div className="font-bold">
+              {standing.points || standing.points_weekly}
+            </div>
           </div>
         ))}
       </div>
