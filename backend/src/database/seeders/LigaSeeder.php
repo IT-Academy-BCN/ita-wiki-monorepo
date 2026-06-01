@@ -29,6 +29,6 @@ class LigaSeeder extends Seeder
             }
         });
 
-        Liga::factory()->count(5)->create();
+        Liga::factory()->count(25)->create();
     }
 }

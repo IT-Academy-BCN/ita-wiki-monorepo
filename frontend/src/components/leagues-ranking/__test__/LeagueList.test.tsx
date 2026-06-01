@@ -1,13 +1,13 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as UserContext from "../../../context/UserContext";
 import { LeagueList } from "../LeagueList/LeagueList";
 
 export const createMockStandings = (count: number) =>
   Array.from({ length: count }, (_, index) => ({
     position: index + 1,
-    user_id: 101 + index,
+    user_id: 1 + index,
     username: `Júlia ${index > 0 ? index : ""}`,
     points: 94 - index * 2,
     status: "Junior developer",
@@ -16,7 +16,33 @@ export const createMockStandings = (count: number) =>
     updated_at: "2026-04-24T00:00:00Z",
   }));
 
+const mockUserContext = (id: number) => {
+  vi.spyOn(UserContext, "useUserContext").mockReturnValue({
+    user: {
+      id: id,
+      github_user_name: "test-user",
+      github_id: 123,
+      name: "Test User",
+      email: "test@example.com",
+      password: "",
+      role: "student",
+    },
+    isAuthenticated: true,
+    setUser: vi.fn(),
+    signOut: vi.fn(),
+    signIn: vi.fn(),
+    saveUser: vi.fn(),
+    error: null,
+    setError: vi.fn(),
+    loading: false,
+    setIsLoading: vi.fn(),
+  });
+};
+
 describe("LeagueList", () => {
+  beforeEach(() => {
+    mockUserContext(8);
+  });
   it("renders the column headers", () => {
     render(<LeagueList standings={createMockStandings(1)} />);
 
@@ -62,5 +88,11 @@ describe("LeagueList", () => {
     expect(screen.getByTestId("league-position-4")).not.toHaveClass(
       "bg-red-100",
     );
+  });
+
+  it("displays an icon next to the logged user name", () => {
+    render(<LeagueList standings={createMockStandings(8)} />);
+    const loggedUserRow = screen.getByTestId("league-position-8");
+    expect(loggedUserRow.querySelector("svg")).toBeInTheDocument();
   });
 });

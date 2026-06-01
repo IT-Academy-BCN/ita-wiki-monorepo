@@ -94,6 +94,7 @@ Antonia Minnucci
 Leandro da Silva Gusmao
 Alejandro Jarque
 Marc Sanchez
+Daniel Vera
 Nacho Abollo (@ignatiusreillius)
 Victor Charneco
 Alex Beltran
@@ -104,3 +105,6 @@ Flavio De Souza
 Miguel Montaño
 Orlando Rojas
 Laurea Gregori
+Clara Cerdà de Palou
+Franco Bridarolli
+Jose Manuel Riu
