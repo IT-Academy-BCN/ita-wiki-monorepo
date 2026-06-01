@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import UserProvider from "../../../context/UserContext";
 import { useLeagues } from "../../../hooks/useLeagues";
 import type { LigaResponse } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
@@ -28,7 +29,11 @@ describe("WeeklyRanking", () => {
     vi.mocked(useLeagues).mockReturnValue({
       leagues: mockLeagues,
     });
-    render(<WeeklyRanking />);
+    render(
+      <UserProvider>
+        <WeeklyRanking />
+      </UserProvider>,
+    );
     await waitFor(() => {
       expect(screen.getByText("Lliga Or")).toBeInTheDocument();
       expect(screen.getByText("Posició")).toBeInTheDocument();

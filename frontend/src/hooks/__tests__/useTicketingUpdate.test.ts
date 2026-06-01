@@ -34,4 +34,26 @@ describe("useTicketingUpdate", () => {
     expect(result.current.errorMessage).toBeNull();
     expect(response).toBe(true);
   });
+
+  it("updates ticket status correctly", async () => {
+    vi.mocked(updateTicket).mockResolvedValue({
+      id: 1,
+      status: "closed",
+    } as never);
+
+    const { result } = renderHook(() => useTicketingUpdate());
+
+    let response: boolean | undefined;
+
+    await act(async () => {
+      response = await result.current.updateStatus(1, "closed");
+    });
+
+    expect(updateTicket).toHaveBeenCalledWith(1, {
+      status: "closed",
+    });
+
+    expect(result.current.errorMessage).toBeNull();
+    expect(response).toBe(true);
+  });
 });

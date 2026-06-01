@@ -488,4 +488,25 @@ describe("FormCreateCodeConnect", () => {
       expect(endDateInput.value).toBe("2026-03-01");
     });
   });
+  it("should show error if end_date is earlier than start_date", async () => {
+    const user = userEvent.setup();
+    renderWithRouter(
+      <FormCreateCodeConnect _computeEndDate={() => "2025-01-01"} />,
+    );
+    await fillCompleteForm(user);
+
+    const startDateInput = screen.getByLabelText(
+      /data d'inici del projecte/i,
+    ) as HTMLInputElement;
+    await user.type(startDateInput, "2026-06-01");
+
+    const form = document.querySelector("form")!;
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        "Hi ha un error amb les dates. Torna a seleccionar la data d'inici.",
+      );
+    });
+  });
 });
