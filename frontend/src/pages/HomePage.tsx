@@ -48,7 +48,7 @@ export default function HomePage() {
         <div className="h-full flex flex-col justify-center">
           <header className="flex justify-center py-9">
             <h1 className="text-2xl md:text-3xl lg:text-4xl text-black font-bold text-center">
-              Aprèn, pràctica i creix com a professional del desenvolupament
+              Aprèn, practica i creix com a professional del desenvolupament
             </h1>
           </header>
 

@@ -9,6 +9,7 @@ type ItaBtnVariant =
   | "close"
   | "icon"
   | "custom";
+
 interface ItaButtonProps {
   children?: ReactNode;
   variant?: ItaBtnVariant;
@@ -18,13 +19,14 @@ interface ItaButtonProps {
   type?: "button" | "submit" | "reset";
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 
 const basicCss =
   "block text-[14px] h-[41px] capitalize text-center rounded-[12px] outline-none cursor-pointer box-sizing w-full";
 const classList = {
   primary: `${basicCss} text-white min-w-[152px] bg-primary font-[600] hover:opacity-90 border-none`,
-  secondary: `${basicCss} border border-gray-foreground font-[600] text-gray-foregorund hover:bg-neutral-50 min-w-[138px]`,
+  secondary: `${basicCss} border border-gray-foreground font-[600] text-gray-foreground hover:bg-neutral-50 min-w-[138px]`,
   neutral: `${basicCss} bg-white text-gray-foreground font-[500] min-w-[138px] hover:bg-neutral-50`,
   github:
     "text-[var(--github-color)] bg-[var(--github-bg)]  justify-between max-w-60 hover:bg-[var(--github-color)] hover:text-[var(--github-bg)] hover:border-black outline-none cursor-pointer box-sizing",
@@ -41,6 +43,7 @@ const ButtonComponent: FC<ItaButtonProps> = ({
   type,
   className,
   onClick,
+  disabled,
 }) => {
   const baseClass =
     variant === "custom"
@@ -48,7 +51,12 @@ const ButtonComponent: FC<ItaButtonProps> = ({
       : `${classList[variant ?? "primary"]} ${className || ""}`.trim();
 
   return (
-    <button type={type || "button"} onClick={onClick} className={baseClass}>
+    <button
+      type={type || "button"}
+      onClick={onClick}
+      className={baseClass}
+      disabled={disabled}
+    >
       {variant === "close" && <img src={closeIcon} alt="Close" />}
 
       {variant === "icon" && text && (
