@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\LigaStatusEnum;
+use App\Enums\LeagueTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +31,7 @@ class Liga extends Model
     protected $casts = [
         'points'=> 'integer',
         'points_weekly'=> 'integer',
-        'league_id'=> 'integer',
+        'league_id'=> LeagueTypeEnum::class,
         'status'=> LigaStatusEnum::class, 
     ];
 
