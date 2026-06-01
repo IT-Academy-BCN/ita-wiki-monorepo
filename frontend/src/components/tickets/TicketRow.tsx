@@ -1,6 +1,10 @@
 // components/ticketing/TicketRow.tsx
 import { useState } from "react";
-import type { ApiTicketData, TicketStatus, TicketPriority } from "../../types/ticketingTypes";
+import type {
+  ApiTicketData,
+  TicketStatus,
+  TicketPriority,
+} from "../../types/ticketingTypes";
 import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
@@ -28,10 +32,15 @@ interface TicketRowProps {
 const TicketRow = ({ ticket }: TicketRowProps) => {
   const { updateStatus, updatePriority, isLoading } = useTicketingUpdate();
   const { user } = useUserContext();
-  const isAdmin = user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
+  const isAdmin =
+    user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
 
-  const [currentStatus, setCurrentStatus] = useState<TicketStatus>(ticket.status);
-  const [currentPriority, setCurrentPriority] = useState<TicketPriority>(ticket.priority ?? "low");
+  const [currentStatus, setCurrentStatus] = useState<TicketStatus>(
+    ticket.status,
+  );
+  const [currentPriority, setCurrentPriority] = useState<TicketPriority>(
+    ticket.priority ?? "low",
+  );
 
   return (
     <div
@@ -49,7 +58,10 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
           currentValue={STATUS_LABELS[currentStatus]}
           options={STATUS_OPTIONS}
           onSelect={async (value) => {
-            const success = await updateStatus(ticket.id, value as TicketStatus);
+            const success = await updateStatus(
+              ticket.id,
+              value as TicketStatus,
+            );
             if (success) setCurrentStatus(value as TicketStatus);
           }}
           disabled={isLoading || !isAdmin}
@@ -60,7 +72,10 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
           currentValue={PRIORITY_LABELS[currentPriority]}
           options={PRIORITY_OPTIONS}
           onSelect={async (value) => {
-            const success = await updatePriority(ticket.id, value as TicketPriority);
+            const success = await updatePriority(
+              ticket.id,
+              value as TicketPriority,
+            );
             if (success) setCurrentPriority(value as TicketPriority);
           }}
           disabled={isLoading || !isAdmin}
