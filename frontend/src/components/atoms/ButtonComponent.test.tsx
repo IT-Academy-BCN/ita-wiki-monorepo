@@ -65,7 +65,7 @@ describe("Render Button", () => {
       "border",
       "border-gray-foreground",
       "font-[600]",
-      "text-gray-foregorund",
+      "text-gray-foreground",
       "hover:bg-neutral-50",
       "min-w-[138px]",
     );
