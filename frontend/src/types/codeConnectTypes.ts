@@ -112,4 +112,5 @@ export interface ProgressBarProps {
 export interface ProjectButtonProps {
   children?: ReactNode;
   onClick?: () => void;
+  isSelected?: boolean;
 }
