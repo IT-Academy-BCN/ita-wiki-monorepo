@@ -18,6 +18,7 @@ class LigaPromotionTest extends TestCase
         $this->assertEquals(2, Liga::where('user_id', $users[1]->id)->first()->league_id);
         $this->assertEquals(2, Liga::where('user_id', $users[2]->id)->first()->league_id);
     }
+
     public function test_worst_3_users_get_demoted(): void {
         $users = User::factory()->count(9)->create();
         for ($i = 0; $i < 9; $i++) {
@@ -28,6 +29,7 @@ class LigaPromotionTest extends TestCase
         $this->assertEquals(1, Liga::where('user_id', $users[7]->id)->first()->league_id);
         $this->assertEquals(1, Liga::where('user_id', $users[8]->id)->first()->league_id);
     }
+
     public function test_user_in_gold_cannot_be_promoted(): void {
         $users = User::factory()->count(3)->create();
         Liga::create(['user_id' => $users[0]->id, 'points_weekly' => 100, 'league_id' => 3]);
@@ -36,6 +38,7 @@ class LigaPromotionTest extends TestCase
         $this->artisan('liga:process-promotions')->assertSuccessful();
         $this->assertEquals(3, Liga::where('user_id', $users[0]->id)->first()->league_id);
     }
+
     public function test_user_in_bronze_cannot_be_demoted(): void {
         $users = User::factory()->count(3)->create();
         Liga::create(['user_id' => $users[0]->id, 'points_weekly' => 100, 'league_id' => 1]);
@@ -44,6 +47,7 @@ class LigaPromotionTest extends TestCase
         $this->artisan('liga:process-promotions')->assertSuccessful();
         $this->assertEquals(1, Liga::where('user_id', $users[2]->id)->first()->league_id);
     }
+    
     public function test_league_with_less_than_3_users_is_skipped(): void {
         $users = User::factory()->count(2)->create();
         Liga::create(['user_id' => $users[0]->id, 'points_weekly' => 100, 'league_id' => 1]);
