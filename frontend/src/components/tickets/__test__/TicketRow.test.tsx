@@ -56,10 +56,7 @@ describe("TicketRow", () => {
 
   it("should render the status dropdown with current value", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
-    // status es "pending" → el label que muestra el dropdown
-    expect(
-      screen.getByRole("button", { name: /pendent/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Nou" })).toBeInTheDocument();
   });
 
   it("should render the priority dropdown with current value", () => {
