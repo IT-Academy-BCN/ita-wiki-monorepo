@@ -1,8 +1,19 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
+
+vi.mock("../TicketRow", () => ({
+  default: ({ ticket }: { ticket: ApiTicketData }) => (
+    <div role="row">
+      <span>{ticket.name}</span>
+      <span>{ticket.status}</span>
+      <span>{ticket.priority ?? "low"}</span>
+      <span>{ticket.code_connect?.role ?? "-"}</span>
+    </div>
+  ),
+}));
 
 const base = {
   code_connect_id: 1,
