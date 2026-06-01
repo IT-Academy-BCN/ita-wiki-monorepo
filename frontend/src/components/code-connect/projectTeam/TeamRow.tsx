@@ -13,7 +13,6 @@ const TeamRow = ({
   emptySlots,
   onSlotClick,
   selectedSlotIndex,
-  slotIndexOffset = 0,
 }: TeamRowProps) => (
   <div className="w-full flex gap-6 pr-2 mb-4">
     {members.map((member, index) => (
