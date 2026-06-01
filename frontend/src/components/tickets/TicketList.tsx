@@ -1,108 +1,49 @@
-import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import TicketList from "../TicketList";
-import type { ApiTicketData } from "../../../types/ticketingTypes";
+import type { TicketListProps } from "../../types/ticketingTypes";
+import TicketRow from "./TicketRow";
 
-vi.mock("../TicketRow", () => ({
-  default: ({ ticket }: { ticket: ApiTicketData }) => (
-    <div role="row">
-      <span>{ticket.name}</span>
-      <span>{ticket.code_connect?.role ?? "-"}</span>
+const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
+  if (isLoading)
+    return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
+
+  if (error) return <p className="text-destructive p-6">{error}</p>;
+
+  if (!tickets || tickets.length === 0)
+    return (
+      <p className="text-muted-foreground p-6">No hi ha tickets disponibles</p>
+    );
+
+  return (
+    <div className="w-full bg-muted/40 rounded-lg p-6 sm:p-8">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold tracking-wide text-foreground">
+          TICKETING
+        </h2>
+        <p className="mt-4 text-sm font-medium text-foreground underline underline-offset-4">
+          Llistat de tickets
+        </p>
+      </div>
+
+      <div role="table" className="w-full">
+        <div
+          role="row"
+          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
+        >
+          <div role="columnheader">ID</div>
+          <div role="columnheader">Descripció</div>
+          <div role="columnheader">Estat</div>
+          <div role="columnheader">Data</div>
+          <div role="columnheader">Prioritat</div>
+          <div role="columnheader">Rol</div>
+        </div>
+
+        <div role="rowgroup" className="flex flex-col">
+          {tickets.map((ticket) => (
+            <TicketRow key={ticket.id} ticket={ticket} />
+          ))}
+        </div>
+      </div>
     </div>
-  ),
-}));
-
-const base = {
-  code_connect_id: 1,
-  forum_answer_id: null,
-  assignee_id: null,
-  closed_by: null,
-  closed_at: null,
-  created_at: "2026-04-23T10:00:00Z",
-  updated_at: "2026-04-23T10:00:00Z",
-  code_connect: { id: 1, name: "Student Test", role: "student" },
+  );
 };
 
-const mockTickets: ApiTicketData[] = [
-  {
-    ...base,
-    id: 1,
-    name: "Login no funciona",
-    description: "",
-    status: "pending",
-    priority: "high",
-    type: "error",
-    affected_app: "wiki_frontend",
-    affected_function: "login",
-    incident_date: "2026-04-23",
-  },
-  {
-    ...base,
-    id: 2,
-    name: "Suggeriment per millorar la interfície",
-    description: "",
-    status: "in_progress",
-    priority: "medium",
-    type: "suggestion",
-    affected_app: "wiki_frontend",
-    affected_function: "other",
-    incident_date: "2026-04-20",
-  },
-  {
-    ...base,
-    id: 3,
-    name: "Error al carregar el dashboard",
-    description: "",
-    status: "blocked",
-    priority: "critical",
-    type: "error",
-    affected_app: "wiki_frontend",
-    affected_function: "other",
-    incident_date: "2026-04-21",
-  },
-  {
-    ...base,
-    id: 4,
-    name: "Millorar la documentació",
-    description: "",
-    status: "ready",
-    priority: "low",
-    type: "suggestion",
-    affected_app: "wiki_frontend",
-    affected_function: "other",
-    incident_date: "2026-04-22",
-  },
-];
-
-describe("TicketList", () => {
-  it("renders empty state", () => {
-    render(<TicketList tickets={[]} isLoading={false} error={null} />);
-    expect(
-      screen.getByText("No hi ha tickets disponibles"),
-    ).toBeInTheDocument();
-  });
-
-  it("renders all ticket names", () => {
-    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-    mockTickets.forEach((ticket) => {
-      expect(screen.getByText(ticket.name)).toBeInTheDocument();
-    });
-  });
-
-  it("renders Descripció column header but not Tipus", () => {
-    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-    expect(screen.getByText("Descripció")).toBeInTheDocument();
-    expect(screen.queryByText("Tipus")).not.toBeInTheDocument();
-  });
-
-  it("renders Rol column header", () => {
-    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-    expect(screen.getByText("Rol")).toBeInTheDocument();
-  });
-
-  it("renders the creator role in the Rol column", () => {
-    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-    expect(screen.getAllByText("student").length).toBeGreaterThan(0);
-  });
-});
+export default TicketList;
