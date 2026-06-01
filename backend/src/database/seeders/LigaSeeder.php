@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Enums\LanguageEnum;
 use App\Enums\LigaStatusEnum;
+use App\Enums\LeagueTypeEnum;   
 use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -22,11 +23,12 @@ class LigaSeeder extends Seeder
                     'points_weekly' => fake()->numberBetween(0, 100),
                     'language'      => fake()->randomElement(LanguageEnum::values()),
                     'status'        => fake()->randomElement(LigaStatusEnum::values()),
-                    'league_id'     => fake()->numberBetween(1, 4),
-                ]);
+                    'league_id'     => fake()->randomElement(LeagueTypeEnum::values()),                
+                    ]);
+
             }
         });
 
-        Liga::factory()->count(5)->create();
+        Liga::factory()->count(25)->create();
     }
 }

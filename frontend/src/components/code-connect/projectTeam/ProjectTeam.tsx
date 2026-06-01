@@ -43,7 +43,6 @@ function ProjectTeam({
     if (!selectedRole || !projectId) return;
     await joinProject(projectId, selectedRole);
   };
-
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
 
