@@ -25,16 +25,62 @@ const base = {
 };
 
 const mockTickets: ApiTicketData[] = [
-  { ...base, id: 1, name: "Login no funciona", description: "", status: "pending", priority: "high", type: "error", affected_app: "wiki_frontend", affected_function: "login", incident_date: "2026-04-23" },
-  { ...base, id: 2, name: "Suggeriment per millorar la interfície", description: "", status: "in_progress", priority: "medium", type: "suggestion", affected_app: "wiki_frontend", affected_function: "other", incident_date: "2026-04-20" },
-  { ...base, id: 3, name: "Error al carregar el dashboard", description: "", status: "blocked", priority: "critical", type: "error", affected_app: "wiki_frontend", affected_function: "other", incident_date: "2026-04-21" },
-  { ...base, id: 4, name: "Millorar la documentació", description: "", status: "ready", priority: "low", type: "suggestion", affected_app: "wiki_frontend", affected_function: "other", incident_date: "2026-04-22" },
+  {
+    ...base,
+    id: 1,
+    name: "Login no funciona",
+    description: "",
+    status: "pending",
+    priority: "high",
+    type: "error",
+    affected_app: "wiki_frontend",
+    affected_function: "login",
+    incident_date: "2026-04-23",
+  },
+  {
+    ...base,
+    id: 2,
+    name: "Suggeriment per millorar la interfície",
+    description: "",
+    status: "in_progress",
+    priority: "medium",
+    type: "suggestion",
+    affected_app: "wiki_frontend",
+    affected_function: "other",
+    incident_date: "2026-04-20",
+  },
+  {
+    ...base,
+    id: 3,
+    name: "Error al carregar el dashboard",
+    description: "",
+    status: "blocked",
+    priority: "critical",
+    type: "error",
+    affected_app: "wiki_frontend",
+    affected_function: "other",
+    incident_date: "2026-04-21",
+  },
+  {
+    ...base,
+    id: 4,
+    name: "Millorar la documentació",
+    description: "",
+    status: "ready",
+    priority: "low",
+    type: "suggestion",
+    affected_app: "wiki_frontend",
+    affected_function: "other",
+    incident_date: "2026-04-22",
+  },
 ];
 
 describe("TicketList", () => {
   it("renders empty state", () => {
     render(<TicketList tickets={[]} isLoading={false} error={null} />);
-    expect(screen.getByText("No hi ha tickets disponibles")).toBeInTheDocument();
+    expect(
+      screen.getByText("No hi ha tickets disponibles"),
+    ).toBeInTheDocument();
   });
 
   it("renders all ticket names", () => {
