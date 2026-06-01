@@ -10,6 +10,7 @@ export const createMockStandings = (count: number) =>
     user_id: 1 + index,
     username: `Júlia ${index > 0 ? index : ""}`,
     points: 94 - index * 2,
+    points_weekly: 10 - index,
     status: "Junior developer",
     language: "React",
     created_at: "2026-04-24T00:00:00Z",

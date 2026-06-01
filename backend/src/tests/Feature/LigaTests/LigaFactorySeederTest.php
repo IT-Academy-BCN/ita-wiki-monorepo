@@ -6,6 +6,7 @@ namespace Tests\Feature\LigaTests;
 
 use App\Models\Liga;
 use App\Models\User;
+use App\Enums\LeagueTypeEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -91,10 +92,13 @@ class LigaFactorySeederTest extends TestCase
         );
     }
 
-    public function test_liga_factory_league_id_is_an_integer(): void
+    public function test_liga_factory_league_id_is_valid_enum(): void
     {
         $liga = Liga::factory()->create();
 
-        $this->assertIsInt($liga->league_id);
+        $this->assertInstanceOf(
+            LeagueTypeEnum::class,
+            $liga->league_id
+        );
     }
 }
