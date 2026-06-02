@@ -61,7 +61,6 @@ describe("TicketRow", () => {
 
   it("should render the priority dropdown with current value", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
-    // priority es "high" → "Alta"
     expect(screen.getByRole("button", { name: /alta/i })).toBeInTheDocument();
   });
 });
