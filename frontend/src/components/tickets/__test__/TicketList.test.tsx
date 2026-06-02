@@ -1,16 +1,23 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
 
 vi.mock("../TicketRow", () => ({
-  default: ({ ticket }: { ticket: ApiTicketData }) => (
+  default: ({
+    ticket,
+    onCommentClick,
+  }: {
+    ticket: ApiTicketData;
+    onCommentClick?: (id: number) => void;
+  }) => (
     <div role="row">
       <span>{ticket.name}</span>
       <span>{ticket.status}</span>
       <span>{ticket.priority ?? "low"}</span>
       <span>{ticket.code_connect?.role ?? "-"}</span>
+      <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
     </div>
   ),
 }));
@@ -130,5 +137,19 @@ describe("TicketList", () => {
   it("renders the creator role in the Rol column", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
     expect(screen.getAllByText("student").length).toBeGreaterThan(0);
+  });
+
+  it("calls onCommentClick with ticket id when Comentari button is clicked", () => {
+    const mockCommentClick = vi.fn();
+    render(
+      <TicketList
+        tickets={mockTickets}
+        isLoading={false}
+        error={null}
+        onCommentClick={mockCommentClick}
+      />,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Comentari" })[0]);
+    expect(mockCommentClick).toHaveBeenCalledWith(mockTickets[0].id);
   });
 });

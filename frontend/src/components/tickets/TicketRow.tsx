@@ -26,9 +26,10 @@ const formatDate = (date: string) => {
 
 interface TicketRowProps {
   ticket: ApiTicketData;
+  onCommentClick?: (id: number) => void;
 }
 
-const TicketRow = ({ ticket }: TicketRowProps) => {
+const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
   const { updateStatus, updatePriority, isLoading } = useTicketingUpdate();
   const { user } = useUserContext();
   const isAdmin = user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
@@ -43,7 +44,7 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
   return (
     <div
       role="row"
-      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
     >
       <div role="cell" className="font-semibold">
         {String(ticket.id).padStart(6, "0")}
@@ -81,6 +82,9 @@ const TicketRow = ({ ticket }: TicketRowProps) => {
       </div>
       <div role="cell">{formatDate(ticket.incident_date)}</div>
       <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
+      <div role="cell">
+        <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
+      </div>
     </div>
   );
 };

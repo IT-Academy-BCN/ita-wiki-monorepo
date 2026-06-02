@@ -15,12 +15,13 @@ export const useTicketComments = (ticketId: number) => {
         const data = await getComments(ticketId);
         setComments(data);
       } catch {
-        setError("Error loading comments");
+        setError("Error en carregar els comentaris");
       } finally {
         setIsLoading(false);
       }
     };
 
+    if (!ticketId) return;
     fetchComments();
   }, [ticketId]);
 
@@ -29,7 +30,7 @@ export const useTicketComments = (ticketId: number) => {
       try {
         await addComment(ticketId, comment);
       } catch {
-        setError("Error al enviar el comentario");
+        setError("Error en enviar el comentari");
       }
     },
     [ticketId],
