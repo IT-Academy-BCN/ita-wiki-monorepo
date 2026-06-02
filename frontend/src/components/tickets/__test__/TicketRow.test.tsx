@@ -54,13 +54,13 @@ describe("TicketRow", () => {
     expect(screen.getByText("Login no funciona")).toBeInTheDocument();
   });
 
-  it("should render the status as static text", () => {
+  it("should render the status dropdown with current value", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
-    expect(screen.getByText("Nou")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Nou" })).toBeInTheDocument();
   });
 
   it("should render the priority dropdown with current value", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
-    expect(screen.getByRole("button", { name: "Alta" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /alta/i })).toBeInTheDocument();
   });
 });
