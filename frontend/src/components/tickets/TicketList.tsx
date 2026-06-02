@@ -44,7 +44,11 @@ const TicketList = ({
 
         <div role="rowgroup" className="flex flex-col">
           {tickets.map((ticket) => (
-            <TicketRow key={ticket.id} ticket={ticket} />
+            <TicketRow
+              key={ticket.id}
+              ticket={ticket}
+              onCommentClick={onCommentClick}
+            />
           ))}
         </div>
       </div>

@@ -5,12 +5,19 @@ import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
 
 vi.mock("../TicketRow", () => ({
-  default: ({ ticket }: { ticket: ApiTicketData }) => (
+  default: ({
+    ticket,
+    onCommentClick,
+  }: {
+    ticket: ApiTicketData;
+    onCommentClick?: (id: number) => void;
+  }) => (
     <div role="row">
       <span>{ticket.name}</span>
       <span>{ticket.status}</span>
       <span>{ticket.priority ?? "low"}</span>
       <span>{ticket.code_connect?.role ?? "-"}</span>
+      <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
     </div>
   ),
 }));
