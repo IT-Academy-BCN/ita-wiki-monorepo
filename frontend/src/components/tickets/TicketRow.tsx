@@ -37,7 +37,6 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
   const [currentStatus, setCurrentStatus] = useState<TicketStatus>(
     ticket.status,
   );
-
   const [currentPriority, setCurrentPriority] = useState<TicketPriority>(
     ticket.priority ?? "low",
   );
@@ -50,11 +49,9 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
       <div role="cell" className="font-semibold">
         {String(ticket.id).padStart(6, "0")}
       </div>
-
       <div role="cell" className="truncate">
         {ticket.name}
       </div>
-
       <div role="cell">
         <DropdownMenu
           currentValue={STATUS_LABELS[currentStatus]}
@@ -69,7 +66,6 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
           disabled={isLoading || !isAdmin}
         />
       </div>
-
       <div role="cell">
         <DropdownMenu
           currentValue={PRIORITY_LABELS[currentPriority]}
@@ -84,11 +80,8 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
           disabled={isLoading || !isAdmin}
         />
       </div>
-
       <div role="cell">{formatDate(ticket.incident_date)}</div>
-
       <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
-
       <div role="cell">
         <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
       </div>
