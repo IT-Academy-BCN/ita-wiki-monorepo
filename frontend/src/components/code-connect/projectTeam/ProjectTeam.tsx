@@ -4,12 +4,14 @@ import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
+import { joinProject } from "../../../api/endPointContributors";
 
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
   contributors?: ApiProjectContributor[];
   timeDuration?: string;
+  projectId?: number;
 }
 
 function ProjectTeam({
@@ -17,6 +19,7 @@ function ProjectTeam({
   logoBack,
   contributors = [],
   timeDuration,
+  projectId,
 }: ProjectTeamProps) {
   const { getTeamByRole } = useProjectContributors(contributors);
   const frontendData = getTeamByRole("frontend");
@@ -36,6 +39,10 @@ function ProjectTeam({
     setSelectedSlotIndex(index);
   };
 
+  const handleJoin = async () => {
+    if (!selectedRole || !projectId) return;
+    await joinProject(projectId, selectedRole);
+  };
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
 
@@ -104,6 +111,7 @@ function ProjectTeam({
           type="button"
           variant="primary"
           disabled={!selectedRole}
+          onClick={handleJoin}
         >
           Apuntar-me
         </ButtonComponent>

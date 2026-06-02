@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   fetchProjectContributors,
   updateContributorStatus,
+  joinProject,
 } from "../endPointContributors";
 
 vi.mock("../../config", () => ({
@@ -42,5 +43,17 @@ describe("updateContributorStatus", () => {
   it("should return false when response is not ok", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
     expect(await updateContributorStatus(1, 42, "rejected")).toBe(false);
+  });
+});
+
+describe("joinProject", () => {
+  it("should return true on successful response", async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({ ok: true });
+    expect(await joinProject(1, "Frontend Developer")).toBe(true);
+  });
+
+  it("should return false when response is not ok", async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
+    expect(await joinProject(1, "Backend Developer")).toBe(false);
   });
 });

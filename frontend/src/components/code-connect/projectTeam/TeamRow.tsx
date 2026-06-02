@@ -13,7 +13,6 @@ const TeamRow = ({
   emptySlots,
   onSlotClick,
   selectedSlotIndex,
-  slotIndexOffset = 0,
 }: TeamRowProps) => (
   <div className="w-full flex gap-6 pr-2 mb-4">
     {members.map((member, index) => (
@@ -31,8 +30,8 @@ const TeamRow = ({
     {Array.from({ length: emptySlots }).map((_, index) => (
       <ProjectButton
         key={`empty-${index}`}
-        onClick={() => onSlotClick?.(index + slotIndexOffset)}
-        isSelected={selectedSlotIndex === index + slotIndexOffset}
+        onClick={() => onSlotClick?.(index)}
+        isSelected={selectedSlotIndex === index}
       >
         +
       </ProjectButton>
