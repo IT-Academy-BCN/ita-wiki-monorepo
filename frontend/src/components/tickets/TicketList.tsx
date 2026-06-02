@@ -1,39 +1,5 @@
-import type {
-  TicketListProps,
-  TicketPriority,
-  TicketStatus,
-} from "../../types/ticketingTypes";
-
-const formatDate = (date: string) => {
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return date;
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
-};
-
-const priorityColors: Record<TicketPriority, string> = {
-  low: "text-emerald-600",
-  medium: "text-amber-600",
-  high: "text-orange-600",
-  critical: "text-red-600",
-};
-
-const priorityLabels: Record<TicketPriority, string> = {
-  low: "Baixa",
-  medium: "Mitjana",
-  high: "Alta",
-  critical: "Crítica",
-};
-
-const statusLabels: Record<TicketStatus, string> = {
-  pending: "Nou",
-  in_progress: "En progrés",
-  blocked: "Bloquejat",
-  ready: "Fet",
-  closed: "Tancat",
-};
+import type { TicketListProps } from "../../types/ticketingTypes";
+import TicketRow from "./TicketRow";
 
 const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
   if (isLoading)
@@ -72,33 +38,7 @@ const TicketList = ({ tickets, isLoading, error }: TicketListProps) => {
 
         <div role="rowgroup" className="flex flex-col">
           {tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              role="row"
-              className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
-            >
-              <div role="cell" className="font-semibold">
-                {String(ticket.id).padStart(6, "0")}
-              </div>
-
-              <div role="cell" className="truncate">
-                {ticket.name}
-              </div>
-
-              <div role="cell">
-                {statusLabels[ticket.status] ?? ticket.status}
-              </div>
-
-              <div role="cell">{formatDate(ticket.incident_date)}</div>
-
-              <div
-                role="cell"
-                className={`font-bold ${priorityColors[ticket.priority ?? "low"] ?? "text-foreground"}`}
-              >
-                {priorityLabels[ticket.priority ?? "low"]}
-              </div>
-              <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
-            </div>
+            <TicketRow key={ticket.id} ticket={ticket} />
           ))}
         </div>
       </div>
