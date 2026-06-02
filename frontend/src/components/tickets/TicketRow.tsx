@@ -1,4 +1,3 @@
-// components/ticketing/TicketRow.tsx
 import { useState } from "react";
 import type {
   ApiTicketData,
