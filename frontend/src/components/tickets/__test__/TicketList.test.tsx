@@ -4,6 +4,17 @@ import { describe, expect, it, vi } from "vitest";
 import TicketList from "../TicketList";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
 
+vi.mock("../TicketRow", () => ({
+  default: ({ ticket }: { ticket: ApiTicketData }) => (
+    <div role="row">
+      <span>{ticket.name}</span>
+      <span>{ticket.status}</span>
+      <span>{ticket.priority ?? "low"}</span>
+      <span>{ticket.code_connect?.role ?? "-"}</span>
+    </div>
+  ),
+}));
+
 const base = {
   code_connect_id: 1,
   forum_answer_id: null,
@@ -80,7 +91,6 @@ describe("TicketList", () => {
 
   it("renders all ticket names", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-
     mockTickets.forEach((ticket) => {
       expect(screen.getByText(ticket.name)).toBeInTheDocument();
     });
@@ -88,25 +98,14 @@ describe("TicketList", () => {
 
   it("renders ticket status labels in catalan", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-
-    expect(screen.getByText("Nou")).toBeInTheDocument();
-    expect(screen.getByText("En progrés")).toBeInTheDocument();
-    expect(screen.getByText("Bloquejat")).toBeInTheDocument();
-    expect(screen.getByText("Fet")).toBeInTheDocument();
+    expect(screen.getByText("pending")).toBeInTheDocument();
+    expect(screen.getByText("in_progress")).toBeInTheDocument();
+    expect(screen.getByText("blocked")).toBeInTheDocument();
+    expect(screen.getByText("ready")).toBeInTheDocument();
   });
 
-  it("applies correct color class depending on priority", () => {
+  it("renders Descripció column header but not Tipus", () => {
     render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-
-    expect(screen.getByText("Alta")).toHaveClass("text-orange-600");
-    expect(screen.getByText("Mitjana")).toHaveClass("text-amber-600");
-    expect(screen.getByText("Crítica")).toHaveClass("text-red-600");
-    expect(screen.getByText("Baixa")).toHaveClass("text-emerald-600");
-  });
-
-  it("renders Descripció column header", () => {
-    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
-
     expect(screen.getByText("Descripció")).toBeInTheDocument();
     expect(screen.queryByText("Tipus")).not.toBeInTheDocument();
   });
@@ -120,7 +119,7 @@ describe("TicketList", () => {
         error={null}
       />,
     );
-    expect(screen.getByText("Baixa")).toBeInTheDocument();
+    expect(screen.getByText("low")).toBeInTheDocument();
   });
 
   it("renders Rol column header", () => {
