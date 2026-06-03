@@ -15,7 +15,7 @@ const LeaguesPage = () => {
         <LeagueToggle view={view} onChange={setView} />
         <UiButton variant="link" size="sm" onClick={() => {}}>
           Veure el meu historial
-        </UiButton>{" "}
+        </UiButton>
       </div>
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
     </div>

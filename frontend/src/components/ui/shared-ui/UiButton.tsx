@@ -27,7 +27,7 @@ const variantStyles = {
   secondary: "border border-gray-300 text-gray-800 bg-white hover:bg-gray-100",
   ghost: "text-gray-600 hover:bg-gray-100",
   icon: "p-2 rounded-full hover:bg-gray-200",
-  link: "text-[#B91879] hover:underline hover:bg-transparent",
+  link: "text-[#B91879] hover:underline hover:bg-transparent cursor-pointer",
 };
 
 // Estilos por tamaño
