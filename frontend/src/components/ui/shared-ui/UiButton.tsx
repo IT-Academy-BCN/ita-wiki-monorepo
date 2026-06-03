@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import clsx from "clsx";
 
 //Variantes y tamaños disponibles//
-type ButtonVariant = "primary" | "secondary" | "ghost" | "icon";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "icon" | "link";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface UiButtonProps {
@@ -26,7 +26,8 @@ const variantStyles = {
   primary: "bg-[#B91879] text-white hover:bg-[#a1156a]",
   secondary: "border border-gray-300 text-gray-800 bg-white hover:bg-gray-100",
   ghost: "text-gray-600 hover:bg-gray-100",
-  icon: "p-2 rounded-full hover: bg-gray-200",
+  icon: "p-2 rounded-full hover:bg-gray-200",
+  link: "text-[#B91879] hover:underline hover:bg-transparent",
 };
 
 // Estilos por tamaño
