@@ -14,7 +14,7 @@ const LeaguesPage = () => {
       <div className="flex items-center justify-between w-full">
         <LeagueToggle view={view} onChange={setView} />
         <UiButton variant="link" size="sm" onClick={() => {}}>
-          Ver mi historial
+          Veure el meu historial
         </UiButton>{" "}
       </div>
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
