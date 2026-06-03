@@ -46,7 +46,7 @@ export const getComments = async (
   ticketId: number,
 ): Promise<TicketComment[]> => {
   const token = localStorage.getItem("auth_token");
-  const url = `${API_URL}/api/tickets/${ticketId}/comments`;
+  const url = `${API_URL}tickets/${ticketId}/comments`;
 
   const response = await axios.get<{ data: TicketComment[] }>(url, {
     headers: {
@@ -62,7 +62,7 @@ export const addComment = async (
   comment: string,
 ): Promise<TicketComment> => {
   const token = localStorage.getItem("auth_token");
-  const url = `${API_URL}/api/tickets/${ticketId}/comments`;
+  const url = `${API_URL}tickets/${ticketId}/comments`;
 
   const response = await axios.post<{ data: TicketComment }>(
     url,
