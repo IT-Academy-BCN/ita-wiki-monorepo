@@ -34,7 +34,8 @@ const classList = {
   close:
     "inline-flex items-center justify-center w-[21px] h-[19px] text-[#282828] bg-transparent border-none hover:duration-100 will-change-transform hover:opacity-50 outline-none cursor-pointer box-sizing m-[10px]",
   icon: "inline-flex items-center justify-center h-[41px] px-4 text-[#808080] border-2 rounded-[10px] border-white bg-white hover:duration-200 will-change-transform ease-in-out hover:bg-[#dcdcdc]  hover:border-[#808080] hover:scale-95 outline-none cursor-pointer box-sizing",
-  discret: "block h-[41px] w-full text-[14px] text-center font-[600] text-primary bg-transparent border-none rounded-[12px] outline-none cursor-pointer hover:opacity-80",
+  discret:
+    "block h-[41px] w-full text-[14px] text-center font-[600] text-primary bg-transparent border-none rounded-[12px] outline-none cursor-pointer hover:opacity-80",
 };
 
 const ButtonComponent: FC<ItaButtonProps> = ({
