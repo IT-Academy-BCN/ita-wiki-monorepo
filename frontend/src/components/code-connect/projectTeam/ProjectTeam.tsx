@@ -116,8 +116,21 @@ function ProjectTeam({
           Apuntar-me
         </ButtonComponent>
       </div>
+      <div>
+        <ButtonComponent
+          className="my-5 w-full"
+          type="button"
+          variant="secondary"
+          disabled={!selectedRole}
+          onClick={handleJoin}
+        >
+          deixar projecte
+        </ButtonComponent>
+      </div>
     </div>
   );
 }
 
 export default ProjectTeam;
+
+
