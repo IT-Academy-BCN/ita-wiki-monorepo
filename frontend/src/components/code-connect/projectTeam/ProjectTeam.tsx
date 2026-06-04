@@ -24,12 +24,12 @@ function ProjectTeam({
   const { getTeamByRole } = useProjectContributors(contributors);
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
-  const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(
+  const [selectedSlotIndex, setSelectedSlotIndex] = useState < number | null > (
     null,
   );
-  const [selectedRole, setSelectedRole] = useState<
+  const [selectedRole, setSelectedRole] = useState <
     "Frontend Developer" | "Backend Developer" | null
-  >(null);
+    > (null);
 
   const handleSlotClick = (
     role: "Frontend Developer" | "Backend Developer",
@@ -120,7 +120,7 @@ function ProjectTeam({
         <ButtonComponent
           className="my-5 w-full"
           type="button"
-          variant="secondary"
+          variant="discret"
           disabled={!selectedRole}
           onClick={handleJoin}
         >
