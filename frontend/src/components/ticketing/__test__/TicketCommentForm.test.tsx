@@ -23,7 +23,7 @@ describe("TicketCommentForm", () => {
     expect(mockSubmit).toHaveBeenCalledWith("Nou comentari");
   });
 
-  it("calls onSubmit with updated text when editing an existing comment", async () => {
+  it("calls onSubmit with updated text when editing own comment", async () => {
     const mockSubmit = vi.fn().mockResolvedValue(undefined);
     render(
       <TicketCommentForm
@@ -31,6 +31,8 @@ describe("TicketCommentForm", () => {
         onClose={vi.fn()}
         error={null}
         initialValue="text original"
+        authorId={123}
+        currentUserId={123}
       />,
     );
 
