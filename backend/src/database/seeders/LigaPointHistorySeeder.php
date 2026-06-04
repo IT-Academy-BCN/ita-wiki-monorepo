@@ -20,10 +20,10 @@ class LigaPointHistorySeeder extends Seeder
         ];
 
         User::all()->each(function (User $user) use ($activities): void {
-            foreach (array_slice($activities, 0, rand(1, 4)) as $activity) {
+            foreach (array_slice($activities, 0, fake()->numberBetween(1, 4)) as $activity) {
                 LigaPointHistory::create([
                     'user_id'  => $user->id,
-                    'points'   => rand(5, 50),
+                    'points'   => fake()->numberBetween(5, 50),
                     'activity' => $activity,
                 ]);
             }
