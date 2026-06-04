@@ -79,10 +79,12 @@ class LigaController extends Controller
         }
 
         $validated = $request->validate([
-            'points' => 'nullable|integer|min:1',
+            'points'   => 'nullable|integer|min:1',
+            'activity' => 'nullable|string|max:255',
         ]);
 
-         $pointsToAdd = $validated['points'] ?? 5;
+        $pointsToAdd = $validated['points'] ?? 5;
+        $activity = $validated['activity'] ?? 'Points awarded';
 
          $entry->increment('points', $pointsToAdd);
          $entry->increment('points_weekly', $pointsToAdd);
