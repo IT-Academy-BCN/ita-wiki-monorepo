@@ -12,6 +12,11 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
   GlobalRanking: () => <h1>Classificació general</h1>,
 }));
 
+const mockUseUser = vi.fn();
+vi.mock("../../hooks/useUser", () => ({
+  useUser: () => mockUseUser(),
+}));
+
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
@@ -45,5 +50,17 @@ describe("LeaguesPage", () => {
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
+  });
+
+  it("shows trigger button for admin users", () => {
+    mockUseUser.mockReturnValue({ user: { role: "admin" } });
+    render(<LeaguesPage />);
+    expect(screen.getByAltText("Trigger weekly transition")).toBeInTheDocument();
+  });
+
+  it("does not show trigger button for student users", () => {
+    mockUseUser.mockReturnValue({ user: { role: "student" } });
+    render(<LeaguesPage />);
+    expect(screen.queryByAltText("Trigger weekly transition")).not.toBeInTheDocument();
   });
 });
