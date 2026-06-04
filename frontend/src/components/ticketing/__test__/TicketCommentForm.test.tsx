@@ -22,4 +22,23 @@ describe("TicketCommentForm", () => {
 
     expect(mockSubmit).toHaveBeenCalledWith("Nou comentari");
   });
+
+  it("calls onSubmit with updated text when editing an existing comment", async () => {
+    const mockSubmit = vi.fn().mockResolvedValue(undefined);
+    render(
+      <TicketCommentForm
+        onSubmit={mockSubmit}
+        onClose={vi.fn()}
+        error={null}
+        initialValue="text original"
+      />,
+    );
+
+    fireEvent.change(screen.getByDisplayValue("text original"), {
+      target: { value: "text editat" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Desar" }));
+
+    expect(mockSubmit).toHaveBeenCalledWith("text editat");
+  });
 });

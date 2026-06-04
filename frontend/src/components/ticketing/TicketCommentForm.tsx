@@ -18,12 +18,14 @@ const TicketCommentForm = ({
   date,
 }: Props) => {
   const [comment, setComment] = useState("");
+  const [editText, setEditText] = useState(initialValue ?? "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!comment.trim()) return;
-    await onSubmit(comment);
-    setComment("");
+    const text = initialValue ? editText : comment;
+    if (!text.trim()) return;
+    await onSubmit(text);
+    if (!initialValue) setComment("");
   };
 
   const textareaClass =
@@ -35,9 +37,9 @@ const TicketCommentForm = ({
       {initialValue ? (
         <>
           <textarea
-            className={`${textareaClass} bg-gray-50`}
-            value={initialValue}
-            readOnly
+            className={textareaClass}
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
           />
           {(authorId || date) && (
             <p className="mt-1 text-xs text-gray-500">
@@ -54,14 +56,12 @@ const TicketCommentForm = ({
         />
       )}
       <div className="mt-4 flex gap-2">
-        {!initialValue && (
-          <button
-            className="bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md"
-            type="submit"
-          >
-            Desar
-          </button>
-        )}
+        <button
+          className="bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md"
+          type="submit"
+        >
+          Desar
+        </button>
         <button
           className="border border-gray-600 px-10 py-4 text-sm font-bold text-gray-600 hover:shadow-md"
           type="button"
