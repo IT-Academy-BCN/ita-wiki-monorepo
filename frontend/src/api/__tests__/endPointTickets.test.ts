@@ -1,6 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import axios from "axios";
-import { createTicket, addComment, getComments, updateComment } from "../endPointTickets";
+import {
+  createTicket,
+  addComment,
+  getComments,
+  updateComment,
+} from "../endPointTickets";
 import { IntCreateTicket } from "../../types/ticketingTypes";
 
 vi.mock("axios");
@@ -93,8 +98,14 @@ describe("updateComment", () => {
   });
 
   it("should update a comment and return the updated data", async () => {
-    const mockUpdatedComment = { id: 42, comment: "edited text", user: { id: 1 } };
-    vi.mocked(axios.put).mockResolvedValue({ data: { data: mockUpdatedComment } });
+    const mockUpdatedComment = {
+      id: 42,
+      comment: "edited text",
+      user: { id: 1 },
+    };
+    vi.mocked(axios.put).mockResolvedValue({
+      data: { data: mockUpdatedComment },
+    });
 
     const result = await updateComment(1, 42, "edited text");
 

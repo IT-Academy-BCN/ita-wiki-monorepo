@@ -86,12 +86,16 @@ export const updateComment = async (
   const token = localStorage.getItem("auth_token");
   const url = `${API_URL}tickets/${ticketId}/comments/${commentId}`;
 
-  const response = await axios.put<{ data: TicketComment }>(url, { comment }, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+  const response = await axios.put<{ data: TicketComment }>(
+    url,
+    { comment },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   return response.data.data;
 };
