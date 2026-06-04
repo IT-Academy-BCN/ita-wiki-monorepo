@@ -19,6 +19,7 @@ vi.mock("../../hooks/useUser", () => ({
 
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
+    mockUseUser.mockReturnValue({ user: null });
     render(<LeaguesPage />);
 
     expect(
@@ -27,6 +28,7 @@ describe("LeaguesPage", () => {
   });
 
   it("switches to GlobalRanking on toggle", () => {
+    mockUseUser.mockReturnValue({ user: null });
     render(<LeaguesPage />);
 
     fireEvent.click(
@@ -39,6 +41,7 @@ describe("LeaguesPage", () => {
   });
 
   it("switches back to WeeklyRanking on toggle from Global", () => {
+    mockUseUser.mockReturnValue({ user: null });
     render(<LeaguesPage />);
 
     fireEvent.click(
