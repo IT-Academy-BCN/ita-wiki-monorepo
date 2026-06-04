@@ -116,7 +116,7 @@ function ProjectTeam({
           Apuntar-me
         </ButtonComponent>
       </div>
-      <div>
+      <div className="w-full flex justify-center -mt-8 ">
         <ButtonComponent
           className="my-5 w-full"
           type="button"
