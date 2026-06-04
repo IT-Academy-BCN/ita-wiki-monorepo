@@ -55,12 +55,16 @@ describe("LeaguesPage", () => {
   it("shows trigger button for admin users", () => {
     mockUseUser.mockReturnValue({ user: { role: "admin" } });
     render(<LeaguesPage />);
-    expect(screen.getByAltText("Trigger weekly transition")).toBeInTheDocument();
+    expect(
+      screen.getByAltText("Trigger weekly transition"),
+    ).toBeInTheDocument();
   });
 
   it("does not show trigger button for student users", () => {
     mockUseUser.mockReturnValue({ user: { role: "student" } });
     render(<LeaguesPage />);
-    expect(screen.queryByAltText("Trigger weekly transition")).not.toBeInTheDocument();
+    expect(
+      screen.queryByAltText("Trigger weekly transition"),
+    ).not.toBeInTheDocument();
   });
 });
