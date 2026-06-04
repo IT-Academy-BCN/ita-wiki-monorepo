@@ -17,9 +17,14 @@ const LeaguesPage = () => {
       {user?.role && user.role !== "student" && (
         <div className="flex justify-end">
           <button
-            onClick={() => { }}
-            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer">
-            <img src={rotateIcon} alt="Trigger weekly transition" className="w-7 h-7" />
+            onClick={() => {}}
+            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
+          >
+            <img
+              src={rotateIcon}
+              alt="Trigger weekly transition"
+              className="w-7 h-7"
+            />
           </button>
         </div>
       )}
