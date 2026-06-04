@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import axios from "axios";
-import { createTicket, addComment, getComments } from "../endPointTickets";
+import { createTicket, addComment, getComments, updateComment } from "../endPointTickets";
 import { IntCreateTicket } from "../../types/ticketingTypes";
 
 vi.mock("axios");
@@ -84,5 +84,29 @@ describe("addComment", () => {
 
     expect(result).toEqual(mockComment);
     expect(axios.post).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("updateComment", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should update a comment and return the updated data", async () => {
+    const mockUpdatedComment = { id: 42, comment: "edited text", user: { id: 1 } };
+    vi.mocked(axios.put).mockResolvedValue({ data: { data: mockUpdatedComment } });
+
+    const result = await updateComment(1, 42, "edited text");
+
+    expect(result).toEqual(mockUpdatedComment);
+    expect(axios.put).toHaveBeenCalledWith(
+      expect.stringContaining("tickets/1/comments/42"),
+      { comment: "edited text" },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+        }),
+      }),
+    );
   });
 });
