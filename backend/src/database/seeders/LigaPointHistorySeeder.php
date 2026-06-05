@@ -12,18 +12,21 @@ class LigaPointHistorySeeder extends Seeder
 {
     public function run(): void
     {
-        $activities = [
-            'Resolució de Dubtes',
-            'Correcció de PR',
-            'Presentació',
+        $entries = [
+            ['activity' => 'Resolució de Dubtes', 'points' => 5],
+            ['activity' => 'Resolució de Dubtes', 'points' => 5],
+            ['activity' => 'Resolució de Dubtes', 'points' => 5],
+            ['activity' => 'Correcció de PR',     'points' => 10],
+            ['activity' => 'Correcció de PR',     'points' => 10],
+            ['activity' => 'Presentació',          'points' => 20],
         ];
 
-        User::all()->each(function (User $user) use ($activities): void {
-            foreach (array_slice($activities, 0, fake()->numberBetween(1, 3)) as $activity) {
+        User::all()->each(function (User $user) use ($entries): void {
+            foreach ($entries as $entry) {
                 LigaPointHistory::create([
                     'user_id'  => $user->id,
-                    'points'   => fake()->numberBetween(5, 50),
-                    'activity' => $activity,
+                    'points'   => $entry['points'],
+                    'activity' => $entry['activity'],
                 ]);
             }
         });
