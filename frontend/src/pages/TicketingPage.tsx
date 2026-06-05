@@ -7,17 +7,10 @@ import { useCreateTicketing } from "../hooks/useCreateTicketing";
 import { useTicketingGetAll } from "../hooks/useTicketingGetAll";
 import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
+import { STATUS_LABELS } from "../components/tickets/ticketConstants";
 import type { IntCreateTicket, TicketStatus } from "../types/ticketingTypes";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
-
-const STATUS_LABELS: Record<TicketStatus, string> = {
-  pending: "Pendent",
-  in_progress: "En progrés",
-  blocked: "Bloquejat",
-  ready: "Llest",
-  closed: "Tancat",
-};
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
