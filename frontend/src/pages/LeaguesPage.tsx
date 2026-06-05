@@ -29,7 +29,7 @@ const LeaguesPage = () => {
       </GenericModal>
 
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
-    </div >
+    </div>
   );
 };
 

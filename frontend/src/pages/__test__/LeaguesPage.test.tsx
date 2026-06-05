@@ -12,6 +12,23 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
   GlobalRanking: () => <h1>Classificació general</h1>,
 }));
 
+vi.mock("../../components/ui/Modal/GenericModal", () => ({
+  default: ({
+    isOpen,
+    secondaryButtonAction,
+    secondaryButtonText,
+  }: {
+    isOpen: boolean;
+    secondaryButtonAction?: () => void;
+    secondaryButtonText?: string;
+  }) =>
+    isOpen ? (
+      <div role="dialog">
+        <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
+      </div>
+    ) : null,
+}));
+
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
@@ -45,5 +62,18 @@ describe("LeaguesPage", () => {
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
+  });
+
+  it("opens modal when trigger button is clicked", () => {
+    render(<LeaguesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("closes modal when cancel button is clicked", () => {
+    render(<LeaguesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
