@@ -30,8 +30,8 @@ function ProjectTeam({
   );
   const [selectedRole, setSelectedRole] = useState<
     "Frontend Developer" | "Backend Developer" | null
-    > (null);
-  
+  >(null);
+
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const handleSlotClick = (
@@ -119,7 +119,7 @@ function ProjectTeam({
           Apuntar-me
         </ButtonComponent>
       </div>
-            <div className="w-full flex justify-center -mt-8 ">
+      <div className="w-full flex justify-center -mt-8 ">
         <ButtonComponent
           className="my-5 w-full"
           type="button"
@@ -132,18 +132,18 @@ function ProjectTeam({
 
       {isLeaveModalOpen && (
         <GenericModal
-  isOpen={isLeaveModalOpen}
-  onClose={() => setIsLeaveModalOpen(false)}
-  title="Deixar projecte"
-  showPrimaryButton
-  primaryButtonText="Confirmar"
-  primaryButtonAction={() => setIsLeaveModalOpen(false)}
-  showSecondaryButton
-  secondaryButtonText="Cancel·lar"
-  secondaryButtonAction={() => setIsLeaveModalOpen(false)}
->
-  <p>Segur que vols deixar aquest projecte?</p>
-</GenericModal>
+          isOpen={isLeaveModalOpen}
+          onClose={() => setIsLeaveModalOpen(false)}
+          title="Deixar projecte"
+          showPrimaryButton
+          primaryButtonText="Confirmar"
+          primaryButtonAction={() => setIsLeaveModalOpen(false)}
+          showSecondaryButton
+          secondaryButtonText="Cancel·lar"
+          secondaryButtonAction={() => setIsLeaveModalOpen(false)}
+        >
+          <p>Segur que vols deixar aquest projecte?</p>
+        </GenericModal>
       )}
     </div>
   );
