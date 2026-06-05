@@ -14,9 +14,6 @@ class LigaPointHistorySeeder extends Seeder
     {
         $entries = [
             ['activity' => 'Resolució de Dubtes', 'points' => 5],
-            ['activity' => 'Resolució de Dubtes', 'points' => 5],
-            ['activity' => 'Resolució de Dubtes', 'points' => 5],
-            ['activity' => 'Correcció de PR',     'points' => 10],
             ['activity' => 'Correcció de PR',     'points' => 10],
             ['activity' => 'Presentació',          'points' => 20],
         ];
