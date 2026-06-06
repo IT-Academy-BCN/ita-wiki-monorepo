@@ -51,6 +51,7 @@ class PermissionSeeder extends Seeder
 
         // Permisos - Liga
         Permission::firstOrCreate(['name' => 'add liga points', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'trigger weekly transition', 'guard_name' => 'api']);
        
         $this->command->info('✅ Permissions created successfully!');
         $this->command->info('Total permissions: ' . Permission::count());

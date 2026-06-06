@@ -182,4 +182,6 @@ Route::get('/ligas/ranking', [LigaController::class, 'ranking'])->name('ligas.ra
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/ligas/{user}/points', [LigaController::class, 'addPoints'])->name('ligas.points.add');
     Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
+
+    Route::post('/liga/trigger-weekly-transition', [LigaController::class, 'triggerWeeklyTransition'])->name('liga.trigger-weekly-transition');
 });
