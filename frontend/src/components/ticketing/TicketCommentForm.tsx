@@ -24,16 +24,23 @@ const TicketCommentForm = ({
 
   const isOwner = authorId === currentUserId;
 
+  const handleEditComment = async () => {
+    if (!editText.trim()) return;
+    await onSubmit(editText);
+  };
+
+  const handleNewComment = async () => {
+    if (!comment.trim()) return;
+    await onSubmit(comment);
+    setComment("");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (initialValue !== undefined) {
-      if (!editText.trim()) return;
-      await onSubmit(editText);
+      await handleEditComment();
     } else {
-      if (!comment.trim()) return;
-      await onSubmit(comment);
-      setComment("");
+      await handleNewComment();
     }
   };
 
