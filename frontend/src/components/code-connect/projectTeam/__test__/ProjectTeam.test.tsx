@@ -13,6 +13,10 @@ vi.mock("../../code-connect/projectCard/ProgressBar", () => ({
   default: () => <div>Barra</div>,
 }));
 
+vi.mock("../../../../utils/getCurrentUserId", () => ({
+  getCurrentUserId: () => 7,
+}));
+
 describe("ProjectTeam Component", () => {
   it("renderitza els títols, la durada i les seccions", () => {
     render(<ProjectTeam timeDuration="2 mesos" />);
@@ -35,5 +39,26 @@ describe("ProjectTeam Component", () => {
     const emptySlots = screen.getAllByRole("button", { name: /\+/i });
     fireEvent.click(emptySlots[0]);
     expect(button).not.toBeDisabled();
+  });
+
+  it("should render the leave project button when the current user is a contributor", () => {
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        contributors={[
+          {
+            id: 12,
+            user_id: 7,
+            name: "Clara",
+            programming_role: "Frontend Developer",
+            avatar_url: null,
+          },
+        ]}
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: /deixar projecte/i }),
+    ).toBeInTheDocument();
   });
 });
