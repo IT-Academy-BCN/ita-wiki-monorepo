@@ -52,4 +52,22 @@ class LigaGetHistoryTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonCount(1);
     }
+
+    public function test_history_is_returned_in_chronological_order(): void
+    {
+        $user = $this->authenticateUserWithRole('student');
+
+        LigaPointHistory::create(['user_id' => $user->id, 'points' => 20, 'activity' => 'Presentació', 'created_at' => now()->subDays(2)]);
+        LigaPointHistory::create(['user_id' => $user->id, 'points' => 10, 'activity' => 'Correcció de PR', 'created_at' => now()->subDay()]);
+        LigaPointHistory::create(['user_id' => $user->id, 'points' => 5, 'activity' => 'Resolució de Dubtes', 'created_at' => now()]);
+
+        $response = $this->getJson('/api/ligas/history');
+
+        $response->assertStatus(200);
+
+        $data = $response->json();
+        $this->assertEquals(20, $data[0]['points']);
+        $this->assertEquals(10, $data[1]['points']);
+        $this->assertEquals(5, $data[2]['points']);
+    }
 }
