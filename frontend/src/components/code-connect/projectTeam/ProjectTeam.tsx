@@ -121,8 +121,6 @@ function ProjectTeam({
           className="my-5 w-full"
           type="button"
           variant="discret"
-          disabled={!selectedRole}
-          onClick={handleJoin}
         >
           deixar projecte
         </ButtonComponent>
