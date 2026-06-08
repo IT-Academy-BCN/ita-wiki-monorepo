@@ -26,10 +26,15 @@ const TicketCommentForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const text = initialValue ? editText : comment;
-    if (!text.trim()) return;
-    await onSubmit(text);
-    if (!initialValue) setComment("");
+
+    if (initialValue !== undefined) {
+      if (!editText.trim()) return;
+      await onSubmit(editText);
+    } else {
+      if (!comment.trim()) return;
+      await onSubmit(comment);
+      setComment("");
+    }
   };
 
   const textareaClass =
