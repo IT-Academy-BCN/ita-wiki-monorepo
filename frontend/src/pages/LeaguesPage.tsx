@@ -10,6 +10,8 @@ import rotateIcon from "../assets/rotate.svg";
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
   const { user } = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleTriggerClick = () => setIsModalOpen(true);
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
@@ -17,9 +19,8 @@ const LeaguesPage = () => {
       {user?.role && user.role !== "student" && (
         <div className="flex justify-end">
           <button
-            onClick={() => {}}
-            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
-          >
+            onClick={handleTriggerClick}
+            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer">
             <img
               src={rotateIcon}
               alt="Trigger weekly transition"
