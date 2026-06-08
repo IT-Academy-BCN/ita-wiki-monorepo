@@ -56,6 +56,7 @@ describe("LeaguesPage", () => {
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
   });
+
   it("opens modal when clicking 'Veure el meu historial'", () => {
     render(<LeaguesPage />);
 
@@ -64,5 +65,19 @@ describe("LeaguesPage", () => {
     );
 
     expect(screen.getByText(/el meu historial de punts/i)).toBeInTheDocument();
+  });
+
+  it("closes modal when clicking close button", () => {
+    render(<LeaguesPage />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /tancar/i }));
+
+    expect(
+      screen.queryByText(/el meu historial de punts/i),
+    ).not.toBeInTheDocument();
   });
 });
