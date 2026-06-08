@@ -24,7 +24,7 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
- export enum TicketCategoryEnum {
+export enum TicketCategoryEnum {
   BUG = "bug",
   SUGGESTION = "suggestion",
   OTHER = "other",

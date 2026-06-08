@@ -54,19 +54,13 @@ export const TicketingCreateForm = ({
         <select
           className="h-[60px] border border-gray-600 px-4 py-3 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
           value={category}
-          onChange={(e) =>
-            setCategory(e.target.value as TicketCategoryEnum)
-          }
+          onChange={(e) => setCategory(e.target.value as TicketCategoryEnum)}
         >
           <option value={TicketCategoryEnum.BUG}>Bug</option>
 
-          <option value={TicketCategoryEnum.SUGGESTION}>
-            Suggestion
-          </option>
+          <option value={TicketCategoryEnum.SUGGESTION}>Suggestion</option>
 
-          <option value={TicketCategoryEnum.OTHER}>
-            Other
-          </option>
+          <option value={TicketCategoryEnum.OTHER}>Other</option>
         </select>
 
         <button
@@ -78,11 +72,7 @@ export const TicketingCreateForm = ({
         </button>
       </div>
 
-      {error && (
-        <p className="mt-1 text-xs text-red-600">
-          {error.message}
-        </p>
-      )}
+      {error && <p className="mt-1 text-xs text-red-600">{error.message}</p>}
     </form>
   );
 };
