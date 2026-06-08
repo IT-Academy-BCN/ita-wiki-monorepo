@@ -36,4 +36,12 @@ describe("ProjectTeam Component", () => {
     fireEvent.click(emptySlots[0]);
     expect(button).not.toBeDisabled();
   });
+
+  it("renders leave project button", () => {
+    render(<ProjectTeam timeDuration="2 mesos" />);
+
+    expect(
+      screen.getByRole("button", { name: /deixar projecte/i }),
+    ).toBeInTheDocument();
+  });
 });
