@@ -47,14 +47,12 @@ describe("LeaguesPage", () => {
     ).toBeInTheDocument();
   });
   it("opens modal when clicking 'Veure el meu historial'", () => {
-  render(<LeaguesPage />);
+    render(<LeaguesPage />);
 
-  fireEvent.click(
-    screen.getByRole("button", { name: /veure el meu historial/i }),
-  );
+    fireEvent.click(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    );
 
-  expect(
-    screen.getByText(/el meu historial de punts/i),
-  ).toBeInTheDocument();
-});
+    expect(screen.getByText(/el meu historial de punts/i)).toBeInTheDocument();
+  });
 });
