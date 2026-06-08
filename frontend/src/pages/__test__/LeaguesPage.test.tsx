@@ -46,4 +46,12 @@ describe("LeaguesPage", () => {
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
   });
+
+  it("renders 'Veure el meu historial' button", () => {
+    render(<LeaguesPage />);
+
+    expect(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    ).toBeInTheDocument();
+  });
 });
