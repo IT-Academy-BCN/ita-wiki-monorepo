@@ -24,6 +24,12 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
+ export enum TicketCategoryEnum {
+  BUG = "bug",
+  SUGGESTION = "suggestion",
+  OTHER = "other",
+}
+
 export type Ticket = {
   id: number;
   name: string;
@@ -43,6 +49,7 @@ export type Ticket = {
 
 export type IntCreateTicket = {
   description: string;
+  category: TicketCategoryEnum;
   name?: string;
   incident_date?: string;
   affected_app?: AffectedApp;
