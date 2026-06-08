@@ -5,6 +5,7 @@ import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
+import { getCurrentUserId } from "../../../utils/getCurrentUserId";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -43,8 +44,14 @@ function ProjectTeam({
     if (!selectedRole || !projectId) return;
     await joinProject(projectId, selectedRole);
   };
+
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
+  const currentUserId = getCurrentUserId();
+
+  const currentUserContributor = contributors.find(
+    (contributor) => contributor.user_id === currentUserId,
+  );
 
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -115,6 +122,20 @@ function ProjectTeam({
         >
           Apuntar-me
         </ButtonComponent>
+        {currentUserContributor && (
+          <div className="w-full flex justify-center -mt-8">
+            <ButtonComponent
+              className="my-5 w-full"
+              type="button"
+              variant="secondary" //should change to discret
+              onClick={() => {
+                // delete call will go here later
+              }}
+            >
+              Deixar projecte
+            </ButtonComponent>
+          </div>
+        )}
       </div>
     </div>
   );
