@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Liga;
+use App\Models\LigaPointHistory;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -66,6 +67,15 @@ class LigaController extends Controller
             ]);
 
         return response()->json($entries);
+    }
+
+    public function history(): JsonResponse
+    {
+        $history = LigaPointHistory::where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc')
+            ->get(['points', 'activity', 'created_at']);
+
+        return response()->json($history);
     }
 
     public function addPoints(Request $request, User $user): JsonResponse
