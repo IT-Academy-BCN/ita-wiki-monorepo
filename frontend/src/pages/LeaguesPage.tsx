@@ -20,7 +20,8 @@ const LeaguesPage = () => {
         <div className="flex justify-end">
           <button
             onClick={handleTriggerClick}
-            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer">
+            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
+          >
             <img
               src={rotateIcon}
               alt="Trigger weekly transition"
