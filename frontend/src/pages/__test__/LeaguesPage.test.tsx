@@ -12,6 +12,16 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
   GlobalRanking: () => <h1>Classificació general</h1>,
 }));
 
+vi.mock("../../components/ui/shared-ui/UiButton", () => ({
+  default: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
+}));
+
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
