@@ -21,7 +21,7 @@ class LigaTriggerWeeklyTransitionTest extends TestCase
             'points' => 10,
             'points_weekly' => 10,
         ]);
-        $response = $this->postJson('/api/liga/trigger-weekly-transition');
+        $response = $this->postJson('/api/ligas/trigger-weekly-transition');
         $response->assertStatus(200);
         $this->assertDatabaseHas('ligas', ['user_id' => $user->id, 'points' => 10, 'points_weekly' => 0,]);
     }
@@ -29,13 +29,13 @@ class LigaTriggerWeeklyTransitionTest extends TestCase
     public function test_student_cannot_trigger_weekly_transition(): void
     {
         $user = $this->authenticateUserWithRole('student');
-        $response = $this->postJson('/api/liga/trigger-weekly-transition');
+        $response = $this->postJson('/api/ligas/trigger-weekly-transition');
         $response->assertStatus(403);
     }
 
     public function test_unauthenticated_user_cannot_trigger_weekly_transition(): void
     {
-        $response = $this->postJson('/api/liga/trigger-weekly-transition');
+        $response = $this->postJson('/api/ligas/trigger-weekly-transition');
         $response->assertStatus(401);
     }
 }
