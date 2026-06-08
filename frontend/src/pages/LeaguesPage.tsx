@@ -10,8 +10,7 @@ import rotateIcon from "../assets/rotate.svg";
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
   const { user } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleTriggerClick = () => setIsModalOpen(true);
+  const handleTriggerClick = () => {};
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
