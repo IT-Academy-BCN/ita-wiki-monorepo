@@ -25,6 +25,8 @@ export interface Project {
 }
 
 export interface ApiProjectContributor {
+   id: number;
+  user_id: number;
   name: string;
   programming_role: ProgrammingRole;
   avatar_url: string | null;
