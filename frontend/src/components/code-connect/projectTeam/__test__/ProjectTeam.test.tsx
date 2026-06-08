@@ -17,6 +17,14 @@ vi.mock("../../../../utils/getCurrentUserId", () => ({
   getCurrentUserId: () => 7,
 }));
 
+const currentUserContributor = {
+  id: 12,
+  user_id: 7,
+  name: "Clara",
+  programming_role: "Frontend Developer" as const,
+  avatar_url: null,
+};
+
 describe("ProjectTeam Component", () => {
   it("renderitza els títols, la durada i les seccions", () => {
     render(<ProjectTeam timeDuration="2 mesos" />);
@@ -45,20 +53,24 @@ describe("ProjectTeam Component", () => {
     render(
       <ProjectTeam
         timeDuration="2 mesos"
-        contributors={[
-          {
-            id: 12,
-            user_id: 7,
-            name: "Clara",
-            programming_role: "Frontend Developer",
-            avatar_url: null,
-          },
-        ]}
+        contributors={[currentUserContributor]}
       />,
     );
-
     expect(
       screen.getByRole("button", { name: /deixar projecte/i }),
     ).toBeInTheDocument();
+  });
+
+  it("should not render the leave project button when the current user is the project owner", () => {
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        projectOwnerId={7}
+        contributors={[currentUserContributor]}
+      />,
+    );
+    expect(
+      screen.queryByRole("button", { name: /deixar projecte/i }),
+    ).not.toBeInTheDocument();
   });
 });
