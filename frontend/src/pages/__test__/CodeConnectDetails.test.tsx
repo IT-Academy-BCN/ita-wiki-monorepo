@@ -133,4 +133,31 @@ describe("CodeConnectDetails Page", () => {
 
     expect(screen.getByText("Marcar com a complet")).toBeTruthy();
   });
+
+  it("toggles to 'Completat' badge after clicking the button", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Test",
+        description: "Descripció de prova",
+        roadmap: [],
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+    
+    const button = screen.getByRole("button", { name: /marcar com a complet/i });
+    button.click();
+    
+    expect(screen.getByText("✓ Completat")).toBeTruthy();
+  });
 });
