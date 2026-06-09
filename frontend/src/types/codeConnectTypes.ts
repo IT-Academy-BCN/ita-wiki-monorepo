@@ -40,7 +40,6 @@ export interface ApiProjectData {
   roadmap?: { task: string; done: boolean }[];
   time_duration: string;
   title: string;
-  status?: "active" | "completed";
 }
 
 export interface ApiContributor {
