@@ -131,6 +131,6 @@ describe("CodeConnectDetails Page", () => {
 
     render(<CodeConnectDetails />);
 
-    expect(screen.getByText("Marcar como completado")).toBeTruthy();
+    expect(screen.getByText("Marcar com a complet")).toBeTruthy();
   });
 });
