@@ -33,6 +33,7 @@ const LeaguesPage = () => {
       >
         <p>Vols actualitzar les lligues?</p>
       </GenericModal>
+
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
     </div>
   );
