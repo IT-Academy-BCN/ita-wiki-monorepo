@@ -69,11 +69,11 @@ const CodeConnectDetails = () => {
                   onClick={() => setIsCompleted(true)}
                   className="mt-6 text-primary hover:opacity-80 transition-opacity"
                 >
-                  Marcar como completado
+                  Marcar com a complet
                 </button>
               ) : (
                 <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
-                  ✓ Completado
+                  ✓ Completat
                 </span>
               )}
             </div>
