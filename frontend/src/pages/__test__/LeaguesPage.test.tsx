@@ -70,6 +70,8 @@ describe("LeaguesPage", () => {
     expect(
       screen.getByRole("button", { name: /veure el meu historial/i }),
     ).toBeInTheDocument();
+  });
+
   it("opens modal when trigger button is clicked", () => {
     render(<LeaguesPage />);
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
