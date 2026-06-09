@@ -154,10 +154,12 @@ describe("CodeConnectDetails Page", () => {
     });
 
     render(<CodeConnectDetails />);
-    
-    const button = screen.getByRole("button", { name: /marcar com a complet/i });
+
+    const button = screen.getByRole("button", {
+      name: /marcar com a complet/i,
+    });
     button.click();
-    
+
     expect(screen.getByText("✓ Completat")).toBeTruthy();
   });
 });
