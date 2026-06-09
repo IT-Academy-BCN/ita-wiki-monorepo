@@ -9,7 +9,6 @@ import GenericModal from "../components/ui/Modal/GenericModal";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
@@ -17,11 +16,7 @@ const LeaguesPage = () => {
       <div className="flex items-center justify-between w-full">
         <LeagueToggle view={view} onChange={setView} />
         <div className="flex flex-col items-end gap-1">
-          <UiButton
-            variant="link"
-            size="sm"
-            onClick={() => setIsModalOpen(true)}
-          >
+          <UiButton variant="link" size="sm" onClick={() => {}}>
             Veure el meu historial
           </UiButton>
           <UiButton
@@ -35,13 +30,6 @@ const LeaguesPage = () => {
       </div>
 
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
-
-      <GenericModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="El meu historial de punts"
-        size="lg"
-      />
 
       <GenericModal
         isOpen={isTriggerModalOpen}
