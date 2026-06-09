@@ -13,6 +13,7 @@ use App\Enums\TicketTypeEnum;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketCategoryEnum;
 use App\Models\ForumAnswer;
 
 class Ticket extends Model
@@ -31,6 +32,7 @@ class Ticket extends Model
         'description',
         'status',
         'priority',
+        'category',
         'assignee_id',
         'closed_by',
         'closed_at'
@@ -41,8 +43,9 @@ class Ticket extends Model
         'status' => TicketStatusEnum::class,
         'type' => TicketTypeEnum::class,
         'priority' => TicketPriorityEnum::class,
+        'category' => TicketCategoryEnum::class,
         'affected_app' => AffectedAppEnum::class,
-        'affected_function' => AffectedFunctionEnum::class,
+        'affected_function' => AffectedFunctionEnum::class,        
         'closed_at' => 'datetime'
     ];
 
