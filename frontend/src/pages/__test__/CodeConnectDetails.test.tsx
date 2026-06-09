@@ -109,4 +109,28 @@ describe("CodeConnectDetails Page", () => {
 
     expect(screen.getByText("Carregant...")).toBeTruthy();
   });
+
+  it("renders the 'Marcar como completado' button", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Test",
+        description: "Descripció de prova",
+        roadmap: [],
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Marcar como completado")).toBeTruthy();
+  });
 });
