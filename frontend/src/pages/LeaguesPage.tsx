@@ -15,11 +15,13 @@ const LeaguesPage = () => {
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
       <div className="flex items-center justify-between w-full">
         <LeagueToggle view={view} onChange={setView} />
-        <UiButton variant="link" size="sm" onClick={() => {}}>
-          Veure el meu historial
-        </UiButton>
+        <div className="flex flex-col items-end gap-1">
+          <UiButton variant="link" size="sm" onClick={() => {}}>
+            Veure el meu historial
+          </UiButton>
+          <button onClick={() => setIsModalOpen(true)}>Trigger</button>
+        </div>
       </div>
-      <button onClick={() => setIsModalOpen(true)}>Trigger</button>
       <GenericModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
