@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 import CodeConnectDetails from "../CodeConnectDetails";
@@ -158,7 +159,7 @@ describe("CodeConnectDetails Page", () => {
     const button = screen.getByRole("button", {
       name: /marcar com a complet/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("/Completat/")).toBeTruthy();
   });
