@@ -24,7 +24,7 @@ export function ProjectJoinProvider({ children }: { children: ReactNode }) {
       const current = prev[projectId] ?? [];
 
       const exists = current.some(
-        (s) => s.area === slot.area && s.index === slot.index
+        (s) => s.area === slot.area && s.index === slot.index,
       );
 
       if (exists) return prev;
