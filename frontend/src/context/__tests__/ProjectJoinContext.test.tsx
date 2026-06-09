@@ -1,16 +1,19 @@
 import { renderHook, act } from "@testing-library/react";
+import type { ReactNode, PropsWithChildren } from "react";
 import {
   ProjectJoinProvider,
   useProjectJoinContext,
 } from "../ProjectJoinContext";
 
-function wrapper({ children }: any) {
+function wrapper({ children }: PropsWithChildren) {
   return <ProjectJoinProvider>{children}</ProjectJoinProvider>;
 }
 
 describe("ProjectJoinContext", () => {
   it("adds request correctly", () => {
-    const { result } = renderHook(() => useProjectJoinContext(), { wrapper });
+    const { result } = renderHook(() => useProjectJoinContext(), {
+      wrapper,
+    });
 
     act(() => {
       result.current.addRequest(1, {
@@ -25,7 +28,9 @@ describe("ProjectJoinContext", () => {
   });
 
   it("prevents duplicates", () => {
-    const { result } = renderHook(() => useProjectJoinContext(), { wrapper });
+    const { result } = renderHook(() => useProjectJoinContext(), {
+      wrapper,
+    });
 
     act(() => {
       const slot = {
