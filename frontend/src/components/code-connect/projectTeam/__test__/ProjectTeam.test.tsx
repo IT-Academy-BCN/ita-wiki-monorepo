@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import ProjectTeam from "../ProjectTeam";
+import { leaveProject } from "../../../../api/endPointContributors";
 
 vi.mock("../../../../hooks/useProjectContributors", () => ({
   useProjectContributors: () => ({
@@ -19,10 +20,15 @@ vi.mock("../../../../context/UserContext", () => ({
   }),
 }));
 
+vi.mock("../../../../api/endPointContributors", () => ({
+  joinProject: vi.fn(),
+  leaveProject: vi.fn(),
+}));
+
 const currentUserContributor = {
   id: 12,
   user_id: 7,
-  name: "Clara",
+  name: "Dalek",
   programming_role: "Frontend Developer" as const,
   avatar_url: null,
 };
@@ -74,5 +80,24 @@ describe("ProjectTeam Component", () => {
     expect(
       screen.queryByRole("button", { name: /deixar projecte/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it("should call leave project when confirming the leave modal", async () => {
+    vi.mocked(leaveProject).mockResolvedValue(true);
+
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        projectId={3}
+        contributors={[currentUserContributor]}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /deixar projecte/i }));
+    fireEvent.click(screen.getByRole("button", { name: /confirmar/i }));
+
+    await waitFor(() => {
+      expect(leaveProject).toHaveBeenCalledWith(3, currentUserContributor.id);
+    });
   });
 });
