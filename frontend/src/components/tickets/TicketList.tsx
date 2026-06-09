@@ -31,13 +31,14 @@ const TicketList = ({
       <div role="table" className="w-full">
         <div
           role="row"
-          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
+          className="hidden sm:grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-4 px-4 py-3 text-xs font-semibold uppercase text-muted-foreground border-b border-border"
         >
           <div role="columnheader">ID</div>
           <div role="columnheader">Descripció</div>
+          <div role="columnheader">Categoria</div>
           <div role="columnheader">Estat</div>
           <div role="columnheader">Data</div>
-          <div role="columnheader">Prioritat</div>
+          <div role="columnheader">Prioritat</div>          
           <div role="columnheader">Rol</div>
           <div role="columnheader">Comentari</div>
         </div>

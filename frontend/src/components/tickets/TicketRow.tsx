@@ -3,6 +3,7 @@ import type {
   ApiTicketData,
   TicketStatus,
   TicketPriority,
+  TicketCategoryEnum,
 } from "../../types/ticketingTypes";
 import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
@@ -13,6 +14,7 @@ import {
   STATUS_OPTIONS,
   PRIORITY_LABELS,
   PRIORITY_OPTIONS,
+  CATEGORY_LABELS,
 } from "./ticketConstants";
 
 const formatDate = (date: string) => {
@@ -44,13 +46,16 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
   return (
     <div
       role="row"
-      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
     >
       <div role="cell" className="font-semibold">
         {String(ticket.id).padStart(6, "0")}
       </div>
       <div role="cell" className="truncate">
         {ticket.name}
+      </div>
+      <div role="cell">
+        {ticket.category ? CATEGORY_LABELS[ticket.category] : "-"}
       </div>
       <div role="cell">
         <DropdownMenu
