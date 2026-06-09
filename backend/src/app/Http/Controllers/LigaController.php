@@ -8,12 +8,14 @@ use App\Models\Liga;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class LigaController extends Controller
 {
     public function __construct()
     {
     $this->middleware('check.permission:add liga points')->only(['addPoints']);
+    $this->middleware('check.permission:trigger weekly transition')->only(['triggerWeeklyTransition']);
     }
 
 
@@ -96,5 +98,12 @@ class LigaController extends Controller
         ]);
     }
 
+    public function triggerWeeklyTransition(): JsonResponse
+    {
+        Artisan::call('liga:reset-weekly');
+        return response()->json([
+            'message' => 'Weekly transition triggered successfully',
+        ]);
+    }
 }
 
