@@ -57,7 +57,6 @@ describe("ProjectTeam Component", () => {
     expect(button).not.toBeDisabled();
   });
 
-<<<<<<< feature/RemoveContributorFromProject
   it("should render the leave project button when the current user is a contributor", () => {
     render(
       <ProjectTeam
@@ -100,20 +99,26 @@ describe("ProjectTeam Component", () => {
     await waitFor(() => {
       expect(leaveProject).toHaveBeenCalledWith(3, currentUserContributor.id);
     });
-=======
+  });
+
   it("opens the leave project modal and closes it with the cancel button", () => {
-    render(<ProjectTeam timeDuration="2 mesos" />);
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        contributors={[currentUserContributor]}
+      />,
+    );
     const leaveProjectButton = screen.getByRole("button", {
       name: /deixar projecte/i,
     });
     fireEvent.click(leaveProjectButton);
-    expect(screen.getByText("Deixar projecte")).toBeInTheDocument();
     expect(
       screen.getByText("Segur que vols deixar aquest projecte?"),
     ).toBeInTheDocument();
-    const cancelButton = screen.getByRole("button", { name: /cancel/i });
+    const cancelButton = screen.getByRole("button", { name: /cancel·lar/i });
     fireEvent.click(cancelButton);
-    expect(screen.queryByText("Deixar projecte")).not.toBeInTheDocument();
->>>>>>> develop
+    expect(
+      screen.queryByText("Segur que vols deixar aquest projecte?"),
+    ).not.toBeInTheDocument();
   });
 });

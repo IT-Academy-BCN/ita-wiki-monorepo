@@ -4,12 +4,8 @@ import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
-<<<<<<< feature/RemoveContributorFromProject
 import { joinProject, leaveProject } from "../../../api/endPointContributors";
 import { useUserContext } from "../../../context/UserContext";
-=======
-import { joinProject } from "../../../api/endPointContributors";
->>>>>>> develop
 import GenericModal from "../../ui/Modal/GenericModal";
 
 interface ProjectTeamProps {
@@ -39,8 +35,6 @@ function ProjectTeam({
   const [selectedRole, setSelectedRole] = useState<
     "Frontend Developer" | "Backend Developer" | null
   >(null);
-
-  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const handleSlotClick = (
     role: "Frontend Developer" | "Backend Developer",
@@ -163,20 +157,6 @@ function ProjectTeam({
           </div>
         )}
       </div>
-<<<<<<< feature/RemoveContributorFromProject
-=======
-      <div className="w-full flex justify-center -mt-8 ">
-        <ButtonComponent
-          className="my-5 w-full"
-          type="button"
-          variant="custom"
-          onClick={() => setIsLeaveModalOpen(true)}
-        >
-          deixar projecte
-        </ButtonComponent>
-      </div>
-
->>>>>>> develop
       {isLeaveModalOpen && (
         <GenericModal
           isOpen={isLeaveModalOpen}
@@ -184,11 +164,7 @@ function ProjectTeam({
           title="Deixar projecte"
           showPrimaryButton
           primaryButtonText="Confirmar"
-<<<<<<< feature/RemoveContributorFromProject
           primaryButtonAction={handleLeaveProject}
-=======
-          primaryButtonAction={() => setIsLeaveModalOpen(false)}
->>>>>>> develop
           showSecondaryButton
           secondaryButtonText="Cancel·lar"
           secondaryButtonAction={() => setIsLeaveModalOpen(false)}
