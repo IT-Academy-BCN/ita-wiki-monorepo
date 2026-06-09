@@ -161,6 +161,6 @@ describe("CodeConnectDetails Page", () => {
     });
     fireEvent.click(button);
 
-    expect(screen.getByText("/Completat/")).toBeTruthy();
+    expect(screen.getByText(/Completat/)).toBeTruthy();
   });
 });
