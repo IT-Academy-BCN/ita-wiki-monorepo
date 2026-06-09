@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router";
 import PendingRequestList from "../components/code-connect/pendingRequests/PendingRequestList";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
@@ -8,6 +9,7 @@ import { displayLanguageIcon } from "../utils/iconUtils";
 
 const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
     projectId || null,
@@ -59,6 +61,20 @@ const CodeConnectDetails = () => {
                 </>
               ) : (
                 "Aquesta informació no està disponible a la base de dades."
+              )}
+
+              {!isCompleted ? (
+                <button
+                  type="button"
+                  onClick={() => setIsCompleted(true)}
+                  className="mt-6 text-primary hover:opacity-80 transition-opacity"
+                >
+                  Marcar como completado
+                </button>
+              ) : (
+                <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
+                  ✓ Completado
+                </span>
               )}
             </div>
 
