@@ -13,8 +13,10 @@ vi.mock("../../code-connect/projectCard/ProgressBar", () => ({
   default: () => <div>Barra</div>,
 }));
 
-vi.mock("../../../../utils/getCurrentUserId", () => ({
-  getCurrentUserId: () => 7,
+vi.mock("../../../../context/UserContext", () => ({
+  useUserContext: () => ({
+    user: { id: 7 },
+  }),
 }));
 
 const currentUserContributor = {

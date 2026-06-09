@@ -5,7 +5,7 @@ import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
-import { getCurrentUserId } from "../../../utils/getCurrentUserId";
+import { useUserContext } from "../../../context/UserContext";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -24,6 +24,7 @@ function ProjectTeam({
   projectId,
   projectOwnerId,
 }: ProjectTeamProps) {
+  const { user } = useUserContext();
   const { getTeamByRole } = useProjectContributors(contributors);
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
@@ -49,7 +50,7 @@ function ProjectTeam({
 
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
-  const currentUserId = getCurrentUserId();
+  const currentUserId = user?.id;
   const isProjectOwner = currentUserId === projectOwnerId;
 
   const currentUserContributor = contributors.find(
