@@ -160,6 +160,6 @@ describe("CodeConnectDetails Page", () => {
     });
     button.click();
 
-    expect(screen.getByText("✓ Completat")).toBeTruthy();
+    expect(screen.getByText("/Completat/")).toBeTruthy();
   });
 });
