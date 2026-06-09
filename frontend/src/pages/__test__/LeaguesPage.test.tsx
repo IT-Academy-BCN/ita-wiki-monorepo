@@ -15,15 +15,21 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
 vi.mock("../../components/ui/Modal/GenericModal", () => ({
   default: ({
     isOpen,
+    title,
+    children,
     secondaryButtonAction,
     secondaryButtonText,
   }: {
     isOpen: boolean;
+    title?: string;
+    children?: React.ReactNode;
     secondaryButtonAction?: () => void;
     secondaryButtonText?: string;
   }) =>
     isOpen ? (
       <div role="dialog">
+        {title && <h2>{title}</h2>}
+        {children}
         <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
       </div>
     ) : null,
@@ -74,14 +80,18 @@ describe("LeaguesPage", () => {
 
   it("opens modal when trigger button is clicked", () => {
     render(<LeaguesPage />);
+
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   it("closes modal when cancel button is clicked", () => {
     render(<LeaguesPage />);
+
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
     fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
+
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

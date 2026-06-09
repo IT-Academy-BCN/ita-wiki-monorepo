@@ -9,33 +9,41 @@ import GenericModal from "../components/ui/Modal/GenericModal";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
       <div className="flex items-center justify-between w-full">
         <LeagueToggle view={view} onChange={setView} />
-        <UiButton variant="link" size="sm" onClick={() => {}}>
-          Veure el meu historial
-        </UiButton>
+        <div className="flex flex-col items-end gap-1">
+          <UiButton variant="link" size="sm" onClick={() => {}}>
+            Veure el meu historial
+          </UiButton>
+          <UiButton
+            variant="link"
+            size="sm"
+            onClick={() => setIsTriggerModalOpen(true)}
+          >
+            Trigger
+          </UiButton>
+        </div>
       </div>
-      <LeagueToggle view={view} onChange={setView} />
-      <button onClick={() => setIsModalOpen(true)}>Trigger</button>
+
+      {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
+
       <GenericModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isTriggerModalOpen}
+        onClose={() => setIsTriggerModalOpen(false)}
         title="Actualitzar lligues"
         showPrimaryButton
         primaryButtonText="Confirmar"
-        primaryButtonAction={() => setIsModalOpen(false)}
+        primaryButtonAction={() => setIsTriggerModalOpen(false)}
         showSecondaryButton
         secondaryButtonText="Cancel·lar"
-        secondaryButtonAction={() => setIsModalOpen(false)}
+        secondaryButtonAction={() => setIsTriggerModalOpen(false)}
       >
         <p>Vols actualitzar les lligues?</p>
       </GenericModal>
-
-      {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
     </div>
   );
 };
