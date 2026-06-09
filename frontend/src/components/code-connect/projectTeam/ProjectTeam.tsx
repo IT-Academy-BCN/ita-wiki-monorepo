@@ -6,6 +6,7 @@ import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
 import { useUserContext } from "../../../context/UserContext";
+import GenericModal from "../../ui/Modal/GenericModal";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -47,6 +48,8 @@ function ProjectTeam({
     if (!selectedRole || !projectId) return;
     await joinProject(projectId, selectedRole);
   };
+
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
   const currentUserId = user?.id;
@@ -58,6 +61,13 @@ function ProjectTeam({
 
   const shouldShowLeaveButton =
     Boolean(currentUserContributor) && !isProjectOwner;
+  
+  
+  const handleLeaveProject = async () => {
+    if (!projectId) return;
+    // await leaveProject(projectId);
+    setIsLeaveModalOpen(false);
+  };
 
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -133,16 +143,29 @@ function ProjectTeam({
             <ButtonComponent
               className="my-5 w-full"
               type="button"
-              variant="secondary" //should change to discret
-              onClick={() => {
-                // TODO: wire leave-project API call in the next step.
-              }}
+              variant="secondary" //should change to discreet
+              onClick={() => setIsLeaveModalOpen(true)}
             >
               Deixar projecte
             </ButtonComponent>
           </div>
         )}
       </div>
+        {isLeaveModalOpen && (
+          <GenericModal
+            isOpen={isLeaveModalOpen}
+            onClose={() => setIsLeaveModalOpen(false)}
+            title="Deixar projecte"
+            showPrimaryButton
+            primaryButtonText="Confirmar"
+            primaryButtonAction={handleLeaveProject}
+            showSecondaryButton
+            secondaryButtonText="Cancel·lar"
+            secondaryButtonAction={() => setIsLeaveModalOpen(false)}
+          >
+            <p>Segur que vols deixar aquest projecte?</p>
+          </GenericModal>
+        )}  
     </div>
   );
 }
