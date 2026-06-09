@@ -38,6 +38,7 @@ vi.mock("../../components/ui/Modal/GenericModal", () => ({
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
     render(<LeaguesPage />);
+
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
@@ -45,9 +46,11 @@ describe("LeaguesPage", () => {
 
   it("switches to GlobalRanking on toggle", () => {
     render(<LeaguesPage />);
+
     fireEvent.click(
       screen.getByRole("button", { name: /classificació general/i }),
     );
+
     expect(
       screen.getByRole("button", { name: /classificació general/i }),
     ).toHaveAttribute("aria-pressed", "true");
@@ -55,10 +58,13 @@ describe("LeaguesPage", () => {
 
   it("switches back to WeeklyRanking on toggle from Global", () => {
     render(<LeaguesPage />);
+
     fireEvent.click(
       screen.getByRole("button", { name: /classificació general/i }),
     );
+
     fireEvent.click(screen.getByRole("button", { name: /lliga setmanal/i }));
+
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
     ).toBeInTheDocument();
