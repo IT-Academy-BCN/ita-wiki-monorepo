@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import type { ReactNode, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import {
   ProjectJoinProvider,
   useProjectJoinContext,
