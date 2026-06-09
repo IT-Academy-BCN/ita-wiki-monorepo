@@ -80,7 +80,7 @@ describe("TicketingPage", () => {
     expect(mockRefetch).toHaveBeenCalledTimes(1);
   });
 
-  it("mostra només tickets pendents i en progrés per defecte", () => {
+  it("shows only pending and in-progress tickets by default", () => {
     const tickets = [
       { id: 1, status: "pending" },
       { id: 2, status: "in_progress" },
