@@ -54,18 +54,18 @@ describe("CodeConnectPage", () => {
   });
 
   it("renders My projects button", () => {
-  render(
-    <MemoryRouter initialEntries={["/codeconnect"]}>
-      <UserProvider>
-        <Routes>
-          <Route path="/codeconnect" element={<CodeConnectPage />} />
-        </Routes>
-      </UserProvider>
-    </MemoryRouter>,
-  );
+    render(
+      <MemoryRouter initialEntries={["/codeconnect"]}>
+        <UserProvider>
+          <Routes>
+            <Route path="/codeconnect" element={<CodeConnectPage />} />
+          </Routes>
+        </UserProvider>
+      </MemoryRouter>,
+    );
 
-  expect(
-    screen.getByRole("button", { name: /Els meus projectes/i })
-  ).toBeInTheDocument();
-});
+    expect(
+      screen.getByRole("button", { name: /Els meus projectes/i }),
+    ).toBeInTheDocument();
+  });
 });
