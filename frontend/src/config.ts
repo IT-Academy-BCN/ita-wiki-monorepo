@@ -18,7 +18,8 @@ type EndPoints =
   | "tickets"
   | "ligas"
   | "ligas/ranking"
-  | "ligas/trigger-weekly-transition";
+  | "ligas/trigger-weekly-transition"
+  | "ligas/history";
 
 const END_POINTS = {
   resources: {
@@ -73,6 +74,7 @@ const END_POINTS = {
     post: "ligas" as EndPoints,
     addPoints: "ligas" as EndPoints,
     triggerWeeklyTransition: "ligas/trigger-weekly-transition" as EndPoints,
+    history: "ligas/history" as EndPoints,
   },
 };
 
