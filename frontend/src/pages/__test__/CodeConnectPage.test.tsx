@@ -52,4 +52,20 @@ describe("CodeConnectPage", () => {
 
     expect(screen.getByText("Create Code Connect Page")).toBeInTheDocument();
   });
+
+  it("renders My projects button", () => {
+    render(
+      <MemoryRouter initialEntries={["/codeconnect"]}>
+        <UserProvider>
+          <Routes>
+            <Route path="/codeconnect" element={<CodeConnectPage />} />
+          </Routes>
+        </UserProvider>
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("button", { name: /Els meus projectes/i }),
+    ).toBeInTheDocument();
+  });
 });
