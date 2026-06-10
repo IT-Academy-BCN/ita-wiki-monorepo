@@ -33,6 +33,10 @@ vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
   ),
 }));
 
+vi.mock("../../context/UserContext", () => ({
+  useUserContext: () => ({ user: { id: 7 } }),
+}));
+
 const mockHook = vi.mocked(useTicketingGetAll);
 const hookReturn = (
   o: Partial<ReturnType<typeof useTicketingGetAll>> = {},
