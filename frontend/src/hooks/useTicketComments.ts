@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { addComment, getComments } from "../api/endPointTickets";
+import { addComment, getComments, updateComment } from "../api/endPointTickets";
 import type { TicketComment } from "../types/ticketingTypes";
 
 export const useTicketComments = (ticketId: number) => {
@@ -36,5 +36,19 @@ export const useTicketComments = (ticketId: number) => {
     [ticketId],
   );
 
-  return { comments, isLoading, error, submitComment };
+  const editComment = useCallback(
+    async (commentId: number, newText: string) => {
+      try {
+        const updated = await updateComment(ticketId, commentId, newText);
+        setComments((prev) =>
+          prev.map((c) => (c.id === commentId ? updated : c)),
+        );
+      } catch {
+        setError("Error en actualitzar el comentari");
+      }
+    },
+    [ticketId],
+  );
+
+  return { comments, isLoading, error, submitComment, editComment };
 };

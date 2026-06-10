@@ -5,6 +5,7 @@ import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
+import GenericModal from "../../ui/Modal/GenericModal";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -30,6 +31,8 @@ function ProjectTeam({
   const [selectedRole, setSelectedRole] = useState<
     "Frontend Developer" | "Backend Developer" | null
   >(null);
+
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const handleSlotClick = (
     role: "Frontend Developer" | "Backend Developer",
@@ -125,11 +128,27 @@ function ProjectTeam({
           className="my-5 w-full"
           type="button"
           variant="discret"
-          onClick={handleLeave}
+          onClick={() => setIsLeaveModalOpen(true)}
         >
-          Deixar projecte
+          deixar projecte
         </ButtonComponent>
       </div>
+
+      {isLeaveModalOpen && (
+        <GenericModal
+          isOpen={isLeaveModalOpen}
+          onClose={() => setIsLeaveModalOpen(false)}
+          title="Deixar projecte"
+          showPrimaryButton
+          primaryButtonText="Confirmar"
+          primaryButtonAction={() => setIsLeaveModalOpen(false)}
+          showSecondaryButton
+          secondaryButtonText="Cancel·lar"
+          secondaryButtonAction={() => setIsLeaveModalOpen(false)}
+        >
+          <p>Segur que vols deixar aquest projecte?</p>
+        </GenericModal>
+      )}
     </div>
   );
 }
