@@ -7,6 +7,7 @@ type Props = {
   initialValue?: string;
   authorId?: number;
   date?: string;
+  currentUserId?: number;
 };
 
 const TicketCommentForm = ({
@@ -16,14 +17,31 @@ const TicketCommentForm = ({
   initialValue,
   authorId,
   date,
+  currentUserId,
 }: Props) => {
   const [comment, setComment] = useState("");
+  const [editText, setEditText] = useState(initialValue ?? "");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const isOwner = authorId === currentUserId;
+
+  const handleEditComment = async () => {
+    if (!editText.trim()) return;
+    await onSubmit(editText);
+  };
+
+  const handleNewComment = async () => {
     if (!comment.trim()) return;
     await onSubmit(comment);
     setComment("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (initialValue !== undefined) {
+      await handleEditComment();
+    } else {
+      await handleNewComment();
+    }
   };
 
   const textareaClass =
@@ -35,9 +53,10 @@ const TicketCommentForm = ({
       {initialValue ? (
         <>
           <textarea
-            className={`${textareaClass} bg-gray-50`}
-            value={initialValue}
-            readOnly
+            className={`${textareaClass} ${!isOwner ? "bg-gray-50" : ""}`}
+            value={isOwner ? editText : initialValue}
+            onChange={isOwner ? (e) => setEditText(e.target.value) : undefined}
+            readOnly={!isOwner}
           />
           {(authorId || date) && (
             <p className="mt-1 text-xs text-gray-500">
@@ -54,7 +73,7 @@ const TicketCommentForm = ({
         />
       )}
       <div className="mt-4 flex gap-2">
-        {!initialValue && (
+        {(!initialValue || isOwner) && (
           <button
             className="bg-[#B91879] px-10 py-4 text-sm font-bold text-white hover:shadow-md"
             type="submit"
