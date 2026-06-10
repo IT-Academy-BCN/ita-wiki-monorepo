@@ -8,15 +8,19 @@ import { useTicketingGetAll } from "../hooks/useTicketingGetAll";
 import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
 import type { IntCreateTicket } from "../types/ticketingTypes";
+import { useUserContext } from "../context/UserContext";
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
   const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
+  const { user } = useUserContext();
+  const currentUserId = user?.id;
   const {
     comments,
     error: commentError,
     submitComment,
+    editComment,
   } = useTicketComments(selectedTicketId ?? 0);
 
   const handleCreateTicket = async (
@@ -43,12 +47,17 @@ const TicketingPage = (): JSX.Element => {
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
-            onSubmit={submitComment}
+            onSubmit={
+              comments[0]
+                ? (text) => editComment(comments[0].id, text)
+                : submitComment
+            }
             onClose={() => setSelectedTicketId(null)}
             error={commentError}
             initialValue={comments[0]?.comment}
             authorId={comments[0]?.user_id}
             date={comments[0]?.created_at}
+            currentUserId={currentUserId ?? undefined}
           />
         )}
       </Container>
