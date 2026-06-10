@@ -73,6 +73,7 @@ class RolePermissionSeeder extends Seeder
                 'update ticket priority',
                 'assign tickets',
                 'add liga points',
+                'trigger weekly transition',
             ],
 
             'admin' => [
@@ -99,6 +100,7 @@ class RolePermissionSeeder extends Seeder
                 'assign tickets',
                 'add closing comment',
                 'add liga points',
+                'trigger weekly transition',
             ],
 
             'superadmin' => 'all',  // Special marker for all permissions

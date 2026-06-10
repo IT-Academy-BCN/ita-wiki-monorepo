@@ -20,6 +20,27 @@ const LeaguesPage = () => {
           Veure el meu historial
         </UiButton>
       </div>
+        <div className="flex flex-col items-end gap-1">
+          <UiButton variant="link" size="sm" onClick={() => {}}>
+            Veure el meu historial
+          </UiButton>
+          <button onClick={() => setIsModalOpen(true)}>Trigger</button>
+        </div>
+      </div>
+      <GenericModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Actualitzar lligues"
+        showPrimaryButton
+        primaryButtonText="Confirmar"
+        primaryButtonAction={() => setIsModalOpen(false)}
+        showSecondaryButton
+        secondaryButtonText="Cancel·lar"
+        secondaryButtonAction={() => setIsModalOpen(false)}
+      >
+        <p>Vols actualitzar les lligues?</p>
+      </GenericModal>
+
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
 
       <GenericModal
