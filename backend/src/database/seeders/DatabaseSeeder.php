@@ -22,6 +22,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Database\Seeders\LigaSeeder;
+use Database\Seeders\LigaPointHistorySeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TicketSeeder::class,
             LigaSeeder::class,
+            LigaPointHistorySeeder::class,
             TagSeeder::class,
             ResourceSeeder::class,
             //BookmarkSeeder::class,

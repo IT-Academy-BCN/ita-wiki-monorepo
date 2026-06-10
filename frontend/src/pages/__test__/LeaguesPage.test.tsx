@@ -17,20 +17,29 @@ vi.mock("../../hooks/useUser", () => ({
   useUser: () => mockUseUser(),
 }));
 vi.mock("../../components/ui/Modal/GenericModal", () => ({
-  default: ({
-    isOpen,
-    secondaryButtonAction,
-    secondaryButtonText,
-  }: {
-    isOpen: boolean;
-    secondaryButtonAction?: () => void;
-    secondaryButtonText?: string;
-  }) =>
-    isOpen ? (
+    default: ({ isOpen, title, onClose, secondaryButtonAction, secondaryButtonText }: {
+      isOpen: boolean;
+      title?: string;
+      onClose?: () => void;
+      secondaryButtonAction?: () => void;
+      secondaryButtonText?: string;
+    }) => isOpen ? (
       <div role="dialog">
-        <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
+        {title && <p>{title}</p>}
+        <button onClick={onClose}>Tancar</button>
+        {secondaryButtonText && <button 
+  onClick={secondaryButtonAction}>{secondaryButtonText}</button>}
       </div>
     ) : null,
+  }));
+vi.mock("../../components/ui/shared-ui/UiButton", () => ({
+  default: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
 }));
 
 describe("LeaguesPage", () => {
@@ -99,6 +108,32 @@ describe("LeaguesPage", () => {
     render(<LeaguesPage />);
     fireEvent.click(screen.getByRole("button", { name: /trigger weekly transition/i }));
     fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  
+  it("opens modal when clicking 'Veure el meu historial'", () => {
+    mockUseUser.mockReturnValue({ user: null });
+    render(<LeaguesPage />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    );
+
+    expect(screen.getByText(/el meu historial de punts/i)).toBeInTheDocument();
+  });
+
+  it("closes modal when clicking close button", () => {
+    mockUseUser.mockReturnValue({ user: null });
+    render(<LeaguesPage />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /tancar/i }));
+    
+    expect(
+      screen.queryByText(/el meu historial de punts/i),
+    ).not.toBeInTheDocument();
   });
 });
