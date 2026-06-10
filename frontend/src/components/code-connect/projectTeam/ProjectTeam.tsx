@@ -158,5 +158,3 @@ function ProjectTeam({
 }
 
 export default ProjectTeam;
-
-
