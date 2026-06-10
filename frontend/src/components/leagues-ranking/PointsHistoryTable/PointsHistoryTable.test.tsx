@@ -17,6 +17,7 @@ describe("PointsHistoryTable", () => {
     render(<PointsHistoryTable />);
 
     expect(screen.getByText("01/06/2025")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("Exercici 1")).toBeInTheDocument();
   });
 });
