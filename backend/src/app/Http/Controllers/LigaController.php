@@ -71,6 +71,15 @@ class LigaController extends Controller
         return response()->json($entries);
     }
 
+    public function history(): JsonResponse
+    {
+        $history = LigaPointHistory::where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc')
+            ->get(['points', 'activity', 'created_at as date']);
+
+        return response()->json($history);
+    }
+
     public function addPoints(Request $request, User $user): JsonResponse
     {
         $entry = Liga::where('user_id', $user->id)->first();
