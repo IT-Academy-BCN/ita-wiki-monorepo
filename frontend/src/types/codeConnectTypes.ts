@@ -31,6 +31,8 @@ export interface ApiProjectContributor {
   status: "pending" | "accepted" | "rejected";
   user: {
     id: number;
+    name: string;
+    email: string;
   };
 }
 
