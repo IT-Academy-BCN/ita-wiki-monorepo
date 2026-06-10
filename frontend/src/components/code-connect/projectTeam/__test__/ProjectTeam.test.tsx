@@ -99,9 +99,15 @@ describe("ProjectTeam Component", () => {
     await waitFor(() => {
       expect(leaveProject).toHaveBeenCalledWith(3, currentUserContributor.id);
     });
-    
+  });
+
   it("renders leave project button", () => {
-    render(<ProjectTeam timeDuration="2 mesos" />);
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        contributors={[currentUserContributor]}
+      />,
+    );
 
     expect(
       screen.getByRole("button", { name: /Deixar projecte/i }),
@@ -125,10 +131,9 @@ describe("ProjectTeam Component", () => {
     expect(
       screen.getByText("Segur que vols deixar aquest projecte?"),
     ).toBeInTheDocument();
-    const cancelButton = screen.getByRole("button", { name: /cancel·lar/i });
+    const cancelButton = screen.getByRole("button", { name: /cancel/i });
     fireEvent.click(cancelButton);
     expect(
-      screen.queryByText("Segur que vols deixar aquest projecte?"),
       screen.queryByRole("heading", { name: "Deixar projecte" }),
     ).not.toBeInTheDocument();
   });
