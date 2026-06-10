@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Liga;
 
 use App\Models\Liga;
+use App\Models\LigaPointHistory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -97,6 +98,43 @@ class LigaAddPointsTest extends TestCase
 
         $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => -5])
             ->assertStatus(422);
+    }
+
+    public function test_add_points_creates_history_entry(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $this->putJson("/api/ligas/{$this->user->id}/points", [
+            'points'   => 10,
+            'activity' => 'PR Review',
+        ]);
+
+        $this->assertDatabaseHas('liga_point_histories', [
+            'user_id'  => $this->user->id,
+            'points'   => 10,
+            'activity' => 'PR Review',
+        ]);
+    }
+
+    public function test_add_points_uses_default_activity_when_not_provided(): void
+    {
+        Liga::create([
+            'user_id'       => $this->user->id,
+            'points'        => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $this->putJson("/api/ligas/{$this->user->id}/points", ['points' => 5]);
+
+        $this->assertDatabaseHas('liga_point_histories', [
+            'user_id'  => $this->user->id,
+            'points'   => 5,
+            'activity' => 'Points awarded',
+        ]);
     }
 
     public function test_put_increments_by_custom_points_amount(): void
