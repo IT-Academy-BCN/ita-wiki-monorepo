@@ -73,7 +73,7 @@ class LigaController extends Controller
     {
         $history = LigaPointHistory::where('user_id', auth()->id())
             ->orderBy('created_at', 'asc')
-            ->get(['points', 'activity', 'created_at']);
+            ->get(['points', 'activity', 'created_at as date']);
 
         return response()->json($history);
     }
