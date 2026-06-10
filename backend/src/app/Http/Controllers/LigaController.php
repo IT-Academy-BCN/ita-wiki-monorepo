@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Liga;
+use App\Models\LigaPointHistory;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class LigaController extends Controller
 {
     public function __construct()
     {
     $this->middleware('check.permission:add liga points')->only(['addPoints']);
+    $this->middleware('check.permission:trigger weekly transition')->only(['triggerWeeklyTransition']);
     }
 
 
@@ -68,6 +71,15 @@ class LigaController extends Controller
         return response()->json($entries);
     }
 
+    public function history(): JsonResponse
+    {
+        $history = LigaPointHistory::where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc')
+            ->get(['points', 'activity', 'created_at as date']);
+
+        return response()->json($history);
+    }
+
     public function addPoints(Request $request, User $user): JsonResponse
     {
         $entry = Liga::where('user_id', $user->id)->first();
@@ -79,13 +91,21 @@ class LigaController extends Controller
         }
 
         $validated = $request->validate([
-            'points' => 'nullable|integer|min:1',
+            'points'   => 'nullable|integer|min:1',
+            'activity' => 'nullable|string|max:255',
         ]);
 
-         $pointsToAdd = $validated['points'] ?? 5;
+        $pointsToAdd = $validated['points'] ?? 5;
+        $activity = $validated['activity'] ?? 'Points awarded';
 
          $entry->increment('points', $pointsToAdd);
          $entry->increment('points_weekly', $pointsToAdd);
+
+        LigaPointHistory::create([
+            'user_id'  => $user->id,
+            'points'   => $pointsToAdd,
+            'activity' => $activity,
+        ]);
 
         $entry->refresh();
 
@@ -96,5 +116,12 @@ class LigaController extends Controller
         ]);
     }
 
+    public function triggerWeeklyTransition(): JsonResponse
+    {
+        Artisan::call('liga:reset-weekly');
+        return response()->json([
+            'message' => 'Weekly transition triggered successfully',
+        ]);
+    }
 }
 
