@@ -10,6 +10,7 @@ import GenericModal from "../components/ui/Modal/GenericModal";
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
@@ -19,6 +20,8 @@ const LeaguesPage = () => {
           Veure el meu historial
         </UiButton>
       </div>
+      <button onClick={() => setIsTriggerModalOpen(true)}>Trigger</button>
+
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
 
       <GenericModal
@@ -27,6 +30,20 @@ const LeaguesPage = () => {
         title="El meu historial de punts"
         size="lg"
       />
+
+      <GenericModal
+        isOpen={isTriggerModalOpen}
+        onClose={() => setIsTriggerModalOpen(false)}
+        title="Actualitzar lligues"
+        showPrimaryButton
+        primaryButtonText="Confirmar"
+        primaryButtonAction={() => setIsTriggerModalOpen(false)}
+        showSecondaryButton
+        secondaryButtonText="Cancel·lar"
+        secondaryButtonAction={() => setIsTriggerModalOpen(false)}
+      >
+        <p>Vols actualitzar les lligues?</p>
+      </GenericModal>
     </div>
   );
 };

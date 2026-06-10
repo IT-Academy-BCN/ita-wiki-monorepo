@@ -80,4 +80,21 @@ describe("LeaguesPage", () => {
       screen.queryByText(/el meu historial de punts/i),
     ).not.toBeInTheDocument();
   });
+
+  it("opens modal when clicking 'Trigger'", () => {
+    render(<LeaguesPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    expect(screen.getByText(/actualitzar lligues/i)).toBeInTheDocument();
+  });
+
+  it("closes trigger modal when clicking cancel button", () => {
+    render(<LeaguesPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
+
+    expect(screen.queryByText(/actualitzar lligues/i)).not.toBeInTheDocument();
+  });
 });
