@@ -46,8 +46,11 @@ const CodeConnectPage = () => {
           </div>
         </div>
         <p className="text-black py-5">Vull practicar com a developer de:</p>
-        <CodeConnectFiltersComponent selected={filter} onChange={handleFilterChange} />
-        <ProjectList 
+        <CodeConnectFiltersComponent
+          selected={filter}
+          onChange={handleFilterChange}
+        />
+        <ProjectList
           filter={filter}
           showMyProjects={showMyProjects}
           userId={user?.id}

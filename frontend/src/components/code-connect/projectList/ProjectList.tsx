@@ -21,10 +21,14 @@ function ProjectList({
 
   const filteredProjects = useMemo(() => {
     if (showMyProjects && userId) {
-      return projects.filter(project =>
-        [...project.frontend.participants, ...project.backend.participants].some(
-          participant => participant.user_id === userId && participant.status === "accepted"
-        )
+      return projects.filter((project) =>
+        [
+          ...project.frontend.participants,
+          ...project.backend.participants,
+        ].some(
+          (participant) =>
+            participant.user_id === userId && participant.status === "accepted",
+        ),
       );
     }
     if (!filter?.length) return projects;
