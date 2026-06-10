@@ -39,6 +39,14 @@ const TicketingPage = (): JSX.Element => {
     }
   };
 
+  const handleCommentSubmit = async (text: string): Promise<void> => {
+    if (comments[0]) {
+      await editComment(comments[0].id, text);
+    } else {
+      await submitComment(text);
+    }
+  };
+
   const toggleStatus = (status: TicketStatus) => {
     setStatusFilter((prev) =>
       prev.includes(status)
@@ -88,11 +96,7 @@ const TicketingPage = (): JSX.Element => {
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
-            onSubmit={
-              comments[0]
-                ? (text) => editComment(comments[0].id, text)
-                : submitComment
-            }
+            onSubmit={handleCommentSubmit}
             onClose={() => setSelectedTicketId(null)}
             error={commentError}
             initialValue={comments[0]?.comment}
