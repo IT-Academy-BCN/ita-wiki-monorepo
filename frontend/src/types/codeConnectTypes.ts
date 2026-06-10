@@ -28,6 +28,10 @@ export interface ApiProjectContributor {
   name: string;
   programming_role: ProgrammingRole;
   avatar_url: string | null;
+  status: "pending" | "accepted" | "rejected";
+  user: {
+    id: number;
+  };
 }
 
 export interface ApiProjectData {
