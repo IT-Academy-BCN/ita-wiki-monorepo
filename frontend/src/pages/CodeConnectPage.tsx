@@ -9,6 +9,7 @@ import PageTitle from "../components/ui/PageTitle";
 const CodeConnectPage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<string[]>([]);
+  const [showMyProjects, setShowMyProjects] = useState<boolean>(false);
 
   return (
     <>
@@ -18,7 +19,14 @@ const CodeConnectPage = () => {
           <h2 className="text-[26px] font-bold text-black text-left">
             Code Connect
           </h2>
-          <div className="py-3 sm:py-0">
+          <div className="flex items-center gap-3 py-3 sm:py-0">
+            <ButtonComponent
+              variant="custom"
+              className="text-primary font-[600] text-[14px] h-[41px] min-w-[152px] cursor-pointer hover:opacity-90"
+              onClick={() => setShowMyProjects(!showMyProjects)}
+            >
+              Els meus projectes
+            </ButtonComponent>
             <ButtonComponent
               variant="primary"
               onClick={() => navigate("/codeconnect/create")}

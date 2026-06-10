@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Liga;
+use App\Models\LigaPointHistory;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -81,13 +82,21 @@ class LigaController extends Controller
         }
 
         $validated = $request->validate([
-            'points' => 'nullable|integer|min:1',
+            'points'   => 'nullable|integer|min:1',
+            'activity' => 'nullable|string|max:255',
         ]);
 
-         $pointsToAdd = $validated['points'] ?? 5;
+        $pointsToAdd = $validated['points'] ?? 5;
+        $activity = $validated['activity'] ?? 'Points awarded';
 
          $entry->increment('points', $pointsToAdd);
          $entry->increment('points_weekly', $pointsToAdd);
+
+        LigaPointHistory::create([
+            'user_id'  => $user->id,
+            'points'   => $pointsToAdd,
+            'activity' => $activity,
+        ]);
 
         $entry->refresh();
 
