@@ -4,14 +4,54 @@ import LeagueToggle, {
 } from "../components/leagues-ranking/LeagueToggle/LeagueToggle";
 import { GlobalRanking } from "../components/leagues-ranking/GlobalRanking/GlobalRanking";
 import { WeeklyRanking } from "../components/leagues-ranking/WeeklyRanking/WeeklyRanking";
+import UiButton from "../components/ui/shared-ui/UiButton";
+import GenericModal from "../components/ui/Modal/GenericModal";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
-      <LeagueToggle view={view} onChange={setView} />
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between w-full">
+          <LeagueToggle view={view} onChange={setView} />
+        </div>
+        <div className="flex flex-col gap-1">
+          <UiButton
+            variant="link"
+            size="sm"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Veure el meu historial
+          </UiButton>
+          <button onClick={() => setIsTriggerModalOpen(true)}>Trigger</button>
+        </div>
+      </div>
+
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
+
+      <GenericModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="El meu historial de punts"
+        size="lg"
+      />
+
+      <GenericModal
+        isOpen={isTriggerModalOpen}
+        onClose={() => setIsTriggerModalOpen(false)}
+        title="Actualitzar lligues"
+        showPrimaryButton
+        primaryButtonText="Confirmar"
+        primaryButtonAction={() => setIsTriggerModalOpen(false)}
+        showSecondaryButton
+        secondaryButtonText="Cancel·lar"
+        secondaryButtonAction={() => setIsTriggerModalOpen(false)}
+      >
+        <p>Vols actualitzar les lligues?</p>
+      </GenericModal>
     </div>
   );
 };
