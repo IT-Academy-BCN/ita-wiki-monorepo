@@ -36,7 +36,7 @@ function ProjectTeam({
   const { user } = useUserContext();
 
   const hasPendingRequest = contributors.some(
-    (c) => c.user_id === user?.id && c.status === "pending",
+    (c) => c.user.id === user?.id && c.status === "pending",
   );
 
   const handleSlotClick = (
