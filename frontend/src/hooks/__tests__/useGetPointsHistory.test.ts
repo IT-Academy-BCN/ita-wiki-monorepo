@@ -9,8 +9,16 @@ vi.mock("../../api/endPointLeagues", () => ({
 }));
 
 const mockHistory: PointsHistoryEntry[] = [
-  { date: "2026-06-01T10:00:00.000000Z", points: 5, activity: "Resolució de Dubtes" },
-  { date: "2026-06-05T10:00:00.000000Z", points: 10, activity: "Correcció de PR" },
+  {
+    date: "2026-06-01T10:00:00.000000Z",
+    points: 5,
+    activity: "Resolució de Dubtes",
+  },
+  {
+    date: "2026-06-05T10:00:00.000000Z",
+    points: 10,
+    activity: "Correcció de PR",
+  },
   { date: "2026-06-10T10:00:00.000000Z", points: 20, activity: "Presentació" },
 ];
 
@@ -35,7 +43,9 @@ describe("useGetPointsHistory", () => {
   });
 
   it("returns empty array when API call fails", async () => {
-    vi.mocked(fetchPointsHistory).mockRejectedValueOnce(new Error("Network error"));
+    vi.mocked(fetchPointsHistory).mockRejectedValueOnce(
+      new Error("Network error"),
+    );
 
     const { result } = renderHook(() => useGetPointsHistory());
 
