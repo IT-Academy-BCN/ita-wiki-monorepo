@@ -6,10 +6,12 @@ import { GlobalRanking } from "../components/leagues-ranking/GlobalRanking/Globa
 import { WeeklyRanking } from "../components/leagues-ranking/WeeklyRanking/WeeklyRanking";
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
+import { useGetPointsHistory } from "../hooks/useGetPointsHistory";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { history } = useGetPointsHistory();
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
@@ -37,7 +39,13 @@ const LeaguesPage = () => {
         onClose={() => setIsModalOpen(false)}
         title="El meu historial de punts"
         size="lg"
-      />
+      >
+        {history.length === 0 ? (
+          <p>No hi ha historial de punts.</p>
+        ) : (
+          <p>{history.length} entrades carregades.</p>
+        )}
+      </GenericModal>
 
       <GenericModal
         isOpen={isTriggerModalOpen}
