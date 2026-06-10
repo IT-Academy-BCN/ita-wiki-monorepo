@@ -55,3 +55,21 @@ export const fetchLeagueRanking = async (
     throw error;
   }
 };
+
+export const triggerWeeklyTransition = async (): Promise<void> => {
+  const url = `${API_URL}${END_POINTS.leagues.triggerWeeklyTransition}`;
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to trigger weekly transition");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
