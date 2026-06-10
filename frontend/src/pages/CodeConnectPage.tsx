@@ -5,11 +5,21 @@ import CodeConnectFiltersComponent from "../components/code-connect/CodeConnectF
 import ProjectList from "../components/code-connect/projectList/ProjectList";
 import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
+import { useUserContext } from "../context/UserContext";
 
 const CodeConnectPage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<string[]>([]);
   const [showMyProjects, setShowMyProjects] = useState<boolean>(false);
+  const { user } = useUserContext();
+  const handleFilterChange = (selected: string[]) => {
+    setFilter(selected);
+    setShowMyProjects(false);
+  };
+  const handleMyProjects = () => {
+    setShowMyProjects(!showMyProjects);
+    setFilter([]);
+  };
 
   return (
     <>
@@ -23,7 +33,7 @@ const CodeConnectPage = () => {
             <ButtonComponent
               variant="custom"
               className="text-primary font-[600] text-[14px] h-[41px] min-w-[152px] cursor-pointer hover:opacity-90"
-              onClick={() => setShowMyProjects(!showMyProjects)}
+              onClick={handleMyProjects}
             >
               Els meus projectes
             </ButtonComponent>
@@ -36,8 +46,12 @@ const CodeConnectPage = () => {
           </div>
         </div>
         <p className="text-black py-5">Vull practicar com a developer de:</p>
-        <CodeConnectFiltersComponent selected={filter} onChange={setFilter} />
-        <ProjectList filter={filter} />
+        <CodeConnectFiltersComponent selected={filter} onChange={handleFilterChange} />
+        <ProjectList 
+          filter={filter}
+          showMyProjects={showMyProjects}
+          userId={user?.id}
+        />
       </Container>
     </>
   );
