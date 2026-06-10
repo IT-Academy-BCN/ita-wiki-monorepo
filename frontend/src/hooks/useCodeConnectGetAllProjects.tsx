@@ -38,6 +38,7 @@ export const useProjects = () => {
         }
 
         const incomingProjects = response.data;
+        console.log("API PROJECTS:", incomingProjects);
         if (incomingProjects.length) {
           const newProjects = incomingProjects.map((p) => ({
             id: p.id,
@@ -53,7 +54,11 @@ export const useProjects = () => {
                 p.contributors
                   ?.filter((c) => c.programming_role === "Frontend Developer")
                   ?.map((c) => ({
-                    ...c,
+                    id: c.id,
+                    user_id: c.user_id,
+                    name: c.name,
+                    programming_role: c.programming_role,
+                    status: c.status,
                     avatar:
                       c.avatar_url ??
                       `https://ui-avatars.com/api/?name=${c.name}&background=b91879&color=fff&rounded=true`,

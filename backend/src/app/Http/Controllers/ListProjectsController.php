@@ -88,8 +88,11 @@ class ListProjectsController extends Controller
                 'owner' => $this->formatOwner($project->user),
                 'contributors' => $project->contributorListProject->map(function ($contributor) {
                     return [
+                        'id' => $contributor->id,
+                        'user_id' => $contributor->user_id,
                         'name' => $contributor->user->name,
                         'programming_role' => $contributor->programming_role,
+                        'status' => $contributor->status,
                         'avatar_url' => $contributor->user->avatar_url,
                     ];
                 }),
@@ -183,8 +186,11 @@ class ListProjectsController extends Controller
             'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
-                    'name' => $contributor->user->name,
+                    'id' => $contributor->id,
+                    'user_id' => $contributor->user_id,
+                    'status' => $contributor->status,
                     'programming_role' => $contributor->programming_role,
+                    'name' => $contributor->user->name,
                     'avatar_url' => $contributor->user->avatar_url,
                 ];
             }),
@@ -196,6 +202,7 @@ class ListProjectsController extends Controller
             'message' => 'Project retrieved successfully'
         ], 200);
     }
+
 
 
     /**

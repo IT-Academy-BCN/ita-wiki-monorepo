@@ -6,7 +6,7 @@ import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
 import GenericModal from "../../ui/Modal/GenericModal";
-
+import { useUserContext } from "../../../context/UserContext";
 interface ProjectTeamProps {
   logoFront?: string;
   logoBack?: string;
@@ -33,6 +33,11 @@ function ProjectTeam({
   >(null);
 
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const { user } = useUserContext();
+
+  const hasPendingRequest = contributors.some(
+    (c) => c.user_id === user?.id && c.status === "pending",
+  );
 
   const handleSlotClick = (
     role: "Frontend Developer" | "Backend Developer",
@@ -44,7 +49,10 @@ function ProjectTeam({
 
   const handleJoin = async () => {
     if (!selectedRole || !projectId) return;
+
     await joinProject(projectId, selectedRole);
+
+    window.location.reload();
   };
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
@@ -113,10 +121,10 @@ function ProjectTeam({
           className="my-5 w-full"
           type="button"
           variant="primary"
-          disabled={!selectedRole}
+          disabled={!selectedRole || hasPendingRequest}
           onClick={handleJoin}
         >
-          Apuntar-me
+          {hasPendingRequest ? "Pending" : "Apuntar-me"}
         </ButtonComponent>
       </div>
       <div className="w-full flex justify-center -mt-8 ">
@@ -150,3 +158,5 @@ function ProjectTeam({
 }
 
 export default ProjectTeam;
+
+
