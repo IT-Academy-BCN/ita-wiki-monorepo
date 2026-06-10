@@ -12,27 +12,14 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
   GlobalRanking: () => <h1>Classificació general</h1>,
 }));
 
-vi.mock("../../components/ui/Modal/GenericModal", () => ({
+vi.mock("../../components/ui/shared-ui/UiButton", () => ({
   default: ({
-    isOpen,
-    title,
     children,
-    secondaryButtonAction,
-    secondaryButtonText,
+    onClick,
   }: {
-    isOpen: boolean;
-    title?: string;
-    children?: React.ReactNode;
-    secondaryButtonAction?: () => void;
-    secondaryButtonText?: string;
-  }) =>
-    isOpen ? (
-      <div role="dialog">
-        {title && <h2>{title}</h2>}
-        {children}
-        <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
-      </div>
-    ) : null,
+    children: React.ReactNode;
+    onClick: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
 }));
 
 describe("LeaguesPage", () => {
@@ -70,23 +57,44 @@ describe("LeaguesPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders 'Veure el meu historial' button", () => {
+  it("opens modal when clicking 'Veure el meu historial'", () => {
     render(<LeaguesPage />);
-    expect(
+
+    fireEvent.click(
       screen.getByRole("button", { name: /veure el meu historial/i }),
-    ).toBeInTheDocument();
+    );
+
+    expect(screen.getByText(/el meu historial de punts/i)).toBeInTheDocument();
   });
 
-  it("opens modal when trigger button is clicked", () => {
+  it("closes modal when clicking close button", () => {
     render(<LeaguesPage />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /tancar/i }));
+
+    expect(
+      screen.queryByText(/el meu historial de punts/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it("opens modal when clicking 'Trigger'", () => {
+    render(<LeaguesPage />);
+
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    expect(screen.getByText(/actualitzar lligues/i)).toBeInTheDocument();
   });
 
-  it("closes modal when cancel button is clicked", () => {
+  it("closes trigger modal when clicking cancel button", () => {
     render(<LeaguesPage />);
+
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
     fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    expect(screen.queryByText(/actualitzar lligues/i)).not.toBeInTheDocument();
   });
 });
