@@ -6,11 +6,7 @@ interface PointsHistoryRow {
   activitiesCompleted: string;
 }
 
-const mockData: PointsHistoryRow[] = [
-  { date: "01/06/2025", pointsEarned: 10, activitiesCompleted: "Exercici 1" },
-  { date: "05/06/2025", pointsEarned: 20, activitiesCompleted: "Exercici 2" },
-  { date: "10/06/2025", pointsEarned: 15, activitiesCompleted: "Exercici 3" },
-];
+const mockData: PointsHistoryRow[] = [];
 
 const PointsHistoryTable: FC = () => {
   return (

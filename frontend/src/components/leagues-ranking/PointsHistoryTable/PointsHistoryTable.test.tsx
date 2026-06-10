@@ -12,12 +12,4 @@ describe("PointsHistoryTable", () => {
     expect(screen.getByText("Punts guanyats")).toBeInTheDocument();
     expect(screen.getByText("Activitats realitzades")).toBeInTheDocument();
   });
-
-  it("renders mock data rows", () => {
-    render(<PointsHistoryTable />);
-
-    expect(screen.getByText("01/06/2025")).toBeInTheDocument();
-    expect(screen.getByText("10")).toBeInTheDocument();
-    expect(screen.getByText("Exercici 1")).toBeInTheDocument();
-  });
 });
