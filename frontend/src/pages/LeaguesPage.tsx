@@ -6,7 +6,7 @@ import { GlobalRanking } from "../components/leagues-ranking/GlobalRanking/Globa
 import { WeeklyRanking } from "../components/leagues-ranking/WeeklyRanking/WeeklyRanking";
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
-import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/pointshistorytable";
+import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/PointsHistoryTable";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
@@ -15,14 +15,6 @@ const LeaguesPage = () => {
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
-      <div className="flex items-center justify-between w-full">
-        <LeagueToggle view={view} onChange={setView} />
-        <UiButton variant="link" size="sm" onClick={() => setIsModalOpen(true)}>
-          Veure el meu historial
-        </UiButton>
-      </div>
-        <div className="flex flex-col items-end gap-1">
-          <UiButton variant="link" size="sm" onClick={() => {}}>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between w-full">
           <LeagueToggle view={view} onChange={setView} />
@@ -46,7 +38,9 @@ const LeaguesPage = () => {
         onClose={() => setIsModalOpen(false)}
         title="El meu historial de punts"
         size="lg"
-      />
+      >
+        <PointsHistoryTable />
+      </GenericModal>
 
       <GenericModal
         isOpen={isTriggerModalOpen}
@@ -60,17 +54,6 @@ const LeaguesPage = () => {
         secondaryButtonAction={() => setIsTriggerModalOpen(false)}
       >
         <p>Vols actualitzar les lligues?</p>
-      </GenericModal>
-
-      {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
-
-      <GenericModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="El meu historial de punts"
-        size="lg"
-      >
-        <PointsHistoryTable />
       </GenericModal>
     </div>
   );

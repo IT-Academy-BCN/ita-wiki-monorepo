@@ -17,9 +17,11 @@ const PointsHistoryTable: FC = () => {
     <table className="w-full text-sm">
       <thead>
         <tr className="bg-[#B91879] text-white">
-          <th className="px-4 py-3 text-left font-semibold">Data</th>
-          <th className="px-4 py-3 text-left font-semibold">Punts guanyats</th>
-          <th className="px-4 py-3 text-left font-semibold">
+          <th className="px-4 py-3 text-center font-semibold">Data</th>
+          <th className="px-4 py-3 text-center font-semibold">
+            Punts guanyats
+          </th>
+          <th className="px-4 py-3 text-center font-semibold">
             Activitats realitzades
           </th>
         </tr>
@@ -30,9 +32,9 @@ const PointsHistoryTable: FC = () => {
             key={index}
             className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
           >
-            <td className="px-4 py-3">{row.date}</td>
-            <td className="px-4 py-3">{row.pointsEarned}</td>
-            <td className="px-4 py-3">{row.activitiesCompleted}</td>
+            <td className="px-4 py-3 text-center">{row.date}</td>
+            <td className="px-4 py-3 text-center">{row.pointsEarned}</td>
+            <td className="px-4 py-3 text-center">{row.activitiesCompleted}</td>
           </tr>
         ))}
       </tbody>
