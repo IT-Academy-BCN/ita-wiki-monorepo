@@ -73,11 +73,16 @@ describe("ProjectTeam Component", () => {
     );
     expect(
       screen.queryByRole("button", { name: /deixar projecte/i }),
-         ).not.toBeInTheDocument();
+    ).not.toBeInTheDocument();
   });
-  
+
   it("renders leave project button", () => {
-    render(<ProjectTeam timeDuration="2 mesos" />);
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        contributors={[currentUserContributor]}
+      />,
+    );
 
     expect(
       screen.getByRole("button", { name: /Deixar projecte/i }),
@@ -85,7 +90,12 @@ describe("ProjectTeam Component", () => {
   });
 
   it("opens the leave project modal and closes it with the cancel button", () => {
-    render(<ProjectTeam timeDuration="2 mesos" />);
+    render(
+      <ProjectTeam
+        timeDuration="2 mesos"
+        contributors={[currentUserContributor]}
+      />,
+    );
     const leaveProjectButton = screen.getByRole("button", {
       name: /Deixar projecte/i,
     });
@@ -100,4 +110,6 @@ describe("ProjectTeam Component", () => {
     fireEvent.click(cancelButton);
     expect(
       screen.queryByRole("heading", { name: "Deixar projecte" }),
+    ).not.toBeInTheDocument();
+  });
 });

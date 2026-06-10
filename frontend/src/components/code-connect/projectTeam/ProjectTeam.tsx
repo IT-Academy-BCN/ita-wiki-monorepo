@@ -6,6 +6,7 @@ import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
 import GenericModal from "../../ui/Modal/GenericModal";
+import { useUserContext } from "../../../context/UserContext";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -136,25 +137,13 @@ function ProjectTeam({
             <ButtonComponent
               className="my-5 w-full"
               type="button"
-              variant="secondary" //should change to discret
-              onClick={() => {
-                // delete call will go here later
-              }}
+              variant="discreet"
+              onClick={() => setIsLeaveModalOpen(true)}
             >
               Deixar projecte
             </ButtonComponent>
           </div>
         )}
-      </div>
-      <div className="w-full flex justify-center -mt-8 ">
-        <ButtonComponent
-          className="my-5 w-full"
-          type="button"
-          variant="discreet"
-          onClick={() => setIsLeaveModalOpen(true)}
-        >
-          Deixar projecte
-        </ButtonComponent>
       </div>
 
       {isLeaveModalOpen && (
