@@ -28,7 +28,7 @@ class LigaGetHistoryTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonCount(1)
             ->assertJsonStructure([
-                '*' => ['points', 'activity', 'created_at'],
+                '*' => ['points', 'activity', 'date'],
             ]);
     }
 
