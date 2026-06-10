@@ -37,18 +37,30 @@ describe("ProjectTeam Component", () => {
     expect(button).not.toBeDisabled();
   });
 
+  it("renders leave project button", () => {
+    render(<ProjectTeam timeDuration="2 mesos" />);
+
+    expect(
+      screen.getByRole("button", { name: /Deixar projecte/i }),
+    ).toBeInTheDocument();
+  });
+
   it("opens the leave project modal and closes it with the cancel button", () => {
     render(<ProjectTeam timeDuration="2 mesos" />);
     const leaveProjectButton = screen.getByRole("button", {
-      name: /deixar projecte/i,
+      name: /Deixar projecte/i,
     });
     fireEvent.click(leaveProjectButton);
-    expect(screen.getByText("Deixar projecte")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Deixar projecte" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("Segur que vols deixar aquest projecte?"),
     ).toBeInTheDocument();
     const cancelButton = screen.getByRole("button", { name: /cancel/i });
     fireEvent.click(cancelButton);
-    expect(screen.queryByText("Deixar projecte")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Deixar projecte" }),
+    ).not.toBeInTheDocument();
   });
 });
