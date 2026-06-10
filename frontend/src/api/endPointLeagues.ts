@@ -1,5 +1,5 @@
 import { API_URL, END_POINTS } from "../config";
-import { LigaResponse } from "../types/league";
+import { LigaResponse, PointsHistoryEntry } from "../types/league";
 
 export const fetchGlobalRanking = async (signal?: AbortSignal) => {
   const url = `${API_URL}${END_POINTS.leagues.get}`;
@@ -23,6 +23,29 @@ export const fetchLeagueRanking = async (
   try {
     const response = await fetch(url, { signal });
     if (!response.ok) throw new Error("Failed to fetch leagues");
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof DOMException && error.name === "AbortError")
+      throw error;
+    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchPointsHistory = async (
+  signal?: AbortSignal,
+): Promise<PointsHistoryEntry[]> => {
+  const token = localStorage.getItem("auth_token");
+  const url = `${API_URL}${END_POINTS.leagues.history}`;
+  try {
+    const response = await fetch(url, {
+      signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch points history");
     const data = await response.json();
     return data;
   } catch (error: unknown) {
