@@ -13,6 +13,12 @@ vi.mock("../../code-connect/projectCard/ProgressBar", () => ({
   default: () => <div>Barra</div>,
 }));
 
+vi.mock("../../../../context/UserContext", () => ({
+  useUserContext: () => ({
+    user: { id: 1 },
+  }),
+}));
+
 describe("ProjectTeam Component", () => {
   it("renderitza els títols, la durada i les seccions", () => {
     render(<ProjectTeam timeDuration="2 mesos" />);
