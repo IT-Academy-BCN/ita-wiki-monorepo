@@ -1,5 +1,9 @@
 // components/ticketing/ticketingConstants.ts
-import type { TicketStatus, TicketPriority, TicketCategoryEnum } from "../../types/ticketingTypes";
+import type {
+  TicketStatus,
+  TicketPriority,
+  TicketCategoryEnum,
+} from "../../types/ticketingTypes";
 
 export const STATUS_LABELS: Record<TicketStatus, string> = {
   pending: "Nou",
