@@ -15,15 +15,21 @@ vi.mock("../../components/leagues-ranking/GlobalRanking/GlobalRanking", () => ({
 vi.mock("../../components/ui/Modal/GenericModal", () => ({
   default: ({
     isOpen,
+    title,
+    children,
     secondaryButtonAction,
     secondaryButtonText,
   }: {
     isOpen: boolean;
+    title?: string;
+    children?: React.ReactNode;
     secondaryButtonAction?: () => void;
     secondaryButtonText?: string;
   }) =>
     isOpen ? (
       <div role="dialog">
+        {title && <h2>{title}</h2>}
+        {children}
         <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
       </div>
     ) : null,
@@ -61,6 +67,13 @@ describe("LeaguesPage", () => {
 
     expect(
       screen.getByRole("heading", { name: /lliga setmanal/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders 'Veure el meu historial' button", () => {
+    render(<LeaguesPage />);
+    expect(
+      screen.getByRole("button", { name: /veure el meu historial/i }),
     ).toBeInTheDocument();
   });
 
