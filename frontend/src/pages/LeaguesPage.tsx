@@ -14,13 +14,21 @@ const LeaguesPage = () => {
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
-      <div className="flex items-center justify-between w-full">
-        <LeagueToggle view={view} onChange={setView} />
-        <UiButton variant="link" size="sm" onClick={() => setIsModalOpen(true)}>
-          Veure el meu historial
-        </UiButton>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between w-full">
+          <LeagueToggle view={view} onChange={setView} />
+        </div>
+        <div className="flex flex-col gap-1">
+          <UiButton
+            variant="link"
+            size="sm"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Veure el meu historial
+          </UiButton>
+          <button onClick={() => setIsTriggerModalOpen(true)}>Trigger</button>
+        </div>
       </div>
-      <button onClick={() => setIsTriggerModalOpen(true)}>Trigger</button>
 
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
 
