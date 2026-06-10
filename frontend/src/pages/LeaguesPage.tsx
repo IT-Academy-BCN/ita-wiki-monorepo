@@ -14,36 +14,41 @@ const LeaguesPage = () => {
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
-  const handleTriggerClick = () => {setIsTriggerModalOpen(true)};
-  
+  const handleTriggerClick = () => {
+    setIsTriggerModalOpen(true);
+  };
+
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between w-full">
           <LeagueToggle view={view} onChange={setView} />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-6 w-full">
           <UiButton
+            className="ml-auto pr-0"
             variant="link"
             size="sm"
             onClick={() => setIsModalOpen(true)}
           >
             Veure el meu historial
           </UiButton>
-          
+
           {user?.role && user.role !== "student" && (
-          <button
-            onClick={handleTriggerClick}
-            className="bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer">
-            <img
-              src={rotateIcon}
-              alt="Trigger weekly transition"
-              className="w-7 h-7"
-            />
-          </button>
-            )}
+            <button
+              onClick={handleTriggerClick}
+              className="ml-auto bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
+            >
+              <img
+                src={rotateIcon}
+                alt="Trigger weekly transition"
+                className="w-7 h-7"
+              />
+            </button>
+          )}
+        </div>
       </div>
-      </div>
+
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
 
       <GenericModal
