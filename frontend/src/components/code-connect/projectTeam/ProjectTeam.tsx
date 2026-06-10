@@ -123,10 +123,10 @@ function ProjectTeam({
         <ButtonComponent
           className="my-5 w-full"
           type="button"
-          variant="custom"
+          variant="discreet"
           onClick={() => setIsLeaveModalOpen(true)}
         >
-          deixar projecte
+          Deixar projecte
         </ButtonComponent>
       </div>
 
