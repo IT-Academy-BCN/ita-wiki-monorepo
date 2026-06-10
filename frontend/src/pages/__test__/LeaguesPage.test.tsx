@@ -16,6 +16,22 @@ const mockUseUser = vi.fn();
 vi.mock("../../hooks/useUser", () => ({
   useUser: () => mockUseUser(),
 }));
+vi.mock("../../components/ui/Modal/GenericModal", () => ({
+  default: ({
+    isOpen,
+    secondaryButtonAction,
+    secondaryButtonText,
+  }: {
+    isOpen: boolean;
+    secondaryButtonAction?: () => void;
+    secondaryButtonText?: string;
+  }) =>
+    isOpen ? (
+      <div role="dialog">
+        <button onClick={secondaryButtonAction}>{secondaryButtonText}</button>
+      </div>
+    ) : null,
+}));
 
 describe("LeaguesPage", () => {
   it("shows WeeklyRanking by default", () => {
@@ -69,5 +85,20 @@ describe("LeaguesPage", () => {
     expect(
       screen.queryByAltText("Trigger weekly transition"),
     ).not.toBeInTheDocument();
+  });
+  
+  it("opens modal when trigger button is clicked", () => {
+    mockUseUser.mockReturnValue({ user: { role: "admin" } });
+    render(<LeaguesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger weekly transition/i }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("closes modal when cancel button is clicked", () => {
+    mockUseUser.mockReturnValue({ user: { role: "admin" } });
+    render(<LeaguesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger weekly transition/i }));
+    fireEvent.click(screen.getByRole("button", { name: /cancel·lar/i }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
