@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
+import type { ApiTicketData } from "../../types/ticketingTypes";
 import type {
   IntCreateTicket,
   TicketListProps,
@@ -15,10 +16,16 @@ vi.mock("../../hooks/useCreateTicketing", () => ({
   useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
 }));
 vi.mock("../../components/tickets/TicketList", () => ({
-  default: ({ isLoading, error }: TicketListProps) => {
+  default: ({ tickets, isLoading, error }: TicketListProps) => {
     if (isLoading) return <p>Carregant tickets...</p>;
     if (error) return <p>{error}</p>;
-    return <div data-testid="ticket-list" />;
+    return (
+      <div data-testid="ticket-list">
+        {tickets.map((t) => (
+          <div key={t.id} data-testid="ticket-list-item" />
+        ))}
+      </div>
+    );
   },
 }));
 vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
@@ -71,5 +78,29 @@ describe("TicketingPage", () => {
     render(<TicketingPage />);
     await act(async () => fireEvent.click(screen.getByText("Crear ticket")));
     expect(mockRefetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows only pending and in-progress tickets by default", () => {
+    const tickets = [
+      { id: 1, status: "pending" },
+      { id: 2, status: "in_progress" },
+      { id: 3, status: "closed" },
+    ] as ApiTicketData[];
+    mockHook.mockReturnValue(hookReturn({ tickets }));
+    render(<TicketingPage />);
+    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(2);
+  });
+
+  it("toggles ticket filter when checkbox is clicked", () => {
+    const tickets = [
+      { id: 1, status: "pending" },
+      { id: 2, status: "in_progress" },
+      { id: 3, status: "blocked" },
+    ] as ApiTicketData[];
+    mockHook.mockReturnValue(hookReturn({ tickets }));
+    render(<TicketingPage />);
+    const blockedCheckbox = screen.getByLabelText("Bloquejat");
+    fireEvent.click(blockedCheckbox);
+    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(3);
   });
 });

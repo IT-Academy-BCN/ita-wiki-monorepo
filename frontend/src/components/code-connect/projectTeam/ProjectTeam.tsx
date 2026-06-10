@@ -149,7 +149,7 @@ function ProjectTeam({
             <ButtonComponent
               className="my-5 w-full"
               type="button"
-              variant="secondary"
+              variant="discreet"
               onClick={() => setIsLeaveModalOpen(true)}
             >
               Deixar projecte
