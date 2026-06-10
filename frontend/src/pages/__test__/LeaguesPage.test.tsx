@@ -70,7 +70,7 @@ describe("LeaguesPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders 'Veure el meu historial' button", () => {
+  it("renders 'View my history' button", () => {
     render(<LeaguesPage />);
     expect(
       screen.getByRole("button", { name: /veure el meu historial/i }),
