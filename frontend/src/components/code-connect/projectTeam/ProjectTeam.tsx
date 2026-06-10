@@ -49,10 +49,6 @@ function ProjectTeam({
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
 
-  const handleLeave = () => {
-    //TODO: api call to leave project
-  };
-
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
       <div>
