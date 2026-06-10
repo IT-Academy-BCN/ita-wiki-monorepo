@@ -3,7 +3,6 @@ import type {
   ApiTicketData,
   TicketStatus,
   TicketPriority,
-  TicketCategoryEnum,
 } from "../../types/ticketingTypes";
 import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
