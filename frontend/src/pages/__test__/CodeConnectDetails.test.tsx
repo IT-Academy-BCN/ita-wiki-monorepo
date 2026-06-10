@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 import CodeConnectDetails from "../CodeConnectDetails";
@@ -108,5 +109,58 @@ describe("CodeConnectDetails Page", () => {
     render(<CodeConnectDetails />);
 
     expect(screen.getByText("Carregant...")).toBeTruthy();
+  });
+
+  it("renders the 'Marcar como completado' button", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Test",
+        description: "Descripció de prova",
+        roadmap: [],
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("Marcar com a complet")).toBeTruthy();
+  });
+
+  it("toggles to 'Completat' badge after clicking the button", () => {
+    const mockProjectData = {
+      data: {
+        title: "Projecte Test",
+        description: "Descripció de prova",
+        roadmap: [],
+        contributors: [],
+        time_duration: "2 setmanes",
+        language_frontend: "react",
+        language_backend: "node",
+      },
+    };
+
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: mockProjectData,
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    const button = screen.getByRole("button", {
+      name: /marcar com a complet/i,
+    });
+    fireEvent.click(button);
+
+    expect(screen.getByText(/Completat/)).toBeTruthy();
   });
 });

@@ -37,8 +37,8 @@ const TicketList = ({
           <div role="columnheader">Descripció</div>
           <div role="columnheader">Categoria</div>
           <div role="columnheader">Estat</div>
-          <div role="columnheader">Data</div>
           <div role="columnheader">Prioritat</div>
+          <div role="columnheader">Data</div>
           <div role="columnheader">Rol</div>
           <div role="columnheader">Comentari</div>
         </div>
