@@ -15,7 +15,11 @@ describe("PointsHistoryTable", () => {
 
   it("renders rows with data from props", () => {
     const mockData = [
-      { date: "2026-06-01T10:00:00.000000Z", points: 5, activity: "Resolució de Dubtes" },
+      {
+        date: "2026-06-01T10:00:00.000000Z",
+        points: 5,
+        activity: "Resolució de Dubtes",
+      },
     ];
 
     render(<PointsHistoryTable data={mockData} />);
