@@ -21,7 +21,8 @@ const LeaguesPage = () => {
       <div className="max-w-3xl w-full">
         <div className="flex items-center justify-between w-full">
           <LeagueToggle view={view} onChange={setView} />
-          <div className="flex flex-col gap-1 items-end">
+          </div>
+          <div className="flex flex-col gap-4 items-end max-w-3xl w-full">
             <UiButton
               variant="link"
               size="sm"
@@ -42,7 +43,7 @@ const LeaguesPage = () => {
               </button>
             )}
           </div>
-        </div>
+        
       </div>
 
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
