@@ -5,6 +5,8 @@ export type ProgrammingRole = "Frontend Developer" | "Backend Developer";
 export interface ProjectParticipant {
   name: string;
   avatar: string;
+  user_id: number;
+  status: "pending" | "accepted" | "rejected";
 }
 
 export interface ProjectSideInfo {
@@ -30,6 +32,8 @@ export interface ApiProjectContributor {
   name: string;
   programming_role: ProgrammingRole;
   avatar_url: string | null;
+  user_id: number;
+  status: "pending" | "accepted" | "rejected";
 }
 
 export interface ApiProjectData {
