@@ -25,7 +25,9 @@ const PointsHistoryTable: FC<Props> = ({ data }) => {
             key={index}
             className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
           >
-            <td className="px-4 py-3 text-center">{new Date(row.date).toLocaleDateString("ca-ES")}</td>
+            <td className="px-4 py-3 text-center">
+              {new Date(row.date).toLocaleDateString("ca-ES")}
+            </td>
             <td className="px-4 py-3 text-center">{row.points}</td>
             <td className="px-4 py-3 text-center">{row.activity}</td>
           </tr>
