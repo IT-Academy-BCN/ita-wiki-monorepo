@@ -21,29 +21,28 @@ const LeaguesPage = () => {
       <div className="max-w-3xl w-full">
         <div className="flex items-center justify-between w-full">
           <LeagueToggle view={view} onChange={setView} />
-          </div>
-          <div className="flex flex-col gap-4 items-end max-w-3xl w-full">
-            <UiButton
-              variant="link"
-              size="sm"
-              onClick={() => setIsModalOpen(true)}
+        </div>
+        <div className="flex flex-col gap-4 items-end max-w-3xl w-full">
+          <UiButton
+            variant="link"
+            size="sm"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Veure el meu historial
+          </UiButton>
+          {user?.role && user.role !== "student" && (
+            <button
+              onClick={() => setIsTriggerModalOpen(true)}
+              className="w-fit bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
             >
-              Veure el meu historial
-            </UiButton>
-            {user?.role && user.role !== "student" && (
-              <button
-                onClick={() => setIsTriggerModalOpen(true)}
-                className="w-fit bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
-              >
-                <img
-                  src={rotateIcon}
-                  alt="Trigger weekly transition"
-                  className="w-7 h-7"
-                />
-              </button>
-            )}
-          </div>
-        
+              <img
+                src={rotateIcon}
+                alt="Trigger weekly transition"
+                className="w-7 h-7"
+              />
+            </button>
+          )}
+        </div>
       </div>
 
       {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
