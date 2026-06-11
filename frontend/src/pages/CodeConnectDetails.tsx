@@ -89,6 +89,7 @@ const CodeConnectDetails = () => {
                 contributors={codeConnectProject.data.contributors}
                 timeDuration={codeConnectProject.data.time_duration}
                 projectId={codeConnectProject.data.id}
+                projectOwnerId={codeConnectProject.data.user_id}
               />
             </div>
           </div>
