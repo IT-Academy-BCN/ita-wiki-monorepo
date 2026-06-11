@@ -24,7 +24,7 @@ describe("PointsHistoryTable", () => {
 
     render(<PointsHistoryTable data={mockData} />);
 
-    expect(screen.getByText("2026-06-01T10:00:00.000000Z")).toBeInTheDocument();
+    expect(screen.getByText("1/6/2026")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("Resolució de Dubtes")).toBeInTheDocument();
   });
