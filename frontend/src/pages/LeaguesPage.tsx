@@ -7,6 +7,7 @@ import { WeeklyRanking } from "../components/leagues-ranking/WeeklyRanking/Weekl
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
 import { useGetPointsHistory } from "../hooks/useGetPointsHistory";
+import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/PointsHistoryTable";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
@@ -40,11 +41,7 @@ const LeaguesPage = () => {
         title="El meu historial de punts"
         size="lg"
       >
-        {history.length === 0 ? (
-          <p>No hi ha historial de punts.</p>
-        ) : (
-          <p>{history.length} entrades carregades.</p>
-        )}
+        <PointsHistoryTable data={history} />
       </GenericModal>
 
       <GenericModal
