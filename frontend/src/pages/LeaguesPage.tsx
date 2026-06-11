@@ -8,6 +8,7 @@ import { useUser } from "../hooks/useUser";
 import rotateIcon from "../assets/rotate.svg";
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
+import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/PointsHistoryTable";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
@@ -56,7 +57,9 @@ const LeaguesPage = () => {
         onClose={() => setIsModalOpen(false)}
         title="El meu historial de punts"
         size="lg"
-      />
+      >
+        <PointsHistoryTable />
+      </GenericModal>
 
       <GenericModal
         isOpen={isTriggerModalOpen}
