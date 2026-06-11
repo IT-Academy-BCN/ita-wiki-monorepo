@@ -7,7 +7,6 @@ import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject, leaveProject } from "../../../api/endPointContributors";
 import { useUserContext } from "../../../context/UserContext";
 import GenericModal from "../../ui/Modal/GenericModal";
-import { useUserContext } from "../../../context/UserContext";
 
 interface ProjectTeamProps {
   logoFront?: string;
