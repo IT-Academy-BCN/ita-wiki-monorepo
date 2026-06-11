@@ -1,5 +1,9 @@
 // components/ticketing/ticketingConstants.ts
-import type { TicketStatus, TicketPriority } from "../../types/ticketingTypes";
+import type {
+  TicketStatus,
+  TicketPriority,
+  TicketCategoryEnum,
+} from "../../types/ticketingTypes";
 
 export const STATUS_LABELS: Record<TicketStatus, string> = {
   pending: "Nou",
@@ -23,6 +27,12 @@ export const PRIORITY_COLORS: Record<TicketPriority, string> = {
   critical: "text-red-600",
 };
 
+export const CATEGORY_LABELS: Record<TicketCategoryEnum, string> = {
+  bug: "Error",
+  suggestion: "Suggeriment",
+  other: "Altre",
+};
+
 export const STATUS_OPTIONS = (
   Object.keys(STATUS_LABELS) as TicketStatus[]
 ).map((value) => ({ value, label: STATUS_LABELS[value] }));
@@ -30,3 +40,7 @@ export const STATUS_OPTIONS = (
 export const PRIORITY_OPTIONS = (
   Object.keys(PRIORITY_LABELS) as TicketPriority[]
 ).map((value) => ({ value, label: PRIORITY_LABELS[value] }));
+
+export const CATEGORY_OPTIONS = (
+  Object.keys(CATEGORY_LABELS) as TicketCategoryEnum[]
+).map((value) => ({ value, label: CATEGORY_LABELS[value] }));
