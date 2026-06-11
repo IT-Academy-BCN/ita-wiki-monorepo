@@ -3,8 +3,16 @@ import type { PointsHistoryEntry } from "../types/league";
 import { fetchPointsHistory } from "./endPointLeagues";
 
 const mockHistory: PointsHistoryEntry[] = [
-  { date: "2026-06-01T10:00:00.000000Z", points: 5, activity: "Resolució de Dubtes" },
-  { date: "2026-06-05T10:00:00.000000Z", points: 10, activity: "Correcció de PR" },
+  {
+    date: "2026-06-01T10:00:00.000000Z",
+    points: 5,
+    activity: "Resolució de Dubtes",
+  },
+  {
+    date: "2026-06-05T10:00:00.000000Z",
+    points: 10,
+    activity: "Correcció de PR",
+  },
   { date: "2026-06-10T10:00:00.000000Z", points: 20, activity: "Presentació" },
 ];
 
@@ -68,9 +76,7 @@ describe("fetchPointsHistory", () => {
   });
 
   it("throws error when fetch fails", async () => {
-    global.fetch = vi.fn(() =>
-      Promise.reject(new Error("Network error")),
-    );
+    global.fetch = vi.fn(() => Promise.reject(new Error("Network error")));
 
     await expect(fetchPointsHistory()).rejects.toThrow("Network error");
   });
