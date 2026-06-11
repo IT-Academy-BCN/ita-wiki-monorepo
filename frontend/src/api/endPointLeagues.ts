@@ -35,7 +35,7 @@ export const fetchLeagueRanking = async (
 
 export const triggerWeeklyTransition = async (): Promise<void> => {
   const url = `${API_URL}${END_POINTS.leagues.triggerWeeklyTransition}`;
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("auth_token");
   try {
     const response = await fetch(url, {
       method: "POST",
