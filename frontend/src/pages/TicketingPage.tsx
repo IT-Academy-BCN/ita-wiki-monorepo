@@ -7,6 +7,7 @@ import { useCreateTicketing } from "../hooks/useCreateTicketing";
 import { useTicketingGetAll } from "../hooks/useTicketingGetAll";
 import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
+import { useUserContext } from "../context/UserContext";
 import { STATUS_LABELS } from "../components/tickets/ticketConstants";
 import type { IntCreateTicket, TicketStatus } from "../types/ticketingTypes";
 
@@ -16,12 +17,15 @@ const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
   const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
+  const { user } = useUserContext();
+  const currentUserId = user?.id;
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
     comments,
     error: commentError,
     submitComment,
+    editComment,
   } = useTicketComments(selectedTicketId ?? 0);
 
   const handleCreateTicket = async (
@@ -32,6 +36,14 @@ const TicketingPage = (): JSX.Element => {
       refetch();
     } catch {
       // error already handled by useCreateTicketing error state
+    }
+  };
+
+  const handleCommentSubmit = async (text: string): Promise<void> => {
+    if (comments[0]) {
+      await editComment(comments[0].id, text);
+    } else {
+      await submitComment(text);
     }
   };
 
@@ -84,12 +96,13 @@ const TicketingPage = (): JSX.Element => {
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
-            onSubmit={submitComment}
+            onSubmit={handleCommentSubmit}
             onClose={() => setSelectedTicketId(null)}
             error={commentError}
             initialValue={comments[0]?.comment}
             authorId={comments[0]?.user_id}
             date={comments[0]?.created_at}
+            currentUserId={currentUserId ?? undefined}
           />
         )}
       </Container>
