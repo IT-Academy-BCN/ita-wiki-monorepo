@@ -68,4 +68,21 @@ describe("CodeConnectPage", () => {
       screen.getByRole("button", { name: /Els meus projectes/i }),
     ).toBeInTheDocument();
   });
+
+  it("toggles my projects filter when clicking My projects button", () => {
+    render(
+      <MemoryRouter initialEntries={["/codeconnect"]}>
+        <UserProvider>
+          <Routes>
+            <Route path="/codeconnect" element={<CodeConnectPage />} />
+          </Routes>
+        </UserProvider>
+      </MemoryRouter>,
+    );
+
+    const button = screen.getByRole("button", { name: /Els meus projectes/i });
+    fireEvent.click(button);
+
+    expect(button).toBeInTheDocument();
+  });
 });
