@@ -6,6 +6,7 @@ import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
 import { joinProject } from "../../../api/endPointContributors";
 import GenericModal from "../../ui/Modal/GenericModal";
+import { useUserContext } from "../../../context/UserContext";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -13,6 +14,7 @@ interface ProjectTeamProps {
   contributors?: ApiProjectContributor[];
   timeDuration?: string;
   projectId?: number;
+  projectOwnerId?: number;
 }
 
 function ProjectTeam({
@@ -21,7 +23,9 @@ function ProjectTeam({
   contributors = [],
   timeDuration,
   projectId,
+  projectOwnerId,
 }: ProjectTeamProps) {
+  const { user } = useUserContext();
   const { getTeamByRole } = useProjectContributors(contributors);
   const frontendData = getTeamByRole("frontend");
   const backendData = getTeamByRole("backend");
@@ -46,8 +50,18 @@ function ProjectTeam({
     if (!selectedRole || !projectId) return;
     await joinProject(projectId, selectedRole);
   };
+
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
+  const currentUserId = user?.id;
+  const isProjectOwner = currentUserId === projectOwnerId;
+
+  const currentUserContributor = contributors.find(
+    (contributor) => contributor.user_id === currentUserId,
+  );
+
+  const shouldShowLeaveButton =
+    Boolean(currentUserContributor) && !isProjectOwner;
 
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -118,16 +132,18 @@ function ProjectTeam({
         >
           Apuntar-me
         </ButtonComponent>
-      </div>
-      <div className="w-full flex justify-center -mt-8 ">
-        <ButtonComponent
-          className="my-5 w-full"
-          type="button"
-          variant="discreet"
-          onClick={() => setIsLeaveModalOpen(true)}
-        >
-          Deixar projecte
-        </ButtonComponent>
+        {shouldShowLeaveButton && (
+          <div className="w-full flex justify-center -mt-8">
+            <ButtonComponent
+              className="my-5 w-full"
+              type="button"
+              variant="discreet"
+              onClick={() => setIsLeaveModalOpen(true)}
+            >
+              Deixar projecte
+            </ButtonComponent>
+          </div>
+        )}
       </div>
 
       {isLeaveModalOpen && (

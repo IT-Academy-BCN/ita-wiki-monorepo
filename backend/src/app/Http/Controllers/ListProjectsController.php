@@ -185,6 +185,8 @@ class ListProjectsController extends Controller
             'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
+                    'id' => $contributor->id,
+                    'user_id' => $contributor->user_id,
                     'name' => $contributor->user->name,
                     'programming_role' => $contributor->programming_role,
                     'avatar_url' => $contributor->user->avatar_url,
