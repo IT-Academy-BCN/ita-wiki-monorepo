@@ -21,7 +21,6 @@ class UpdateTicketRequest extends FormRequest{
             'type' => 'sometimes|required|in:error,suggestion',
             'affected_function' => 'sometimes|required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'sometimes|required|string',
-            'category' => 'sometimes|nullable|in:bug,suggestion,other', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
         ];
     }
 }
