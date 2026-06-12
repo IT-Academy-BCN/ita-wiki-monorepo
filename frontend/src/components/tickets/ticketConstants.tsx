@@ -44,9 +44,3 @@ export const PRIORITY_OPTIONS = (
 export const CATEGORY_OPTIONS = (
   Object.keys(CATEGORY_LABELS) as TicketCategoryEnum[]
 ).map((value) => ({ value, label: CATEGORY_LABELS[value] }));
-
-export const CATEGORY_ICONS = {
-  bug: "ticketing-category-error-icon.svg",
-  suggestion: "ticketing-category-suggeriment-icon.svg",
-  other: "ticketing-category-altre-icon.svg",
-};
