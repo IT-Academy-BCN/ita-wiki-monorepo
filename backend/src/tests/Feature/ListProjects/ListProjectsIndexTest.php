@@ -89,6 +89,8 @@ class ListProjectsIndexTest extends TestCase
                     'name' => $this->contributorOne->user->name,
                     'programming_role' => $this->contributorOne->programming_role,
                     'avatar_url' => $this->contributorOne->user->avatar_url,
+                    'user_id' => $this->contributorOne->user_id,
+                    'status' => $this->contributorOne->status,
                 ]
             ],
         ]);
@@ -135,6 +137,23 @@ class ListProjectsIndexTest extends TestCase
                 'id' => $this->projectOne->user->id,
                 'name'=> $this->projectOne->user->name,
             ]
+        ]);
+    }
+
+    public function test_index_returns_contributor_status_and_user_id(): void
+    {
+        $response = $this->get('/api/codeconnect');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'contributors' => [
+                [
+                    'name' => $this->contributorOne->user->name,
+                    'programming_role' => $this->contributorOne->programming_role,
+                    'avatar_url' => $this->contributorOne->user->avatar_url,
+                    'user_id' => $this->contributorOne->user_id,
+                    'status' => $this->contributorOne->status,
+                ]
+            ],
         ]);
     }
 
