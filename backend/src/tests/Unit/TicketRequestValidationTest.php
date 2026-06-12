@@ -2,27 +2,29 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Http\Requests\Tickets\CreateTicketRequest;
-use App\Http\Requests\Tickets\UpdateTicketRequest;
-use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
-use App\Http\Requests\Tickets\UpdatePriorityRequest;
 use App\Http\Requests\Tickets\AssignTicketRequest;
+use App\Http\Requests\Tickets\CreateTicketRequest;
+use App\Http\Requests\Tickets\UpdatePriorityRequest;
+use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
+use App\Http\Requests\Tickets\UpdateTicketRequest;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
-class TicketRequestValidationTest extends TestCase{
-
+class TicketRequestValidationTest extends TestCase
+{
     /** @test */
-    public function create_ticket_request_is_authorized(): void{
+    public function create_ticket_request_is_authorized(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function create_ticket_request_has_correct_rules(): void{
+    public function create_ticket_request_has_correct_rules(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
 
         $expectedRules = [
             'forum_answer_id' => 'nullable|integer|exists:forum_answers,id',
@@ -34,15 +36,17 @@ class TicketRequestValidationTest extends TestCase{
             'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
             'priority' => 'nullable|in:low,medium,high,critical',
+            'category' => 'nullable|in:bug,suggestion,other', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
         ];
 
         $this->assertEquals($expectedRules, $request->rules());
     }
 
     /** @test */
-    public function create_ticket_request_validates_required_fields(): void{
+    public function create_ticket_request_validates_required_fields(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
         $validator = Validator::make([], $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -55,9 +59,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function create_ticket_request_validates_affected_app_enum(): void{
+    public function create_ticket_request_validates_affected_app_enum(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
 
         $validValues = ['wiki_frontend', 'wiki_backend', 'code_connect', 'other'];
         foreach ($validValues as $value) {
@@ -70,9 +75,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function create_ticket_request_validates_type_enum(): void{
+    public function create_ticket_request_validates_type_enum(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
 
         $validValues = ['error', 'suggestion'];
         foreach ($validValues as $value) {
@@ -85,9 +91,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function create_ticket_request_validates_name_max_length(): void{
+    public function create_ticket_request_validates_name_max_length(): void
+    {
 
-        $request = new CreateTicketRequest();
+        $request = new CreateTicketRequest;
 
         $validator = Validator::make(['name' => str_repeat('a', 255)], $request->rules());
         $this->assertFalse($validator->errors()->has('name'));
@@ -97,16 +104,18 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_ticket_request_is_authorized(): void{
+    public function update_ticket_request_is_authorized(): void
+    {
 
-        $request = new UpdateTicketRequest();
+        $request = new UpdateTicketRequest;
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function update_ticket_request_has_correct_rules(): void{
+    public function update_ticket_request_has_correct_rules(): void
+    {
 
-        $request = new UpdateTicketRequest();
+        $request = new UpdateTicketRequest;
 
         $expectedRules = [
             'code_connect_id' => 'sometimes|required|integer|exists:users,id',
@@ -123,9 +132,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_ticket_request_allows_partial_updates(): void{
+    public function update_ticket_request_allows_partial_updates(): void
+    {
 
-        $request = new UpdateTicketRequest();
+        $request = new UpdateTicketRequest;
 
         $validator = Validator::make([], $request->rules());
         $this->assertFalse($validator->fails());
@@ -135,9 +145,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_ticket_request_validates_fields_when_present(): void{
+    public function update_ticket_request_validates_fields_when_present(): void
+    {
 
-        $request = new UpdateTicketRequest();
+        $request = new UpdateTicketRequest;
 
         $validator = Validator::make(['type' => 'invalid_type'], $request->rules());
         $this->assertTrue($validator->errors()->has('type'));
@@ -147,28 +158,31 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_status_request_is_authorized(): void{
+    public function update_status_request_is_authorized(): void
+    {
 
-        $request = new UpdateStatusTicketRequest();
+        $request = new UpdateStatusTicketRequest;
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function update_status_request_has_correct_rules(): void{
+    public function update_status_request_has_correct_rules(): void
+    {
 
-        $request = new UpdateStatusTicketRequest();
+        $request = new UpdateStatusTicketRequest;
 
         $expectedRules = [
-            'status' => 'required|in:pending,in_progress,blocked,ready,closed'
+            'status' => 'required|in:pending,in_progress,blocked,ready,closed',
         ];
 
         $this->assertEquals($expectedRules, $request->rules());
     }
 
     /** @test */
-    public function update_status_request_validates_all_valid_statuses(): void{
+    public function update_status_request_validates_all_valid_statuses(): void
+    {
 
-        $request = new UpdateStatusTicketRequest();
+        $request = new UpdateStatusTicketRequest;
         $validStatuses = ['pending', 'in_progress', 'blocked', 'ready', 'closed'];
 
         foreach ($validStatuses as $status) {
@@ -178,9 +192,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_status_request_rejects_invalid_status(): void{
+    public function update_status_request_rejects_invalid_status(): void
+    {
 
-        $request = new UpdateStatusTicketRequest();
+        $request = new UpdateStatusTicketRequest;
         $invalidStatuses = ['invalid', 'completed', 'open'];
 
         foreach ($invalidStatuses as $status) {
@@ -190,9 +205,10 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_status_request_ensures_single_status(): void{
+    public function update_status_request_ensures_single_status(): void
+    {
 
-        $request = new UpdateStatusTicketRequest();
+        $request = new UpdateStatusTicketRequest;
         $validator = Validator::make(['status' => 'pending'], $request->rules());
 
         $data = $validator->validated();
@@ -201,28 +217,31 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_priority_request_is_authorized(): void{
+    public function update_priority_request_is_authorized(): void
+    {
 
-        $request = new UpdatePriorityRequest();
+        $request = new UpdatePriorityRequest;
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function update_priority_request_has_correct_rules(): void{
+    public function update_priority_request_has_correct_rules(): void
+    {
 
-        $request = new UpdatePriorityRequest();
+        $request = new UpdatePriorityRequest;
 
         $expectedRules = [
-            'priority' => 'required|in:low,medium,high,critical'
+            'priority' => 'required|in:low,medium,high,critical',
         ];
 
         $this->assertEquals($expectedRules, $request->rules());
     }
 
     /** @test */
-    public function update_priority_request_validates_all_valid_priorities(): void{
+    public function update_priority_request_validates_all_valid_priorities(): void
+    {
 
-        $request = new UpdatePriorityRequest();
+        $request = new UpdatePriorityRequest;
         $validPriorities = ['low', 'medium', 'high', 'critical'];
 
         foreach ($validPriorities as $priority) {
@@ -232,28 +251,31 @@ class TicketRequestValidationTest extends TestCase{
     }
 
     /** @test */
-    public function update_priority_request_rejects_invalid_priority(): void{
+    public function update_priority_request_rejects_invalid_priority(): void
+    {
 
-        $request = new UpdatePriorityRequest();
+        $request = new UpdatePriorityRequest;
 
         $validator = Validator::make(['priority' => 'invalid'], $request->rules());
         $this->assertTrue($validator->errors()->has('priority'));
     }
 
     /** @test */
-    public function assign_ticket_request_is_authorized(): void{
+    public function assign_ticket_request_is_authorized(): void
+    {
 
-        $request = new AssignTicketRequest();
+        $request = new AssignTicketRequest;
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function assign_ticket_request_has_correct_rules(): void{
+    public function assign_ticket_request_has_correct_rules(): void
+    {
 
-        $request = new AssignTicketRequest();
+        $request = new AssignTicketRequest;
 
         $expectedRules = [
-            'assignee_id' => 'required|integer|exists:users,id'
+            'assignee_id' => 'required|integer|exists:users,id',
         ];
 
         $this->assertEquals($expectedRules, $request->rules());

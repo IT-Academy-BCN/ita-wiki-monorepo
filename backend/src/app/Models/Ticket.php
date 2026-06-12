@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\AffectedAppEnum;
+use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketCategoryEnum;
+use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Enums\TicketStatusEnum;
-use App\Enums\TicketTypeEnum;
-use App\Enums\TicketPriorityEnum;
-use App\Enums\AffectedAppEnum;
-use App\Enums\AffectedFunctionEnum;
-use App\Models\ForumAnswer;
+use Illuminate\Database\Eloquent\Relations\HasMany; // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
 
 class Ticket extends Model
 {
@@ -33,7 +33,8 @@ class Ticket extends Model
         'priority',
         'assignee_id',
         'closed_by',
-        'closed_at'
+        'closed_at',
+        'category', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
     ];
 
     protected $casts = [
@@ -43,7 +44,8 @@ class Ticket extends Model
         'priority' => TicketPriorityEnum::class,
         'affected_app' => AffectedAppEnum::class,
         'affected_function' => AffectedFunctionEnum::class,
-        'closed_at' => 'datetime'
+        'closed_at' => 'datetime',
+        'category' => TicketCategoryEnum::class, // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
     ];
 
     public function codeConnect(): BelongsTo
@@ -73,9 +75,16 @@ class Ticket extends Model
 
     public function canClose(User $user): bool
     {
-        if ($user->hasAnyRole(['admin', 'superadmin'])) return true;
-        if ((int) $this->code_connect_id === (int) $user->id) return true;
-        if ($this->assignee_id !== null && (int) $this->assignee_id === (int) $user->id) return true;
+        if ($user->hasAnyRole(['admin', 'superadmin'])) {
+            return true;
+        }
+        if ((int) $this->code_connect_id === (int) $user->id) {
+            return true;
+        }
+        if ($this->assignee_id !== null && (int) $this->assignee_id === (int) $user->id) {
+            return true;
+        }
+
         return false;
     }
 }
