@@ -36,6 +36,7 @@ export type Ticket = {
   description: string;
   status: TicketStatus;
   priority: TicketPriority;
+  category?: TicketCategoryEnum;
   type: TicketType;
   incident_date: string;
   affected_app?: AffectedApp;
@@ -96,6 +97,7 @@ export interface ApiTicketData {
   description: string;
   status: TicketStatus;
   priority: TicketPriority | null;
+  category: TicketCategoryEnum | null;
   assignee_id: number | null;
   closed_by: number | null;
   closed_at: string | null;
