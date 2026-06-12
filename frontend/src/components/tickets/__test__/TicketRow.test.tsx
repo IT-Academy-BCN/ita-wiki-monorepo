@@ -68,7 +68,7 @@ describe("TicketRow", () => {
 
   it("should render the category label", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
-    expect(screen.getByText("Error")).toBeInTheDocument();
+    expect(screen.getByAltText(/bug/i)).toBeInTheDocument();
   });
 
   it("should render - when category is null", () => {
