@@ -14,7 +14,6 @@ import {
   STATUS_OPTIONS,
   PRIORITY_LABELS,
   PRIORITY_OPTIONS,
-  CATEGORY_LABELS,
 } from "./ticketConstants";
 
 const formatDate = (date: string) => {
