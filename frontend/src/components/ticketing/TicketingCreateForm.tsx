@@ -3,8 +3,6 @@ import {
   IntCreateTicket,
   TicketCategoryEnum,
 } from "../../types/ticketingTypes";
-import type { IntCreateTicket } from "../../types/ticketingTypes";
-import { TicketCategoryEnum } from "../../types/ticketingTypes";
 import { CATEGORY_LABELS } from "../tickets/ticketConstants";
 
 type TicketingCreateFormProps = {
@@ -19,10 +17,6 @@ export const TicketingCreateForm = ({
   error,
 }: TicketingCreateFormProps): JSX.Element => {
   const [description, setDescription] = useState<string>("");
-  const [category, setCategory] = useState<TicketCategoryEnum>(
-    TicketCategoryEnum.BUG,
-  );
-
   const [category, setCategory] = useState<TicketCategoryEnum>(
     TicketCategoryEnum.BUG,
   );
