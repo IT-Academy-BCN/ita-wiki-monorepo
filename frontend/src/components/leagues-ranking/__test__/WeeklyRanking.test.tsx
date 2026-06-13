@@ -1,14 +1,9 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it} from "vitest";
 import UserProvider from "../../../context/UserContext";
-import { useLeagues } from "../../../hooks/useLeagues";
 import type { LigaResponse } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
-
-vi.mock("../../../hooks/useLeagues", () => ({
-  useLeagues: vi.fn(),
-}));
 
 const mockLeagues: LigaResponse = {
   "1": [
@@ -26,12 +21,9 @@ const mockLeagues: LigaResponse = {
 
 describe("WeeklyRanking", () => {
   it("renders the standings table after fetch", async () => {
-    vi.mocked(useLeagues).mockReturnValue({
-      leagues: mockLeagues,
-    });
     render(
       <UserProvider>
-        <WeeklyRanking />
+        <WeeklyRanking leagues={mockLeagues} />
       </UserProvider>,
     );
     await waitFor(() => {
