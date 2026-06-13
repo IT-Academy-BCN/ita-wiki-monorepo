@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it} from "vitest";
+import { describe, expect, it } from "vitest";
 import UserProvider from "../../../context/UserContext";
 import type { LigaResponse } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
