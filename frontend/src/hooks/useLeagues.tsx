@@ -10,7 +10,7 @@ export const useLeagues = () => {
       setLeagues(data);
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
-      console.log(err instanceof Error ? err.message : "Unknown error");
+      console.error(err instanceof Error ? err.message : "Unknown error");
     }
   };
 
