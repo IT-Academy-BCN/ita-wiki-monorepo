@@ -33,8 +33,7 @@ class TicketRequestValidationTest extends TestCase{
             'type' => 'nullable|in:error,suggestion',
             'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
-            'priority' => 'nullable|in:low,medium,high,critical',
-            'category' => 'nullable|in:bug,suggestion,other', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
+            'priority' => 'nullable|in:low,medium,high,critical'
         ];
 
         $this->assertEquals($expectedRules, $request->rules());
@@ -117,8 +116,7 @@ class TicketRequestValidationTest extends TestCase{
             'affected_app' => 'sometimes|required|in:wiki_frontend,wiki_backend,code_connect,other',
             'type' => 'sometimes|required|in:error,suggestion',
             'affected_function' => 'sometimes|required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
-            'description' => 'sometimes|required|string',
-            'category' => 'sometimes|nullable|in:bug,suggestion,other', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
+            'description' => 'sometimes|required|string'
         ];
 
         $this->assertEquals($expectedRules, $request->rules());

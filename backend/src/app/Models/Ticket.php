@@ -13,7 +13,6 @@ use App\Enums\TicketTypeEnum;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
-use App\Enums\TicketCategoryEnum; // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
 use App\Models\ForumAnswer;
 
 class Ticket extends Model
@@ -34,8 +33,7 @@ class Ticket extends Model
         'priority',
         'assignee_id',
         'closed_by',
-        'closed_at',
-        'category', // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
+        'closed_at'
     ];
 
     protected $casts = [
@@ -45,8 +43,7 @@ class Ticket extends Model
         'priority' => TicketPriorityEnum::class,
         'affected_app' => AffectedAppEnum::class,
         'affected_function' => AffectedFunctionEnum::class,
-        'closed_at' => 'datetime',
-        'category' => TicketCategoryEnum::class, // <-- TEMPORARY: For UI development - Remove after PR 786 is merged
+        'closed_at' => 'datetime'
     ];
 
     public function codeConnect(): BelongsTo
