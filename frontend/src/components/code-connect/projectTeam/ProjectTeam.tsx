@@ -4,9 +4,9 @@ import ButtonComponent from "../../atoms/ButtonComponent";
 import TeamRow from "./TeamRow";
 import { useProjectContributors } from "../../../hooks/useProjectContributors";
 import { ApiProjectContributor } from "../../../types/codeConnectTypes";
-import { joinProject } from "../../../api/endPointContributors";
-import GenericModal from "../../ui/Modal/GenericModal";
+import { joinProject, leaveProject } from "../../../api/endPointContributors";
 import { useUserContext } from "../../../context/UserContext";
+import GenericModal from "../../ui/Modal/GenericModal";
 
 interface ProjectTeamProps {
   logoFront?: string;
@@ -36,8 +36,6 @@ function ProjectTeam({
     "Frontend Developer" | "Backend Developer" | null
   >(null);
 
-  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
-
   const handleSlotClick = (
     role: "Frontend Developer" | "Backend Developer",
     index: number,
@@ -51,6 +49,7 @@ function ProjectTeam({
     await joinProject(projectId, selectedRole);
   };
 
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const frontendOffset = 0;
   const backendOffset = frontendData.emptySlots;
   const currentUserId = user?.id;
@@ -62,6 +61,19 @@ function ProjectTeam({
 
   const shouldShowLeaveButton =
     Boolean(currentUserContributor) && !isProjectOwner;
+
+  const handleLeaveProject = async () => {
+    if (!projectId || !currentUserContributor) return;
+
+    const hasLeftProject = await leaveProject(
+      projectId,
+      currentUserContributor.id,
+    );
+
+    if (hasLeftProject) {
+      setIsLeaveModalOpen(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-start border border-gray-500 text-black w-80 pt-7 pb-10 px-6 rounded-3xl max-h-[700px]">
@@ -153,7 +165,7 @@ function ProjectTeam({
           title="Deixar projecte"
           showPrimaryButton
           primaryButtonText="Confirmar"
-          primaryButtonAction={() => setIsLeaveModalOpen(false)}
+          primaryButtonAction={handleLeaveProject}
           showSecondaryButton
           secondaryButtonText="Cancel·lar"
           secondaryButtonAction={() => setIsLeaveModalOpen(false)}
