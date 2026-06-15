@@ -117,7 +117,7 @@ class TicketRequestValidationTest extends TestCase{
             'affected_app' => 'sometimes|required|in:wiki_frontend,wiki_backend,code_connect,other',
             'type' => 'sometimes|required|in:error,suggestion',
             'affected_function' => 'sometimes|required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
-            'description' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string'
         ];
 
         $this->assertEquals($expectedRules, $request->rules());

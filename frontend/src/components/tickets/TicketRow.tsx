@@ -8,12 +8,12 @@ import { useTicketingUpdate } from "../../hooks/useTicketingUpdate";
 import { useUserContext } from "../../context/UserContext";
 import { roles } from "../../data/tempRoles";
 import DropdownMenu from "../atoms/DropdownMenu";
+import CategoryIcon from "./CategoryIcon";
 import {
   STATUS_LABELS,
   STATUS_OPTIONS,
   PRIORITY_LABELS,
   PRIORITY_OPTIONS,
-  CATEGORY_LABELS,
 } from "./ticketConstants";
 
 const formatDate = (date: string) => {
@@ -54,7 +54,7 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
         {ticket.name}
       </div>
       <div role="cell">
-        {ticket.category ? CATEGORY_LABELS[ticket.category] : "-"}
+        {ticket.category ? <CategoryIcon category={ticket.category} /> : "-"}
       </div>
       <div role="cell">
         <DropdownMenu
