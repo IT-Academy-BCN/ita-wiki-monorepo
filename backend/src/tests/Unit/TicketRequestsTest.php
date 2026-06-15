@@ -27,7 +27,7 @@ class TicketRequestsTest extends TestCase{
             'type' => 'nullable|in:error,suggestion',
             'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
-            'priority' => 'nullable|in:low,medium,high,critical',
+            'priority' => 'nullable|in:low,medium,high,critical'
         ], $request->rules());
     }
 
@@ -44,7 +44,7 @@ class TicketRequestsTest extends TestCase{
             'affected_app' => 'sometimes|required|in:wiki_frontend,wiki_backend,code_connect,other',
             'type' => 'sometimes|required|in:error,suggestion',
             'affected_function' => 'sometimes|required|in:login,challenges,resources,profile,technical_tests,code_connect,other',
-            'description' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string'
         ], $request->rules());
     }
 
