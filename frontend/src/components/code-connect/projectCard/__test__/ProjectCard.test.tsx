@@ -1,10 +1,20 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { UserProvider } from "../../../../context/UserContext";
 import { Project } from "../../../../types/codeConnectTypes";
 import ProjectCard from "../ProjectCard";
+
+vi.mock("../../../../context/UserContext", async () => {
+  const actual = await vi.importActual("../../../../context/UserContext");
+  return {
+    ...actual,
+    useUserContext: () => ({
+      user: { id: 1, name: "Test User" },
+    }),
+  };
+});
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <UserProvider>
@@ -106,5 +116,41 @@ describe("ProjectCard", () => {
     const link = screen.getByRole("link");
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", `/codeconnect/${project.id}`);
+  });
+
+  it("highlights the card and participant name when the current user is an accepted member", () => {
+    const project = makeProject({
+      backend: {
+        tech: "Java",
+        logo: "../assets/technologies/java-logo.svg",
+        positions: 2,
+        participants: [
+          {
+            name: "Test User",
+            avatar: "../assets/project-avatar.svg",
+            user_id: 1,
+            status: "accepted",
+          },
+        ],
+      },
+    });
+
+    render(<ProjectCard project={project} />, { wrapper });
+
+    const card = screen.getByText(project.title).closest("div.flex.flex-col");
+    expect(card).toHaveClass("border-primary");
+
+    const figcaption = screen.getByText("Test User");
+    expect(figcaption).toHaveClass("text-black");
+  });
+
+  it("does not highlight the card when the current user is not a member", () => {
+    const project = makeProject();
+
+    render(<ProjectCard project={project} />, { wrapper });
+
+    const card = screen.getByText(project.title).closest("div.flex.flex-col");
+    expect(card).toHaveClass("border-gray-500");
+    expect(card).not.toHaveClass("border-primary");
   });
 });

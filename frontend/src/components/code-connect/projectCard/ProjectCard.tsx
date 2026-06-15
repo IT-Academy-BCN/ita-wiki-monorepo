@@ -12,6 +12,14 @@ export type { ProjectParticipant } from "../../../types/codeConnectTypes";
 function ProjectCard({ project }: ProjectCardProps) {
   const { slots, joinModal, decisionModal } = useProjectJoin(project.id);
   const { user } = useUserContext();
+
+  const isCurrentUser = (participant: { user_id?: number; status?: string }) =>
+  participant.user_id === user?.id && participant.status === "accepted";
+
+  const userIsInProject =
+  project.frontend.participants.some(isCurrentUser) ||
+  project.backend.participants.some(isCurrentUser);
+
   const userAvatar = user?.photoURL ?? avatarPlaceholder;
 
   const resolveAvatar = (avatar: string) => {
@@ -24,7 +32,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   const availableBackend =
     project.backend.positions - project.backend.participants.length;
   return (
-    <div className="flex flex-col border scale-95 sm:scale-none border-gray-500 text-black items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10">
+    <div className={`flex flex-col border scale-95 sm:scale-none ${userIsInProject ? "border-primary" : "border-gray-500"} text-black items-center w-70 sm:w-76 xl:w-82 px-6 rounded-3xl py-7 pb-10`}>
       <div className="w-full">
         <Link to={`/codeconnect/${project.id}`}>
           <h1 className="font-extrabold text-black w-fit hover:text-primary transition-colors duration-300 text-xl text-start">
@@ -58,11 +66,11 @@ function ProjectCard({ project }: ProjectCardProps) {
           {project.frontend.participants.map((p, i) => (
             <figure className="flex flex-col items-center" key={i}>
               <img
-                className="w-12 h-12"
+                className={`w-12 h-12 rounded-full ${isCurrentUser(p) ? "outline outline-4 outline-primary" : ""}`}
                 src={resolveAvatar(p.avatar)}
                 alt={p.name}
               />
-              <figcaption className="text-xs mt-1 font-bold text-gray-500">
+              <figcaption className={`text-xs mt-1 font-bold ${isCurrentUser(p) ? "text-black" : "text-gray-500"}`}>
                 {p.name}
               </figcaption>
             </figure>
@@ -115,11 +123,11 @@ function ProjectCard({ project }: ProjectCardProps) {
           {project.backend.participants.map((p, i) => (
             <figure className="flex flex-col items-center" key={i}>
               <img
-                className="w-12 h-12"
+                className={`w-12 h-12 rounded-full ${isCurrentUser(p) ? "outline outline-4 outline-primary" : ""}`}
                 src={resolveAvatar(p.avatar)}
                 alt={p.name}
               />
-              <figcaption className="text-xs mt-1 font-bold text-gray-500">
+              <figcaption className={`text-xs mt-1 font-bold ${isCurrentUser(p) ? "text-black" : "text-gray-500"}`}>
                 {p.name}
               </figcaption>
             </figure>
