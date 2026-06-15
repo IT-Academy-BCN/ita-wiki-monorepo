@@ -8,14 +8,29 @@ import ProjectCard from "../projectCard/ProjectCard";
 function ProjectList({
   onCardClick,
   filter,
+  showMyProjects,
+  userId,
 }: {
   onCardClick?: (id: number) => void;
   filter?: string[] | null;
+  showMyProjects?: boolean;
+  userId?: number | null;
 }) {
   const { projects, isLoading, errorMessage } = useProjects();
   const showLoader = useMinLoading(isLoading);
 
   const filteredProjects = useMemo(() => {
+    if (showMyProjects && userId) {
+      return projects.filter((project) =>
+        [
+          ...project.frontend.participants,
+          ...project.backend.participants,
+        ].some(
+          (participant) =>
+            participant.user_id === userId && participant.status === "accepted",
+        ),
+      );
+    }
     if (!filter?.length) return projects;
     const normalizedFilter = filter.map((tech) => tech.toLowerCase());
     return projects.filter(
@@ -23,7 +38,7 @@ function ProjectList({
         normalizedFilter.includes(project.frontend.tech.toLowerCase()) ||
         normalizedFilter.includes(project.backend.tech.toLowerCase()),
     );
-  }, [projects, filter]);
+  }, [projects, filter, showMyProjects, userId]);
 
   const hasError = Boolean(errorMessage);
 

@@ -24,12 +24,19 @@ export type AffectedFunction =
   | "code_connect"
   | "other";
 
+export enum TicketCategoryEnum {
+  BUG = "bug",
+  SUGGESTION = "suggestion",
+  OTHER = "other",
+}
+
 export type Ticket = {
   id: number;
   name: string;
   description: string;
   status: TicketStatus;
   priority: TicketPriority;
+  category?: TicketCategoryEnum;
   type: TicketType;
   incident_date: string;
   affected_app?: AffectedApp;
@@ -43,6 +50,7 @@ export type Ticket = {
 
 export type IntCreateTicket = {
   description: string;
+  category: TicketCategoryEnum;
   name?: string;
   incident_date?: string;
   affected_app?: AffectedApp;
@@ -89,6 +97,7 @@ export interface ApiTicketData {
   description: string;
   status: TicketStatus;
   priority: TicketPriority | null;
+  category: TicketCategoryEnum | null;
   assignee_id: number | null;
   closed_by: number | null;
   closed_at: string | null;

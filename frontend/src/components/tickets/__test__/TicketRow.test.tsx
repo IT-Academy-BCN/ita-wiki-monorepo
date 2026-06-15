@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import TicketRow from "../TicketRow";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
 import { UserContext } from "../../../context/UserContext";
+import { TicketCategoryEnum } from "../../../types/ticketingTypes";
 
 const mockUserContext = {
   user: { role: "admin" },
@@ -35,6 +36,7 @@ const mockTicket: ApiTicketData = {
   affected_app: "wiki_frontend",
   affected_function: "login",
   incident_date: "2026-04-23",
+  category: TicketCategoryEnum.BUG,
 };
 
 const renderWithContext = (ui: React.ReactElement) => {
@@ -62,5 +64,15 @@ describe("TicketRow", () => {
   it("should render the priority dropdown with current value", () => {
     renderWithContext(<TicketRow ticket={mockTicket} />);
     expect(screen.getByRole("button", { name: /alta/i })).toBeInTheDocument();
+  });
+
+  it("should render the category label", () => {
+    renderWithContext(<TicketRow ticket={mockTicket} />);
+    expect(screen.getByText("Error")).toBeInTheDocument();
+  });
+
+  it("should render - when category is null", () => {
+    renderWithContext(<TicketRow ticket={{ ...mockTicket, category: null }} />);
+    expect(screen.getAllByText("-").length).toBeGreaterThan(0);
   });
 });

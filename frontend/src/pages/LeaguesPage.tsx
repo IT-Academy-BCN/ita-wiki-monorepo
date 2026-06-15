@@ -4,6 +4,8 @@ import LeagueToggle, {
 } from "../components/leagues-ranking/LeagueToggle/LeagueToggle";
 import { GlobalRanking } from "../components/leagues-ranking/GlobalRanking/GlobalRanking";
 import { WeeklyRanking } from "../components/leagues-ranking/WeeklyRanking/WeeklyRanking";
+import { useUser } from "../hooks/useUser";
+import rotateIcon from "../assets/rotate.svg";
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
 import { useGetPointsHistory } from "../hooks/useGetPointsHistory";
@@ -11,17 +13,18 @@ import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
+  const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { history } = useGetPointsHistory();
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
-      <div className="flex flex-col gap-4">
+      <div className="max-w-3xl w-full">
         <div className="flex items-center justify-between w-full">
           <LeagueToggle view={view} onChange={setView} />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-4 items-end max-w-3xl w-full">
           <UiButton
             variant="link"
             size="sm"
@@ -29,7 +32,18 @@ const LeaguesPage = () => {
           >
             Veure el meu historial
           </UiButton>
-          <button onClick={() => setIsTriggerModalOpen(true)}>Trigger</button>
+          {user?.role && user.role !== "student" && (
+            <button
+              onClick={() => setIsTriggerModalOpen(true)}
+              className="w-fit bg-primary p-1 rounded-md hover:bg-[#a1156a] cursor-pointer"
+            >
+              <img
+                src={rotateIcon}
+                alt="Trigger weekly transition"
+                className="w-7 h-7"
+              />
+            </button>
+          )}
         </div>
       </div>
 

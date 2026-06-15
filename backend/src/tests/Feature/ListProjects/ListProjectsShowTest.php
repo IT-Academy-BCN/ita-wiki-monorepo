@@ -73,6 +73,8 @@ class ListProjectsShowTest extends TestCase
                 ],
                 'contributors' => [
                     [
+                        'id' => $this->contributorOne->id,
+                        'user_id' => $this->contributorOne->user_id,
                         'name' => $this->contributorOne->user->name,
                         'programming_role' => $this->contributorOne->programming_role,
                         'avatar_url' => $this->contributorOne->user->avatar_url,

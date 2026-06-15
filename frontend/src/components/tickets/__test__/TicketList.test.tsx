@@ -35,6 +35,7 @@ const base = {
     name: "Student Test",
     role: "student",
   },
+  category: null,
 };
 
 const mockTickets: ApiTicketData[] = [
@@ -151,5 +152,10 @@ describe("TicketList", () => {
     );
     fireEvent.click(screen.getAllByRole("button", { name: "Comentari" })[0]);
     expect(mockCommentClick).toHaveBeenCalledWith(mockTickets[0].id);
+  });
+
+  it("renders Categoria column header", () => {
+    render(<TicketList tickets={mockTickets} isLoading={false} error={null} />);
+    expect(screen.getByText("Categoria")).toBeInTheDocument();
   });
 });

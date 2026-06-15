@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Props = {
   onSubmit: (comment: string) => Promise<void>;
@@ -21,6 +21,12 @@ const TicketCommentForm = ({
 }: Props) => {
   const [comment, setComment] = useState("");
   const [editText, setEditText] = useState(initialValue ?? "");
+
+  useEffect(() => {
+    if (initialValue !== undefined) {
+      setEditText(initialValue);
+    }
+  }, [initialValue]);
 
   const isOwner = authorId === currentUserId;
 
@@ -50,7 +56,7 @@ const TicketCommentForm = ({
   return (
     <form className="mt-8" onSubmit={handleSubmit}>
       <h3 className="mb-4 text-sm font-bold text-black underline">Comentari</h3>
-      {initialValue ? (
+      {initialValue !== undefined ? (
         <>
           <textarea
             className={`${textareaClass} ${!isOwner ? "bg-gray-50" : ""}`}
