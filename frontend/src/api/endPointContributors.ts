@@ -64,3 +64,25 @@ export const joinProject = async (
     return false;
   }
 };
+
+export const leaveProject = async (
+  projectId: number,
+  contributorId: number,
+): Promise<boolean> => {
+  const token = localStorage.getItem("auth_token");
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/contributors/${contributorId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
