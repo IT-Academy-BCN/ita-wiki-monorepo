@@ -1,6 +1,8 @@
 import { FormEvent, JSX, useState } from "react";
-import type { IntCreateTicket } from "../../types/ticketingTypes";
-import { TicketCategoryEnum } from "../../types/ticketingTypes";
+import {
+  IntCreateTicket,
+  TicketCategoryEnum,
+} from "../../types/ticketingTypes";
 import { CATEGORY_LABELS } from "../tickets/ticketConstants";
 
 type TicketingCreateFormProps = {
@@ -23,8 +25,14 @@ export const TicketingCreateForm = ({
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
+
     if (!description.trim()) return;
-    await onSubmit({ description: description.trim(), category });
+
+    await onSubmit({
+      description: description.trim(),
+      category,
+    });
+
     setDescription("");
     setCategory(TicketCategoryEnum.BUG);
   };
@@ -34,7 +42,8 @@ export const TicketingCreateForm = ({
       <h3 className="mb-6 text-sm font-bold text-black underline">
         Crear tiquet
       </h3>
-      <div className="grid gap-6 md:grid-cols-[minmax(0,410px)_auto_auto] md:items-center">
+
+      <div className="grid gap-6 md:grid-cols-[minmax(0,410px)_180px_auto] md:items-center">
         <textarea
           className="h-[60px] resize-none border border-gray-600 px-4 py-3 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
           placeholder="Descripció..."
@@ -60,6 +69,7 @@ export const TicketingCreateForm = ({
           {isLoading ? "Creant..." : "Crear tiquet"}
         </button>
       </div>
+
       {error && <p className="mt-1 text-xs text-red-600">{error.message}</p>}
     </form>
   );

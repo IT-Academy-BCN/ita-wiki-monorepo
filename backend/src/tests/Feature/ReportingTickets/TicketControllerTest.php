@@ -861,5 +861,58 @@ class TicketControllerTest extends TestCase{
         $this->assertArrayHasKey('role', $response->json('data.0.code_connect'));
         $this->assertEquals('student', $response->json('data.0.code_connect.role'));
     }
+    
+    /** @test */
+    public function an_auth_user_can_create_a_ticket_with_category(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'description' => 'This is a test ticket.',
+            'category' => 'bug',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+            'description' => 'This is a test ticket.',
+            'category' => 'bug',
+        ]);
+    }
+
+    /** @test */
+    public function an_auth_user_can_create_a_ticket_without_category(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'description' => 'This is a test ticket.',
+        ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tickets', [
+            'code_connect_id' => $user->id,
+            'category' => null,
+        ]);
+    }
+
+    /** @test */
+    public function creating_a_ticket_with_invalid_category_returns_422(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/tickets', [
+            'description' => 'This is a test ticket.',
+            'category' => 'invalid_category',
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors(['category']);
+    }
 }
 ?>
