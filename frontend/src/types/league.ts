@@ -1,3 +1,9 @@
+export type PointsHistoryEntry = {
+  date: string;
+  points: number;
+  activity: string;
+};
+
 export type Liga = {
   position: number;
   user_id: number;
