@@ -12,6 +12,7 @@ import { useGetPointsHistory } from "../hooks/useGetPointsHistory";
 import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/PointsHistoryTable";
 import { useTriggerWeeklyTransition } from "../hooks/useTriggerWeeklyTransition";
 import { triggerWeeklyTransition } from "../api/endPointLeagues";
+import { useLeagues } from "../hooks/useLeagues";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
@@ -20,7 +21,7 @@ const LeaguesPage = () => {
   const { history } = useGetPointsHistory();
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
   const { trigger } = useTriggerWeeklyTransition({ triggerWeeklyTransition });
-
+  const { leagues, fetchLeagues } = useLeagues();
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
       <div className="max-w-3xl w-full">
@@ -51,7 +52,11 @@ const LeaguesPage = () => {
         </div>
       </div>
 
-      {view === "weekly" ? <WeeklyRanking /> : <GlobalRanking />}
+      {view === "weekly" ? (
+        <WeeklyRanking leagues={leagues} />
+      ) : (
+        <GlobalRanking />
+      )}
 
       <GenericModal
         isOpen={isModalOpen}
@@ -70,6 +75,7 @@ const LeaguesPage = () => {
         primaryButtonText="Confirmar"
         primaryButtonAction={async () => {
           await trigger();
+          await fetchLeagues();
           setIsTriggerModalOpen(false);
         }}
         showSecondaryButton
