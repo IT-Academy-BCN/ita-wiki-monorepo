@@ -31,6 +31,7 @@ const LeaguesPage = () => {
           <UiButton
             variant="link"
             size="sm"
+            className="pr-0"
             onClick={() => setIsModalOpen(true)}
           >
             Veure el meu historial
