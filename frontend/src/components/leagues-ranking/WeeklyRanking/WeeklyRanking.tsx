@@ -1,8 +1,11 @@
-import { useLeagues } from "../../../hooks/useLeagues";
+import type { LigaResponse } from "../../../types/league";
 import { LeagueList } from "../LeagueList/LeagueList";
 
-export const WeeklyRanking = () => {
-  const { leagues } = useLeagues();
+type WeeklyRankingProps = {
+  leagues: LigaResponse | null;
+};
+
+export const WeeklyRanking = ({ leagues }: WeeklyRankingProps) => {
   const LEAGUE_LABELS: Record<string, string> = {
     "1": "Or",
     "2": "Plata",
