@@ -8,6 +8,7 @@ import { useUser } from "../hooks/useUser";
 import rotateIcon from "../assets/rotate.svg";
 import UiButton from "../components/ui/shared-ui/UiButton";
 import GenericModal from "../components/ui/Modal/GenericModal";
+import { useGetPointsHistory } from "../hooks/useGetPointsHistory";
 import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable/PointsHistoryTable";
 import { useTriggerWeeklyTransition } from "../hooks/useTriggerWeeklyTransition";
 import { triggerWeeklyTransition } from "../api/endPointLeagues";
@@ -17,6 +18,7 @@ const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { history } = useGetPointsHistory();
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
   const { trigger } = useTriggerWeeklyTransition({ triggerWeeklyTransition });
   const { leagues, fetchLeagues } = useLeagues();
@@ -30,6 +32,7 @@ const LeaguesPage = () => {
           <UiButton
             variant="link"
             size="sm"
+            className="pr-0"
             onClick={() => setIsModalOpen(true)}
           >
             Veure el meu historial
@@ -61,7 +64,7 @@ const LeaguesPage = () => {
         title="El meu historial de punts"
         size="lg"
       >
-        <PointsHistoryTable />
+        <PointsHistoryTable data={history} />
       </GenericModal>
 
       <GenericModal

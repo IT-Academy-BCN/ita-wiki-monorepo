@@ -1,14 +1,11 @@
 import { FC } from "react";
+import type { PointsHistoryEntry } from "../../../types/league";
 
-interface PointsHistoryRow {
-  date: string;
-  pointsEarned: number;
-  activitiesCompleted: string;
+interface Props {
+  data: PointsHistoryEntry[];
 }
 
-const mockData: PointsHistoryRow[] = [];
-
-const PointsHistoryTable: FC = () => {
+const PointsHistoryTable: FC<Props> = ({ data }) => {
   return (
     <table className="w-full text-sm">
       <thead>
@@ -23,14 +20,16 @@ const PointsHistoryTable: FC = () => {
         </tr>
       </thead>
       <tbody>
-        {mockData.map((row, index) => (
+        {data.map((row, index) => (
           <tr
             key={index}
             className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
           >
-            <td className="px-4 py-3 text-center">{row.date}</td>
-            <td className="px-4 py-3 text-center">{row.pointsEarned}</td>
-            <td className="px-4 py-3 text-center">{row.activitiesCompleted}</td>
+            <td className="px-4 py-3 text-center">
+              {new Date(row.date).toLocaleDateString("ca-ES")}
+            </td>
+            <td className="px-4 py-3 text-center">{row.points}</td>
+            <td className="px-4 py-3 text-center">{row.activity}</td>
           </tr>
         ))}
       </tbody>
