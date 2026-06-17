@@ -16,6 +16,20 @@ const mockUseUser = vi.fn();
 vi.mock("../../hooks/useUser", () => ({
   useUser: () => mockUseUser(),
 }));
+
+vi.mock("../../hooks/useLeagues", () => ({
+  useLeagues: () => ({
+    leagues: null,
+    fetchLeagues: vi.fn(),
+  }),
+}));
+
+vi.mock("../../hooks/useTriggerWeeklyTransition", () => ({
+  useTriggerWeeklyTransition: () => ({
+    trigger: vi.fn(),
+  }),
+}));
+
 vi.mock("../../components/ui/Modal/GenericModal", () => ({
   default: ({
     isOpen,
