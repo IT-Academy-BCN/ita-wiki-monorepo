@@ -93,8 +93,8 @@ const TicketingPage = (): JSX.Element => {
           className="w-full flex justify-start"
           variant="discreet"
           onClick={() => {}}
-          >
-          Veure Suggeriments
+        >
+          Veure suggeriments
         </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
