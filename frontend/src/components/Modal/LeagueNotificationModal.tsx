@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 interface LeagueNotificationModalProps {
   direction: "up" | "down";
   newLeagueId: number;
@@ -22,20 +20,19 @@ export const LeagueNotificationModal = ({
 
   const title = isUp ? "Felicitats!" : "Atenció";
 
-  const content = useMemo(() => {
-    if (isUp) {
-      return (
-        <div className="flex flex-col items-center text-center space-y-4">
-          <div className="text-4xl">🎉</div>
-          <p className="text-gray-700 text-lg">
-            El teu esforç ha donat fruits! Has pujat a la lliga{" "}
-            <strong className="text-black font-bold">{leagueName}</strong>.
-          </p>
-        </div>
-      );
-    }
-
-    return (
+  let content;
+  if (isUp) {
+    content = (
+      <div className="flex flex-col items-center text-center space-y-4">
+        <div className="text-4xl">🎉</div>
+        <p className="text-gray-700 text-lg">
+          El teu esforç ha donat fruits! Has pujat a la lliga{" "}
+          <strong className="text-black font-bold">{leagueName}</strong>.
+        </p>
+      </div>
+    );
+  } else {
+    content = (
       <div className="flex flex-col items-center text-center space-y-4">
         <div className="text-4xl">📉</div>
         <p className="text-gray-700 text-lg">
@@ -44,7 +41,7 @@ export const LeagueNotificationModal = ({
         </p>
       </div>
     );
-  }, [isUp, leagueName]);
+  }
 
   return (
     <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50">
