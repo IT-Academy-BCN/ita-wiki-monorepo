@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\LeagueTypeEnum;
 
 class LeagueWeeklyResult extends Model
 {
@@ -15,7 +16,7 @@ class LeagueWeeklyResult extends Model
 
     protected $casts = [
         'week_date' => 'date',
-        'from_league' => 'integer',
-        'to_league' => 'integer',
+        'from_league' => LeagueTypeEnum::class,
+        'to_league' => LeagueTypeEnum::class,
     ];
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
+use App\Enums\LeagueTypeEnum;
 
 class LigaWeeklyResultTest extends TestCase
 {
@@ -39,8 +40,8 @@ class LigaWeeklyResultTest extends TestCase
         LeagueWeeklyResult::create([
             'user_id' => $user->id,
             'week_date' => '2026-06-22',
-            'from_league' => 1,
-            'to_league' => 2,
+            'from_league' => LeagueTypeEnum::Bronze->value,
+            'to_league' => LeagueTypeEnum::Silver->value,
         ]);
 
         $this->expectException(\Illuminate\Database\QueryException::class);
@@ -48,8 +49,8 @@ class LigaWeeklyResultTest extends TestCase
         LeagueWeeklyResult::create([
             'user_id' => $user->id,
             'week_date' => '2026-06-22',
-            'from_league' => 1,
-            'to_league' => 2,
+            'from_league' => LeagueTypeEnum::Bronze->value,
+            'to_league' => LeagueTypeEnum::Silver->value,
         ]);
     }
 }
