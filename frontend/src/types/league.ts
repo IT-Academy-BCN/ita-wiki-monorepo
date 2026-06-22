@@ -39,4 +39,3 @@ export type Ranking = {
 export type LeagueNotificationResponse =
   | { hasChange: true; direction: "up" | "down"; newLeagueId: number }
   | { hasChange: false };
-

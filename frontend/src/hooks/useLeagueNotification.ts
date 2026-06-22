@@ -3,7 +3,8 @@ import { dismissLeagueNotification } from "../api/endPointLeagues";
 import type { LeagueNotificationResponse } from "../types/league";
 
 export const useLeagueNotification = () => {
-  const [notification, setNotification] = useState<LeagueNotificationResponse | null>(null);
+  const [notification, setNotification] =
+    useState<LeagueNotificationResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

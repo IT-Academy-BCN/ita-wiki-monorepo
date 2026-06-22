@@ -1,5 +1,9 @@
 import { API_URL, END_POINTS } from "../config";
-import { LeagueNotificationResponse, LigaResponse, PointsHistoryEntry } from "../types/league";
+import {
+  LeagueNotificationResponse,
+  LigaResponse,
+  PointsHistoryEntry,
+} from "../types/league";
 
 export const fetchGlobalRanking = async (signal?: AbortSignal) => {
   const url = `${API_URL}${END_POINTS.leagues.get}`;

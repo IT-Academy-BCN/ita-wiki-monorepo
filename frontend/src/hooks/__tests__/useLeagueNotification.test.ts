@@ -17,13 +17,17 @@ describe("useLeagueNotification", () => {
   });
 
   it("returns notification data when API call succeeds", async () => {
-    const mockData = { hasChange: true, direction: "up", newLeagueId: 2 } as const;
+    const mockData = {
+      hasChange: true,
+      direction: "up",
+      newLeagueId: 2,
+    } as const;
     vi.mocked(dismissLeagueNotification).mockResolvedValueOnce(mockData);
 
     const { result } = renderHook(() => useLeagueNotification());
 
     expect(result.current.loading).toBe(true);
-    
+
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
       expect(result.current.notification).toEqual(mockData);
