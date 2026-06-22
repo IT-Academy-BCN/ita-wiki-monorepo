@@ -13,14 +13,12 @@ describe("LeagueNotificationModal", () => {
       />,
     );
 
-    // Verifica que se renderiza con el texto esperado en catalán
     expect(screen.getByText("Felicitats!")).toBeInTheDocument();
     expect(screen.getByText("Silver")).toBeInTheDocument();
     expect(
       screen.getByText(/El teu esforç ha donat fruits!/i),
     ).toBeInTheDocument();
 
-    // Verifica la interacción
     const button = screen.getByText("D'acord");
     fireEvent.click(button);
 
