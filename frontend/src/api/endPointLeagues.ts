@@ -1,5 +1,5 @@
 import { API_URL, END_POINTS } from "../config";
-import { LigaResponse, PointsHistoryEntry } from "../types/league";
+import { LeagueNotificationResponse, LigaResponse, PointsHistoryEntry } from "../types/league";
 
 export const fetchGlobalRanking = async (signal?: AbortSignal) => {
   const url = `${API_URL}${END_POINTS.leagues.get}`;
@@ -69,6 +69,30 @@ export const triggerWeeklyTransition = async (): Promise<void> => {
     });
     if (!response.ok) throw new Error("Failed to trigger weekly transition");
   } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const dismissLeagueNotification = async (
+  signal?: AbortSignal,
+): Promise<LeagueNotificationResponse> => {
+  const url = `${API_URL}${END_POINTS.leagues.dismissNotification}`;
+  const token = localStorage.getItem("auth_token");
+  try {
+    const response = await fetch(url, {
+      method: "PATCH",
+      signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to dismiss notification");
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof DOMException && error.name === "AbortError")
+      throw error;
     console.error(error);
     throw error;
   }

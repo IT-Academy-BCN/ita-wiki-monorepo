@@ -35,3 +35,8 @@ export type Ranking = {
   language: string;
   league_id: number;
 };
+
+export type LeagueNotificationResponse =
+  | { hasChange: true; direction: "up" | "down"; newLeagueId: number }
+  | { hasChange: false };
+
