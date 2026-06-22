@@ -18,12 +18,14 @@ class LigaFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'       => User::factory(),
-            'points'        => fake()->numberBetween(0, 100),
-            'points_weekly' => fake()->numberBetween(0, 100),
-            'language'      => fake()->randomElement(LanguageEnum::values()),
-            'status'        => fake()->randomElement(LigaStatusEnum::values()),
-            'league_id'     => fake()->randomElement(LeagueTypeEnum::values()),
+            'user_id'                => User::factory(),
+            'points'                 => fake()->numberBetween(0, 100),
+            'points_weekly'          => fake()->numberBetween(0, 100),
+            'language'               => fake()->randomElement(LanguageEnum::values()),
+            'status'                 => fake()->randomElement(LigaStatusEnum::values()),
+            'league_id'              => fake()->randomElement(LeagueTypeEnum::values()),
+            'previous_league_id'     => null,
+            'notification_dismissed' => false,
         ];
     }
 }

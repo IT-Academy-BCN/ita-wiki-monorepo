@@ -36,7 +36,7 @@ class Liga extends Model
         'points_weekly'          => 'integer',
         'league_id'              => LeagueTypeEnum::class,
         'status'                 => LigaStatusEnum::class,
-        'previous_league_id'     => 'integer',
+        'previous_league_id'     => LeagueTypeEnum::class,
         'notification_dismissed' => 'boolean',
     ];
 
