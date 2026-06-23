@@ -50,6 +50,7 @@ const TicketList = ({
               key={ticket.id}
               ticket={ticket}
               onCommentClick={onCommentClick}
+              onRowClick={onRowClick}
             />
           ))}
         </div>
