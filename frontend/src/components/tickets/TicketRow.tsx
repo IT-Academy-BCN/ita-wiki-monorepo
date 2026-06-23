@@ -89,10 +89,12 @@ const TicketRow = ({ ticket, onCommentClick, onRowClick }: TicketRowProps) => {
       <div role="cell">{formatDate(ticket.incident_date)}</div>
       <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
       <div role="cell">
-        <button onClick={(e) => {
-          e.stopPropagation();
-          onCommentClick?.(ticket.id);
-        }}>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onCommentClick?.(ticket.id);
+          }}
+        >
           Comentari
         </button>
       </div>
