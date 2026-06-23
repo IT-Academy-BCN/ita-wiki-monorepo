@@ -14,6 +14,8 @@ use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
 use App\Http\Requests\Tickets\UpdatePriorityRequest;
 use App\Http\Requests\Tickets\AssignTicketRequest;
 use Illuminate\Http\JsonResponse;
+use App\Models\Liga;
+use App\Models\LigaPointHistory;
 
 class TicketController extends Controller
 {
@@ -137,9 +139,25 @@ class TicketController extends Controller
             $updateData['closed_by'] = null;
             $updateData['closed_at'] = null;
         }
-
+        $oldStatus = $ticket->status;
         $ticket->update($updateData);
+        if (
+            $oldStatus !== TicketStatusEnum::Closed &&
+            $status === TicketStatusEnum::Closed->value
+        ) {
+            $entry = Liga::where('user_id', $ticket->code_connect_id)->first();
 
+            if ($entry) {
+                $entry->increment('points', 15);
+                $entry->increment('points_weekly', 15);
+
+                LigaPointHistory::create([
+                    'user_id' => $ticket->code_connect_id,
+                    'points' => 15,
+                    'activity' => 'Bug Bounty resolved',
+                ]);
+            }
+        }
         return response()->json([
             'success' => true,
             'message' => 'The Ticket status has been updated correctly',
