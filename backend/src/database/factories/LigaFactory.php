@@ -24,6 +24,7 @@ class LigaFactory extends Factory
             'language'      => fake()->randomElement(LanguageEnum::values()),
             'status'        => fake()->randomElement(LigaStatusEnum::values()),
             'league_id'     => fake()->randomElement(LeagueTypeEnum::values()),
+            'notification_dismissed' => true,
         ];
     }
 }

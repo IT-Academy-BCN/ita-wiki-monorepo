@@ -21,6 +21,7 @@ class LigaTableTest extends TestCase
         $this->assertTrue(Schema::hasColumn('ligas', 'status'));
         $this->assertTrue(Schema::hasColumn('ligas', 'language'));
         $this->assertTrue(Schema::hasColumn('ligas', 'league_id'));
+        $this->assertTrue(Schema::hasColumn('ligas', 'notification_dismissed'));
     }
 
     public function test_points_weekly_defaults_to_zero(): void
@@ -74,6 +75,20 @@ class LigaTableTest extends TestCase
             ? $liga->status->value
             : $liga->status;
         $this->assertEquals('Junior Coder', $statusValue);
+    }
+
+    public function test_notification_dismissed_defaults_to_true(): void
+    {
+        $user = User::factory()->create();
+
+        $liga = Liga::create([
+            'user_id' => $user->id,
+            'points'  => 0,
+        ]);
+
+        $liga->refresh();
+
+        $this->assertTrue($liga->notification_dismissed);
     }
 
     public function test_existing_fields_are_not_affected(): void

@@ -21,18 +21,21 @@ class Liga extends Model
         'status',
         'language',
         'league_id',
+        'notification_dismissed',
     ];
 
     protected $attributes = [
-        'points_weekly'=> 0,
-        'status'=> 'Junior Coder',
+        'points_weekly' => 0,
+        'status' => 'Junior Coder',
+        'notification_dismissed' => true,
     ];
 
     protected $casts = [
-        'points'=> 'integer',
-        'points_weekly'=> 'integer',
-        'league_id'=> LeagueTypeEnum::class,
-        'status'=> LigaStatusEnum::class, 
+        'points' => 'integer',
+        'points_weekly' => 'integer',
+        'league_id' => LeagueTypeEnum::class,
+        'status' => LigaStatusEnum::class, 
+        'notification_dismissed' => 'boolean',
     ];
 
     public function user(): BelongsTo
