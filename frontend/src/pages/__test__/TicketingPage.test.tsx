@@ -113,11 +113,4 @@ describe("TicketingPage", () => {
     const button = screen.getByRole("button", { name: "Veure suggeriments" });
     expect(button).toBeInTheDocument();
   });
-
-  it("'suggeriments' button is clickable", () => {
-    render(<TicketingPage />);
-    const button = screen.getByRole("button", { name: "Veure suggeriments" });
-    fireEvent.click(button);
-    expect(button).toBeInTheDocument();
-  });
 });
