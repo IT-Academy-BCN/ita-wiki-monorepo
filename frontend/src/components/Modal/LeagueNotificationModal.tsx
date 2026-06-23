@@ -20,28 +20,20 @@ export const LeagueNotificationModal = ({
 
   const title = isUp ? "Felicitats!" : "Atenció";
 
-  let content;
-  if (isUp) {
-    content = (
-      <div className="flex flex-col items-center text-center space-y-4">
-        <div className="text-4xl">🎉</div>
-        <p className="text-gray-700 text-lg">
-          El teu esforç ha donat fruits! Has pujat a la lliga{" "}
-          <strong className="text-black font-bold">{leagueName}</strong>.
-        </p>
-      </div>
-    );
-  } else {
-    content = (
-      <div className="flex flex-col items-center text-center space-y-4">
-        <div className="text-4xl">📉</div>
-        <p className="text-gray-700 text-lg">
-          Aquesta setmana no ha estat la millor. Has baixat a la lliga{" "}
-          <strong className="text-black font-bold">{leagueName}</strong>.
-        </p>
-      </div>
-    );
-  }
+  const icon = isUp ? "🎉" : "📉";
+  const message = isUp
+    ? "El teu esforç ha donat fruits! Has pujat a la lliga "
+    : "Aquesta setmana no ha estat la millor. Has baixat a la lliga ";
+
+  const content = (
+    <div className="flex flex-col items-center text-center space-y-4">
+      <div className="text-4xl">{icon}</div>
+      <p className="text-gray-700 text-lg">
+        {message}
+        <strong className="text-black font-bold">{leagueName}</strong>.
+      </p>
+    </div>
+  );
 
   return (
     <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50">
