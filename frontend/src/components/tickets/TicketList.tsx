@@ -6,6 +6,7 @@ const TicketList = ({
   isLoading,
   error,
   onCommentClick,
+  onRowClick,
 }: TicketListProps) => {
   if (isLoading)
     return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
