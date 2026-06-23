@@ -9,7 +9,12 @@ import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
 import { useUserContext } from "../context/UserContext";
 import { STATUS_LABELS } from "../components/tickets/ticketConstants";
-import type { IntCreateTicket, TicketStatus } from "../types/ticketingTypes";
+import type {
+  IntCreateTicket,
+  TicketStatus,
+  ApiTicketData,
+} from "../types/ticketingTypes";
+import TicketDetailModal from "../components/tickets/TicketDetailModal";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
@@ -17,6 +22,9 @@ const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
   const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<ApiTicketData | null>(
+    null,
+  );
   const { user } = useUserContext();
   const currentUserId = user?.id;
   const [statusFilter, setStatusFilter] =
@@ -93,6 +101,12 @@ const TicketingPage = (): JSX.Element => {
           isLoading={isLoading}
           error={errorMessage}
           onCommentClick={setSelectedTicketId}
+          onRowClick={setSelectedTicket}
+        />
+        <TicketDetailModal
+          ticket={selectedTicket}
+          isOpen={selectedTicket !== null}
+          onClose={() => setSelectedTicket(null)}
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
