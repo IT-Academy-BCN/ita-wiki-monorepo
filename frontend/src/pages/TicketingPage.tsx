@@ -102,7 +102,7 @@ const TicketingPage = (): JSX.Element => {
           isLoading={isLoading}
           error={errorMessage}
           onCommentClick={setSelectedTicketId}
-          onRowClick={(ticket) => {
+          onViewDetail={(ticket) => {
             setSelectedTicket(ticket);
             setIsModalOpen(true);
           }}

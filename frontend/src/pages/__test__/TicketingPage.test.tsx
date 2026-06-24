@@ -16,7 +16,7 @@ vi.mock("../../hooks/useCreateTicketing", () => ({
   useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
 }));
 vi.mock("../../components/tickets/TicketList", () => ({
-  default: ({ tickets, isLoading, error, onRowClick }: TicketListProps) => {
+  default: ({ tickets, isLoading, error, onViewDetail }: TicketListProps) => {
     if (isLoading) return <p>Carregant tickets...</p>;
     if (error) return <p>{error}</p>;
     return (
@@ -25,7 +25,7 @@ vi.mock("../../components/tickets/TicketList", () => ({
           <div
             key={t.id}
             data-testid="ticket-list-item"
-            onClick={() => onRowClick?.(t)}
+            onClick={() => onViewDetail?.(t)}
           />
         ))}
       </div>
