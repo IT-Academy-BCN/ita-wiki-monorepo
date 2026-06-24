@@ -12,7 +12,6 @@ const TicketDetailModal = ({
   isOpen,
   onClose,
 }: TicketDetailModalProps) => {
-
   return (
     <GenericModal isOpen={isOpen} onClose={onClose} size="lg">
       {ticket && <p>{String(ticket.id).padStart(6, "0")}</p>}
