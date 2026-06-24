@@ -74,7 +74,7 @@ export type TicketListProps = {
   isLoading?: boolean;
   error?: string | null;
   onCommentClick?: (id: number) => void;
-  onRowClick?: (ticket: ApiTicketData) => void;
+  onViewDetail?: (ticket: ApiTicketData) => void;
 };
 
 export interface TicketUserData {

@@ -76,13 +76,13 @@ describe("TicketRow", () => {
     expect(screen.getAllByText("-").length).toBeGreaterThan(0);
   });
 
-  it("calls onRowClick with the ticket when the row is clicked", () => {
-    const onRowClickMock = vi.fn();
+  it("calls onViewDetail with the ticket when the ID is clicked", () => {
+    const onViewDetailMock = vi.fn();
     renderWithContext(
-      <TicketRow ticket={mockTicket} onRowClick={onRowClickMock} />,
+      <TicketRow ticket={mockTicket} onViewDetail={onViewDetailMock} />,
     );
 
-    fireEvent.click(screen.getByRole("row"));
-    expect(onRowClickMock).toHaveBeenCalledWith(mockTicket);
+    fireEvent.click(screen.getByText("000001"));
+    expect(onViewDetailMock).toHaveBeenCalledWith(mockTicket);
   });
 });

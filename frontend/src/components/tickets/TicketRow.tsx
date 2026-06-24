@@ -28,10 +28,14 @@ const formatDate = (date: string) => {
 interface TicketRowProps {
   ticket: ApiTicketData;
   onCommentClick?: (id: number) => void;
-  onRowClick?: (ticket: ApiTicketData) => void;
+  onViewDetail?: (ticket: ApiTicketData) => void;
 }
 
-const TicketRow = ({ ticket, onCommentClick, onRowClick }: TicketRowProps) => {
+const TicketRow = ({
+  ticket,
+  onCommentClick,
+  onViewDetail,
+}: TicketRowProps) => {
   const { updateStatus, updatePriority, isLoading } = useTicketingUpdate();
   const { user } = useUserContext();
   const isAdmin = user?.role === roles.ADMIN || user?.role === roles.SUPERADMIN;
@@ -46,10 +50,14 @@ const TicketRow = ({ ticket, onCommentClick, onRowClick }: TicketRowProps) => {
   return (
     <div
       role="row"
-      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60 cursor-pointer"
-      onClick={() => onRowClick?.(ticket)}
+      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60"
     >
-      <div role="cell" className="font-semibold">
+      <div
+        role="cell"
+        className="font-semibold cursor-pointer px-2 py-1 -mx-2 rounded-md transition hover:bg-[#fcecec]"
+        onClick={() => onViewDetail?.(ticket)}
+        title="Veure detall"
+      >
         {String(ticket.id).padStart(6, "0")}
       </div>
       <div role="cell" className="truncate">
@@ -89,14 +97,7 @@ const TicketRow = ({ ticket, onCommentClick, onRowClick }: TicketRowProps) => {
       <div role="cell">{formatDate(ticket.incident_date)}</div>
       <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
       <div role="cell">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onCommentClick?.(ticket.id);
-          }}
-        >
-          Comentari
-        </button>
+        <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
       </div>
     </div>
   );
