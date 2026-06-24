@@ -25,7 +25,8 @@ class LigaWeeklyResultTest extends TestCase
         $this->assertTrue(Schema::hasColumns('league_weekly_results', [
             'id',
             'user_id',
-            'week_date',
+            'year',
+            'week_number',
             'from_league',
             'to_league',
             'created_at',
@@ -39,7 +40,8 @@ class LigaWeeklyResultTest extends TestCase
 
         LeagueWeeklyResult::create([
             'user_id' => $user->id,
-            'week_date' => '2026-06-22',
+            'year'        => 2026,
+            'week_number' => 25,
             'from_league' => LeagueTypeEnum::Bronze->value,
             'to_league' => LeagueTypeEnum::Silver->value,
         ]);
@@ -48,7 +50,8 @@ class LigaWeeklyResultTest extends TestCase
 
         LeagueWeeklyResult::create([
             'user_id' => $user->id,
-            'week_date' => '2026-06-22',
+            'year'        => 2026,
+            'week_number' => 25,
             'from_league' => LeagueTypeEnum::Bronze->value,
             'to_league' => LeagueTypeEnum::Silver->value,
         ]);

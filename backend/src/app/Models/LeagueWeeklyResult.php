@@ -9,13 +9,13 @@ class LeagueWeeklyResult extends Model
 {
      protected $fillable = [
         'user_id',
-        'week_date',
+        'year',
+        'week_number',
         'from_league',
         'to_league',
     ];
 
     protected $casts = [
-        'week_date' => 'date',
         'from_league' => LeagueTypeEnum::class,
         'to_league' => LeagueTypeEnum::class,
     ];

@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('league_weekly_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->date('week_date');
+            $table->unsignedSmallInteger('year');
+            $table->unsignedTinyInteger('week_number');
             $table->unsignedTinyInteger('from_league');
             $table->unsignedTinyInteger('to_league');
             $table->timestamps();
 
-            $table->unique(['user_id', 'week_date']);
+            $table->unique(['user_id', 'year', 'week_number']);
+            $table->index(['year', 'week_number']);
         });
     }
 
