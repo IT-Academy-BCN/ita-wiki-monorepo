@@ -52,13 +52,14 @@ const TicketRow = ({
       role="row"
       className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60"
     >
-      <div
-        role="cell"
-        className="font-semibold cursor-pointer px-2 py-1 -mx-2 rounded-md transition hover:bg-[#fcecec]"
-        onClick={() => onViewDetail?.(ticket)}
-        title="Veure detall"
-      >
-        {String(ticket.id).padStart(6, "0")}
+      <div role="cell">
+        <button
+          className="font-semibold cursor-pointer px-2 py-1 rounded-md transition hover:bg-[#fcecec]"
+          onClick={() => onViewDetail?.(ticket)}
+          title="Veure detall"
+        >
+          {String(ticket.id).padStart(6, "0")}
+        </button>
       </div>
       <div role="cell" className="truncate">
         {ticket.name}
