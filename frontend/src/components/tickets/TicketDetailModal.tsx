@@ -12,11 +12,10 @@ const TicketDetailModal = ({
   isOpen,
   onClose,
 }: TicketDetailModalProps) => {
-  if (!ticket) return null;
 
   return (
     <GenericModal isOpen={isOpen} onClose={onClose} size="lg">
-      <p>{String(ticket.id).padStart(6, "0")}</p>
+      {ticket && <p>{String(ticket.id).padStart(6, "0")}</p>}
     </GenericModal>
   );
 };

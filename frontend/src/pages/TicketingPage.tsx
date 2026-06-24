@@ -21,6 +21,7 @@ const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
   const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<ApiTicketData | null>(
     null,
@@ -101,12 +102,15 @@ const TicketingPage = (): JSX.Element => {
           isLoading={isLoading}
           error={errorMessage}
           onCommentClick={setSelectedTicketId}
-          onRowClick={setSelectedTicket}
+          onRowClick={(ticket) => {
+            setSelectedTicket(ticket);
+            setIsModalOpen(true);
+          }}
         />
         <TicketDetailModal
           ticket={selectedTicket}
-          isOpen={selectedTicket !== null}
-          onClose={() => setSelectedTicket(null)}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
