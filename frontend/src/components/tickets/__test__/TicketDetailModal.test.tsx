@@ -27,26 +27,7 @@ const mockHookReturn = (comments = []) => ({
   editComment: vi.fn(),
 });
 
-const mockTicket: ApiTicketData = {
-  id: 1,
-  code_connect_id: 1,
-  forum_answer_id: null,
-  assignee_id: null,
-  closed_by: null,
-  closed_at: null,
-  created_at: "2026-04-23T10:00:00Z",
-  updated_at: "2026-04-23T10:00:00Z",
-  name: "Login no funciona",
-  description: "No puc iniciar sessió.",
-  status: "pending",
-  priority: "high",
-  type: "error",
-  affected_app: "wiki_frontend",
-  affected_function: "login",
-  incident_date: "2026-04-23",
-  category: null,
-  code_connect: { id: 1, role: "student" },
-};
+const mockTicket = { id: 1 } as ApiTicketData;
 
 describe("TicketDetailModal", () => {
   beforeEach(() => mockUseTicketComments.mockReturnValue(mockHookReturn()));
