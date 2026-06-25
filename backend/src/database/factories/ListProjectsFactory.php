@@ -33,6 +33,8 @@ class ListProjectsFactory extends Factory
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
             'language_frontend' => $this->faker->randomElement($languages),
+            'github_url' => $this->faker->optional()->url(),
+            'youtube_url' => $this->faker->optional()->url(),
             'roadmap'=> $this->faker->optional()->passthrough([
                 ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
                 ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
