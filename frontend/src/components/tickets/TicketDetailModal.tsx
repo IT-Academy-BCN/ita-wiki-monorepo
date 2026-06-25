@@ -53,29 +53,33 @@ const TicketDetailModal = ({
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase text-muted-foreground">
+            <dl>
+              <dt className="text-xs font-semibold uppercase text-muted-foreground">
                 Estat
-              </p>
-              <p className="mt-2 text-sm font-medium text-gray-900">
+              </dt>
+              <dd className="mt-2 text-sm font-medium text-gray-900">
                 {STATUS_LABELS[ticket.status]}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase text-muted-foreground">
+              </dd>
+            </dl>
+            <dl>
+              <dt className="text-xs font-semibold uppercase text-muted-foreground">
                 Prioritat
-              </p>
-              <p
-                className={`mt-2 text-sm font-semibold ${ticket.priority ? PRIORITY_COLORS[ticket.priority] : "text-gray-400"}`}
+              </dt>
+              <dd
+                className={`mt-2 text-sm font-semibold ${
+                  ticket.priority
+                    ? PRIORITY_COLORS[ticket.priority]
+                    : "text-gray-400"
+                }`}
               >
                 {ticket.priority ? PRIORITY_LABELS[ticket.priority] : "-"}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase text-muted-foreground">
+              </dd>
+            </dl>
+            <dl>
+              <dt className="text-xs font-semibold uppercase text-muted-foreground">
                 Categoria
-              </p>
-              <div className="mt-2 flex items-center gap-2 text-sm font-medium text-gray-900">
+              </dt>
+              <dd className="mt-2 text-sm font-medium text-gray-900">
                 {ticket.category ? (
                   <>
                     <CategoryIcon category={ticket.category} />
@@ -84,36 +88,40 @@ const TicketDetailModal = ({
                 ) : (
                   "-"
                 )}
-              </div>
-            </div>
+              </dd>
+            </dl>
           </div>
 
           <div className="grid grid-cols-2 gap-4 border-y border-gray-100 py-4">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-gray-100 bg-gray-50">
-                <img src={calendarIcon} alt="calendar icon" className="w-4 h-4" />
+                <img
+                  src={calendarIcon}
+                  alt="calendar icon"
+                  className="w-4 h-4"
+                />
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase text-muted-foreground">
+              <dl>
+                <dt className="text-xs font-semibold uppercase text-muted-foreground">
                   Data
-                </p>
-                <p className="mt-0.5 text-sm font-medium text-gray-900">
+                </dt>
+                <dd className="mt-0.5 text-sm font-medium text-gray-900">
                   {formatDate(ticket.incident_date)}
-                </p>
-              </div>
+                </dd>
+              </dl>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-gray-100 bg-gray-50">
                 <img src={userIcon} alt="user icon" className="w-4 h-4" />
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase text-muted-foreground">
+              <dl>
+                <dt className="text-xs font-semibold uppercase text-muted-foreground">
                   Rol
-                </p>
-                <p className="mt-0.5 text-sm font-medium text-gray-900">
+                </dt>
+                <dd className="mt-0.5 text-sm font-medium text-gray-900">
                   {ticket.code_connect?.role ?? "-"}
-                </p>
-              </div>
+                </dd>
+              </dl>
             </div>
           </div>
         </div>
