@@ -6,6 +6,7 @@ const TicketList = ({
   isLoading,
   error,
   onCommentClick,
+  onViewDetail,
 }: TicketListProps) => {
   if (isLoading)
     return <p className="text-muted-foreground p-6">Carregant tickets...</p>;
@@ -49,6 +50,7 @@ const TicketList = ({
               key={ticket.id}
               ticket={ticket}
               onCommentClick={onCommentClick}
+              onViewDetail={onViewDetail}
             />
           ))}
         </div>

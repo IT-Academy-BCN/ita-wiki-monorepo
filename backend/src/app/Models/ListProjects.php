@@ -34,6 +34,8 @@ class ListProjects extends Model
         'description',
         'roadmap',
         'status',
+        'github_url',
+        'youtube_url',
     ];
 
     public function contributorListProject()
