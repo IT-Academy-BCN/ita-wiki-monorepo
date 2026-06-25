@@ -19,6 +19,7 @@ use App\Models\LigaPointHistory;
 
 class TicketController extends Controller
 {
+    public const BUG_BOUNTY_REWARD_POINTS = 15;
     public function index(): JsonResponse
     {
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
@@ -148,15 +149,14 @@ class TicketController extends Controller
             $entry = Liga::where('user_id', $ticket->code_connect_id)->first();
 
             if ($entry) {
-                $rewardPoints = 15;
-                $entry->increment('points', $rewardPoints);
-                $entry->increment('points_weekly', $rewardPoints);
+            $entry->increment('points', self::BUG_BOUNTY_REWARD_POINTS);
+            $entry->increment('points_weekly', self::BUG_BOUNTY_REWARD_POINTS);
 
-                LigaPointHistory::create([
-                    'user_id' => $ticket->code_connect_id,
-                    'points' => $rewardPoints,
-                    'activity' => 'Bug Bounty resolved',
-                ]);
+            LigaPointHistory::create([
+                'user_id' => $ticket->code_connect_id,
+                'points' => self::BUG_BOUNTY_REWARD_POINTS,
+                'activity' => 'Bug Bounty resolved',
+            ]);
             }
         }
         return response()->json([

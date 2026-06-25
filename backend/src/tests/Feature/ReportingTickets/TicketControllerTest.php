@@ -9,7 +9,7 @@ use Tests\TestCase;
 use App\Models\Liga;
 use App\Models\LigaPointHistory;
 use App\Enums\TicketStatusEnum;
-
+use App\Http\Controllers\Tickets\TicketController;
 class TicketControllerTest extends TestCase{
 
     use RefreshDatabase;
@@ -944,13 +944,13 @@ class TicketControllerTest extends TestCase{
 
         $this->assertDatabaseHas('ligas', [
             'user_id' => $creator->id,
-            'points' => 15,
-            'points_weekly' => 15,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+            'points_weekly' => TicketController::BUG_BOUNTY_REWARD_POINTS,
         ]);
 
         $this->assertDatabaseHas('liga_point_histories', [
             'user_id' => $creator->id,
-            'points' => 15,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
             'activity' => 'Bug Bounty resolved',
         ]);
     }
