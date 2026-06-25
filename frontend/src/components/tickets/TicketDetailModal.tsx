@@ -91,7 +91,7 @@ const TicketDetailModal = ({
           <div className="grid grid-cols-2 gap-4 border-y border-gray-100 py-4">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-gray-100 bg-gray-50">
-                <img src={calendarIcon} alt="data" className="w-4 h-4" />
+                <img src={calendarIcon} alt="calendar icon" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase text-muted-foreground">
@@ -104,7 +104,7 @@ const TicketDetailModal = ({
             </div>
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-gray-100 bg-gray-50">
-                <img src={userIcon} alt="rol" className="w-4 h-4" />
+                <img src={userIcon} alt="user icon" className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase text-muted-foreground">
