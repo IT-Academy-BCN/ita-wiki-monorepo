@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\ListProjects;
 use App\Models\ContributorListProject;
 use App\Enums\LanguageEnum;
+use App\Enums\ProjectStatusEnum;
 
 class ListProjectsSeeder extends Seeder
 {
@@ -35,6 +36,7 @@ class ListProjectsSeeder extends Seeder
                     ['task' => 'Setup structure', 'done' => true],
                     ['task' => 'Implement authentication', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
             ]
         );
 
@@ -55,6 +57,7 @@ class ListProjectsSeeder extends Seeder
                     ['task' => 'Design database', 'done' => true],
                     ['task' => 'Create ui components', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
             ]
         );
         
@@ -75,6 +78,7 @@ class ListProjectsSeeder extends Seeder
                     ['task' => 'Setup CI/CD pipeline', 'done' => true],
                     ['task' => 'Implement user roles', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
                 
             ]
         );
