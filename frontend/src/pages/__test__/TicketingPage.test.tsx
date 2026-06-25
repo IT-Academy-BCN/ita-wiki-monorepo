@@ -10,6 +10,7 @@ import type {
 } from "../../types/ticketingTypes";
 
 const mockSubmitTicketing = vi.hoisted(() => vi.fn());
+const mockUser = vi.hoisted(() => ({ current: { id: 7, role: "student" } }));
 
 vi.mock("../../hooks/useTicketingGetAll");
 vi.mock("../../hooks/useCreateTicketing", () => ({
@@ -45,7 +46,7 @@ vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
 }));
 
 vi.mock("../../context/UserContext", () => ({
-  useUserContext: () => ({ user: { id: 7 } }),
+  useUserContext: () => ({ user: mockUser.current }),
 }));
 
 vi.mock("../../components/tickets/TicketDetailModal", () => ({
@@ -65,7 +66,10 @@ const hookReturn = (
 });
 
 describe("TicketingPage", () => {
-  beforeEach(() => mockHook.mockReturnValue(hookReturn()));
+  beforeEach(() => {
+    mockUser.current = { id: 7, role: "student" };
+    mockHook.mockReturnValue(hookReturn());
+  });
 
   it("renderitza la llista de tickets", () => {
     render(<TicketingPage />);
@@ -125,9 +129,19 @@ describe("TicketingPage", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  it("it renders 'suggeriments' button", () => {
+  it("renders the suggestions button only for students", () => {
+    const { unmount } = render(<TicketingPage />);
+
+    expect(
+      screen.getByRole("button", { name: "Veure suggeriments" }),
+    ).toBeInTheDocument();
+
+    unmount();
+    mockUser.current = { id: 7, role: "admin" };
     render(<TicketingPage />);
-    const button = screen.getByRole("button", { name: "Veure suggeriments" });
-    expect(button).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: "Veure suggeriments" }),
+    ).not.toBeInTheDocument();
   });
 });
