@@ -35,7 +35,8 @@ class ListProjectRequest extends FormRequest
             'language_backend' => 'required|string|max:255',
             'language_frontend' => 'required|string|max:255',
             'roadmap' => 'nullable|array',
-
+            'github_url' => ['nullable', 'url'],
+            'youtube_url' => ['nullable', 'url'],
             'programming_role' => [
                 $this->isMethod('post') ? 'required' : 'nullable',
                 'string',
@@ -61,6 +62,8 @@ class ListProjectRequest extends FormRequest
             'language_frontend.required' => "The frontend language field is required.",
             'programming_role.required' => 'The programming role field is required.',
             'programming_role.in' => 'The programming role must be one of: Frontend Developer, Backend Developer, Fullstack Developer, Other.',
+            'github_url.url' => 'The GitHub URL must be a valid URL.',
+            'youtube_url.url' => 'The YouTube URL must be a valid URL.',
         ];
     }
 }
