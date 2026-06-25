@@ -67,6 +67,7 @@ class ListProjectsShowTest extends TestCase
                 'language_frontend' => $this->projectOne->language_frontend,
                 'description' => $this->projectOne->description,
                 'roadmap' => $this->projectOne->roadmap,
+                'status' => $this->projectOne->status->value, // <--- temporary to be deleted after 869 PR approval --->
                 'owner' => [
                     'id' => $this->projectOne->user->id,
                     'name' => $this->projectOne->user->name,
