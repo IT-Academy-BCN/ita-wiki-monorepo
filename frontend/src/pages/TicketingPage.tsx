@@ -29,6 +29,7 @@ const TicketingPage = (): JSX.Element => {
   );
   const { user } = useUserContext();
   const currentUserId = user?.id;
+  const isStudent = user?.role === "student";
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
@@ -98,13 +99,15 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
-        <ButtonComponent
-          className="w-full flex justify-start"
-          variant="discreet"
-          onClick={() => {}}
-        >
-          Veure suggeriments
-        </ButtonComponent>
+        {isStudent && (
+          <ButtonComponent
+            className="w-full flex justify-start"
+            variant="discreet"
+            onClick={() => {}}
+          >
+            Veure suggeriments
+          </ButtonComponent>
+        )}
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}
