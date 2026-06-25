@@ -46,35 +46,35 @@ const TicketDetailModal = ({
           <hr className="border-gray-200" />
 
           <div>
-            <div className="text-xs font-semibold uppercase text-muted-foreground">
+            <p className="text-xs font-semibold uppercase text-muted-foreground">
               Descripció
-            </div>
+            </p>
             <p className="mt-2 text-sm text-gray-700">{ticket.description}</p>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-xs font-semibold uppercase text-muted-foreground">
+              <p className="text-xs font-semibold uppercase text-muted-foreground">
                 Estat
-              </div>
-              <div className="mt-2 text-sm font-medium text-gray-900">
+              </p>
+              <p className="mt-2 text-sm font-medium text-gray-900">
                 {STATUS_LABELS[ticket.status]}
-              </div>
+              </p>
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase text-muted-foreground">
+              <p className="text-xs font-semibold uppercase text-muted-foreground">
                 Prioritat
-              </div>
-              <div
+              </p>
+              <p
                 className={`mt-2 text-sm font-semibold ${ticket.priority ? PRIORITY_COLORS[ticket.priority] : "text-gray-400"}`}
               >
                 {ticket.priority ? PRIORITY_LABELS[ticket.priority] : "-"}
-              </div>
+              </p>
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase text-muted-foreground">
+              <p className="text-xs font-semibold uppercase text-muted-foreground">
                 Categoria
-              </div>
+              </p>
               <div className="mt-2 flex items-center gap-2 text-sm font-medium text-gray-900">
                 {ticket.category ? (
                   <>
@@ -94,12 +94,12 @@ const TicketDetailModal = ({
                 <img src={calendarIcon} alt="data" className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-semibold uppercase text-muted-foreground">
+                <p className="text-xs font-semibold uppercase text-muted-foreground">
                   Data
-                </div>
-                <div className="mt-0.5 text-sm font-medium text-gray-900">
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-gray-900">
                   {formatDate(ticket.incident_date)}
-                </div>
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -107,12 +107,12 @@ const TicketDetailModal = ({
                 <img src={userIcon} alt="rol" className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-semibold uppercase text-muted-foreground">
+                <p className="text-xs font-semibold uppercase text-muted-foreground">
                   Rol
-                </div>
-                <div className="mt-0.5 text-sm font-medium text-gray-900">
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-gray-900">
                   {ticket.code_connect?.role ?? "-"}
-                </div>
+                </p>
               </div>
             </div>
           </div>
