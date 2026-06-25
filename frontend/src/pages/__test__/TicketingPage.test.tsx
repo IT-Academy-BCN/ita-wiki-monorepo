@@ -16,13 +16,17 @@ vi.mock("../../hooks/useCreateTicketing", () => ({
   useCreateTicketing: () => ({ submitTicketing: mockSubmitTicketing }),
 }));
 vi.mock("../../components/tickets/TicketList", () => ({
-  default: ({ tickets, isLoading, error }: TicketListProps) => {
+  default: ({ tickets, isLoading, error, onViewDetail }: TicketListProps) => {
     if (isLoading) return <p>Carregant tickets...</p>;
     if (error) return <p>{error}</p>;
     return (
       <div data-testid="ticket-list">
         {tickets.map((t) => (
-          <div key={t.id} data-testid="ticket-list-item" />
+          <div
+            key={t.id}
+            data-testid="ticket-list-item"
+            onClick={() => onViewDetail?.(t)}
+          />
         ))}
       </div>
     );
@@ -42,6 +46,11 @@ vi.mock("../../components/ticketing/TicketingCreateForm", () => ({
 
 vi.mock("../../context/UserContext", () => ({
   useUserContext: () => ({ user: { id: 7 } }),
+}));
+
+vi.mock("../../components/tickets/TicketDetailModal", () => ({
+  default: ({ isOpen }: { isOpen: boolean }) =>
+    isOpen ? <div role="dialog">Modal</div> : null,
 }));
 
 const mockHook = vi.mocked(useTicketingGetAll);
@@ -106,5 +115,19 @@ describe("TicketingPage", () => {
     const blockedCheckbox = screen.getByLabelText("Bloquejat");
     fireEvent.click(blockedCheckbox);
     expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(3);
+  });
+
+  it("opens modal when a ticket row is clicked", () => {
+    const ticket = { id: 1, status: "pending" } as ApiTicketData;
+    mockHook.mockReturnValue(hookReturn({ tickets: [ticket] }));
+    render(<TicketingPage />);
+    fireEvent.click(screen.getByTestId("ticket-list-item"));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("it renders 'suggeriments' button", () => {
+    render(<TicketingPage />);
+    const button = screen.getByRole("button", { name: "Veure suggeriments" });
+    expect(button).toBeInTheDocument();
   });
 });

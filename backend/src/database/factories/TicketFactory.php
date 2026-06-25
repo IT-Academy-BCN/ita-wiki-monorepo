@@ -8,6 +8,7 @@ use App\Enums\TicketTypeEnum;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
 use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketCategoryEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -32,6 +33,8 @@ class TicketFactory extends Factory
             'description' => fake()->paragraph(),
             'status' => TicketStatusEnum::Pending->value,
             'priority' => fake()->randomElement(TicketPriorityEnum::values()),
+            'category' => fake()->randomElement(TicketCategoryEnum::values()),
+
         ];
 
     }
