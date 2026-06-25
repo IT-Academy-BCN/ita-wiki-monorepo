@@ -5,6 +5,8 @@ declare (strict_types= 1);
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Enums\ProjectStatusEnum;
 
 class ListProjectRequest extends FormRequest
 {
@@ -42,6 +44,7 @@ class ListProjectRequest extends FormRequest
                 'string',
                 'in:Frontend Developer,Backend Developer,Fullstack Developer,Other',
             ],
+            'status' => ['nullable', Rule::enum(ProjectStatusEnum::class)]
         ];
     }
 
@@ -62,6 +65,7 @@ class ListProjectRequest extends FormRequest
             'language_frontend.required' => "The frontend language field is required.",
             'programming_role.required' => 'The programming role field is required.',
             'programming_role.in' => 'The programming role must be one of: Frontend Developer, Backend Developer, Fullstack Developer, Other.',
+            'status.enum' => 'The status must be either in_progress or completed.',
             'github_url.url' => 'The GitHub URL must be a valid URL.',
             'youtube_url.url' => 'The YouTube URL must be a valid URL.',
         ];
