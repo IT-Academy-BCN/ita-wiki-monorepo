@@ -11,6 +11,7 @@ use App\Models\ListProjects;
 use App\Models\ContributorListProject;
 use App\Models\User;
 use App\Enums\LanguageEnum;
+use App\Enums\ProjectStatusEnum;
 
 class ListProjectsShowTest extends TestCase
 {
@@ -126,6 +127,42 @@ class ListProjectsShowTest extends TestCase
                 'id' => $this->projectOne->user->id,
                 'name'=> $this->projectOne->user->name,
             ]
+        ]);
+    }
+
+    public function test_show_returns_project_status_github_url_and_youtube_url(): void
+    {
+        $project = ListProjects::factory()->create([
+            'user_id' => $this->userOne->id,
+            'status' => ProjectStatusEnum::IN_PROGRESS->value,
+            'github_url' => 'https://github.com/example/repo',
+            'youtube_url' => 'https://www.youtube.com/watch?v=example',
+        ]);
+
+        $response = $this->get("/api/codeconnect/{$project->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'project_status' => ProjectStatusEnum::IN_PROGRESS->value,
+            'github_url' => 'https://github.com/example/repo',
+            'youtube_url' => 'https://www.youtube.com/watch?v=example',
+        ]);
+    }
+
+    public function test_show_returns_null_urls_when_not_set(): void
+    {
+        $project = ListProjects::factory()->create([
+            'user_id' => $this->userOne->id,
+            'github_url' => null,
+            'youtube_url' => null,
+        ]);
+
+        $response = $this->get("/api/codeconnect/{$project->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'github_url' => null,
+            'youtube_url' => null,
         ]);
     }
 

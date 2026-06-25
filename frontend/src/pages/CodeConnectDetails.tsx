@@ -6,14 +6,35 @@ import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
 import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
 import { displayLanguageIcon } from "../utils/iconUtils";
+import { useUserContext } from '../context/UserContext';
+import CloseProjectModal from '../components/code-connect/CloseProjectModal';
+import { closeCodeConnectProject } from '../api/endPointCodeConnect';
 
 const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const [isCompleted, setIsCompleted] = useState(false);
-
+  const { user } = useUserContext();
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
     projectId || null,
   );
+  const handleCloseProject = async (githubUrl: string, youtubeUrl: string) => {
+    if (!codeConnectProject?.data?.id) return;
+    setIsSubmitting(true);
+    try {
+      await closeCodeConnectProject(codeConnectProject.data.id, {
+        github_url: githubUrl || undefined,
+        youtube_url: youtubeUrl || undefined,
+      });
+      setIsCloseModalOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <>
@@ -63,19 +84,23 @@ const CodeConnectDetails = () => {
                 "Aquesta informació no està disponible a la base de dades."
               )}
 
-              {!isCompleted ? (
-                <button
-                  type="button"
-                  onClick={() => setIsCompleted(true)}
-                  className="mt-6 text-primary hover:opacity-80 transition-opacity"
-                >
-                  Marcar com a complet
-                </button>
-              ) : (
-                <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
-                  ✓ Completat
-                </span>
+              {codeConnectProject.data.user_id === user?.id && (
+                codeConnectProject.data.project_status === 'completed' ? (
+                  <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
+                    ✓ Completat
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsCloseModalOpen(true)}
+                    className="mt-6 text-primary hover:opacity-80 transition-opacity"
+                  >
+                    Marcar com a complet
+                  </button>
+                )
               )}
+
+              
             </div>
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
@@ -95,6 +120,12 @@ const CodeConnectDetails = () => {
           </div>
         )}
       </Container>
+<CloseProjectModal
+                isOpen={isCloseModalOpen}
+                onClose={() => setIsCloseModalOpen(false)}
+                onConfirm={handleCloseProject}
+                isSubmitting={isSubmitting}
+              />      
     </>
   );
 };

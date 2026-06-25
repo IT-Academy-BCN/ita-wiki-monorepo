@@ -45,6 +45,9 @@ export interface ApiProjectData {
   roadmap?: { task: string; done: boolean }[];
   time_duration: string;
   title: string;
+  project_status?: 'in_progress' | 'completed';
+  github_url?: string | null;
+  youtube_url?: string | null;
 }
 
 export interface ApiContributor {

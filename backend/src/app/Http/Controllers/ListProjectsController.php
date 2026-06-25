@@ -170,7 +170,6 @@ class ListProjectsController extends Controller
         $project = [
             'id' => $project->id,
             'user_id' => $project->user_id,
-
             'title' => $project->title,
             'time_duration' => $project->time_duration,
             'language_backend' => $project->language_backend,
@@ -182,6 +181,9 @@ class ListProjectsController extends Controller
             'end_date' => $project->end_date?->format('Y-m-d'),
             'dev_front_number' => $project->dev_front_number,
             'dev_back_number' => $project->dev_back_number,
+            'project_status' => $project->status,
+            'github_url' => $project->github_url,
+            'youtube_url' => $project->youtube_url,
             'owner' => $this->formatOwner($project->user),
             'contributors' => $project->contributorListProject->map(function ($contributor) {
                 return [
