@@ -78,20 +78,19 @@ export const triggerWeeklyTransition = async (): Promise<void> => {
   }
 };
 
-export const dismissLeagueNotification = async (
+export const fetchLeagueNotification = async (
   signal?: AbortSignal,
 ): Promise<LeagueNotificationResponse> => {
-  const url = `${API_URL}${END_POINTS.leagues.dismissNotification}`;
+  const url = `${API_URL}${END_POINTS.leagues.getNotification}`;
   const token = localStorage.getItem("auth_token");
   try {
     const response = await fetch(url, {
-      method: "PATCH",
       signal,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (!response.ok) throw new Error("Failed to dismiss notification");
+    if (!response.ok) throw new Error("Failed to fetch notification");
     const data = await response.json();
     return data;
   } catch (error: unknown) {

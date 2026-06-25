@@ -37,5 +37,11 @@ export type Ranking = {
 };
 
 export type LeagueNotificationResponse =
-  | { hasChange: true; direction: "up" | "down"; newLeagueId: number }
+  | {
+      hasChange: true;
+      direction: "up" | "down";
+      newLeagueId: number;
+      year: number;
+      week_number: number;
+    }
   | { hasChange: false };

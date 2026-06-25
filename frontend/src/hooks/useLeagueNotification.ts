@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dismissLeagueNotification } from "../api/endPointLeagues";
+import { fetchLeagueNotification } from "../api/endPointLeagues";
 import type { LeagueNotificationResponse } from "../types/league";
 
 export const useLeagueNotification = () => {
@@ -11,10 +11,21 @@ export const useLeagueNotification = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    const fetchNotification = async () => {
+    const getNotification = async () => {
       try {
         setLoading(true);
-        const data = await dismissLeagueNotification(controller.signal);
+        const data = await fetchLeagueNotification(controller.signal);
+
+        if (data.hasChange) {
+          const isDismissed = localStorage.getItem(
+            `league_notified_${data.year}_${data.week_number}`,
+          );
+          if (isDismissed) {
+            setNotification({ hasChange: false });
+            return;
+          }
+        }
+
         setNotification(data);
         setError(null);
       } catch (err) {
@@ -26,12 +37,18 @@ export const useLeagueNotification = () => {
       }
     };
 
-    fetchNotification();
+    getNotification();
 
     return () => controller.abort();
   }, []);
 
   const dismiss = () => {
+    if (notification && notification.hasChange) {
+      localStorage.setItem(
+        `league_notified_${notification.year}_${notification.week_number}`,
+        "true",
+      );
+    }
     setNotification({ hasChange: false });
   };
 
