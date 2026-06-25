@@ -123,5 +123,40 @@ class LigaController extends Controller
             'message' => 'Weekly transition triggered successfully',
         ]);
     }
+
+    public function getNotification(Request $request): JsonResponse
+    {
+        $userId = $request->user()->id;
+
+        $latestResult = \App\Models\LeagueWeeklyResult::where('user_id', $userId)
+            ->orderBy('year', 'desc')
+            ->orderBy('week_number', 'desc')
+            ->first();
+
+        if (!$latestResult) {
+            return response()->json(['hasChange' => false]);
+        }
+
+        $fromLeagueId = $latestResult->from_league;
+        $toLeagueId = $latestResult->to_league;
+
+        if ($fromLeagueId === $toLeagueId) {
+            return response()->json(['hasChange' => false]);
+        }
+
+        $direction = $toLeagueId > $fromLeagueId ? 'up' : 'down';
+        
+        // Convert ID to name using the Enum if available, otherwise just mapping
+        $leagueNames = [1 => 'Bronze', 2 => 'Silver', 3 => 'Gold', 4 => 'Platinum'];
+        $leagueName = $leagueNames[$toLeagueId] ?? 'Desconeguda';
+
+        return response()->json([
+            'hasChange' => true,
+            'direction' => $direction,
+            'leagueName' => $leagueName,
+            'year' => $latestResult->year,
+            'week_number' => $latestResult->week_number,
+        ]);
+    }
 }
 
