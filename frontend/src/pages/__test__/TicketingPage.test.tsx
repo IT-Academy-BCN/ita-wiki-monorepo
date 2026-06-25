@@ -124,4 +124,10 @@ describe("TicketingPage", () => {
     fireEvent.click(screen.getByTestId("ticket-list-item"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
+    
+  it("it renders 'suggeriments' button", () => {
+    render(<TicketingPage />);
+    const button = screen.getByRole("button", { name: "Veure suggeriments" });
+    expect(button).toBeInTheDocument();
+  });
 });

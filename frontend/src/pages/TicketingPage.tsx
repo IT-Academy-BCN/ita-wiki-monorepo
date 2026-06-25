@@ -15,6 +15,7 @@ import type {
   ApiTicketData,
 } from "../types/ticketingTypes";
 import TicketDetailModal from "../components/tickets/TicketDetailModal";
+import ButtonComponent from "../components/atoms/ButtonComponent";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
@@ -97,6 +98,13 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
+        <ButtonComponent
+          className="w-full flex justify-start"
+          variant="discreet"
+          onClick={() => {}}
+        >
+          Veure suggeriments
+        </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}

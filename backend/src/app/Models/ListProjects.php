@@ -30,8 +30,9 @@ class ListProjects extends Model
         'language_backend',
         'language_frontend',
         'description',
-        'roadmap'
-    
+        'roadmap',
+        'github_url',
+        'youtube_url',
     ];
 
     public function contributorListProject()
