@@ -10,6 +10,7 @@ import TicketList from "../components/tickets/TicketList";
 import { useUserContext } from "../context/UserContext";
 import { STATUS_LABELS } from "../components/tickets/ticketConstants";
 import type { IntCreateTicket, TicketStatus } from "../types/ticketingTypes";
+import ButtonComponent from "../components/atoms/ButtonComponent";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
@@ -88,6 +89,13 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
+        <ButtonComponent
+          className="w-full flex justify-start"
+          variant="discreet"
+          onClick={() => {}}
+        >
+          Veure suggeriments
+        </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}

@@ -107,4 +107,10 @@ describe("TicketingPage", () => {
     fireEvent.click(blockedCheckbox);
     expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(3);
   });
+
+  it("it renders 'suggeriments' button", () => {
+    render(<TicketingPage />);
+    const button = screen.getByRole("button", { name: "Veure suggeriments" });
+    expect(button).toBeInTheDocument();
+  });
 });
