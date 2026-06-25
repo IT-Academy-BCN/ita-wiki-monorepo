@@ -148,12 +148,13 @@ class TicketController extends Controller
             $entry = Liga::where('user_id', $ticket->code_connect_id)->first();
 
             if ($entry) {
-                $entry->increment('points', 15);
-                $entry->increment('points_weekly', 15);
+                $rewardPoints = 15;
+                $entry->increment('points', $rewardPoints);
+                $entry->increment('points_weekly', $rewardPoints);
 
                 LigaPointHistory::create([
                     'user_id' => $ticket->code_connect_id,
-                    'points' => 15,
+                    'points' => $rewardPoints,
                     'activity' => 'Bug Bounty resolved',
                 ]);
             }
