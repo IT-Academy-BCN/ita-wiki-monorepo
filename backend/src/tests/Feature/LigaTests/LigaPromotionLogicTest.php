@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Liga;
+
+use App\Models\Liga;
+use App\Models\User;
+use App\Enums\LeagueTypeEnum;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class LigaPromotionLogicTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_top_3_in_bronze_are_promoted_to_silver(): void
+    {
+        $users = User::factory(4)->create();
+        Liga::create(['user_id' => $users[0]->id, 'points_weekly' => 30, 'league_id' => LeagueTypeEnum::Bronze]);
+        Liga::create(['user_id' => $users[1]->id, 'points_weekly' => 20, 'league_id' => LeagueTypeEnum::Bronze]);
+        Liga::create(['user_id' => $users[2]->id, 'points_weekly' => 10, 'league_id' => LeagueTypeEnum::Bronze]);
+        Liga::create(['user_id' => $users[3]->id, 'points_weekly' => 5,  'league_id' => LeagueTypeEnum::Bronze]);
+
+        $this->artisan('liga:process-promotions')->assertExitCode(0);
+
+        $this->assertEquals(LeagueTypeEnum::Silver, Liga::where('user_id', $users[0]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Silver, Liga::where('user_id', $users[1]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Silver, Liga::where('user_id', $users[2]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Bronze, Liga::where('user_id', $users[3]->id)->first()->league_id);
+    }
+
+    public function test_top_3_in_silver_are_promoted_to_gold(): void
+    {
+        $users = User::factory(4)->create();
+        Liga::create(['user_id' => $users[0]->id, 'points_weekly' => 30, 'league_id' => LeagueTypeEnum::Silver]);
+        Liga::create(['user_id' => $users[1]->id, 'points_weekly' => 20, 'league_id' => LeagueTypeEnum::Silver]);
+        Liga::create(['user_id' => $users[2]->id, 'points_weekly' => 10, 'league_id' => LeagueTypeEnum::Silver]);
+        Liga::create(['user_id' => $users[3]->id, 'points_weekly' => 5,  'league_id' => LeagueTypeEnum::Silver]);
+
+        $this->artisan('liga:process-promotions')->assertExitCode(0);
+
+        $this->assertEquals(LeagueTypeEnum::Gold,   Liga::where('user_id', $users[0]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Gold,   Liga::where('user_id', $users[1]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Gold,   Liga::where('user_id', $users[2]->id)->first()->league_id);
+        $this->assertEquals(LeagueTypeEnum::Silver, Liga::where('user_id', $users[3]->id)->first()->league_id);
+    }
+}
