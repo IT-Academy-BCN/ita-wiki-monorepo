@@ -15,6 +15,7 @@ import {
   PRIORITY_LABELS,
   PRIORITY_OPTIONS,
 } from "./ticketConstants";
+import CommentIcon from "../../assets/Comment_Alt_Lines.svg";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -41,11 +42,10 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
   const [currentPriority, setCurrentPriority] = useState<TicketPriority>(
     ticket.priority ?? "low",
   );
-
   return (
     <div
       role="row"
-      className="grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-4 px-4 py-4 border-b border-border/60 hover:bg-background/60"
+      className="grid grid-cols-3 sm:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 sm:gap-2 px-4 py-4 border-b border-border/60 hover:bg-background/60"
     >
       <div role="cell" className="font-semibold">
         {String(ticket.id).padStart(6, "0")}
@@ -88,6 +88,16 @@ const TicketRow = ({ ticket, onCommentClick }: TicketRowProps) => {
       <div role="cell">{ticket.code_connect?.role ?? "-"}</div>
       <div role="cell">
         <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
+      </div>
+      <div role="cell">
+        {ticket.comments_count > 0 && (
+          <span className="relative inline-flex items-center justify-center" aria-label="Comment indicator">
+            <img className="block w-5 h-5" src={CommentIcon} alt="Comment indicator" />
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
+              {ticket.comments_count}
+            </span>
+          </span>
+        )}
       </div>
     </div>
   );
