@@ -118,7 +118,7 @@ const TicketingPage = (): JSX.Element => {
         <TicketDetailModal
           ticket={selectedTicket}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => { setIsModalOpen(false); setSelectedTicket(null); }}
         />
         {selectedTicketId !== null && (
           <TicketCommentForm
