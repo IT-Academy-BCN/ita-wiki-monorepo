@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\LigaTests;
 
+use App\Enums\LeagueTypeEnum;
 use App\Models\User;
 use App\Models\LeagueWeeklyResult;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,79 +14,88 @@ class LigaNotificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_notification_returns_false_if_no_history(): void
+    public function test_returns_false_when_user_has_no_league_history(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->getJson(route('ligas.notification'));
-
-        $response->assertStatus(200)
-                 ->assertJson(['hasChange' => false]);
+        $this->actingAs($user)
+             ->getJson(route('ligas.notification'))
+             ->assertStatus(200)
+             ->assertJson(['hasChange' => false]);
     }
 
-    public function test_get_notification_returns_false_if_no_league_change(): void
+    public function test_returns_false_when_recent_change_is_same_league(): void
     {
         $user = User::factory()->create();
 
-        LeagueWeeklyResult::factory()->create([
-            'user_id' => $user->id,
-            'from_league' => 1,
-            'to_league' => 1,
-            'year' => 2026,
-            'week_number' => 25,
+        LeagueWeeklyResult::create([
+            'user_id'     => $user->id,
+            'from_league' => LeagueTypeEnum::Bronze,
+            'to_league'   => LeagueTypeEnum::Bronze,
         ]);
 
-        $response = $this->actingAs($user)->getJson(route('ligas.notification'));
-
-        $response->assertStatus(200)
-                 ->assertJson(['hasChange' => false]);
+        $this->actingAs($user)
+             ->getJson(route('ligas.notification'))
+             ->assertStatus(200)
+             ->assertJson(['hasChange' => false]);
     }
 
-    public function test_get_notification_returns_true_for_promotion(): void
+    public function test_returns_false_when_league_change_is_older_than_24h(): void
     {
         $user = User::factory()->create();
 
-        LeagueWeeklyResult::factory()->create([
-            'user_id' => $user->id,
-            'from_league' => 1,
-            'to_league' => 2,
-            'year' => 2026,
-            'week_number' => 25,
+        $record = LeagueWeeklyResult::create([
+            'user_id'     => $user->id,
+            'from_league' => LeagueTypeEnum::Bronze,
+            'to_league'   => LeagueTypeEnum::Silver,
         ]);
+        $record->forceFill(['created_at' => now()->subDays(2)])->save();
 
-        $response = $this->actingAs($user)->getJson(route('ligas.notification'));
-
-        $response->assertStatus(200)
-                 ->assertJson([
-                     'hasChange' => true,
-                     'direction' => 'up',
-                     'leagueName' => 'Silver',
-                     'year' => 2026,
-                     'week_number' => 25,
-                 ]);
+        $this->actingAs($user)
+             ->getJson(route('ligas.notification'))
+             ->assertStatus(200)
+             ->assertJson(['hasChange' => false]);
     }
 
-    public function test_get_notification_returns_true_for_demotion(): void
+    public function test_returns_promotion_when_recent_change_goes_up(): void
     {
         $user = User::factory()->create();
 
-        LeagueWeeklyResult::factory()->create([
-            'user_id' => $user->id,
-            'from_league' => 3,
-            'to_league' => 2,
-            'year' => 2026,
-            'week_number' => 26,
+        LeagueWeeklyResult::create([
+            'user_id'     => $user->id,
+            'from_league' => LeagueTypeEnum::Bronze,
+            'to_league'   => LeagueTypeEnum::Silver,
+            'created_at'  => now()->subHours(6),
         ]);
 
-        $response = $this->actingAs($user)->getJson(route('ligas.notification'));
+        $this->actingAs($user)
+             ->getJson(route('ligas.notification'))
+             ->assertStatus(200)
+             ->assertJson([
+                 'hasChange'  => true,
+                 'direction'  => 'up',
+                 'leagueName' => 'Silver',
+             ]);
+    }
 
-        $response->assertStatus(200)
-                 ->assertJson([
-                     'hasChange' => true,
-                     'direction' => 'down',
-                     'leagueName' => 'Silver',
-                     'year' => 2026,
-                     'week_number' => 26,
-                 ]);
+    public function test_returns_demotion_when_recent_change_goes_down(): void
+    {
+        $user = User::factory()->create();
+
+        LeagueWeeklyResult::create([
+            'user_id'     => $user->id,
+            'from_league' => LeagueTypeEnum::Gold,
+            'to_league'   => LeagueTypeEnum::Silver,
+            'created_at'  => now()->subHours(1),
+        ]);
+
+        $this->actingAs($user)
+             ->getJson(route('ligas.notification'))
+             ->assertStatus(200)
+             ->assertJson([
+                 'hasChange'  => true,
+                 'direction'  => 'down',
+                 'leagueName' => 'Silver',
+             ]);
     }
 }
