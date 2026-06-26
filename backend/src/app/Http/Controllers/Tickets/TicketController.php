@@ -23,7 +23,7 @@ class TicketController extends Controller
 {
  public const BUG_BOUNTY_REWARD_POINTS = 15;
   
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
