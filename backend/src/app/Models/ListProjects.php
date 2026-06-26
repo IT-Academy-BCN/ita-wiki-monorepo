@@ -8,6 +8,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\ForumQuestion;
+use App\Enums\ProjectStatusEnum;
 
 class ListProjects extends Model
 {
@@ -17,6 +18,7 @@ class ListProjects extends Model
         'roadmap' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',
+        'status' => ProjectStatusEnum::class,
     ];
     protected $fillable = [
         'user_id',
@@ -31,6 +33,7 @@ class ListProjects extends Model
         'language_frontend',
         'description',
         'roadmap',
+        'status',
         'github_url',
         'youtube_url',
     ];
