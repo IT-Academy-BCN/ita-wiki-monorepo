@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import GenericModal from '../ui/Modal/GenericModal';
+import { useState } from "react";
+import GenericModal from "../ui/Modal/GenericModal";
 
 interface CloseProjectModalProps {
   isOpen: boolean;
@@ -8,9 +8,14 @@ interface CloseProjectModalProps {
   isSubmitting: boolean;
 }
 
-function CloseProjectModal({ isOpen, onClose, onConfirm, isSubmitting }: CloseProjectModalProps) {
-  const [githubUrl, setGithubUrl] = useState('');
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+function CloseProjectModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  isSubmitting,
+}: CloseProjectModalProps) {
+  const [githubUrl, setGithubUrl] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   return (
     <GenericModal
@@ -18,8 +23,10 @@ function CloseProjectModal({ isOpen, onClose, onConfirm, isSubmitting }: ClosePr
       onClose={onClose}
       title="Completar projecte"
       showPrimaryButton
-      primaryButtonText={isSubmitting ? 'Guardant...' : 'Guardar'}
-      primaryButtonAction={isSubmitting ? undefined : () => onConfirm(githubUrl, youtubeUrl)}
+      primaryButtonText={isSubmitting ? "Guardant..." : "Guardar"}
+      primaryButtonAction={
+        isSubmitting ? undefined : () => onConfirm(githubUrl, youtubeUrl)
+      }
       showSecondaryButton
       secondaryButtonText="Cancel·lar"
       secondaryButtonAction={onClose}
@@ -29,7 +36,12 @@ function CloseProjectModal({ isOpen, onClose, onConfirm, isSubmitting }: ClosePr
       </p>
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-1 text-left">
-          <label htmlFor="github-url" className="text-sm font-medium text-gray-700">URL de GitHub</label>
+          <label
+            htmlFor="github-url"
+            className="text-sm font-medium text-gray-700"
+          >
+            URL de GitHub
+          </label>
           <input
             id="github-url"
             type="url"
@@ -40,7 +52,12 @@ function CloseProjectModal({ isOpen, onClose, onConfirm, isSubmitting }: ClosePr
           />
         </div>
         <div className="flex flex-col gap-1 text-left">
-          <label htmlFor="youtube-url" className="text-sm font-medium text-gray-700">URL de YouTube</label>
+          <label
+            htmlFor="youtube-url"
+            className="text-sm font-medium text-gray-700"
+          >
+            URL de YouTube
+          </label>
           <input
             id="youtube-url"
             type="url"

@@ -33,8 +33,14 @@ describe("CloseProjectModal", () => {
 
     render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
 
-    await user.type(screen.getByLabelText("URL de GitHub"), "https://github.com/user/project");
-    await user.type(screen.getByLabelText("URL de YouTube"), "https://youtube.com/watch?v=123");
+    await user.type(
+      screen.getByLabelText("URL de GitHub"),
+      "https://github.com/user/project",
+    );
+    await user.type(
+      screen.getByLabelText("URL de YouTube"),
+      "https://youtube.com/watch?v=123",
+    );
     await user.click(screen.getByRole("button", { name: "Guardar" }));
 
     expect(onConfirm).toHaveBeenCalledWith(
@@ -58,7 +64,13 @@ describe("CloseProjectModal", () => {
     const onConfirm = vi.fn();
     const user = userEvent.setup();
 
-    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} isSubmitting={true} />);
+    render(
+      <CloseProjectModal
+        {...defaultProps}
+        onConfirm={onConfirm}
+        isSubmitting={true}
+      />,
+    );
 
     expect(screen.getByRole("button", { name: "Guardant..." })).toBeTruthy();
 

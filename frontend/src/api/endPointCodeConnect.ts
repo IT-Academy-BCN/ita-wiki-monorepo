@@ -180,20 +180,22 @@ export const closeCodeConnectProject = async (
   data: { github_url?: string; youtube_url?: string },
 ): Promise<ApiProjectResponse> => {
   const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/complete`;
-  const token = localStorage.getItem('auth_token');
+  const token = localStorage.getItem("auth_token");
 
   const response = await fetch(url, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({})) as { message?: string };
+    const errorData = (await response.json().catch(() => ({}))) as {
+      message?: string;
+    };
     throw {
       message: errorData.message || `Error ${response.status}`,
       status: response.status,
@@ -202,4 +204,3 @@ export const closeCodeConnectProject = async (
 
   return response.json() as Promise<ApiProjectResponse>;
 };
-
