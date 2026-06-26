@@ -83,7 +83,7 @@ class ListProjectsIndexTest extends TestCase
             'language_frontend' => $this->projectOne->language_frontend,
             'description' => $this->projectOne->description,
             'roadmap' => $this->projectOne->roadmap,
-            'status' => $this->projectOne->status->value, // <--- temporary to be deleted after 869 PR approval --->
+            'status' => $this->projectOne->status->value,
 
             'contributors' => [
                 [
@@ -101,7 +101,6 @@ class ListProjectsIndexTest extends TestCase
             'time_duration' => $this->projectTwo->time_duration,
             'language_backend' => $this->projectTwo->language_backend,
             'language_frontend' => $this->projectTwo->language_frontend,
-            'status' => $this->projectOne->status->value, // <--- temporary to be deleted after 869 PR approval --->
             'contributors' => [],
         ]);
 
