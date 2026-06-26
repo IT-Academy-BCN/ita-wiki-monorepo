@@ -440,7 +440,7 @@ class ListProjectsController extends Controller
         if ($project->status !== ProjectStatusEnum::IN_PROGRESS) {
             return response()->json([
                 'success' => false,
-                'message' => 'Project is already completed'
+                'message' => "Project must be in 'in_progress' status to mark it as completed"
             ], 422);
         }
         
