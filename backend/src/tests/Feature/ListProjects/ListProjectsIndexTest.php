@@ -101,6 +101,7 @@ class ListProjectsIndexTest extends TestCase
             'time_duration' => $this->projectTwo->time_duration,
             'language_backend' => $this->projectTwo->language_backend,
             'language_frontend' => $this->projectTwo->language_frontend,
+            'status' => $this->projectTwo->status->value,
             'contributors' => [],
         ]);
 
