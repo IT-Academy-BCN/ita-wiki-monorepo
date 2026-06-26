@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import TicketRow from "../TicketRow";
 import type { ApiTicketData } from "../../../types/ticketingTypes";
@@ -74,5 +74,15 @@ describe("TicketRow", () => {
   it("should render - when category is null", () => {
     renderWithContext(<TicketRow ticket={{ ...mockTicket, category: null }} />);
     expect(screen.getAllByText("-").length).toBeGreaterThan(0);
+  });
+
+  it("calls onViewDetail with the ticket when the ID is clicked", () => {
+    const onViewDetailMock = vi.fn();
+    renderWithContext(
+      <TicketRow ticket={mockTicket} onViewDetail={onViewDetailMock} />,
+    );
+
+    fireEvent.click(screen.getByText("000001"));
+    expect(onViewDetailMock).toHaveBeenCalledWith(mockTicket);
   });
 });
