@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\ListProjects;
 use App\Models\ContributorListProject;
 use App\Enums\LanguageEnum;
+use App\Enums\ProjectStatusEnum;
 
 class ListProjectsSeeder extends Seeder
 {
@@ -29,10 +30,13 @@ class ListProjectsSeeder extends Seeder
                 'time_duration' => '1 month',
                 'language_backend' => LanguageEnum::PHP->value,
                 'language_frontend' => LanguageEnum::JavaScript->value,
+                'github_url' => 'https://github.com/example/project-alpha',
+                'youtube_url' => 'https://www.youtube.com/watch?v=example',
                 'roadmap' => [
                     ['task' => 'Setup structure', 'done' => true],
                     ['task' => 'Implement authentication', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
             ]
         );
 
@@ -47,10 +51,13 @@ class ListProjectsSeeder extends Seeder
                 'time_duration' => '2 months',
                 'language_backend' => LanguageEnum::Python->value,
                 'language_frontend' => LanguageEnum::React->value,
+                'github_url' => 'https://github.com/example/project-beta',
+                'youtube_url' => 'https://www.youtube.com/watch?v=example',
                 'roadmap' => [
                     ['task' => 'Design database', 'done' => true],
                     ['task' => 'Create ui components', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
             ]
         );
         
@@ -65,10 +72,14 @@ class ListProjectsSeeder extends Seeder
                 'time_duration' => '3 weeks',
                 'language_backend' => LanguageEnum::Java->value,
                 'language_frontend' => LanguageEnum::TypeScript->value,
+                'github_url' => 'https://github.com/example/project-gamma',
+                'youtube_url' => 'https://www.youtube.com/watch?v=example',
                 'roadmap' => [
                     ['task' => 'Setup CI/CD pipeline', 'done' => true],
                     ['task' => 'Implement user roles', 'done' => false],
                 ],
+                'status' => ProjectStatusEnum::IN_PROGRESS->value,
+                
             ]
         );
     }
