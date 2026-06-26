@@ -37,6 +37,9 @@ class ListProjectsShowTest extends TestCase
             'roadmap' => [['task' => 'Setup project', 'done' => true]],
             'start_date' => '2026-06-01',
             'end_date' => '2026-12-31',
+            'status' => ProjectStatusEnum::COMPLETED,
+            'github_url' => null,
+            'youtube_url' => null,
         ]);
 
         $this->contributorOne = ContributorListProject::factory()->create([
