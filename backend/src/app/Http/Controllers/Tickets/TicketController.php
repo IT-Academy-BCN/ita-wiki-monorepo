@@ -16,10 +16,14 @@ use App\Http\Requests\Tickets\UpdatePriorityRequest;
 use App\Http\Requests\Tickets\AssignTicketRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\Liga;
+use App\Models\LigaPointHistory;
 
 class TicketController extends Controller
 {
-     public function index(Request $request): JsonResponse
+ public const BUG_BOUNTY_REWARD_POINTS = 15;
+  
+    public function index(): JsonResponse
     {
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
@@ -143,9 +147,25 @@ class TicketController extends Controller
             $updateData['closed_by'] = null;
             $updateData['closed_at'] = null;
         }
-
+        $oldStatus = $ticket->status;
         $ticket->update($updateData);
+        if (
+            $oldStatus !== TicketStatusEnum::Closed &&
+            $status === TicketStatusEnum::Closed->value
+        ) {
+            $entry = Liga::where('user_id', $ticket->code_connect_id)->first();
 
+            if ($entry) {
+            $entry->increment('points', self::BUG_BOUNTY_REWARD_POINTS);
+            $entry->increment('points_weekly', self::BUG_BOUNTY_REWARD_POINTS);
+
+            LigaPointHistory::create([
+                'user_id' => $ticket->code_connect_id,
+                'points' => self::BUG_BOUNTY_REWARD_POINTS,
+                'activity' => 'Bug Bounty resolved',
+            ]);
+            }
+        }
         return response()->json([
             'success' => true,
             'message' => 'The Ticket status has been updated correctly',
