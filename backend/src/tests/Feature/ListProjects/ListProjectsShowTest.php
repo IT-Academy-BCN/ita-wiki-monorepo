@@ -74,6 +74,7 @@ class ListProjectsShowTest extends TestCase
                 'project_status' => ProjectStatusEnum::COMPLETED->value,
                 'github_url' => null,
                 'youtube_url' => null,
+                'status' => $this->projectOne->status->value,
                 'owner' => [
                     'id' => $this->projectOne->user->id,
                     'name' => $this->projectOne->user->name,
