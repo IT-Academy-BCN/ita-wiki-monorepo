@@ -3,6 +3,7 @@
 namespace Tests\Feature\ReportingTickets;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Enums\TicketCategoryEnum;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -269,9 +270,9 @@ class TicketControllerTest extends TestCase{
         $otherUser = User::factory()->create();
         Sanctum::actingAs($user);
 
-        Ticket::factory()->create(['code_connect_id' => $user->id]);
-        Ticket::factory()->create(['code_connect_id' => $user->id]);
-        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+        Ticket::factory()->create(['code_connect_id' => $user->id, 'category' => TicketCategoryEnum::Bug->value]);
+        Ticket::factory()->create(['code_connect_id' => $user->id, 'category' => TicketCategoryEnum::Bug->value]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id, 'category' => TicketCategoryEnum::Bug->value]);
 
         $response = $this->getJson('/api/tickets');
 
@@ -310,8 +311,8 @@ class TicketControllerTest extends TestCase{
         $otherUser = User::factory()->create();
         Sanctum::actingAs($student);
 
-        Ticket::factory()->create(['code_connect_id' => $student->id]);
-        Ticket::factory()->create(['code_connect_id' => $otherUser->id]);
+        Ticket::factory()->create(['code_connect_id' => $student->id, 'category' => TicketCategoryEnum::Bug->value]);
+        Ticket::factory()->create(['code_connect_id' => $otherUser->id, 'category' => TicketCategoryEnum::Bug->value]);
 
         $response = $this->getJson('/api/tickets');
 
@@ -319,6 +320,39 @@ class TicketControllerTest extends TestCase{
         $this->assertCount(1, $response->json('data'));
         $this->assertEquals($student->id, $response->json('data.0.code_connect_id'));
     }
+
+    /** @test */
+    public function a_student_can_see_all_suggestion_tickets(): void
+    {
+        $student = User::factory()->create();
+        $student->assignRole('student');
+        $otherUser = User::factory()->create();
+        Sanctum::actingAs($student);
+
+        $ownTicket = Ticket::factory()->create([
+            'code_connect_id' => $student->id,
+            'category' => TicketCategoryEnum::Bug->value,
+        ]);
+        $otherSuggestion = Ticket::factory()->create([
+            'code_connect_id' => $otherUser->id,
+            'category' => TicketCategoryEnum::Suggestion->value,
+        ]);
+        $otherBug = Ticket::factory()->create([
+            'code_connect_id' => $otherUser->id,
+            'category' => TicketCategoryEnum::Bug->value,
+        ]);
+
+        $response = $this->getJson('/api/tickets?include_suggestions=true');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data'))->pluck('id');
+
+        $this->assertTrue($ids->contains($ownTicket->id));
+        $this->assertTrue($ids->contains($otherSuggestion->id));
+        $this->assertFalse($ids->contains($otherBug->id));
+    }
+
+
 
     /** @test */
     public function admin_can_view_any_ticket(): void{
