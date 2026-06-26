@@ -6,7 +6,10 @@ use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-
+use App\Models\Liga;
+use App\Models\LigaPointHistory;
+use App\Enums\TicketStatusEnum;
+use App\Http\Controllers\Tickets\TicketController;
 class TicketControllerTest extends TestCase{
 
     use RefreshDatabase;
@@ -913,6 +916,43 @@ class TicketControllerTest extends TestCase{
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['category']);
+    }
+
+    public function test_bug_bounty_awards_15_points_when_ticket_is_closed(): void
+    {
+        $creator = User::factory()->create();
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        Sanctum::actingAs($admin);
+        Liga::create([
+            'user_id' => $creator->id,
+            'points' => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $ticket = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'status' => TicketStatusEnum::InProgress->value,
+        ]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed',
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('ligas', [
+            'user_id' => $creator->id,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+            'points_weekly' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+        ]);
+
+        $this->assertDatabaseHas('liga_point_histories', [
+            'user_id' => $creator->id,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+            'activity' => 'Bug Bounty resolved',
+        ]);
     }
 }
 ?>
