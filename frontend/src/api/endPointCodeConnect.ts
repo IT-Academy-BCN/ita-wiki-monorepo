@@ -179,7 +179,7 @@ export const closeCodeConnectProject = async (
   projectId: number,
   data: { github_url?: string; youtube_url?: string },
 ): Promise<ApiProjectResponse> => {
-  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/close`;
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/complete`;
   const token = localStorage.getItem('auth_token');
 
   const response = await fetch(url, {
