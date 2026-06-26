@@ -6,9 +6,9 @@ import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
 import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
 import { displayLanguageIcon } from "../utils/iconUtils";
-import { useUserContext } from '../context/UserContext';
-import CloseProjectModal from '../components/code-connect/CloseProjectModal';
-import { closeCodeConnectProject } from '../api/endPointCodeConnect';
+import { useUserContext } from "../context/UserContext";
+import CloseProjectModal from "../components/code-connect/CloseProjectModal";
+import { closeCodeConnectProject } from "../api/endPointCodeConnect";
 
 const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -34,7 +34,6 @@ const CodeConnectDetails = () => {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <>
@@ -84,8 +83,8 @@ const CodeConnectDetails = () => {
                 "Aquesta informació no està disponible a la base de dades."
               )}
 
-              {codeConnectProject.data.user_id === user?.id && (
-                codeConnectProject.data.project_status === 'completed' ? (
+              {codeConnectProject.data.user_id === user?.id &&
+                (codeConnectProject.data.project_status === "completed" ? (
                   <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
                     ✓ Completat
                   </span>
@@ -97,10 +96,7 @@ const CodeConnectDetails = () => {
                   >
                     Marcar com a complet
                   </button>
-                )
-              )}
-
-              
+                ))}
             </div>
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
@@ -120,12 +116,12 @@ const CodeConnectDetails = () => {
           </div>
         )}
       </Container>
-<CloseProjectModal
-                isOpen={isCloseModalOpen}
-                onClose={() => setIsCloseModalOpen(false)}
-                onConfirm={handleCloseProject}
-                isSubmitting={isSubmitting}
-              />      
+      <CloseProjectModal
+        isOpen={isCloseModalOpen}
+        onClose={() => setIsCloseModalOpen(false)}
+        onConfirm={handleCloseProject}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 };
