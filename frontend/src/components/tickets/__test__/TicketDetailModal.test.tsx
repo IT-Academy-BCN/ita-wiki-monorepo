@@ -57,14 +57,14 @@ describe("TicketDetailModal", () => {
   beforeEach(() => mockUseTicketComments.mockReturnValue(mockHookReturn()));
 
   it("shows empty state when there are no comments", () => {
-render(
+    render(
       <TicketDetailModal
         ticket={mockTicket}
         isOpen={true}
         onClose={() => {}}
       />,
     );
-expect(screen.getByText("No hi ha comentaris")).toBeInTheDocument();
+    expect(screen.getByText("No hi ha comentaris")).toBeInTheDocument();
   });
 
   it("renders ticket details correctly", () => {
@@ -75,15 +75,14 @@ expect(screen.getByText("No hi ha comentaris")).toBeInTheDocument();
         onClose={() => {}}
       />,
     );
-     expect(screen.getByText("000001")).toBeInTheDocument();
+    expect(screen.getByText("000001")).toBeInTheDocument();
     expect(screen.getByText("No puc iniciar sessió.")).toBeInTheDocument();
     expect(screen.getByText("Nou")).toBeInTheDocument();
     expect(screen.getByText("Alta")).toBeInTheDocument();
     expect(screen.getByTestId("category-icon")).toBeInTheDocument();
     expect(screen.getByText("23/04/2026")).toBeInTheDocument();
     expect(screen.getByText("student")).toBeInTheDocument();
-    });
-    
+  });
 
   it("shows comment text when a comment exists", () => {
     mockUseTicketComments.mockReturnValue(
@@ -108,7 +107,5 @@ expect(screen.getByText("No hi ha comentaris")).toBeInTheDocument();
       />,
     );
     expect(screen.getByText("El login falla des de ahir.")).toBeInTheDocument();
-
-   
   });
 });
