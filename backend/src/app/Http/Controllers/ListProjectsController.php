@@ -65,8 +65,7 @@ class ListProjectsController extends Controller
      * )
      */
 
-    private function formatOwner(?User $user): ?array
-    {
+    private function formatOwner(?User $user): ?array {
 
         return $user ? ['id' => $user->id, 'name' => $user->name,] : null;
     }
