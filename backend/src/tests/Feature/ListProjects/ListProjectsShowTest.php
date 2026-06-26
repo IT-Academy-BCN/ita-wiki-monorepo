@@ -71,6 +71,9 @@ class ListProjectsShowTest extends TestCase
                 'language_frontend' => $this->projectOne->language_frontend,
                 'description' => $this->projectOne->description,
                 'roadmap' => $this->projectOne->roadmap,
+                'project_status' => ProjectStatusEnum::COMPLETED->value,
+                'github_url' => null,
+                'youtube_url' => null,
                 'owner' => [
                     'id' => $this->projectOne->user->id,
                     'name' => $this->projectOne->user->name,
