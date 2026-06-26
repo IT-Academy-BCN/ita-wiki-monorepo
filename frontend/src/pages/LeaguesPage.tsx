@@ -13,6 +13,8 @@ import PointsHistoryTable from "../components/leagues-ranking/PointsHistoryTable
 import { useTriggerWeeklyTransition } from "../hooks/useTriggerWeeklyTransition";
 import { triggerWeeklyTransition } from "../api/endPointLeagues";
 import { useLeagues } from "../hooks/useLeagues";
+import { LeagueNotificationModal } from "../components/Modal/LeagueNotificationModal";
+import { useLeagueNotification } from "../hooks/useLeagueNotification";
 
 const LeaguesPage = () => {
   const [view, setView] = useState<LeagueView>("weekly");
@@ -22,6 +24,7 @@ const LeaguesPage = () => {
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
   const { trigger } = useTriggerWeeklyTransition({ triggerWeeklyTransition });
   const { leagues, fetchLeagues } = useLeagues();
+  const { notification, dismiss } = useLeagueNotification();
   return (
     <div className="px-6 md:px-10 xl:px-20 2xl:px-6 flex flex-col gap-10">
       <div className="max-w-3xl w-full">
@@ -84,6 +87,14 @@ const LeaguesPage = () => {
       >
         <p>Vols actualitzar les lligues?</p>
       </GenericModal>
+
+      {notification?.hasChange && (
+        <LeagueNotificationModal
+          direction={notification.direction}
+          leagueName={notification.leagueName}
+          onDismiss={dismiss}
+        />
+      )}
     </div>
   );
 };
