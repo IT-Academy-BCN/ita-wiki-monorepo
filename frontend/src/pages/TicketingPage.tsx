@@ -9,6 +9,7 @@ import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
 import { useUserContext } from "../context/UserContext";
 import { STATUS_LABELS } from "../components/tickets/ticketConstants";
+import { TicketCategoryEnum } from "../types/ticketingTypes";
 import type {
   IntCreateTicket,
   TicketStatus,
@@ -21,7 +22,9 @@ const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
-  const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const { tickets, isLoading, errorMessage, refetch } =
+    useTicketingGetAll(showSuggestions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<ApiTicketData | null>(
@@ -65,8 +68,9 @@ const TicketingPage = (): JSX.Element => {
     );
   };
 
-  const filteredTickets =
-    statusFilter.length === 0
+  const filteredTickets = showSuggestions
+    ? tickets.filter((t) => t.category === TicketCategoryEnum.SUGGESTION)
+    : statusFilter.length === 0
       ? tickets
       : tickets.filter((t) => statusFilter.includes(t.status));
 
@@ -98,12 +102,12 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
-        <ButtonComponent
+       <ButtonComponent
           className="w-full flex justify-start"
           variant="discreet"
-          onClick={() => {}}
+          onClick={() => setShowSuggestions((prev) => !prev)}
         >
-          Veure suggeriments
+          {showSuggestions ? "Veure tickets" : "Veure suggeriments"}
         </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
@@ -137,3 +141,4 @@ const TicketingPage = (): JSX.Element => {
 };
 
 export default TicketingPage;
+
