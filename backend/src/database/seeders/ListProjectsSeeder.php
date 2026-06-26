@@ -19,12 +19,11 @@ class ListProjectsSeeder extends Seeder
     public function run(): void
     {
         $owner = \App\Models\User::first() ?? \App\Models\User::factory()->create();
-        $riu = \App\Models\User::where('email', 'josemanuelriu@gmail.com')->first() ?? $owner;
 
         ListProjects::firstOrCreate(
             ['title' => 'Project Alpha'],
             [
-                'user_id' => $riu->id,
+                'user_id' => $owner->id,
                 'description' => 'This is an example project description',
                 'limit_date_inscription' => '2026-06-30',
                 'dev_front_number' => 2,
@@ -108,7 +107,7 @@ class ListProjectsSeeder extends Seeder
         ListProjects::firstOrCreate(
             ['title' => 'Project Epsilon'],
             [
-                'user_id' => $riu->id,
+                'user_id' => $owner->id,
                 'description' => 'Frontend dashboard with React and data visualization',
                 'limit_date_inscription' => '2026-09-15',
                 'dev_front_number' => 3,
