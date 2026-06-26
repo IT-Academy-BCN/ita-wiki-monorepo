@@ -119,4 +119,20 @@ describe("useTicketingGetAll", () => {
     await waitFor(() => expect(result.current.tickets).toEqual(apiTickets));
     expect(axios.get).toHaveBeenCalledTimes(2);
   });
+
+  it("requests suggestions when includeSuggestions is true", async () => {
+    vi.spyOn(axios, "get").mockResolvedValueOnce({
+      data: { success: true, data: [] },
+    });
+
+    renderHook(() => useTicketingGetAll(true));
+
+    await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
+    expect(axios.get).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        params: { include_suggestions: true },
+      }),
+    );
+  });
 });

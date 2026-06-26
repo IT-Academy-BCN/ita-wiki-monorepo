@@ -3,7 +3,10 @@ import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
-import type { ApiTicketData } from "../../types/ticketingTypes";
+import {
+  TicketCategoryEnum,
+  type ApiTicketData,
+} from "../../types/ticketingTypes";
 import type {
   IntCreateTicket,
   TicketListProps,
@@ -26,7 +29,9 @@ vi.mock("../../components/tickets/TicketList", () => ({
             key={t.id}
             data-testid="ticket-list-item"
             onClick={() => onViewDetail?.(t)}
-          />
+          >
+            {t.id}
+          </div>
         ))}
       </div>
     );
@@ -129,5 +134,27 @@ describe("TicketingPage", () => {
     render(<TicketingPage />);
     const button = screen.getByRole("button", { name: "Veure suggeriments" });
     expect(button).toBeInTheDocument();
+  });
+
+  it("shows all suggestion tickets when suggestions button is clicked", () => {
+    const tickets = [
+      { id: 1, status: "pending", category: TicketCategoryEnum.BUG },
+      { id: 2, status: "closed", category: TicketCategoryEnum.SUGGESTION },
+      { id: 3, status: "closed", category: TicketCategoryEnum.BUG },
+    ] as ApiTicketData[];
+    mockHook.mockReturnValue(hookReturn({ tickets }));
+    render(<TicketingPage />);
+
+    expect(mockHook).toHaveBeenLastCalledWith(false);
+
+    fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
+
+    expect(mockHook).toHaveBeenLastCalledWith(true);
+
+    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(1);
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Veure tickets" }),
+    ).toBeInTheDocument();
   });
 });

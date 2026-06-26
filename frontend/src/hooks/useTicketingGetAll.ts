@@ -90,4 +90,3 @@ export const useTicketingGetAll = (includeSuggestions = false) => {
 
   return { tickets, isLoading, errorMessage, refetch };
 };
-

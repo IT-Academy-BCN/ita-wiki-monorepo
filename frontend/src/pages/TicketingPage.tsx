@@ -102,7 +102,7 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
-       <ButtonComponent
+        <ButtonComponent
           className="w-full flex justify-start"
           variant="discreet"
           onClick={() => setShowSuggestions((prev) => !prev)}
@@ -141,4 +141,3 @@ const TicketingPage = (): JSX.Element => {
 };
 
 export default TicketingPage;
-
