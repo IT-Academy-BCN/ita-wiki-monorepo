@@ -118,6 +118,7 @@ class LigaController extends Controller
 
     public function triggerWeeklyTransition(): JsonResponse
     {
+        Artisan::call('liga:process-promotions');
         Artisan::call('liga:reset-weekly');
         return response()->json([
             'message' => 'Weekly transition triggered successfully',
