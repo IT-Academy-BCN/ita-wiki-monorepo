@@ -7,25 +7,20 @@ vi.mock("../../api/endPointLeagues", () => ({
   fetchLeagueNotification: vi.fn(),
 }));
 
+const mockNotification = {
+  hasChange: true,
+  direction: "up",
+  leagueName: "Silver",
+  year: 2026,
+  week_number: 25,
+} as const;
+
 describe("useLeagueNotification", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    localStorage.clear();
-  });
+  beforeEach(() => vi.clearAllMocks());
+  afterEach(() => vi.restoreAllMocks());
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("returns notification data when API call succeeds and not dismissed", async () => {
-    const mockData = {
-      hasChange: true,
-      direction: "up",
-      newLeagueId: 2,
-      year: 2026,
-      week_number: 25,
-    } as const;
-    vi.mocked(fetchLeagueNotification).mockResolvedValueOnce(mockData);
+  it("returns notification data when API call succeeds", async () => {
+    vi.mocked(fetchLeagueNotification).mockResolvedValueOnce(mockNotification);
 
     const { result } = renderHook(() => useLeagueNotification());
 
@@ -33,51 +28,20 @@ describe("useLeagueNotification", () => {
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
-      expect(result.current.notification).toEqual(mockData);
+      expect(result.current.notification).toEqual(mockNotification);
       expect(result.current.error).toBeNull();
     });
   });
 
-  it("returns hasChange false if it was already dismissed in localStorage", async () => {
-    const mockData = {
-      hasChange: true,
-      direction: "up",
-      newLeagueId: 2,
-      year: 2026,
-      week_number: 25,
-    } as const;
-    localStorage.setItem("league_notified_2026_25", "true");
-    vi.mocked(fetchLeagueNotification).mockResolvedValueOnce(mockData);
+  it("clears notification state when dismiss is called", async () => {
+    vi.mocked(fetchLeagueNotification).mockResolvedValueOnce(mockNotification);
 
     const { result } = renderHook(() => useLeagueNotification());
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-      expect(result.current.notification).toEqual({ hasChange: false });
-    });
-  });
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
-  it("dismisses notification by setting localStorage and state", async () => {
-    const mockData = {
-      hasChange: true,
-      direction: "up",
-      newLeagueId: 2,
-      year: 2026,
-      week_number: 25,
-    } as const;
-    vi.mocked(fetchLeagueNotification).mockResolvedValueOnce(mockData);
-
-    const { result } = renderHook(() => useLeagueNotification());
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
-    act(() => {
-      result.current.dismiss();
-    });
+    act(() => result.current.dismiss());
 
     expect(result.current.notification).toEqual({ hasChange: false });
-    expect(localStorage.getItem("league_notified_2026_25")).toBe("true");
   });
 });

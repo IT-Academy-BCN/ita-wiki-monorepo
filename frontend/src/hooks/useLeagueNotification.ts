@@ -15,17 +15,6 @@ export const useLeagueNotification = () => {
       try {
         setLoading(true);
         const data = await fetchLeagueNotification(controller.signal);
-
-        if (data.hasChange) {
-          const isDismissed = localStorage.getItem(
-            `league_notified_${data.year}_${data.week_number}`,
-          );
-          if (isDismissed) {
-            setNotification({ hasChange: false });
-            return;
-          }
-        }
-
         setNotification(data);
         setError(null);
       } catch (err) {
@@ -42,15 +31,7 @@ export const useLeagueNotification = () => {
     return () => controller.abort();
   }, []);
 
-  const dismiss = () => {
-    if (notification && notification.hasChange) {
-      localStorage.setItem(
-        `league_notified_${notification.year}_${notification.week_number}`,
-        "true",
-      );
-    }
-    setNotification({ hasChange: false });
-  };
+  const dismiss = () => setNotification({ hasChange: false });
 
   return { notification, loading, error, dismiss };
 };
