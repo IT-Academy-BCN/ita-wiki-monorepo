@@ -16,6 +16,7 @@ import type {
 } from "../types/ticketingTypes";
 import TicketDetailModal from "../components/tickets/TicketDetailModal";
 import ButtonComponent from "../components/atoms/ButtonComponent";
+import { roles } from "../data/tempRoles";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
@@ -29,7 +30,7 @@ const TicketingPage = (): JSX.Element => {
   );
   const { user } = useUserContext();
   const currentUserId = user?.id;
-  const isStudent = user?.role === "student";
+  const isStudent = user?.role === roles.STUDENT;
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
