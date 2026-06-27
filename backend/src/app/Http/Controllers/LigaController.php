@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Liga;
 use App\Models\LigaPointHistory;
 use App\Models\User;
+use App\Models\LeagueWeeklyResult;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -126,9 +127,14 @@ class LigaController extends Controller
 
     public function getNotification(Request $request): JsonResponse
     {
-        $recentChange = \App\Models\LeagueWeeklyResult::where('user_id', $request->user()->id)
-            ->where('created_at', '>=', now()->subDay())
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $recentChange = LeagueWeeklyResult::where('user_id', $user->id)
             ->whereColumn('from_league', '!=', 'to_league')
+            ->where('created_at', '>=', now()->subDay())
             ->latest()
             ->first();
 
