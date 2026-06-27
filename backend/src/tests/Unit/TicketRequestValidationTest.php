@@ -34,7 +34,7 @@ class TicketRequestValidationTest extends TestCase{
             'affected_function' => 'nullable|in:login,challenges,resources,profile,technical_tests,code_connect,other',
             'description' => 'required|string',
             'priority' => 'nullable|in:low,medium,high,critical',
-            'category' => 'nullable|in:bug,suggestion,other',
+            'category' => 'required|in:bug,suggestion,other',
         ];
 
         $this->assertEquals($expectedRules, $request->rules());
@@ -53,6 +53,7 @@ class TicketRequestValidationTest extends TestCase{
         $this->assertFalse($validator->errors()->has('type'));
         $this->assertFalse($validator->errors()->has('affected_function'));
         $this->assertTrue($validator->errors()->has('description'));
+         $this->assertTrue($validator->errors()->has('category'));
     }
 
     /** @test */
