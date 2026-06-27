@@ -118,8 +118,12 @@ class LigaController extends Controller
 
     public function triggerWeeklyTransition(): JsonResponse
     {
-        app(\App\Console\Commands\ProcessLeaguePromotions::class)->handle();
-        \App\Models\Liga::query()->update(['points_weekly' => 0]);
+        $exitCode = app(\App\Console\Commands\ProcessLeaguePromotions::class)->handle();
+
+        if ($exitCode === 0) {
+            \App\Models\Liga::query()->update(['points_weekly' => 0]);
+        }
+
         return response()->json([
             'message' => 'Weekly transition triggered successfully',
         ]);
