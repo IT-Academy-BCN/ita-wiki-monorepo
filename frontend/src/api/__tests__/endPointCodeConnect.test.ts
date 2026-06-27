@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IntCodeConnect } from "../../types";
 import {
   CodeConnectError,
+  closeCodeConnectProject,
   createCodeConnect,
   fetchCodeConnectAllProjects,
   fetchCodeConnectProject,
@@ -204,6 +205,81 @@ describe("fetchCodeConnectAllProjects", () => {
     mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
 
     await expect(fetchCodeConnectAllProjects()).rejects.toMatchObject({
+      message: "Error de connexió. Verifica la teva connexió a internet.",
+      code: "NETWORK_ERROR",
+    } as CodeConnectError);
+  });
+});
+
+describe("closeCodeConnectProject", () => {
+  beforeEach(() => {
+    mockFetch = vi.fn();
+    global.fetch = mockFetch;
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should call the correct endpoint with PATCH method and token", async () => {
+    localStorage.setItem("auth_token", "test-token");
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    });
+
+    await closeCodeConnectProject(1, {
+      github_url: "https://github.com/user/project",
+      youtube_url: "https://youtube.com/watch?v=123",
+    });
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "http://localhost:8000/codeconnect/1/complete",
+      expect.objectContaining({
+        method: "PATCH",
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Authorization: "Bearer test-token",
+        }),
+        body: JSON.stringify({
+          github_url: "https://github.com/user/project",
+          youtube_url: "https://youtube.com/watch?v=123",
+        }),
+      }),
+    );
+  });
+
+  it("should not send Authorization header when no token in localStorage", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    });
+
+    await closeCodeConnectProject(1, {});
+
+    const calledWithOptions = mockFetch.mock.calls[0][1];
+    expect(calledWithOptions.headers.Authorization).toBeUndefined();
+  });
+
+  it("should throw an error with the backend message on failed request", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 403,
+      statusText: "Forbidden",
+      json: async () => ({ message: "You are not the owner of this project" }),
+    });
+
+    await expect(closeCodeConnectProject(1, {})).rejects.toMatchObject({
+      message: "You are not the owner of this project",
+      status: 403,
+    } as CodeConnectError);
+  });
+
+  it("should throw an error on network failure", async () => {
+    mockFetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+
+    await expect(closeCodeConnectProject(1, {})).rejects.toMatchObject({
       message: "Error de connexió. Verifica la teva connexió a internet.",
       code: "NETWORK_ERROR",
     } as CodeConnectError);

@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
+import { closeCodeConnectProject } from "../../api/endPointCodeConnect";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 import CodeConnectDetails from "../CodeConnectDetails";
 
@@ -18,6 +18,32 @@ vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
 
 vi.mock("../../utils/iconUtils", () => ({
   displayLanguageIcon: () => "fake-icon.svg",
+}));
+
+vi.mock("../../context/UserContext", () => ({
+  useUserContext: () => ({ user: { id: 1 } }),
+}));
+
+vi.mock("../../api/endPointCodeConnect", () => ({
+  closeCodeConnectProject: vi.fn(),
+}));
+
+vi.mock("../../components/code-connect/CloseProjectModal", () => ({
+  default: ({
+    isOpen,
+    onClose,
+    onConfirm,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: (g: string, y: string) => Promise<void>;
+  }) =>
+    isOpen ? (
+      <div data-testid="close-project-modal">
+        <button onClick={() => onConfirm("", "")}>Confirmar</button>
+        <button onClick={onClose}>Cancel·lar</button>
+      </div>
+    ) : null,
 }));
 
 describe("CodeConnectDetails Page", () => {
@@ -162,5 +188,96 @@ describe("CodeConnectDetails Page", () => {
     fireEvent.click(button);
 
     expect(screen.getByText(/Completat/)).toBeTruthy();
+  });
+
+  it("shows '✓ Completat' when project_status is already completed", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: {
+        data: {
+          id: 1,
+          user_id: 1,
+          title: "Projecte Test",
+          description: "Descripció de prova",
+          roadmap: [],
+          contributors: [],
+          time_duration: "2 setmanes",
+          language_frontend: "react",
+          language_backend: "node",
+          project_status: "completed",
+        },
+      },
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.getByText("✓ Completat")).toBeTruthy();
+    expect(screen.queryByText("Marcar com a complet")).toBeNull();
+  });
+
+  it("does not show the button when the user is not the owner", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: {
+        data: {
+          id: 1,
+          user_id: 99,
+          title: "Projecte Test",
+          description: "Descripció de prova",
+          roadmap: [],
+          contributors: [],
+          time_duration: "2 setmanes",
+          language_frontend: "react",
+          language_backend: "node",
+          project_status: "in_progress",
+        },
+      },
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.queryByText("Marcar com a complet")).toBeNull();
+  });
+
+  it("calls closeCodeConnectProject and reloads when confirming", async () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: {
+        data: {
+          id: 1,
+          user_id: 1,
+          title: "Projecte Test",
+          description: "Descripció de prova",
+          roadmap: [],
+          contributors: [],
+          time_duration: "2 setmanes",
+          language_frontend: "react",
+          language_backend: "node",
+          project_status: "in_progress",
+        },
+      },
+      isLoading: false,
+      errorMessage: null,
+    });
+    (closeCodeConnectProject as Mock).mockResolvedValue({});
+    const reloadMock = vi.fn();
+    Object.defineProperty(window, "location", {
+      value: { reload: reloadMock },
+      writable: true,
+    });
+
+    render(<CodeConnectDetails />);
+
+    fireEvent.click(screen.getByText("Marcar com a complet"));
+    fireEvent.click(screen.getByText("Confirmar"));
+
+    await waitFor(() => {
+      expect(closeCodeConnectProject).toHaveBeenCalledWith(1, {
+        github_url: undefined,
+        youtube_url: undefined,
+      });
+      expect(reloadMock).toHaveBeenCalled();
+    });
   });
 });
