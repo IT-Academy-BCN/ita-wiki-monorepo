@@ -369,12 +369,12 @@ class ListProjectsController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/api/codeconnect/{id}/complete",
+     *     path="/api/codeconnect/{listProject}/complete",
      *     summary="Mark a project as completed",
      *     tags={"Codeconnect"},
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="listProject",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
@@ -420,9 +420,9 @@ class ListProjectsController extends Controller
      *     )
      * )
      */
-    public function complete(CompleteProjectRequest $request, $id)
+    public function complete(CompleteProjectRequest $request, $listProjectId)
     {
-        $project = ListProjects::find($id);
+        $project = ListProjects::find($listProjectId);
         if (!$project) {
             return response()->json([
                 'success' => false,
