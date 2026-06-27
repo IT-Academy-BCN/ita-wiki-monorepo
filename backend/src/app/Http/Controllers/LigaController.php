@@ -118,8 +118,8 @@ class LigaController extends Controller
 
     public function triggerWeeklyTransition(): JsonResponse
     {
-        Artisan::call('liga:process-promotions');
-        Artisan::call('liga:reset-weekly');
+        app(\App\Console\Commands\ProcessLeaguePromotions::class)->handle();
+        \App\Models\Liga::query()->update(['points_weekly' => 0]);
         return response()->json([
             'message' => 'Weekly transition triggered successfully',
         ]);
