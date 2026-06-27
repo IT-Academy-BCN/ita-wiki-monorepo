@@ -37,6 +37,22 @@ vi.mock("../../utils/iconUtils", () => ({
   displayLanguageIcon: () => "fake-icon.svg",
 }));
 
+vi.mock("../../context/UserContext", () => ({
+  useUserContext: () => ({ user: { id: 1 } }),
+}));
+
+const baseProject = {
+  id: 1,
+  user_id: 1,
+  title: "Projecte Test",
+  description: "Descripció de prova",
+  roadmap: [],
+  contributors: [],
+  time_duration: "2 setmanes",
+  language_frontend: "react",
+  language_backend: "node",
+};
+
 describe("CodeConnectDetails Page", () => {
   it("renders the project title and team when data arrives", () => {
     const mockProjectData = {
@@ -128,19 +144,9 @@ describe("CodeConnectDetails Page", () => {
     expect(screen.getByText("Carregant...")).toBeTruthy();
   });
 
-  it("renders the 'Marcar com a complet' button", () => {
+  it("shows 'Marcar com a complet' button when the user is the owner", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: {
-        data: {
-          title: "Projecte Test",
-          description: "Descripció de prova",
-          roadmap: [],
-          contributors: [],
-          time_duration: "2 setmanes",
-          language_frontend: "react",
-          language_backend: "node",
-        },
-      },
+      codeConnectProject: { data: baseProject },
       isLoading: false,
       errorMessage: null,
     });
@@ -150,19 +156,21 @@ describe("CodeConnectDetails Page", () => {
     expect(screen.getByText("Marcar com a complet")).toBeTruthy();
   });
 
+  it("does not show the button when the user is not the owner", () => {
+    (useCodeConnectDetails as Mock).mockReturnValue({
+      codeConnectProject: { data: { ...baseProject, user_id: 99 } },
+      isLoading: false,
+      errorMessage: null,
+    });
+
+    render(<CodeConnectDetails />);
+
+    expect(screen.queryByText("Marcar com a complet")).toBeNull();
+  });
+
   it("opens CloseProjectModal when clicking 'Marcar com a complet'", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: {
-        data: {
-          title: "Projecte Test",
-          description: "Descripció de prova",
-          roadmap: [],
-          contributors: [],
-          time_duration: "2 setmanes",
-          language_frontend: "react",
-          language_backend: "node",
-        },
-      },
+      codeConnectProject: { data: baseProject },
       isLoading: false,
       errorMessage: null,
     });
@@ -176,17 +184,7 @@ describe("CodeConnectDetails Page", () => {
 
   it("shows '✓ Completat' after confirming in the modal", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: {
-        data: {
-          title: "Projecte Test",
-          description: "Descripció de prova",
-          roadmap: [],
-          contributors: [],
-          time_duration: "2 setmanes",
-          language_frontend: "react",
-          language_backend: "node",
-        },
-      },
+      codeConnectProject: { data: baseProject },
       isLoading: false,
       errorMessage: null,
     });
@@ -201,17 +199,7 @@ describe("CodeConnectDetails Page", () => {
 
   it("closes the modal when clicking Cancel·lar", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: {
-        data: {
-          title: "Projecte Test",
-          description: "Descripció de prova",
-          roadmap: [],
-          contributors: [],
-          time_duration: "2 setmanes",
-          language_frontend: "react",
-          language_backend: "node",
-        },
-      },
+      codeConnectProject: { data: baseProject },
       isLoading: false,
       errorMessage: null,
     });
