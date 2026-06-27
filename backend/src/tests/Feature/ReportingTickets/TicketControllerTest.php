@@ -6,7 +6,10 @@ use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-
+use App\Models\Liga;
+use App\Models\LigaPointHistory;
+use App\Enums\TicketStatusEnum;
+use App\Http\Controllers\Tickets\TicketController;
 class TicketControllerTest extends TestCase{
 
     use RefreshDatabase;
@@ -23,7 +26,8 @@ class TicketControllerTest extends TestCase{
             'affected_app' => 'wiki_frontend',
             'type' => 'error',
             'affected_function' => 'login',
-            'description' => 'This is a test ticket.'
+            'description' => 'This is a test ticket.',
+            'category' => 'bug'
         ]);
         
 
@@ -36,7 +40,8 @@ class TicketControllerTest extends TestCase{
                 'affected_function',
                 'description',
                 'created_at',
-                'updated_at'
+                'updated_at',
+                'category'
             ]
         ]);      
 
@@ -46,7 +51,8 @@ class TicketControllerTest extends TestCase{
             'affected_app' => 'wiki_frontend',
             'type' => 'error',
             'affected_function' => 'login',
-            'description' => 'This is a test ticket.'
+            'description' => 'This is a test ticket.',
+            'category' => 'bug'
         ]);
         
     }
@@ -60,7 +66,8 @@ class TicketControllerTest extends TestCase{
             'affected_app' => 'wiki_frontend',
             'type' => 'error',
             'affected_function' => 'login',
-            'description' => 'This is a test ticket.'
+            'description' => 'This is a test ticket.',
+            'category' => 'suggestion'
         ]);       
 
         $response->assertStatus(401);
@@ -84,7 +91,8 @@ class TicketControllerTest extends TestCase{
                 'affected_function',
                 'description',
                 'created_at',
-                'updated_at'
+                'updated_at',
+                'category'
             ]
         ]);
     }
@@ -127,6 +135,7 @@ class TicketControllerTest extends TestCase{
          'type' => 'error',
          'affected_function' => 'login',
          'description' => 'Old description.',
+         'category' => 'other',
         ]);
 
         $response = $this->putJson("/api/tickets/{$ticket->id}", [
@@ -135,6 +144,7 @@ class TicketControllerTest extends TestCase{
          'type' => 'suggestion',
          'affected_function' => 'profile',
          'description' => 'Updated description.',
+         'category' => 'other',
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
@@ -146,7 +156,8 @@ class TicketControllerTest extends TestCase{
             'affected_function',
             'description',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'category'
         ]
     ]);
 
@@ -158,6 +169,7 @@ class TicketControllerTest extends TestCase{
         'type' => 'suggestion',
         'affected_function' => 'profile',
         'description' => 'Updated description.',
+        'category' => 'other',
     ]);
 }
     /** @test*/
@@ -216,13 +228,14 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
-    public function a_ticket_can_be_created_with_only_description(): void{
+    public function a_ticket_can_be_created_with_only_description_and_category(): void{
 
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         $response = $this->postJson('/api/tickets', [
             'description' => 'Login fails on production',
+            'category' => 'suggestion'
         ]);
 
         $response->assertStatus(201);
@@ -235,6 +248,7 @@ class TicketControllerTest extends TestCase{
             'type' => 'error',
             'affected_function' => 'other',
             'incident_date' => now()->toDateString(),
+            'category' => 'suggestion'
         ]);
     }
 
@@ -251,6 +265,7 @@ class TicketControllerTest extends TestCase{
             'type' => 'error',
             'affected_function' => 'login',
             'description' => 'This is a test ticket.',
+            'category' => 'bug'
         ]);
 
         $response->assertStatus(201);
@@ -883,24 +898,6 @@ class TicketControllerTest extends TestCase{
     }
 
     /** @test */
-    public function an_auth_user_can_create_a_ticket_without_category(): void
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $response = $this->postJson('/api/tickets', [
-            'description' => 'This is a test ticket.',
-        ]);
-
-        $response->assertStatus(201);
-
-        $this->assertDatabaseHas('tickets', [
-            'code_connect_id' => $user->id,
-            'category' => null,
-        ]);
-    }
-
-    /** @test */
     public function creating_a_ticket_with_invalid_category_returns_422(): void
     {
         $user = User::factory()->create();
@@ -913,6 +910,43 @@ class TicketControllerTest extends TestCase{
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['category']);
+    }
+
+    public function test_bug_bounty_awards_15_points_when_ticket_is_closed(): void
+    {
+        $creator = User::factory()->create();
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        Sanctum::actingAs($admin);
+        Liga::create([
+            'user_id' => $creator->id,
+            'points' => 0,
+            'points_weekly' => 0,
+        ]);
+
+        $ticket = Ticket::factory()->create([
+            'code_connect_id' => $creator->id,
+            'status' => TicketStatusEnum::InProgress->value,
+        ]);
+
+        $response = $this->patchJson("/api/tickets/{$ticket->id}/status", [
+            'status' => 'closed',
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('ligas', [
+            'user_id' => $creator->id,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+            'points_weekly' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+        ]);
+
+        $this->assertDatabaseHas('liga_point_histories', [
+            'user_id' => $creator->id,
+            'points' => TicketController::BUG_BOUNTY_REWARD_POINTS,
+            'activity' => 'Bug Bounty resolved',
+        ]);
     }
 }
 ?>
