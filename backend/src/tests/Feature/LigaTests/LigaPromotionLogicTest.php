@@ -14,6 +14,14 @@ class LigaPromotionLogicTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->make(\Illuminate\Contracts\Console\Kernel::class)->registerCommand(
+            new \App\Console\Commands\ProcessLeaguePromotions()
+        );
+    }
+
     public function test_top_3_in_bronze_are_promoted_to_silver(): void
     {
         $users = User::factory(4)->create();
