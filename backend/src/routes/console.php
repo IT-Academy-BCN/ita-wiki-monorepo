@@ -13,8 +13,8 @@ Artisan::command('liga:reset-weekly', function () {
     $this->info('liga:reset-weekly');
 })->purpose('Reset weekly points for all liga entries');
 
-Artisan::command('liga:process-promotions', function () {
-    app(\App\Console\Commands\ProcessLeaguePromotions::class)->handle();
-})->purpose('Process weekly league promotions and demotions');
-
-Schedule::command('liga:reset-weekly')->weeklyOn(0, '00:00');
+Schedule::command('liga:process-promotions')
+    ->weeklyOn(0, '00:00')
+    ->then(function () {
+        Artisan::call('liga:reset-weekly');
+    });
