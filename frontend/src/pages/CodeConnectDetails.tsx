@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
+import CloseProjectModal from "../components/code-connect/CloseProjectModal";
 import PendingRequestList from "../components/code-connect/pendingRequests/PendingRequestList";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
@@ -10,6 +11,12 @@ import { displayLanguageIcon } from "../utils/iconUtils";
 const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleConfirm = async (_githubUrl: string, _youtubeUrl: string) => {
+    setIsCompleted(true);
+    setIsModalOpen(false);
+  };
 
   const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
     projectId || null,
@@ -66,7 +73,7 @@ const CodeConnectDetails = () => {
               {!isCompleted ? (
                 <button
                   type="button"
-                  onClick={() => setIsCompleted(true)}
+                  onClick={() => setIsModalOpen(true)}
                   className="mt-6 text-primary hover:opacity-80 transition-opacity"
                 >
                   Marcar com a complet
@@ -95,6 +102,12 @@ const CodeConnectDetails = () => {
           </div>
         )}
       </Container>
+      <CloseProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirm}
+        isSubmitting={false}
+      />
     </>
   );
 };
