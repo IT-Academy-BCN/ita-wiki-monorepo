@@ -67,6 +67,8 @@ const END_POINTS = {
     get: "tickets" as EndPoints,
     post: "tickets" as EndPoints,
     patch: "tickets" as EndPoints,
+    status: (id: number) => `tickets/${id}/status`,
+    priority: (id: number) => `tickets/${id}/priority`,
   },
   leagues: {
     get: "ligas/ranking" as EndPoints,

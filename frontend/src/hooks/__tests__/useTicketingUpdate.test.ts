@@ -1,11 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { updateTicket } from "../../api/endPointTickets";
+import { updateTicket, updateTicketStatus } from "../../api/endPointTickets";
 import { useTicketingUpdate } from "../useTicketingUpdate";
 
 vi.mock("../../api/endPointTickets", () => ({
   updateTicket: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }));
 
 describe("useTicketingUpdate", () => {
@@ -36,7 +37,7 @@ describe("useTicketingUpdate", () => {
   });
 
   it("updates ticket status correctly", async () => {
-    vi.mocked(updateTicket).mockResolvedValue({
+    vi.mocked(updateTicketStatus).mockResolvedValue({
       id: 1,
       status: "closed",
     } as never);
@@ -49,9 +50,7 @@ describe("useTicketingUpdate", () => {
       response = await result.current.updateStatus(1, "closed");
     });
 
-    expect(updateTicket).toHaveBeenCalledWith(1, {
-      status: "closed",
-    });
+    expect(updateTicketStatus).toHaveBeenCalledWith(1, "closed");
 
     expect(result.current.errorMessage).toBeNull();
     expect(response).toBe(true);
