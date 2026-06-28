@@ -32,7 +32,7 @@ export const useTicketingUpdate = () => {
     setErrorMessage(null);
 
     try {
-     await updateTicketStatus(ticketId, status);
+      await updateTicketStatus(ticketId, status);
       return true;
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unknown error");
