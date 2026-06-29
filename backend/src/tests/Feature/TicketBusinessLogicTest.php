@@ -240,6 +240,7 @@ class TicketBusinessLogicTest extends TestCase{
             'type' => 'error',
             'affected_function' => 'login',
             'description' => 'Test',
+            'category'=> 'bug',
         ];
 
         $response1 = $this->postJson('/api/tickets', $ticketData);
@@ -265,6 +266,7 @@ class TicketBusinessLogicTest extends TestCase{
             'type' => 'error',
             'affected_function' => 'login',
             'description' => 'This is a test ticket.',
+            'category' => 'other',
         ]);
 
         $response->assertStatus(201);
