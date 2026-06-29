@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Liga;
 use App\Models\LigaPointHistory;
 use App\Models\User;
+use App\Models\LeagueWeeklyResult;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -128,5 +129,33 @@ class LigaController extends Controller
             'message' => 'Weekly transition triggered successfully',
         ]);
     }
-}
 
+    public function getNotification(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $recentChange = LeagueWeeklyResult::where('user_id', $user->id)
+            ->whereColumn('from_league', '!=', 'to_league')
+            ->where('created_at', '>=', now()->subDay())
+            ->latest()
+            ->first();
+
+        if (!$recentChange) {
+            return response()->json(['hasChange' => false]);
+        }
+
+        /** @var \App\Enums\LeagueTypeEnum $fromLeague */
+        $fromLeague = $recentChange->from_league;
+        /** @var \App\Enums\LeagueTypeEnum $toLeague */
+        $toLeague = $recentChange->to_league;
+
+        return response()->json([
+            'hasChange'   => true,
+            'direction'   => $toLeague->value > $fromLeague->value ? 'up' : 'down',
+            'leagueName'  => $toLeague->name,
+        ]);
+    }
+}
