@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\LanguageEnum;
+use App\Enums\ProjectStatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,10 +34,13 @@ class ListProjectsFactory extends Factory
             'time_duration' => $this->faker->word(),
             'language_backend' => $this->faker->randomElement($languages),
             'language_frontend' => $this->faker->randomElement($languages),
+            'github_url' => $this->faker->optional()->url(),
+            'youtube_url' => $this->faker->optional()->url(),
             'roadmap'=> $this->faker->optional()->passthrough([
                 ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
                 ['task' => $this->faker->sentence(3), 'done' => $this->faker->boolean()],
-            ])
+            ]),
+            'status' => $this->faker->randomElement(ProjectStatusEnum::values()),
         ];
     }
 }
