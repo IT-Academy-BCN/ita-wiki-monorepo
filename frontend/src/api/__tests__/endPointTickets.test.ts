@@ -5,6 +5,7 @@ import {
   addComment,
   getComments,
   updateComment,
+  updateTicketStatus,
 } from "../endPointTickets";
 import { IntCreateTicket } from "../../types/ticketingTypes";
 
@@ -16,6 +17,7 @@ vi.mock("../../config", () => ({
       get: "/api/tickets",
       post: "/api/tickets",
       patch: "/api/tickets",
+      status: (id: number) => `/api/tickets/${id}/status`,
     },
   },
 }));
@@ -113,6 +115,36 @@ describe("updateComment", () => {
     expect(axios.put).toHaveBeenCalledWith(
       expect.stringContaining("tickets/1/comments/42"),
       { comment: "edited text" },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+        }),
+      }),
+    );
+  });
+});
+
+describe("updateTicketStatus", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should update the ticket status and return the updated data", async () => {
+    const mockTicket = {
+      id: 1,
+      status: "closed",
+    };
+
+    vi.mocked(axios.patch).mockResolvedValue({
+      data: { data: mockTicket },
+    });
+
+    const result = await updateTicketStatus(1, "closed");
+
+    expect(result).toEqual(mockTicket);
+    expect(axios.patch).toHaveBeenCalledWith(
+      expect.stringContaining("/api/tickets/1/status"),
+      { status: "closed" },
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
