@@ -1,5 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
 import useCodeConnectDetails from "../../hooks/useCodeConnectDetails";
 import CodeConnectDetails from "../CodeConnectDetails";
@@ -18,6 +17,32 @@ vi.mock("../../components/code-connect/projectTeam/ProjectTeam", () => ({
 
 vi.mock("../../utils/iconUtils", () => ({
   displayLanguageIcon: () => "fake-icon.svg",
+}));
+
+vi.mock("../../context/UserContext", () => ({
+  useUserContext: () => ({ user: { id: 1 } }),
+}));
+
+vi.mock("../../api/endPointCodeConnect", () => ({
+  closeCodeConnectProject: vi.fn(),
+}));
+
+vi.mock("../../components/code-connect/CloseProjectModal", () => ({
+  default: ({
+    isOpen,
+    onClose,
+    onConfirm,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: (g: string, y: string) => Promise<void>;
+  }) =>
+    isOpen ? (
+      <div data-testid="close-project-modal">
+        <button onClick={() => onConfirm("", "")}>Guardar</button>
+        <button onClick={onClose}>Cancel·lar</button>
+      </div>
+    ) : null,
 }));
 
 describe("CodeConnectDetails Page", () => {
@@ -114,6 +139,8 @@ describe("CodeConnectDetails Page", () => {
   it("renders the 'Marcar como completado' button", () => {
     const mockProjectData = {
       data: {
+        id: 1,
+        user_id: 1,
         title: "Projecte Test",
         description: "Descripció de prova",
         roadmap: [],
@@ -121,6 +148,7 @@ describe("CodeConnectDetails Page", () => {
         time_duration: "2 setmanes",
         language_frontend: "react",
         language_backend: "node",
+        project_status: "in_progress",
       },
     };
 
@@ -135,32 +163,43 @@ describe("CodeConnectDetails Page", () => {
     expect(screen.getByText("Marcar com a complet")).toBeTruthy();
   });
 
-  it("toggles to 'Completat' badge after clicking the button", () => {
-    const mockProjectData = {
-      data: {
-        title: "Projecte Test",
-        description: "Descripció de prova",
-        roadmap: [],
-        contributors: [],
-        time_duration: "2 setmanes",
-        language_frontend: "react",
-        language_backend: "node",
-      },
-    };
-
+  it("closes the modal after clicking Guardar", async () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: mockProjectData,
+      codeConnectProject: {
+        data: {
+          id: 1,
+          user_id: 1,
+          title: "Projecte Test",
+          description: "Descripció de prova",
+          roadmap: [],
+          contributors: [],
+          time_duration: "2 setmanes",
+          language_frontend: "react",
+          language_backend: "node",
+          project_status: "in_progress",
+        },
+      },
       isLoading: false,
       errorMessage: null,
+    });
+    (closeCodeConnectProject as Mock).mockResolvedValue({});
+    Object.defineProperty(window, "location", {
+      value: { reload: vi.fn() },
+      writable: true,
     });
 
     render(<CodeConnectDetails />);
 
-    const button = screen.getByRole("button", {
-      name: /marcar com a complet/i,
-    });
-    fireEvent.click(button);
+    fireEvent.click(
+      screen.getByRole("button", { name: /marcar com a complet/i }),
+    );
+    expect(screen.getByTestId("close-project-modal")).toBeTruthy();
 
-    expect(screen.getByText(/Completat/)).toBeTruthy();
+    fireEvent.click(screen.getByText("Guardar"));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("close-project-modal")).toBeNull();
+    });
   });
+
 });
