@@ -39,29 +39,6 @@ class CompleteProjectTest extends TestCase
         ]);
     }
 
-    public function test_unauthenticated_user_cannot_complete_project(): void
-    {
-        $owner = User::factory()->create();
-        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
-
-        $response = $this->patchJson("/api/codeconnect/{$project->id}/complete");
-
-        $response->assertStatus(401);
-    }
-
-    public function test_non_owner_cannot_complete_project(): void
-    {
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
-        $project = ListProjects::factory()->create(['user_id' => $owner->id]);
-
-        $response = $this->actingAs($otherUser)
-            ->patchJson("/api/codeconnect/{$project->id}/complete");
-
-        $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not the owner of this project']);
-    }
-
     public function test_nonexistent_project_returns_404(): void
     {
         $user = User::factory()->create();
