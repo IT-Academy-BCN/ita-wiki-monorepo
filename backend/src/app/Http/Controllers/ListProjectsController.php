@@ -417,7 +417,7 @@ class ListProjectsController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Project is already completed or invalid URLs"
+     *         description="Project must be in 'in_progress' status to mark it as completed or invalid URLs"
      *     )
      * )
      */
@@ -441,7 +441,7 @@ class ListProjectsController extends Controller
         if ($project->status !== ProjectStatusEnum::IN_PROGRESS) {
             return response()->json([
                 'success' => false,
-                'message' => 'Project is already completed'
+                'message' => "Project must be in 'in_progress' status to mark it as completed"
             ], 422);
         }
         
