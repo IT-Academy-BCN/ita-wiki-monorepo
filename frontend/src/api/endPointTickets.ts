@@ -32,7 +32,7 @@ export const updateTicketStatus = async (
 ): Promise<ApiTicketData> => {
   const token = localStorage.getItem("auth_token");
 
-  const url = `${API_URL}${END_POINTS.tickets.status(id)}`;
+  const url = `${API_URL}tickets/${id}/status`;
 
   const response = await axios.patch<ApiUpdateTicketResponse>(
     url,
