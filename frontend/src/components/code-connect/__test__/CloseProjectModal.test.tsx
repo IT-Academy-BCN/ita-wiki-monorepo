@@ -100,4 +100,57 @@ describe("CloseProjectModal", () => {
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it("shows an error and does not call onConfirm when github URL is invalid", async () => {
+    const onConfirm = vi.fn();
+    const user = userEvent.setup();
+
+    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
+
+    await user.type(screen.getByLabelText("URL de GitHub"), "not-a-url");
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
+
+    expect(
+      screen.getByText("The GitHub URL must be a valid URL."),
+    ).toBeTruthy();
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
+  it("shows an error and does not call onConfirm when youtube URL is invalid", async () => {
+    const onConfirm = vi.fn();
+    const user = userEvent.setup();
+
+    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
+
+    await user.type(screen.getByLabelText("URL de YouTube"), "not-a-url");
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
+
+    expect(
+      screen.getByText("The YouTube URL must be a valid URL."),
+    ).toBeTruthy();
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
+  it("clears the error when the user corrects the invalid URL", async () => {
+    const user = userEvent.setup();
+
+    render(<CloseProjectModal {...defaultProps} />);
+
+    await user.type(screen.getByLabelText("URL de GitHub"), "not-a-url");
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
+
+    expect(
+      screen.getByText("The GitHub URL must be a valid URL."),
+    ).toBeTruthy();
+
+    await user.clear(screen.getByLabelText("URL de GitHub"));
+    await user.type(
+      screen.getByLabelText("URL de GitHub"),
+      "https://github.com/user/project",
+    );
+
+    expect(
+      screen.queryByText("The GitHub URL must be a valid URL."),
+    ).toBeNull();
+  });
 });

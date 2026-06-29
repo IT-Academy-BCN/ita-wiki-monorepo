@@ -8,6 +8,15 @@ interface CloseProjectModalProps {
   isSubmitting: boolean;
 }
 
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 function CloseProjectModal({
   isOpen,
   onClose,
@@ -16,6 +25,26 @@ function CloseProjectModal({
 }: CloseProjectModalProps) {
   const [githubUrl, setGithubUrl] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [githubUrlError, setGithubUrlError] = useState("");
+  const [youtubeUrlError, setYoutubeUrlError] = useState("");
+
+  const handleConfirm = () => {
+    const githubError =
+      githubUrl && !isValidUrl(githubUrl)
+        ? "The GitHub URL must be a valid URL."
+        : "";
+    const youtubeError =
+      youtubeUrl && !isValidUrl(youtubeUrl)
+        ? "The YouTube URL must be a valid URL."
+        : "";
+
+    setGithubUrlError(githubError);
+    setYoutubeUrlError(youtubeError);
+
+    if (githubError || youtubeError) return;
+
+    onConfirm(githubUrl, youtubeUrl);
+  };
 
   return (
     <GenericModal
@@ -24,9 +53,7 @@ function CloseProjectModal({
       title="Completar projecte"
       showPrimaryButton
       primaryButtonText={isSubmitting ? "Guardant..." : "Guardar"}
-      primaryButtonAction={
-        isSubmitting ? undefined : () => onConfirm(githubUrl, youtubeUrl)
-      }
+      primaryButtonAction={isSubmitting ? undefined : handleConfirm}
       showSecondaryButton
       secondaryButtonText="Cancel·lar"
       secondaryButtonAction={onClose}
@@ -46,10 +73,16 @@ function CloseProjectModal({
             id="github-url"
             type="url"
             value={githubUrl}
-            onChange={(e) => setGithubUrl(e.target.value)}
+            onChange={(e) => {
+              setGithubUrl(e.target.value);
+              setGithubUrlError("");
+            }}
             placeholder="https://github.com/..."
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {githubUrlError && (
+            <p className="text-xs text-red-500">{githubUrlError}</p>
+          )}
         </div>
         <div className="flex flex-col gap-1 text-left">
           <label
@@ -62,10 +95,16 @@ function CloseProjectModal({
             id="youtube-url"
             type="url"
             value={youtubeUrl}
-            onChange={(e) => setYoutubeUrl(e.target.value)}
+            onChange={(e) => {
+              setYoutubeUrl(e.target.value);
+              setYoutubeUrlError("");
+            }}
             placeholder="https://youtube.com/..."
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {youtubeUrlError && (
+            <p className="text-xs text-red-500">{youtubeUrlError}</p>
+          )}
         </div>
       </div>
     </GenericModal>
