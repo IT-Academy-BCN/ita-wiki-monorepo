@@ -81,7 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
     Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
     Route::post('/codeconnect/{listProject}/join', JoinProjectController::class)->name('codeconnect.join');
-    Route::patch('/codeconnect/{id}/complete', [ListProjectsController::class, 'complete'])->name('codeconnect.complete');
+    Route::patch('/codeconnect/{listProject}/complete', [ListProjectsController::class, 'complete'])->name('codeconnect.complete');
 });
 
 // ========== FORUM ENDPOINTS ==========
