@@ -11,13 +11,12 @@ import { IntCreateTicket } from "../../types/ticketingTypes";
 
 vi.mock("axios");
 vi.mock("../../config", () => ({
-  API_URL: "http://localhost:3000",
+  API_URL: "http://localhost/api/",
   END_POINTS: {
     tickets: {
       get: "/api/tickets",
       post: "/api/tickets",
       patch: "/api/tickets",
-      status: (id: number) => `/api/tickets/${id}/status`,
     },
   },
 }));
