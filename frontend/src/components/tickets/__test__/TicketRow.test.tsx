@@ -82,6 +82,7 @@ describe("TicketRow", () => {
     expect(
       screen.getByRole("img", { name: /comment indicator/i }),
     ).toBeInTheDocument();
+  });
   it("calls onViewDetail with the ticket when the ID is clicked", () => {
     const onViewDetailMock = vi.fn();
     renderWithContext(

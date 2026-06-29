@@ -101,11 +101,18 @@ const TicketRow = ({
         <button onClick={() => onCommentClick?.(ticket.id)}>Comentari</button>
       </div>
       <div role="cell">
-        {ticket.comments_count > 0 && (
-          <span className="relative inline-flex items-center justify-center" aria-label="Comment indicator">
-            <img className="block w-5 h-5" src={CommentIcon} alt="Comment indicator" />
+        {(ticket.comments_count ?? 0) > 0 && (
+          <span
+            className="relative inline-flex items-center justify-center"
+            aria-label="Comment indicator"
+          >
+            <img
+              className="block w-5 h-5"
+              src={CommentIcon}
+              alt="Comment indicator"
+            />
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-              {ticket.comments_count}
+              {ticket.comments_count ?? 0}
             </span>
           </span>
         )}
