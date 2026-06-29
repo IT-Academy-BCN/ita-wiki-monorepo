@@ -14,8 +14,12 @@ const CodeConnectDetails = () => {
   const { user } = useUserContext();
   const [isCompleted, setIsCompleted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setGithubUrl] = useState("");
+  const [, setYoutubeUrl] = useState("");
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (github: string, youtube: string) => {
+    setGithubUrl(github);
+    setYoutubeUrl(youtube);
     setIsCompleted(true);
     setIsModalOpen(false);
   };
