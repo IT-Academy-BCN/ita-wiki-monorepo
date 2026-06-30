@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateTicket } from "../api/endPointTickets";
+import { updateTicket, updateTicketStatus } from "../api/endPointTickets";
 import type { TicketPriority, TicketStatus } from "../types/ticketingTypes";
 
 export const useTicketingUpdate = () => {
@@ -32,7 +32,7 @@ export const useTicketingUpdate = () => {
     setErrorMessage(null);
 
     try {
-      await updateTicket(ticketId, { status });
+      await updateTicketStatus(ticketId, status);
       return true;
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unknown error");

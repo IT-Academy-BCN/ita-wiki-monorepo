@@ -8,6 +8,7 @@ import {
   ApiTicketData,
 } from "../types/ticketingTypes";
 import { API_URL, END_POINTS } from "../config";
+import type { TicketStatus } from "../types/ticketingTypes";
 
 export const createTicket = async (
   data: IntCreateTicket,
@@ -21,6 +22,28 @@ export const createTicket = async (
       Authorization: `Bearer ${token}`,
     },
   });
+
+  return response.data.data;
+};
+
+export const updateTicketStatus = async (
+  id: number,
+  status: TicketStatus,
+): Promise<ApiTicketData> => {
+  const token = localStorage.getItem("auth_token");
+
+  const url = `${API_URL}tickets/${id}/status`;
+
+  const response = await axios.patch<ApiUpdateTicketResponse>(
+    url,
+    { status },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 
   return response.data.data;
 };
