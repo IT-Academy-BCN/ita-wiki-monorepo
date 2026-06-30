@@ -25,7 +25,11 @@ class TicketController extends Controller
   
     public function index(Request $request): JsonResponse
     {
-        $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
+        $query = Ticket::with([
+            'codeConnect',
+            'assignee',
+            'closedBy',
+        ])->withCount('comments');
 
         if (! auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
             $query->where(function ($q) use ($request) {
