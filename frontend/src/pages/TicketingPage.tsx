@@ -31,6 +31,8 @@ const TicketingPage = (): JSX.Element => {
   const { user } = useUserContext();
   const currentUserId = user?.id;
   const isStudent = user?.role === roles.STUDENT;
+  const [showOnlySuggestions, setShowOnlySuggestions] =
+    useState<boolean>(false);
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
@@ -67,10 +69,12 @@ const TicketingPage = (): JSX.Element => {
     );
   };
 
-  const filteredTickets =
-    statusFilter.length === 0
-      ? tickets
-      : tickets.filter((t) => statusFilter.includes(t.status));
+  const filteredTickets = tickets.filter((t) => {
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(t.status);
+    const matchesCategory = !showOnlySuggestions || t.category === "suggestion";
+    return matchesStatus && matchesCategory;
+  });
 
   return (
     <>
@@ -101,14 +105,15 @@ const TicketingPage = (): JSX.Element => {
           )}
         </div>
         {isStudent && (
-          <ButtonComponent
-            className="w-full flex justify-start"
-            variant="discreet"
-            onClick={() => {}}
-          >
-            Veure suggeriments
-          </ButtonComponent>
-        )}
+        <ButtonComponent
+          className="w-full flex justify-start"
+          variant="discreet"
+          onClick={() => setShowOnlySuggestions((prev) => !prev)}
+        >
+          {showOnlySuggestions
+            ? "Veure els meus tickets"
+            : "Veure suggeriments"}
+        </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}

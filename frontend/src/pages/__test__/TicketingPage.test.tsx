@@ -27,7 +27,9 @@ vi.mock("../../components/tickets/TicketList", () => ({
             key={t.id}
             data-testid="ticket-list-item"
             onClick={() => onViewDetail?.(t)}
-          />
+          >
+            {t.name}
+          </div>
         ))}
       </div>
     );
@@ -84,6 +86,7 @@ describe("TicketingPage", () => {
 
   it("mostra el missatge d'error", () => {
     mockHook.mockReturnValue(hookReturn({ errorMessage: "Error de connexió" }));
+
     render(<TicketingPage />);
     expect(screen.getByText("Error de connexió")).toBeInTheDocument();
   });
@@ -143,5 +146,55 @@ describe("TicketingPage", () => {
     expect(
       screen.queryByRole("button", { name: "Veure suggeriments" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("toggles the suggestion filter", () => {
+    render(<TicketingPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
+
+    expect(
+      screen.getByRole("button", { name: "Veure els meus tickets" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Veure els meus tickets" }),
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Veure suggeriments" }),
+    ).toBeInTheDocument();
+  });
+
+  it("filters tickets by suggestion category", () => {
+    const tickets = [
+      {
+        id: 1,
+        name: "Login no funciona",
+        status: "pending",
+        category: "bug",
+      },
+      {
+        id: 2,
+        name: "Afegir mode fosc",
+        status: "pending",
+        category: "suggestion",
+      },
+      {
+        id: 3,
+        name: "Millorar filtres",
+        status: "in_progress",
+        category: "suggestion",
+      },
+    ] as ApiTicketData[];
+    mockHook.mockReturnValue(hookReturn({ tickets }));
+
+    render(<TicketingPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
+
+    expect(screen.queryByText("Login no funciona")).not.toBeInTheDocument();
+    expect(screen.getByText("Afegir mode fosc")).toBeInTheDocument();
+    expect(screen.getByText("Millorar filtres")).toBeInTheDocument();
+    expect(screen.queryByText("Suggeriment tancat")).not.toBeInTheDocument();
   });
 });
