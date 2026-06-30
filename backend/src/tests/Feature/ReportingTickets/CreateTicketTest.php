@@ -41,6 +41,7 @@ class CreateTicketTest extends TestCase
             'type' => 'error',
             'affected_function' => 'code_connect',
             'description' => 'This answer should be reported',
+            'category' => 'bug',
         ];
 
         $response = $this->postJson('/api/tickets', $payload);

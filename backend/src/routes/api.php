@@ -185,4 +185,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
     Route::post('/ligas/trigger-weekly-transition', [LigaController::class, 'triggerWeeklyTransition'])->name('ligas.trigger-weekly-transition');
     Route::get('/ligas/history', [LigaController::class, 'history'])->name('ligas.history');
+    Route::get('/ligas/notification', [LigaController::class, 'getNotification'])->name('ligas.notification');
 });

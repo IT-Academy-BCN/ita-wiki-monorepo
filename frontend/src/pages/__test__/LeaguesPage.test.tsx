@@ -30,6 +30,14 @@ vi.mock("../../hooks/useTriggerWeeklyTransition", () => ({
   }),
 }));
 
+const mockUseLeagueNotification = vi.fn(() => ({
+  notification: null,
+  dismiss: vi.fn(),
+}));
+vi.mock("../../hooks/useLeagueNotification", () => ({
+  useLeagueNotification: () => mockUseLeagueNotification(),
+}));
+
 vi.mock("../../components/ui/Modal/GenericModal", () => ({
   default: ({
     isOpen,
@@ -161,5 +169,42 @@ describe("LeaguesPage", () => {
     expect(
       screen.queryByText(/el meu historial de punts/i),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders LeagueNotificationModal when there is a league change", () => {
+    mockUseUser.mockReturnValue({ user: null });
+    mockUseLeagueNotification.mockReturnValue({
+      notification: {
+        hasChange: true,
+        direction: "up",
+        leagueName: "Silver",
+      },
+      dismiss: vi.fn(),
+    });
+
+    render(<LeaguesPage />);
+
+    expect(screen.getByText("Felicitats!")).toBeInTheDocument();
+    expect(screen.getByText(/Has pujat a la lliga/)).toBeInTheDocument();
+    expect(screen.getByText("Silver")).toBeInTheDocument();
+  });
+
+  it("calls dismiss when modal is closed", () => {
+    mockUseUser.mockReturnValue({ user: null });
+    const dismissSpy = vi.fn();
+    mockUseLeagueNotification.mockReturnValue({
+      notification: {
+        hasChange: true,
+        direction: "up",
+        leagueName: "Silver",
+      },
+      dismiss: dismissSpy,
+    });
+
+    render(<LeaguesPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: "D'acord" }));
+
+    expect(dismissSpy).toHaveBeenCalledTimes(1);
   });
 });
