@@ -6,7 +6,7 @@ import type { LigaResponse } from "../../../types/league";
 import { WeeklyRanking } from "../WeeklyRanking/WeeklyRanking";
 
 const mockLeagues: LigaResponse = {
-  "1": [
+  "3": [
     {
       position: 1,
       user_id: 101,
@@ -14,7 +14,7 @@ const mockLeagues: LigaResponse = {
       points_weekly: 94,
       status: "Junior Coder",
       language: "React",
-      league_id: 1,
+      league_id: 3,
     },
   ],
 };
