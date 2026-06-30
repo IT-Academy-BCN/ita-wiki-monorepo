@@ -1,21 +1,14 @@
 interface LeagueNotificationModalProps {
   direction: "up" | "down";
-  newLeagueId: number;
+  leagueName: string;
   onDismiss: () => void;
 }
 
-const LEAGUE_NAMES: Record<number, string> = {
-  1: "Bronze",
-  2: "Silver",
-  3: "Gold",
-};
-
 export const LeagueNotificationModal = ({
   direction,
-  newLeagueId,
+  leagueName,
   onDismiss,
 }: LeagueNotificationModalProps) => {
-  const leagueName = LEAGUE_NAMES[newLeagueId] || "Desconeguda";
   const isUp = direction === "up";
 
   const title = isUp ? "Felicitats!" : "Atenció";

@@ -7,22 +7,26 @@ type WeeklyRankingProps = {
 
 export const WeeklyRanking = ({ leagues }: WeeklyRankingProps) => {
   const LEAGUE_LABELS: Record<string, string> = {
-    "1": "Or",
+    "1": "Bronze",
     "2": "Plata",
-    "3": "Bronze",
+    "3": "Or",
   };
+
+  const sortedLeagues = leagues
+    ? Object.entries(leagues).sort(([a], [b]) => Number(b) - Number(a))
+    : [];
 
   return (
     <>
       {leagues && (
         <section>
-          {Object.entries(leagues).map(([id, league], index) => (
+          {sortedLeagues.map(([id, league], index) => (
             <div key={id} className="my-10">
               <h1>Lliga {LEAGUE_LABELS[id] ?? id}</h1>
               <LeagueList
                 standings={league}
                 showUp={index > 0}
-                showDown={index + 1 < Object.entries(leagues).length}
+                showDown={index + 1 < sortedLeagues.length}
               />
             </div>
           ))}

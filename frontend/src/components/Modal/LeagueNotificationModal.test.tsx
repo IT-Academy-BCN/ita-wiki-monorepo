@@ -8,7 +8,7 @@ describe("LeagueNotificationModal", () => {
     render(
       <LeagueNotificationModal
         direction="up"
-        newLeagueId={2}
+        leagueName="Silver"
         onDismiss={handleDismiss}
       />,
     );
