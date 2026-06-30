@@ -37,6 +37,7 @@ const mockTicket: ApiTicketData = {
   affected_function: "login",
   incident_date: "2026-04-23",
   category: TicketCategoryEnum.BUG,
+  comments_count: 1,
 };
 
 const renderWithContext = (ui: React.ReactElement) => {
@@ -76,6 +77,12 @@ describe("TicketRow", () => {
     expect(screen.getAllByText("-").length).toBeGreaterThan(0);
   });
 
+  it("should render comment icon when ticket has comments", () => {
+    renderWithContext(<TicketRow ticket={mockTicket} />);
+    expect(
+      screen.getByRole("img", { name: /comment indicator/i }),
+    ).toBeInTheDocument();
+  });
   it("calls onViewDetail with the ticket when the ID is clicked", () => {
     const onViewDetailMock = vi.fn();
     renderWithContext(

@@ -107,6 +107,7 @@ export interface ApiTicketData {
   code_connect?: TicketUserData | null;
   assignee?: TicketUserData | null;
   closed_by_user?: TicketUserData | null;
+  comments_count?: number;
 }
 
 export interface ApiTicketsResponse {
