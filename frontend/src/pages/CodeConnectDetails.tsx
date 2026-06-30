@@ -1,15 +1,28 @@
 import { useState } from "react";
 import { useParams } from "react-router";
+import CloseProjectModal from "../components/code-connect/CloseProjectModal";
 import PendingRequestList from "../components/code-connect/pendingRequests/PendingRequestList";
 import ProjectTeam from "../components/code-connect/projectTeam/ProjectTeam";
 import Container from "../components/ui/Container";
 import PageTitle from "../components/ui/PageTitle";
+import { useUserContext } from "../context/UserContext";
 import useCodeConnectDetails from "../hooks/useCodeConnectDetails";
 import { displayLanguageIcon } from "../utils/iconUtils";
 
 const CodeConnectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
+  const { user } = useUserContext();
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setGithubUrl] = useState("");
+  const [, setYoutubeUrl] = useState("");
+
+  const handleConfirm = async (github: string, youtube: string) => {
+    setGithubUrl(github);
+    setYoutubeUrl(youtube);
+    setIsCompleted(true);
+    setIsModalOpen(false);
+  };
 
   const { codeConnectProject, isLoading, errorMessage } = useCodeConnectDetails(
     projectId || null,
@@ -63,19 +76,20 @@ const CodeConnectDetails = () => {
                 "Aquesta informació no està disponible a la base de dades."
               )}
 
-              {!isCompleted ? (
-                <button
-                  type="button"
-                  onClick={() => setIsCompleted(true)}
-                  className="mt-6 text-primary hover:opacity-80 transition-opacity"
-                >
-                  Marcar com a complet
-                </button>
-              ) : (
-                <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
-                  ✓ Completat
-                </span>
-              )}
+              {user?.id === codeConnectProject.data.user_id &&
+                (!isCompleted ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="mt-6 text-primary hover:opacity-80 transition-opacity"
+                  >
+                    Marcar com a complet
+                  </button>
+                ) : (
+                  <span className="mt-6 font-medium text-gray-500 flex items-center gap-1">
+                    ✓ Completat
+                  </span>
+                ))}
             </div>
 
             <div className="lg:w-1/3 flex-shrink-0 min-w-[320px] flex lg:justify-end">
@@ -95,6 +109,12 @@ const CodeConnectDetails = () => {
           </div>
         )}
       </Container>
+      <CloseProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirm}
+        isSubmitting={false}
+      />
     </>
   );
 };
