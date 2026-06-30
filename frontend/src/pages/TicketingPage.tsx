@@ -29,6 +29,8 @@ const TicketingPage = (): JSX.Element => {
   );
   const { user } = useUserContext();
   const currentUserId = user?.id;
+  const [showOnlySuggestions, setShowOnlySuggestions] =
+    useState<boolean>(false);
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
@@ -65,10 +67,12 @@ const TicketingPage = (): JSX.Element => {
     );
   };
 
-  const filteredTickets =
-    statusFilter.length === 0
-      ? tickets
-      : tickets.filter((t) => statusFilter.includes(t.status));
+  const filteredTickets = tickets.filter((t) => {
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(t.status);
+    const matchesCategory = !showOnlySuggestions || t.category === "suggestion";
+    return matchesStatus && matchesCategory;
+  });
 
   return (
     <>
@@ -101,9 +105,11 @@ const TicketingPage = (): JSX.Element => {
         <ButtonComponent
           className="w-full flex justify-start"
           variant="discreet"
-          onClick={() => {}}
+          onClick={() => setShowOnlySuggestions((prev) => !prev)}
         >
-          Veure suggeriments
+          {showOnlySuggestions
+            ? "Veure els meus tickets"
+            : "Veure suggeriments"}
         </ButtonComponent>
         <TicketList
           tickets={filteredTickets}
