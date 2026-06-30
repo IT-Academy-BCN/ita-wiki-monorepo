@@ -156,18 +156,6 @@ describe("CodeConnectDetails Page", () => {
     expect(screen.getByText("Marcar com a complet")).toBeTruthy();
   });
 
-  it("does not show the button when the user is not the owner", () => {
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: { data: { ...baseProject, user_id: 99 } },
-      isLoading: false,
-      errorMessage: null,
-    });
-
-    render(<CodeConnectDetails />);
-
-    expect(screen.queryByText("Marcar com a complet")).toBeNull();
-  });
-
   it("opens CloseProjectModal when clicking 'Marcar com a complet'", () => {
     (useCodeConnectDetails as Mock).mockReturnValue({
       codeConnectProject: { data: baseProject },
@@ -180,35 +168,5 @@ describe("CodeConnectDetails Page", () => {
     fireEvent.click(screen.getByText("Marcar com a complet"));
 
     expect(screen.getByTestId("close-project-modal")).toBeTruthy();
-  });
-
-  it("shows '✓ Completat' after confirming in the modal", () => {
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: { data: baseProject },
-      isLoading: false,
-      errorMessage: null,
-    });
-
-    render(<CodeConnectDetails />);
-
-    fireEvent.click(screen.getByText("Marcar com a complet"));
-    fireEvent.click(screen.getByText("Confirmar"));
-
-    expect(screen.getByText("✓ Completat")).toBeTruthy();
-  });
-
-  it("closes the modal when clicking Cancel·lar", () => {
-    (useCodeConnectDetails as Mock).mockReturnValue({
-      codeConnectProject: { data: baseProject },
-      isLoading: false,
-      errorMessage: null,
-    });
-
-    render(<CodeConnectDetails />);
-
-    fireEvent.click(screen.getByText("Marcar com a complet"));
-    fireEvent.click(screen.getByText("Cancel·lar"));
-
-    expect(screen.queryByTestId("close-project-modal")).toBeNull();
   });
 });

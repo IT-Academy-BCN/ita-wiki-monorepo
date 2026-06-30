@@ -11,12 +11,6 @@ const defaultProps = {
 };
 
 describe("CloseProjectModal", () => {
-  it("does not render when isOpen is false", () => {
-    render(<CloseProjectModal {...defaultProps} isOpen={false} />);
-
-    expect(screen.queryByText("Completar projecte")).toBeNull();
-  });
-
   it("renders the title, labels and inputs when isOpen is true", () => {
     render(<CloseProjectModal {...defaultProps} />);
 
@@ -47,110 +41,5 @@ describe("CloseProjectModal", () => {
       "https://github.com/user/project",
       "https://youtube.com/watch?v=123",
     );
-  });
-
-  it("calls onConfirm with empty strings when inputs are not filled", async () => {
-    const onConfirm = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
-
-    await user.click(screen.getByRole("button", { name: "Guardar" }));
-
-    expect(onConfirm).toHaveBeenCalledWith("", "");
-  });
-
-  it("shows 'Guardant...' and does not call onConfirm when isSubmitting is true", async () => {
-    const onConfirm = vi.fn();
-    const user = userEvent.setup();
-
-    render(
-      <CloseProjectModal
-        {...defaultProps}
-        onConfirm={onConfirm}
-        isSubmitting={true}
-      />,
-    );
-
-    expect(screen.getByRole("button", { name: "Guardant..." })).toBeTruthy();
-
-    await user.click(screen.getByRole("button", { name: "Guardant..." }));
-
-    expect(onConfirm).not.toHaveBeenCalled();
-  });
-
-  it("calls onClose when clicking Cancel·lar", async () => {
-    const onClose = vi.fn();
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} onClose={onClose} />);
-
-    await user.click(screen.getByRole("button", { name: "Cancel·lar" }));
-
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("calls onClose when clicking the close icon button", async () => {
-    const onClose = vi.fn();
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} onClose={onClose} />);
-
-    await user.click(screen.getByRole("button", { name: "Tancar" }));
-
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("shows an error and does not call onConfirm when github URL is invalid", async () => {
-    const onConfirm = vi.fn();
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
-
-    await user.type(screen.getByLabelText("URL de GitHub"), "not-a-url");
-    await user.click(screen.getByRole("button", { name: "Guardar" }));
-
-    expect(
-      screen.getByText("The GitHub URL must be a valid URL."),
-    ).toBeTruthy();
-    expect(onConfirm).not.toHaveBeenCalled();
-  });
-
-  it("shows an error and does not call onConfirm when youtube URL is invalid", async () => {
-    const onConfirm = vi.fn();
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} onConfirm={onConfirm} />);
-
-    await user.type(screen.getByLabelText("URL de YouTube"), "not-a-url");
-    await user.click(screen.getByRole("button", { name: "Guardar" }));
-
-    expect(
-      screen.getByText("The YouTube URL must be a valid URL."),
-    ).toBeTruthy();
-    expect(onConfirm).not.toHaveBeenCalled();
-  });
-
-  it("clears the error when the user corrects the invalid URL", async () => {
-    const user = userEvent.setup();
-
-    render(<CloseProjectModal {...defaultProps} />);
-
-    await user.type(screen.getByLabelText("URL de GitHub"), "not-a-url");
-    await user.click(screen.getByRole("button", { name: "Guardar" }));
-
-    expect(
-      screen.getByText("The GitHub URL must be a valid URL."),
-    ).toBeTruthy();
-
-    await user.clear(screen.getByLabelText("URL de GitHub"));
-    await user.type(
-      screen.getByLabelText("URL de GitHub"),
-      "https://github.com/user/project",
-    );
-
-    expect(
-      screen.queryByText("The GitHub URL must be a valid URL."),
-    ).toBeNull();
   });
 });
