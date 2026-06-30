@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Tickets;
 use App\Enums\AffectedAppEnum;
 use App\Enums\AffectedFunctionEnum;
+use App\Enums\TicketCategoryEnum;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Http\Controllers\Controller;
@@ -14,20 +15,26 @@ use App\Http\Requests\Tickets\UpdateStatusTicketRequest;
 use App\Http\Requests\Tickets\UpdatePriorityRequest;
 use App\Http\Requests\Tickets\AssignTicketRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Models\Liga;
 use App\Models\LigaPointHistory;
 
 class TicketController extends Controller
 {
-    public const BUG_BOUNTY_REWARD_POINTS = 15;
-    public function index(): JsonResponse
+ public const BUG_BOUNTY_REWARD_POINTS = 15;
+  
+    public function index(Request $request): JsonResponse
     {
         $query = Ticket::with(['codeConnect', 'assignee', 'closedBy']);
 
         if (! auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
-            $query->where(function ($q) {
+            $query->where(function ($q) use ($request) {
                 $q->where('code_connect_id', auth()->id())
-                ->orWhere('assignee_id', auth()->id());
+                    ->orWhere('assignee_id', auth()->id());
+
+                if ($request->boolean('include_suggestions')) {
+                    $q->orWhere('category', TicketCategoryEnum::Suggestion->value);
+                }
             });
         }
 

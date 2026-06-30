@@ -40,8 +40,6 @@ export type LeagueNotificationResponse =
   | {
       hasChange: true;
       direction: "up" | "down";
-      newLeagueId: number;
-      year: number;
-      week_number: number;
+      leagueName: string;
     }
   | { hasChange: false };
