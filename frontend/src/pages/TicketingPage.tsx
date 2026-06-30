@@ -9,6 +9,7 @@ import { useTicketComments } from "../hooks/useTicketComments";
 import TicketList from "../components/tickets/TicketList";
 import { useUserContext } from "../context/UserContext";
 import { STATUS_LABELS } from "../components/tickets/ticketConstants";
+import { TicketCategoryEnum } from "../types/ticketingTypes";
 import type {
   IntCreateTicket,
   TicketStatus,
@@ -22,7 +23,10 @@ const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
-  const { tickets, isLoading, errorMessage, refetch } = useTicketingGetAll();
+  const [showOnlySuggestions, setShowOnlySuggestions] =
+    useState<boolean>(false);
+  const { tickets, isLoading, errorMessage, refetch } =
+    useTicketingGetAll(showOnlySuggestions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<ApiTicketData | null>(
@@ -31,8 +35,6 @@ const TicketingPage = (): JSX.Element => {
   const { user } = useUserContext();
   const currentUserId = user?.id;
   const isStudent = user?.role === roles.STUDENT;
-  const [showOnlySuggestions, setShowOnlySuggestions] =
-    useState<boolean>(false);
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
@@ -71,8 +73,11 @@ const TicketingPage = (): JSX.Element => {
 
   const filteredTickets = tickets.filter((t) => {
     const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(t.status);
-    const matchesCategory = !showOnlySuggestions || t.category === "suggestion";
+      showOnlySuggestions ||
+      statusFilter.length === 0 ||
+      statusFilter.includes(t.status);
+    const matchesCategory =
+      !showOnlySuggestions || t.category === TicketCategoryEnum.SUGGESTION;
     return matchesStatus && matchesCategory;
   });
 

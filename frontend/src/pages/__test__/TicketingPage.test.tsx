@@ -3,7 +3,10 @@ import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import TicketingPage from "../TicketingPage";
 import { useTicketingGetAll } from "../../hooks/useTicketingGetAll";
-import type { ApiTicketData } from "../../types/ticketingTypes";
+import {
+  TicketCategoryEnum,
+  type ApiTicketData,
+} from "../../types/ticketingTypes";
 import type {
   IntCreateTicket,
   TicketListProps,
@@ -171,7 +174,7 @@ describe("TicketingPage", () => {
       {
         id: 1,
         name: "Login no funciona",
-        status: "pending",
+        status: "closed",
         category: "bug",
       },
       {
@@ -196,5 +199,38 @@ describe("TicketingPage", () => {
     expect(screen.getByText("Afegir mode fosc")).toBeInTheDocument();
     expect(screen.getByText("Millorar filtres")).toBeInTheDocument();
     expect(screen.queryByText("Suggeriment tancat")).not.toBeInTheDocument();
+  });
+
+  it("shows all suggestion tickets when suggestions button is clicked", () => {
+    const tickets = [
+      { id: 1, name: "1", status: "closed", category: TicketCategoryEnum.BUG },
+      {
+        id: 2,
+        name: "2",
+        status: "pending",
+        category: TicketCategoryEnum.SUGGESTION,
+      },
+      {
+        id: 3,
+        name: "3",
+        status: "closed",
+        category: TicketCategoryEnum.SUGGESTION,
+      },
+    ] as ApiTicketData[];
+    mockHook.mockReturnValue(hookReturn({ tickets }));
+    render(<TicketingPage />);
+
+    expect(mockHook).toHaveBeenLastCalledWith(false);
+
+    fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
+
+    expect(mockHook).toHaveBeenLastCalledWith(true);
+
+    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(2);
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Veure els meus tickets" }),
+    ).toBeInTheDocument();
   });
 });
