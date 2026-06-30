@@ -174,7 +174,7 @@ describe("TicketingPage", () => {
       {
         id: 1,
         name: "Login no funciona",
-        status: "pending",
+        status: "closed",
         category: "bug",
       },
       {
@@ -203,8 +203,13 @@ describe("TicketingPage", () => {
 
   it("shows all suggestion tickets when suggestions button is clicked", () => {
     const tickets = [
-      { id: 1, name: "1", status: "pending", category: TicketCategoryEnum.BUG },
-      { id: 2, name: "2", status: "closed", category: TicketCategoryEnum.SUGGESTION },
+      { id: 1, name: "1", status: "closed", category: TicketCategoryEnum.BUG },
+      {
+        id: 2,
+        name: "2",
+        status: "pending",
+        category: TicketCategoryEnum.SUGGESTION,
+      },
       { id: 3, name: "3", status: "closed", category: TicketCategoryEnum.BUG },
     ] as ApiTicketData[];
     mockHook.mockReturnValue(hookReturn({ tickets }));
@@ -214,12 +219,12 @@ describe("TicketingPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
 
-    expect(mockHook).toHaveBeenLastCalledWith(true);
+    expect(mockHook).toHaveBeenLastCalledWith(false);
 
     expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(1);
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Veure tickets" }),
+      screen.getByRole("button", { name: "Veure els meus tickets" }),
     ).toBeInTheDocument();
   });
 });

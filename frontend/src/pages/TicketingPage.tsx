@@ -75,7 +75,8 @@ const TicketingPage = (): JSX.Element => {
   const filteredTickets = tickets.filter((t) => {
     const matchesStatus =
       statusFilter.length === 0 || statusFilter.includes(t.status);
-    const matchesCategory = !showOnlySuggestions || TicketCategoryEnum.SUGGESTION;
+    const matchesCategory =
+      !showOnlySuggestions || TicketCategoryEnum.SUGGESTION;
     return matchesStatus && matchesCategory;
   });
 
