@@ -1,83 +1,73 @@
-# ITA Wiki Frontend
+# .
 
-The ITA Wiki Frontend is a React-based web application that serves as a knowledge-sharing platform for IT Academy students and professionals. It allows users to discover, create, and interact with educational resources related to programming and technology.
+This template should help get you started developing with Vue 3 in Vite.
 
-## Purpose and Key Features
+## Recommended IDE Setup
 
-The ITA Wiki Frontend provides the following core functionality:
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-- **Resource Management**: Browse, filter, create, and interact with learning resources
-- **GitHub Authentication**: Sign in with GitHub credentials
-- **Role-Based Access Control**: Different permissions based on user roles
-- **Social Features**: Bookmark and like resources
-- **Category and Tag System**: Organized content discovery
+## Recommended Browser Setup
 
-## System Architecture
+- Chromium-based browsers (Chrome, Edge, Brave, etc.):
+  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
+- Firefox:
+  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
+  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
 
-The application follows a component-based architecture built with React, using context API for state management.
+## Type Support for `.vue` Imports in TS
 
-<img src="./src/assets/diagrams/system-architecture.svg" alt="System Architecture" width="650"/>
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
 
-## Core Data Flow
+## Customize configuration
 
-The application manages several key data types that flow through the system:
+See [Vite Configuration Reference](https://vite.dev/config/).
 
-<img src="./src/assets/diagrams/core-data-flow.svg" alt="Core Data Flow" width="650"/>
+## Project Setup
 
-## Component Hierarchy
+```sh
+npm install
+```
 
-The component structure follows a hierarchical pattern, with the main application container wrapping various feature components:
+### Compile and Hot-Reload for Development
 
-<img src="./src/assets/diagrams/component-hierarchy.svg" alt="Component Hierarchy" width="750"/>
+```sh
+npm run dev
+```
 
-## State Management
+### Type-Check, Compile and Minify for Production
 
-The application uses React Context for state management. There are three main contexts:
+```sh
+npm run build
+```
 
-| Context          | Purpose                      | Main State                               |
-| ---------------- | ---------------------------- | ---------------------------------------- |
-| UserContext      | Manages authentication state | Current user, login status, role         |
-| ResourcesContext | Manages resource data        | Resource list, bookmarks, loading states |
-| LikesContext     | Manages user likes           | Liked resources, like counts             |
+### Run Unit Tests with [Vitest](https://vitest.dev/)
 
-<img src="./src/assets/diagrams/state-management.svg" alt="State Management" width="775"/>
+```sh
+npm run test:unit
+```
 
-## Authentication Flow
+### Run End-to-End Tests with [Playwright](https://playwright.dev)
 
-**2025-11-24 Current status**: The authentication system is in transition.
+```sh
+# Install browsers for the first run
+npx playwright install
 
-- **Previously**: Firebase Authentication
-- **Current**: Without authentication
+# When testing on CI, must build the project first
+npm run build
 
-The application uses GitHub for authentication:
+# Runs the end-to-end tests
+npm run test:e2e
+# Runs the tests only on Chromium
+npm run test:e2e -- --project=chromium
+# Runs the tests of a specific file
+npm run test:e2e -- tests/example.spec.ts
+# Runs the tests in debug mode
+npm run test:e2e -- --debug
+```
 
-<img src="./src/assets/diagrams/authentication-flow.svg" alt="Authentication Flow" width="775"/>
+### Lint with [ESLint](https://eslint.org/)
 
-## API Integration
-
-The application communicates with the backend through a set of configured endpoints:
-
-| API Endpoint | Purpose                      |
-| ------------ | ---------------------------- |
-| resources/   | Manage educational resources |
-| bookmarks/   | Handle user bookmarks        |
-| likes/       | Handle user likes            |
-| tags/        | Manage resource tags         |
-| roles/       | Manage user roles            |
-
-## Resource Management
-
-The ResourcesContext is the central state manager for resources:
-
-<img src="./src/assets/diagrams/resource-management.svg" alt="Resource Management" width="200"/>
-
-## Resource Type System
-
-The application handles various types of resources, categorized by field and type:
-
-| Resource Property | Description        | Examples                   |
-| ----------------- | ------------------ | -------------------------- |
-| Category          | Subject area       | React, JavaScript, Node.js |
-| Theme             | UI framework/theme | Null or specific theme     |
-| Type              | Content type       | Tutorial, Article, Video   |
-| Tags              | Custom labels      | Array of tag objects       |
+```sh
+npm run lint
+```

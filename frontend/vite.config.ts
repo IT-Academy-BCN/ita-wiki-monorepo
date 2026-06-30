@@ -1,35 +1,20 @@
-/// <reference types="vitest/config" />
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { defineConfig } from "vite";
-import svgr from "vite-plugin-svgr";
-// https://vitejs.dev/config/
+import { fileURLToPath, URL } from 'node:url'
 
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), svgr()],
-  test: {
-    environment: "jsdom",
-    setupFiles: "./src/setupTest.ts",
-    outputFile: "json",
-    globals: true,
-    coverage: {
-      enabled: true,
-      provider: "v8",
-      cleanOnRerun: true,
-    },
-    css: true,
-  },
+  plugins: [
+    vue(),
+    vueJsx(),
+    vueDevTools(),
+  ],
   resolve: {
     alias: {
-      "@": path.resolve("./src"),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  server: {
-    host: true,
-    port: 80,
-    proxy: {
-      "/api": "http://localhost/api",
-    },
-  },
-});
+})
