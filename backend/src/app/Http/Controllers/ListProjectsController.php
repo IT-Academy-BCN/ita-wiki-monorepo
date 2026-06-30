@@ -8,7 +8,9 @@ use App\Models\ListProjects;
 use App\Models\ContributorListProject;
 use Illuminate\Http\Request;
 use App\Enums\LanguageEnum;
+use App\Enums\ProjectStatusEnum;
 use App\Http\Requests\ListProjectRequest;
+use App\Http\Requests\CompleteProjectRequest;
 use App\Enums\ContributorStatusEnum;
 use App\Models\User;
 
@@ -63,7 +65,8 @@ class ListProjectsController extends Controller
      * )
      */
 
-    private function formatOwner(?User $user): ?array{
+    private function formatOwner(?User $user): ?array
+    {
 
         return $user ? ['id' => $user->id, 'name' => $user->name,] : null;
     }
@@ -360,6 +363,102 @@ class ListProjectsController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Error updating project',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/api/codeconnect/{listProject}/complete",
+     *     summary="Mark a project as completed",
+     *     tags={"Codeconnect"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="listProject",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="github_url", type="string", nullable=true, example="https://github.com/user/project"),
+     *             @OA\Property(property="youtube_url", type="string", nullable=true, example="https://youtube.com/watch?v=...")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Project marked as completed successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Project marked as completed successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="status", type="string", enum={"in_progress", "completed"}, example="completed"),
+     *                 @OA\Property(property="github_url", type="string", nullable=true, example="https://github.com/user/project"),
+     *                 @OA\Property(property="youtube_url", type="string", nullable=true, example="https://youtube.com/watch?v=...")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User is not the owner of the project"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Project not found"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Project must be in 'in_progress' status to mark it as completed or invalid URLs"
+     *     )
+     * )
+     */
+    public function complete(CompleteProjectRequest $request, $listProjectId)
+    {
+        $project = ListProjects::find($listProjectId);
+        if (!$project) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Project not found'
+            ], 404);
+        }
+        
+        if ($project->user_id !== $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not the owner of this project'
+            ], 403);
+        }
+        
+        if ($project->status !== ProjectStatusEnum::IN_PROGRESS) {
+            return response()->json([
+                'success' => false,
+                'message' => "Project must be in 'in_progress' status to mark it as completed"
+            ], 422);
+        }
+        
+        try {
+            $project->update([
+                'status' => ProjectStatusEnum::COMPLETED,
+                'github_url' => $request->github_url ?? $project->github_url,
+                'youtube_url' => $request->youtube_url ?? $project->youtube_url,
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Project marked as completed successfully',
+                'data' => $project->fresh()
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error marking project as completed',
                 'message' => $e->getMessage()
             ], 500);
         }
