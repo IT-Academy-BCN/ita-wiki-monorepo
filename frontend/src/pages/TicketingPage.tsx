@@ -16,6 +16,7 @@ import type {
 } from "../types/ticketingTypes";
 import TicketDetailModal from "../components/tickets/TicketDetailModal";
 import ButtonComponent from "../components/atoms/ButtonComponent";
+import { roles } from "../data/tempRoles";
 
 const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
@@ -29,6 +30,7 @@ const TicketingPage = (): JSX.Element => {
   );
   const { user } = useUserContext();
   const currentUserId = user?.id;
+  const isStudent = user?.role === roles.STUDENT;
   const [showOnlySuggestions, setShowOnlySuggestions] =
     useState<boolean>(false);
   const [statusFilter, setStatusFilter] =
@@ -102,15 +104,17 @@ const TicketingPage = (): JSX.Element => {
             </button>
           )}
         </div>
-        <ButtonComponent
-          className="w-full flex justify-start"
-          variant="discreet"
-          onClick={() => setShowOnlySuggestions((prev) => !prev)}
-        >
-          {showOnlySuggestions
-            ? "Veure els meus tickets"
-            : "Veure suggeriments"}
-        </ButtonComponent>
+        {isStudent && (
+          <ButtonComponent
+            className="w-full flex justify-start"
+            variant="discreet"
+            onClick={() => setShowOnlySuggestions((prev) => !prev)}
+          >
+            {showOnlySuggestions
+              ? "Veure els meus tickets"
+              : "Veure suggeriments"}
+          </ButtonComponent>
+        )}
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}
