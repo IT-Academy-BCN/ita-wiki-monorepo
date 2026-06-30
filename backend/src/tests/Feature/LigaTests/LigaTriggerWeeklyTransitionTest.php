@@ -13,6 +13,14 @@ class LigaTriggerWeeklyTransitionTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->make(\Illuminate\Contracts\Console\Kernel::class)->registerCommand(
+            new \App\Console\Commands\ProcessLeaguePromotions()
+        );
+    }
+
     public function test_mentor_can_trigger_weekly_transition(): void
     {
         $user = $this->authenticateUserWithRole('mentor');
