@@ -81,6 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/codeconnect/{listProject}/contributors/{contributor}', [ListProjectsController::class, 'removeContributor'])->name('contributors.destroy');
     Route::patch('/codeconnect/{listProject}/contributors/{contributor}/status', [ListProjectsController::class, 'updateContributorStatus'])->name('contributors.update-status');
     Route::post('/codeconnect/{listProject}/join', JoinProjectController::class)->name('codeconnect.join');
+    Route::patch('/codeconnect/{listProject}/complete', [ListProjectsController::class, 'complete'])->name('codeconnect.complete');
 });
 
 // ========== FORUM ENDPOINTS ==========
@@ -184,4 +185,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ligas', [LigaController::class, 'store'])->name('ligas.store');
     Route::post('/ligas/trigger-weekly-transition', [LigaController::class, 'triggerWeeklyTransition'])->name('ligas.trigger-weekly-transition');
     Route::get('/ligas/history', [LigaController::class, 'history'])->name('ligas.history');
+    Route::get('/ligas/notification', [LigaController::class, 'getNotification'])->name('ligas.notification');
 });

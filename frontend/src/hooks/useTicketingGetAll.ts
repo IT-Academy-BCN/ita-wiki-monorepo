@@ -13,7 +13,7 @@ const isAbortLikeError = (value: unknown): boolean => {
   return value instanceof CanceledError;
 };
 
-export const useTicketingGetAll = () => {
+export const useTicketingGetAll = (includeSuggestions = false) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [tickets, setTickets] = useState<ApiTicketData[]>([]);
@@ -39,6 +39,9 @@ export const useTicketingGetAll = () => {
               Authorization: `Bearer ${token}`,
             },
             signal: abortController.signal,
+            params: includeSuggestions
+              ? { include_suggestions: true }
+              : undefined,
           },
         );
 
@@ -83,7 +86,7 @@ export const useTicketingGetAll = () => {
     fetchTickets();
 
     return () => abortController.abort();
-  }, [refetchTrigger]);
+  }, [includeSuggestions, refetchTrigger]);
 
   return { tickets, isLoading, errorMessage, refetch };
 };
