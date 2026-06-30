@@ -105,15 +105,16 @@ const TicketingPage = (): JSX.Element => {
           )}
         </div>
         {isStudent && (
-        <ButtonComponent
-          className="w-full flex justify-start"
-          variant="discreet"
-          onClick={() => setShowOnlySuggestions((prev) => !prev)}
-        >
-          {showOnlySuggestions
-            ? "Veure els meus tickets"
-            : "Veure suggeriments"}
-        </ButtonComponent>
+          <ButtonComponent
+            className="w-full flex justify-start"
+            variant="discreet"
+            onClick={() => setShowOnlySuggestions((prev) => !prev)}
+          >
+            {showOnlySuggestions
+              ? "Veure els meus tickets"
+              : "Veure suggeriments"}
+          </ButtonComponent>
+        )}
         <TicketList
           tickets={filteredTickets}
           isLoading={isLoading}
