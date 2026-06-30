@@ -174,3 +174,57 @@ export const fetchCodeConnectAllProjects = async (
     throw error;
   }
 };
+
+export const closeCodeConnectProject = async (
+  projectId: number,
+  data: { github_url?: string; youtube_url?: string },
+): Promise<ApiProjectResponse> => {
+  const url = `${API_URL}${END_POINTS.codeconnect.get}/${projectId}/complete`;
+  const token = localStorage.getItem("auth_token");
+
+  try {
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      let errorCode: string | undefined;
+
+      try {
+        const errorData = (await response.json()) as {
+          message?: string;
+          code?: string;
+        };
+
+        errorMessage = errorData.message || errorMessage;
+        errorCode = errorData.code;
+      } catch {
+        // Ignore the parsing error and use the default values that have already been set.
+      }
+
+      throw {
+        message: errorMessage,
+        status: response.status,
+        code: errorCode,
+      } as CodeConnectError;
+    }
+
+    return (await response.json()) as ApiProjectResponse;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw {
+        message: "Error de connexió. Verifica la teva connexió a internet.",
+        code: "NETWORK_ERROR",
+      } as CodeConnectError;
+    }
+
+    throw error;
+  }
+};
