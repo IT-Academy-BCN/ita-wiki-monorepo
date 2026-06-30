@@ -23,9 +23,10 @@ const DEFAULT_STATUSES: TicketStatus[] = ["pending", "in_progress"];
 
 const TicketingPage = (): JSX.Element => {
   const { submitTicketing } = useCreateTicketing();
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showOnlySuggestions, setShowOnlySuggestions] =
+    useState<boolean>(false);
   const { tickets, isLoading, errorMessage, refetch } =
-    useTicketingGetAll(showSuggestions);
+    useTicketingGetAll(showOnlySuggestions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<ApiTicketData | null>(
@@ -34,8 +35,6 @@ const TicketingPage = (): JSX.Element => {
   const { user } = useUserContext();
   const currentUserId = user?.id;
   const isStudent = user?.role === roles.STUDENT;
-  const [showOnlySuggestions, setShowOnlySuggestions] =
-    useState<boolean>(false);
   const [statusFilter, setStatusFilter] =
     useState<TicketStatus[]>(DEFAULT_STATUSES);
   const {
@@ -74,9 +73,11 @@ const TicketingPage = (): JSX.Element => {
 
   const filteredTickets = tickets.filter((t) => {
     const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(t.status);
+      showOnlySuggestions ||
+      statusFilter.length === 0 ||
+      statusFilter.includes(t.status);
     const matchesCategory =
-      !showOnlySuggestions || TicketCategoryEnum.SUGGESTION;
+      !showOnlySuggestions || t.category === TicketCategoryEnum.SUGGESTION;
     return matchesStatus && matchesCategory;
   });
 

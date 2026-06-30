@@ -210,7 +210,12 @@ describe("TicketingPage", () => {
         status: "pending",
         category: TicketCategoryEnum.SUGGESTION,
       },
-      { id: 3, name: "3", status: "closed", category: TicketCategoryEnum.BUG },
+      {
+        id: 3,
+        name: "3",
+        status: "closed",
+        category: TicketCategoryEnum.SUGGESTION,
+      },
     ] as ApiTicketData[];
     mockHook.mockReturnValue(hookReturn({ tickets }));
     render(<TicketingPage />);
@@ -219,10 +224,11 @@ describe("TicketingPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Veure suggeriments" }));
 
-    expect(mockHook).toHaveBeenLastCalledWith(false);
+    expect(mockHook).toHaveBeenLastCalledWith(true);
 
-    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(1);
+    expect(screen.getAllByTestId("ticket-list-item")).toHaveLength(2);
     expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Veure els meus tickets" }),
     ).toBeInTheDocument();
