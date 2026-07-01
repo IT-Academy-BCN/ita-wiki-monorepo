@@ -20,7 +20,6 @@ services:
     env_file: ./frontend/.env.dev
     depends_on:
       - backend
-    command: npm run dev
     networks:
       - app-network
 
