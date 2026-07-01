@@ -1,5 +1,16 @@
-FROM node:25.2.1-alpine3.22
+FROM node:26-alpine
+
 WORKDIR /app
-COPY package.json package-lock.json /app/
-RUN npm ci
-COPY . /app
+
+RUN npm install -g http-server
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 80
+CMD [ "http-server", "dist", "-p", "80" ]

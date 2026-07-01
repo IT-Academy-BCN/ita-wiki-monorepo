@@ -1,15 +1,14 @@
-import { defineConfig } from "vitest/config";
-import viteConfig from "./vite.config";
+import { fileURLToPath } from 'node:url'
+import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
+import viteConfig from './vite.config'
 
-export default defineConfig({
-  ...viteConfig,
-  test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: "./src/setupTest.ts",
-    mockReset: true,
-  },
-  define: {
-    "import.meta.env.VITE_API_URL": JSON.stringify("http://localhost:8000"),
-  },
-});
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    test: {
+      environment: 'jsdom',
+      exclude: [...configDefaults.exclude, 'e2e/**'],
+      root: fileURLToPath(new URL('./', import.meta.url)),
+    },
+  }),
+)
